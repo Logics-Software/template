@@ -1,5 +1,5 @@
 /**
- * Hando PHP MVC Template - Main JavaScript
+ * Logis PHP APP Template - Main JavaScript
  */
 
 // Global variables
@@ -433,6 +433,151 @@ function initFullscreenToggle() {
   }
 }
 
+// F12 Lock Screen Detection
+function initF12LockScreen() {
+  // Configuration
+  const config = {
+    enabled: true, // Set to false to disable F12 lock screen
+    warningDelay: 1000, // Delay before locking screen (ms)
+    detectionMethods: {
+      f12Key: true,
+      windowSize: true,
+      console: true,
+      rightClick: true,
+      shortcuts: true,
+    },
+  };
+
+  // Check if feature is enabled
+  if (!config.enabled) return;
+
+  // Only activate if user is logged in (check for session data or specific elements)
+  const isLoggedIn =
+    document.querySelector(".user-info") ||
+    document.querySelector(".sidebar") ||
+    window.location.pathname !== "/login";
+
+  if (!isLoggedIn) return;
+
+  // Track if F12 was pressed
+  let f12Pressed = false;
+  let lockScreenTriggered = false;
+
+  // Listen for F12 key press
+  if (config.detectionMethods.f12Key) {
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "F12") {
+        event.preventDefault();
+        f12Pressed = true;
+
+        // Redirect to lock screen after short delay
+        setTimeout(() => {
+          if (!lockScreenTriggered) {
+            window.location.href = window.Hando.appUrl + "/lock-screen";
+          }
+        }, config.warningDelay);
+      }
+    });
+  }
+
+  // Listen for developer tools detection (multiple methods)
+  let devtools = {
+    open: false,
+    orientation: null,
+  };
+
+  const threshold = 160;
+
+  // Method 1: Window size detection
+  if (config.detectionMethods.windowSize) {
+    setInterval(() => {
+      if (
+        window.outerHeight - window.innerHeight > threshold ||
+        window.outerWidth - window.innerWidth > threshold
+      ) {
+        if (!devtools.open) {
+          devtools.open = true;
+          showAlert(
+            "Developer tools detected! Redirecting to lock screen...",
+            "warning",
+            2000
+          );
+          setTimeout(() => {
+            window.location.href = window.Hando.appUrl + "/lock-screen";
+          }, config.warningDelay);
+        }
+      } else {
+        devtools.open = false;
+      }
+    }, 500);
+  }
+
+  // Method 2: Console detection
+  if (config.detectionMethods.console) {
+    let devtoolsConsole = false;
+    setInterval(() => {
+      const start = performance.now();
+      debugger;
+      const end = performance.now();
+      if (end - start > 100) {
+        if (!devtoolsConsole) {
+          devtoolsConsole = true;
+
+          setTimeout(() => {
+            window.location.href = window.Hando.appUrl + "/lock-screen";
+          }, config.warningDelay);
+        }
+      } else {
+        devtoolsConsole = false;
+      }
+    }, 1000);
+  }
+
+  // Method 3: Right-click context menu detection
+  if (config.detectionMethods.rightClick) {
+    document.addEventListener("contextmenu", function (event) {
+      event.preventDefault();
+      showAlert("Right-click disabled for security", "warning", 2000);
+    });
+  }
+
+  // Method 4: Keyboard shortcuts detection
+  if (config.detectionMethods.shortcuts) {
+    document.addEventListener("keydown", function (event) {
+      // Detect common developer tools shortcuts
+      const shortcuts = [
+        { key: "F12", ctrl: false, shift: false, alt: false },
+        { key: "I", ctrl: true, shift: false, alt: false },
+        { key: "J", ctrl: true, shift: false, alt: false },
+        { key: "C", ctrl: true, shift: false, alt: false },
+        { key: "U", ctrl: true, shift: false, alt: false },
+        { key: "K", ctrl: true, shift: false, alt: false },
+      ];
+
+      shortcuts.forEach((shortcut) => {
+        if (
+          event.key === shortcut.key &&
+          event.ctrlKey === shortcut.ctrl &&
+          event.shiftKey === shortcut.shift &&
+          event.altKey === shortcut.alt
+        ) {
+          event.preventDefault();
+          setTimeout(() => {
+            window.location.href = window.Hando.appUrl + "/lock-screen";
+          }, config.warningDelay);
+        }
+      });
+    });
+  }
+
+  // Function to redirect to lock screen
+  function redirectToLockScreen() {
+    if (lockScreenTriggered) return;
+    lockScreenTriggered = true;
+    window.location.href = window.Hando.appUrl + "/lock-screen";
+  }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize theme
@@ -458,6 +603,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize auto-save
   initAutoSave();
+
+  // Initialize F12 lock screen detection
+  initF12LockScreen();
 
   // Theme toggle event listener
   const themeToggle = document.getElementById("themeToggle");

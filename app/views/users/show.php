@@ -9,17 +9,42 @@ $content = '
                 </h5>
             </div>
             <div class="card-body">
+                <!-- Profile Picture Section -->
+                <div class="row mb-4">
+                    <div class="col-md-12 text-center">
+                        <div class="mb-3">
+                            ' . ($user['picture'] ? 
+                                '<img src="' . htmlspecialchars($user['picture']) . '" alt="Profile Picture" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">' :
+                                '<div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle text-white" style="width: 120px; height: 120px;">
+                                    <i class="fas fa-user" style="font-size: 48px;"></i>
+                                </div>'
+                            ) . '
+                        </div>
+                        <h4 class="mb-1">' . htmlspecialchars($user['namalengkap'] ?? 'N/A') . '</h4>
+                        <p class="text-muted mb-0">@' . htmlspecialchars($user['username'] ?? 'N/A') . '</p>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Full Name</label>
-                            <p class="form-control-plaintext">' . htmlspecialchars($user['name'] ?? '') . '</p>
+                            <label class="form-label fw-bold">Username</label>
+                            <p class="form-control-plaintext">' . htmlspecialchars($user['username'] ?? 'N/A') . '</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
+                            <label class="form-label fw-bold">Nama Lengkap</label>
+                            <p class="form-control-plaintext">' . htmlspecialchars($user['namalengkap'] ?? 'N/A') . '</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
                             <label class="form-label fw-bold">Email Address</label>
-                            <p class="form-control-plaintext">' . htmlspecialchars($user['email'] ?? '') . '</p>
+                            <p class="form-control-plaintext">' . htmlspecialchars($user['email'] ?? 'N/A') . '</p>
                         </div>
                     </div>
                 </div>
@@ -29,7 +54,13 @@ $content = '
                         <div class="mb-3">
                             <label class="form-label fw-bold">Role</label>
                             <p class="form-control-plaintext">
-                                <span class="badge bg-primary">' . ucfirst($user['role'] ?? '') . '</span>
+                                <span class="badge bg-' . match($user['role'] ?? '') {
+                                    'admin' => 'danger',
+                                    'manajemen' => 'primary',
+                                    'marketing' => 'info',
+                                    'customer' => 'secondary',
+                                    default => 'light'
+                                } . '">' . ucfirst($user['role'] ?? 'N/A') . '</span>
                             </p>
                         </div>
                     </div>
@@ -37,7 +68,12 @@ $content = '
                         <div class="mb-3">
                             <label class="form-label fw-bold">Status</label>
                             <p class="form-control-plaintext">
-                                <span class="badge bg-' . (($user['status'] ?? '') === 'active' ? 'success' : 'danger') . '">' . ucfirst($user['status'] ?? '') . '</span>
+                                <span class="badge bg-' . match($user['status'] ?? '') {
+                                    'aktif' => 'success',
+                                    'non_aktif' => 'danger',
+                                    'register' => 'warning',
+                                    default => 'secondary'
+                                } . '">' . ucfirst(str_replace('_', ' ', $user['status'] ?? 'N/A')) . '</span>
                             </p>
                         </div>
                     </div>
@@ -46,10 +82,19 @@ $content = '
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
+                            <label class="form-label fw-bold">Last Login</label>
+                            <p class="form-control-plaintext">' . ($user['lastlogin'] ? date('M d, Y H:i', strtotime($user['lastlogin'])) : 'Never') . '</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
                             <label class="form-label fw-bold">Created At</label>
                             <p class="form-control-plaintext">' . date('M d, Y H:i', strtotime($user['created_at'] ?? '')) . '</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Last Updated</label>

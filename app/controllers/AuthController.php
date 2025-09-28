@@ -18,6 +18,7 @@ class AuthController extends BaseController
             $this->redirect('/dashboard');
         }
 
+        
         $this->view('auth/login', [
             'title' => 'Login',
             'csrf_token' => $this->csrfToken()
@@ -27,7 +28,7 @@ class AuthController extends BaseController
     public function authenticate()
     {
         $validator = $this->validate([
-            'email' => 'required|email',
+            'username_email' => 'required',
             'password' => 'required|min:6'
         ]);
 
@@ -36,16 +37,38 @@ class AuthController extends BaseController
             $this->redirect('/login');
         }
 
-        $email = $this->input('email');
+        $usernameEmail = $this->input('username_email');
         $password = $this->input('password');
 
-        $user = $this->userModel->findByEmail($email);
+        // Try to find user by email first, then by username
+        $user = $this->userModel->findByEmail($usernameEmail);
+        if (!$user) {
+            $user = $this->userModel->findByUsername($usernameEmail);
+        }
 
         if ($user && password_verify($password, $user['password'])) {
+            // Check if user can login (status must be 'aktif')
+            if (!$this->userModel->canLogin($user)) {
+                $statusMessage = $this->userModel->getStatusMessage($user['status']);
+                if ($this->isAjax()) {
+                    $this->json(['error' => $statusMessage], 403);
+                } else {
+                    $this->withError($statusMessage);
+                    $this->redirect('/login');
+                }
+                return;
+            }
+
             Session::set('user_id', $user['id']);
-            Session::set('user_name', $user['name']);
+            Session::set('user_name', $user['namalengkap']);
             Session::set('user_email', $user['email']);
+            Session::set('user_role', $user['role']);
+            Session::set('user_username', $user['username']);
+            Session::set('user_picture', $user['picture']);
             Session::regenerate();
+
+            // Update last login
+            $this->userModel->updateLastLogin($user['id']);
 
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'redirect' => '/dashboard']);
@@ -77,7 +100,8 @@ class AuthController extends BaseController
     public function store()
     {
         $validator = $this->validate([
-            'name' => 'required|min:3',
+            'username' => 'required|min:3|unique:users',
+            'namalengkap' => 'required|min:3',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
             'password_confirmation' => 'required'
@@ -89,22 +113,22 @@ class AuthController extends BaseController
         }
 
         $data = [
-            'name' => $this->input('name'),
+            'username' => $this->input('username'),
+            'namalengkap' => $this->input('namalengkap'),
             'email' => $this->input('email'),
-            'password' => password_hash($this->input('password'), PASSWORD_DEFAULT),
-            'role' => 'user',
-            'status' => 'active'
+            'password' => $this->input('password'), // Will be hashed in model
+            'role' => 'user'
         ];
 
         try {
             $this->userModel->beginTransaction();
-            $userId = $this->userModel->create($data);
+            $userId = $this->userModel->registerUser($data); // This sets status to 'register'
             $this->userModel->commit();
 
             if ($this->isAjax()) {
-                $this->json(['success' => true, 'message' => 'Registration successful']);
+                $this->json(['success' => true, 'message' => 'Registration successful. Your account is pending activation.']);
             } else {
-                $this->withSuccess('Registration successful. Please login.');
+                $this->withSuccess('Registration successful. Your account is pending activation.');
                 $this->redirect('/login');
             }
         } catch (Exception $e) {

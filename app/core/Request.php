@@ -9,10 +9,27 @@ class Request
     public function __construct()
     {
         $this->data = array_merge($_GET, $_POST, $_FILES);
+        
+        // Handle PUT/DELETE requests and POST with _method
+        $actualMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        
+        if ($actualMethod === 'PUT' || $actualMethod === 'DELETE') {
+            // Real PUT/DELETE request - parse from php://input
+            parse_str(file_get_contents('php://input'), $putData);
+            $this->data = array_merge($this->data, $putData);
+        } elseif ($actualMethod === 'POST' && isset($_POST['_method'])) {
+            // POST with method spoofing - data is already in $_POST
+            // No need to parse from php://input
+        }
     }
 
     public function method()
     {
+        // Support method spoofing via _method parameter
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method'])) {
+            return strtoupper($_POST['_method']);
+        }
+        
         return $_SERVER['REQUEST_METHOD'] ?? 'GET';
     }
 

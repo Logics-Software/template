@@ -53,7 +53,13 @@ class Session
     public static function validateCSRF($token)
     {
         $sessionToken = self::get('_csrf_token');
-        return $sessionToken && hash_equals($sessionToken, $token);
+        
+        // Check if both tokens exist and are strings
+        if (!$sessionToken || !$token || !is_string($sessionToken) || !is_string($token)) {
+            return false;
+        }
+        
+        return hash_equals($sessionToken, $token);
     }
 
     public static function flash($key, $value = null)

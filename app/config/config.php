@@ -20,7 +20,7 @@ define('DB_CHARSET', 'utf8mb4');
 
 // Session configuration
 define('SESSION_LIFETIME', 3600); // 1 hour
-define('SESSION_NAME', 'HANDO_SESSION');
+define('SESSION_NAME', 'LOGICS_SESSION');
 
 // Security
 define('ENCRYPTION_KEY', 'your-secret-key-here');

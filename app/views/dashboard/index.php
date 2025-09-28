@@ -13,7 +13,7 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h3>' . ($stats['total_customers'] ?? '3,456') . '</h3>
+                    <h3>3,456</h3>
                     <p>Total Customers</p>
                     <div class="stats-change">
                         <span class="text-success">
@@ -23,7 +23,7 @@ $content = '
                     </div>
                 </div>
                 <div class="stats-icon">
-                    <i class="fas fa-people"></i>
+                    <i class="fas fa-users"></i>
                 </div>
             </div>
         </div>
@@ -33,17 +33,17 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h3>' . ($stats['task_pending'] ?? '2,839') . '</h3>
+                    <h3>2,839</h3>
                     <p>Task Pending</p>
                     <div class="stats-change">
-                        <span class="text-success">
+                        <span class="text-warning">
                             <i class="fas fa-arrow-up"></i> 1.5%
                         </span>
                         <span class="text-muted">Last 7 days</span>
                     </div>
                 </div>
                 <div class="stats-icon">
-                    <i class="fas fa-list-task"></i>
+                    <i class="fas fa-tasks"></i>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h3>' . ($stats['total_deals'] ?? '2,254') . '</h3>
+                    <h3>2,254</h3>
                     <p>Total Deals</p>
                     <div class="stats-change">
                         <span class="text-success">
@@ -73,7 +73,7 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h3>$' . ($stats['total_revenue'] ?? '4,578') . '</h3>
+                    <h3>$45,780</h3>
                     <p>Total Revenue</p>
                     <div class="stats-change">
                         <span class="text-success">
@@ -83,27 +83,7 @@ $content = '
                     </div>
                 </div>
                 <div class="stats-icon">
-                    <i class="fas fa-currency-dollar"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="card stats-card">
-            <div class="card-body">
-                <div class="stats-info">
-                    <h3>' . ($stats['conversion_rate'] ?? '14.57') . '%</h3>
-                    <p>Conversion Rate</p>
-                    <div class="stats-change">
-                        <span class="text-success">
-                            <i class="fas fa-arrow-up"></i> 5.8%
-                        </span>
-                        <span class="text-muted">Last 7 days</span>
-                    </div>
-                </div>
-                <div class="stats-icon">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-dollar-sign"></i>
                 </div>
             </div>
         </div>
@@ -480,133 +460,166 @@ $content = '
 </div>
 
 <script>
-// Sales Chart
-const salesCtx = document.getElementById("salesChart");
-if (salesCtx) {
-    // Destroy all existing charts on this canvas
-    try {
-        // Destroy from window reference
-        if (window.salesChart && typeof window.salesChart.destroy === "function") {
-            window.salesChart.destroy();
-            window.salesChart = null;
-        }
-        
-        // Destroy from Chart.js registry
-        const existingChart = Chart.getChart(salesCtx);
-        if (existingChart) {
-            existingChart.destroy();
-        }
-        
-        // Clear canvas completely
-        const ctx = salesCtx.getContext("2d");
-        ctx.clearRect(0, 0, salesCtx.width, salesCtx.height);
-        
-        // Reset canvas size to force complete refresh
-        salesCtx.width = salesCtx.offsetWidth;
-        salesCtx.height = salesCtx.offsetHeight;
-        
-    } catch (e) {
-        console.warn("Error destroying existing chart:", e);
-    }
-    
-    const salesChart = new Chart(salesCtx, {
-        type: "line",
-        data: {
-            labels: ' . json_encode($chartData['labels'] ?? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']) . ',
-            datasets: ' . json_encode($chartData['datasets'] ?? [[
-                'label' => 'Sales',
-                'data' => [12, 19, 3, 5, 2, 3],
-                'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
-                'borderColor' => 'rgba(54, 162, 235, 1)',
-                'borderWidth' => 2,
-                'tension' => 0.4
-            ]]) . '
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: "rgba(0,0,0,0.1)"
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
+// Chart initialization function with proper cleanup
+function initializeCharts() {
+    // Destroy all existing charts first
+    Chart.helpers.each(Chart.instances, function(instance) {
+        if (instance && typeof instance.destroy === "function") {
+            instance.destroy();
         }
     });
     
-    // Store chart reference
-    window.salesChart = salesChart;
+    // Clear window references
+    if (window.salesChart) {
+        window.salesChart = null;
+    }
+    if (window.pipelineChart) {
+        window.pipelineChart = null;
+    }
+    
+    // Wait a bit to ensure cleanup is complete
+    setTimeout(function() {
+        // Sales Chart
+        const salesCtx = document.getElementById("salesChart");
+        if (salesCtx) {
+            try {
+                // Double check for existing chart
+                const existingSalesChart = Chart.getChart(salesCtx);
+                if (existingSalesChart) {
+                    existingSalesChart.destroy();
+                }
+                
+                // Clear canvas
+                const ctx = salesCtx.getContext("2d");
+                ctx.clearRect(0, 0, salesCtx.width, salesCtx.height);
+                
+                // Reset canvas size
+                salesCtx.width = salesCtx.offsetWidth;
+                salesCtx.height = salesCtx.offsetHeight;
+                
+                // Create new chart
+                const salesChart = new Chart(salesCtx, {
+                    type: "line",
+                    data: {
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+                        datasets: [{
+                            label: "Sales",
+                            data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 35000],
+                            backgroundColor: "rgba(54, 162, 235, 0.2)",
+                            borderColor: "rgba(54, 162, 235, 1)",
+                            borderWidth: 2,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: "rgba(0,0,0,0.1)"
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Store chart reference
+                window.salesChart = salesChart;
+                
+            } catch (e) {
+                console.warn("Error creating sales chart:", e);
+            }
+        }
+        
+        // Pipeline Chart
+        const pipelineCtx = document.getElementById("pipelineChart");
+        if (pipelineCtx) {
+            try {
+                // Double check for existing chart
+                const existingPipelineChart = Chart.getChart(pipelineCtx);
+                if (existingPipelineChart) {
+                    existingPipelineChart.destroy();
+                }
+                
+                // Clear canvas
+                const ctx = pipelineCtx.getContext("2d");
+                ctx.clearRect(0, 0, pipelineCtx.width, pipelineCtx.height);
+                
+                // Reset canvas size
+                pipelineCtx.width = pipelineCtx.offsetWidth;
+                pipelineCtx.height = pipelineCtx.offsetHeight;
+                
+                // Create new chart
+                const pipelineChart = new Chart(pipelineCtx, {
+                    type: "doughnut",
+                    data: {
+                        labels: ["Won", "Discovery", "Undiscovery"],
+                        datasets: [{
+                            data: [12.48, 5.23, 15.58],
+                            backgroundColor: [
+                                "rgba(54, 162, 235, 0.8)",
+                                "rgba(255, 206, 86, 0.8)",
+                                "rgba(255, 99, 132, 0.8)"
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: "bottom"
+                            }
+                        }
+                    }
+                });
+                
+                // Store chart reference
+                window.pipelineChart = pipelineChart;
+                
+            } catch (e) {
+                console.warn("Error creating pipeline chart:", e);
+            }
+        }
+    }, 100);
 }
 
-// Pipeline Chart
-const pipelineCtx = document.getElementById("pipelineChart");
-if (pipelineCtx) {
-    // Destroy all existing charts on this canvas
-    try {
-        // Destroy from window reference
-        if (window.pipelineChart && typeof window.pipelineChart.destroy === "function") {
-            window.pipelineChart.destroy();
-            window.pipelineChart = null;
-        }
-        
-        // Destroy from Chart.js registry
-        const existingChart = Chart.getChart(pipelineCtx);
-        if (existingChart) {
-            existingChart.destroy();
-        }
-        
-        // Clear canvas completely
-        const ctx = pipelineCtx.getContext("2d");
-        ctx.clearRect(0, 0, pipelineCtx.width, pipelineCtx.height);
-        
-        // Reset canvas size to force complete refresh
-        pipelineCtx.width = pipelineCtx.offsetWidth;
-        pipelineCtx.height = pipelineCtx.offsetHeight;
-        
-    } catch (e) {
-        console.warn("Error destroying existing chart:", e);
+// Initialize charts when DOM is ready
+document.addEventListener("DOMContentLoaded", function() {
+    initializeCharts();
+});
+
+// Re-initialize charts when page becomes visible (handles tab switching)
+document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+        setTimeout(initializeCharts, 200);
     }
-    
-    const pipelineChart = new Chart(pipelineCtx, {
-        type: "doughnut",
-        data: {
-            labels: ["Won", "Discovery", "Undiscovery"],
-            datasets: [{
-                data: [12.48, 5.23, 15.58],
-                backgroundColor: [
-                    "rgba(54, 162, 235, 0.8)",
-                    "rgba(255, 206, 86, 0.8)",
-                    "rgba(255, 99, 132, 0.8)"
-                ],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: "bottom"
-                }
-            }
-        }
-    });
-    
-    // Store chart reference
-    window.pipelineChart = pipelineChart;
-}
+});
+
+// Cleanup charts when page is unloaded
+window.addEventListener("beforeunload", function() {
+    if (window.salesChart) {
+        window.salesChart.destroy();
+        window.salesChart = null;
+    }
+    if (window.pipelineChart) {
+        window.pipelineChart.destroy();
+        window.pipelineChart = null;
+    }
+});
 </script>
 
 <!-- Test Content for Sticky Header -->

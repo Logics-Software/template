@@ -21,8 +21,9 @@ $content = '
                 <label for="status" class="form-label">Status</label>
                 <select class="form-select" id="status" name="status">
                     <option value="">All Status</option>
-                    <option value="active"' . ($status === 'active' ? ' selected' : '') . '>Active</option>
-                    <option value="inactive"' . ($status === 'inactive' ? ' selected' : '') . '>Inactive</option>
+                    <option value="aktif"' . ($status === 'aktif' ? ' selected' : '') . '>Aktif</option>
+                    <option value="non_aktif"' . ($status === 'non_aktif' ? ' selected' : '') . '>Non Aktif</option>
+                    <option value="register"' . ($status === 'register' ? ' selected' : '') . '>Register</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -56,10 +57,13 @@ $content = '
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
+                        <th>Picture</th>
+                        <th>Username</th>
+                        <th>Nama Lengkap</th>
                         <th>Email</th>
                         <th>Role</th>
                         <th>Status</th>
+                        <th>Last Login</th>
                         <th>Created</th>
                         <th>Actions</th>
                     </tr>
@@ -68,26 +72,51 @@ $content = '
 ';
 
 foreach ($users['data'] as $user) {
-    $statusClass = $user['status'] === 'active' ? 'success' : 'secondary';
+    // Status color mapping
+    $statusClass = match($user['status'] ?? '') {
+        'aktif' => 'success',
+        'non_aktif' => 'danger',
+        'register' => 'warning',
+        default => 'secondary'
+    };
+    
+    // Role color mapping
+    $roleClass = match($user['role'] ?? '') {
+        'admin' => 'danger',
+        'manajemen' => 'primary',
+        'marketing' => 'info',
+        'customer' => 'secondary',
+        default => 'info'
+    };
+    
+    // Picture handling
+    $pictureUrl = $user['picture'] ?? null;
+    $pictureHtml = $pictureUrl ? 
+        '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">' :
+        '<div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+            <i class="fas fa-user text-white" style="font-size: 14px;"></i>
+        </div>';
+    
+    // Last login formatting
+    $lastLogin = $user['lastlogin'] ? 
+        '<small class="text-muted">' . date('M d, Y H:i', strtotime($user['lastlogin'])) . '</small>' :
+        '<small class="text-muted">Never</small>';
+    
     $content .= '
                     <tr>
                         <td>' . $user['id'] . '</td>
+                        <td>' . $pictureHtml . '</td>
+                        <td>' . htmlspecialchars($user['username'] ?? 'N/A') . '</td>
+                        <td>' . htmlspecialchars($user['namalengkap'] ?? 'N/A') . '</td>
+                        <td>' . htmlspecialchars($user['email'] ?? 'N/A') . '</td>
                         <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-2">
-                                    <i class="fas fa-user text-white"></i>
-                                </div>
-                                ' . htmlspecialchars($user['name']) . '
-                            </div>
-                        </td>
-                        <td>' . htmlspecialchars($user['email']) . '</td>
-                        <td>
-                            <span class="badge bg-info">' . ucfirst($user['role']) . '</span>
+                            <span class="badge bg-' . $roleClass . '">' . ucfirst($user['role'] ?? 'N/A') . '</span>
                         </td>
                         <td>
-                            <span class="badge bg-' . $statusClass . '">' . ucfirst($user['status']) . '</span>
+                            <span class="badge bg-' . $statusClass . '">' . ucfirst(str_replace('_', ' ', $user['status'] ?? 'N/A')) . '</span>
                         </td>
-                        <td>' . date('M d, Y', strtotime($user['created_at'])) . '</td>
+                        <td>' . $lastLogin . '</td>
+                        <td>' . date('M d, Y', strtotime($user['created_at'] ?? 'now')) . '</td>
                         <td>
                             <div class="btn-group" role="group">
                                 <a href="' . APP_URL . '/users/' . $user['id'] . '" class="btn btn-sm btn-outline-primary">
@@ -188,7 +217,8 @@ document.getElementById("confirmDelete").addEventListener("click", function() {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-Token": window.csrfToken
+                "X-CSRF-Token": window.csrfToken,
+                "X-Requested-With": "XMLHttpRequest"
             }
         })
         .then(response => response.json())

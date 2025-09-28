@@ -1,3 +1,23 @@
+<?php
+// Check if user is logged in
+$isLoggedIn = Session::has('user_id');
+$currentUrl = $_SERVER['REQUEST_URI'] ?? '';
+$isLoginPage = (strpos($currentUrl, '/login') !== false) || 
+               (strpos($currentUrl, '/auth/login') !== false) ||
+               (basename($_SERVER['PHP_SELF']) === 'login.php');
+
+// If not logged in and not on login page, redirect to login
+if (!$isLoggedIn && !$isLoginPage) {
+    header('Location: ' . APP_URL . '/login');
+    exit;
+}
+
+// If logged in and on login page, redirect to dashboard
+if ($isLoggedIn && $isLoginPage) {
+    header('Location: ' . APP_URL . '/dashboard');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="<?php echo $_COOKIE[THEME_COOKIE_NAME] ?? DEFAULT_THEME; ?>">
 <head>
@@ -23,7 +43,8 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo APP_URL; ?>/assets/images/favicon.ico">
 </head>
-<body>
+<body<?php echo $isLoginPage ? ' class="login-page"' : ''; ?>>
+<?php if ($isLoggedIn): ?>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
@@ -98,12 +119,13 @@
             </div>
         </div>
     </nav>
+<?php endif; ?>
 
+<?php if ($isLoggedIn): ?>
     <!-- Main Content -->
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <?php if (Session::has('user_id')): ?>
             <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
@@ -135,10 +157,9 @@
                     </ul>
                 </div>
             </nav>
-            <?php endif; ?>
 
             <!-- Main Content Area -->
-            <main class="<?php echo Session::has('user_id') ? 'col-md-9 ms-sm-auto col-lg-10 px-md-4' : 'col-12'; ?>">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!-- Flash Messages -->
                 <?php if (Session::has('success')): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -186,6 +207,12 @@
             </div>
         </div>
     </footer>
+<?php else: ?>
+    <!-- Login Page - No Navigation, Sidebar, or Footer -->
+    <div class="login-page-content">
+        <?php echo $content; ?>
+    </div>
+<?php endif; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

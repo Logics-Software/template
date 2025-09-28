@@ -5,7 +5,7 @@
 class User extends Model
 {
     protected $table = 'users';
-    protected $fillable = ['name', 'email', 'password', 'role', 'status'];
+    protected $fillable = ['username', 'namalengkap', 'email', 'password', 'role', 'picture', 'status'];
     protected $hidden = ['password'];
 
     public function findByEmail($email)
@@ -14,24 +14,35 @@ class User extends Model
         return $this->db->fetch($sql, ['email' => $email]);
     }
 
+    public function findByUsername($username)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE username = :username";
+        return $this->db->fetch($sql, ['username' => $username]);
+    }
+
     public function findByRole($role)
     {
         return $this->findAll('role = :role', ['role' => $role]);
     }
 
-    public function getActiveUsers()
+    public function getAktifUsers()
     {
-        return $this->findAll('status = :status', ['status' => 'active']);
+        return $this->findAll('status = :status', ['status' => 'aktif']);
     }
 
-    public function getInactiveUsers()
+    public function getNonAktifUsers()
     {
-        return $this->findAll('status = :status', ['status' => 'inactive']);
+        return $this->findAll('status = :status', ['status' => 'non_aktif']);
+    }
+
+    public function getRegisterUsers()
+    {
+        return $this->findAll('status = :status', ['status' => 'register']);
     }
 
     public function updateLastLogin($id)
     {
-        $data = ['last_login' => date('Y-m-d H:i:s')];
+        $data = ['lastlogin' => date('Y-m-d H:i:s')];
         return $this->update($id, $data);
     }
 
@@ -43,13 +54,48 @@ class User extends Model
 
     public function activate($id)
     {
-        $data = ['status' => 'active'];
+        $data = ['status' => 'aktif'];
         return $this->update($id, $data);
     }
 
     public function deactivate($id)
     {
-        $data = ['status' => 'inactive'];
+        $data = ['status' => 'non_aktif'];
         return $this->update($id, $data);
+    }
+
+    public function updatePicture($id, $picturePath)
+    {
+        $data = ['picture' => $picturePath];
+        return $this->update($id, $data);
+    }
+
+    public function createUser($data, $status = 'aktif')
+    {
+        $data['status'] = $status;
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        return $this->create($data);
+    }
+
+    public function registerUser($data)
+    {
+        return $this->createUser($data, 'register');
+    }
+
+    public function canLogin($user)
+    {
+        return $user && $user['status'] === 'aktif';
+    }
+
+    public function getStatusMessage($status)
+    {
+        switch ($status) {
+            case 'register':
+                return 'Akun anda belum diaktifkan';
+            case 'non_aktif':
+                return 'Akun anda telah dinonaktifkan';
+            default:
+                return '';
+        }
     }
 }

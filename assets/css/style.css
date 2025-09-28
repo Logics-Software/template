@@ -180,7 +180,6 @@ div:hover {
 .notification-dropdown .dropdown-menu {
   width: 350px;
   max-height: 400px;
-  overflow-y: auto;
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-lg);
   border-radius: 0.5rem;
@@ -189,7 +188,15 @@ div:hover {
   right: 0 !important;
   transform: none !important;
   margin-top: 0;
-  position: fixed;
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.notification-dropdown .dropdown-menu.show {
+  display: flex !important;
 }
 
 .notification-item {
@@ -404,6 +411,85 @@ div:hover {
   box-shadow: none;
 }
 
+/* Notification List - Positioned between header and footer */
+.notification-dropdown .notification-list {
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(400px - 120px); /* Total height minus header and footer */
+  position: relative;
+  z-index: 1;
+}
+
+/* Notification Header - Sticky Header */
+.notification-dropdown .dropdown-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+  margin: 0;
+  z-index: 10;
+}
+
+/* Notification Header - Clear All Button Styling */
+.notification-dropdown .dropdown-header .btn {
+  text-align: center !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--primary-color) !important;
+  background-color: transparent !important;
+  border: 2px solid var(--primary-color) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.375rem 0.75rem !important;
+  transition: all 0.2s ease-in-out !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: auto !important;
+}
+
+.notification-dropdown .dropdown-header .btn:hover {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3) !important;
+}
+
+/* Notification Dropdown Footer - Sticky View All Button */
+.notification-dropdown .dropdown-footer {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem;
+  margin: 0;
+}
+
+.notification-dropdown .dropdown-footer .btn {
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: var(--primary-color) !important;
+  background-color: transparent !important;
+  border: 2px solid var(--primary-color) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1.5rem !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.notification-dropdown .dropdown-footer .btn:hover {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3) !important;
+}
+
 /* User Dropdown */
 .user-dropdown {
   position: relative;
@@ -518,9 +604,16 @@ div:hover {
 /* Sidebar scrollbar styling */
 .sidebar::-webkit-scrollbar {
   width: 6px; /* Always reserve 6px width */
+  height: 6px; /* For horizontal scrollbar */
   background: transparent;
   position: absolute;
   right: 0;
+}
+
+/* Set scrollbar button size to 0 */
+.sidebar::-webkit-scrollbar-button {
+  width: 0px !important;
+  height: 0px !important;
 }
 
 /* Force remove all scrollbar buttons */
@@ -598,6 +691,45 @@ div:hover {
   background: transparent !important;
 }
 
+/* Comprehensive scrollbar button hiding - most specific selectors */
+.sidebar::-webkit-scrollbar-button:horizontal:start:decrement,
+.sidebar::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Hide scrollbar buttons on all pseudo-states */
+.sidebar::-webkit-scrollbar-button:start:decrement:before,
+.sidebar::-webkit-scrollbar-button:end:increment:before,
+.sidebar::-webkit-scrollbar-button:start:decrement:after,
+.sidebar::-webkit-scrollbar-button:end:increment:after {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  content: none !important;
+}
+
+/* Force hide scrollbar buttons on focus and active states */
+.sidebar:focus::-webkit-scrollbar-button,
+.sidebar:active::-webkit-scrollbar-button,
+.sidebar:focus-within::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Hide scrollbar buttons on all hover states */
+.sidebar:hover::-webkit-scrollbar-button:horizontal:start:decrement,
+.sidebar:hover::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
 .sidebar::-webkit-scrollbar-track {
   background: transparent;
   margin-top: 80px; /* Start below sticky logo */
@@ -621,9 +753,150 @@ div:hover {
   scrollbar-color: #d1d5db transparent; /* thumb track */
 }
 
+/* Modern approach - hide scrollbar buttons completely */
+.sidebar {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+/* Ensure no scrollbar buttons are visible */
+.sidebar::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Additional comprehensive scrollbar button hiding */
+.sidebar *::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Hide scrollbar buttons on all child elements */
+.sidebar .nav-item::-webkit-scrollbar-button,
+.sidebar .nav-link::-webkit-scrollbar-button,
+.sidebar .dropdown-menu::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Force hide scrollbar buttons with maximum specificity */
+.sidebar.sidebar::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Alternative approach using appearance property */
+.sidebar::-webkit-scrollbar-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Hide scrollbar buttons using size approach */
+.sidebar::-webkit-scrollbar-button:start:decrement,
+.sidebar::-webkit-scrollbar-button:end:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
 .sidebar:hover {
   overflow: scroll;
   scrollbar-color: #d1d5db transparent; /* thumb track */
+}
+
+/* Most comprehensive scrollbar button hiding - override everything */
+.sidebar::-webkit-scrollbar-button:vertical:start:decrement,
+.sidebar::-webkit-scrollbar-button:vertical:end:increment,
+.sidebar::-webkit-scrollbar-button:horizontal:start:decrement,
+.sidebar::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Force hide on all states and pseudo-elements */
+.sidebar:hover::-webkit-scrollbar-button,
+.sidebar:focus::-webkit-scrollbar-button,
+.sidebar:active::-webkit-scrollbar-button,
+.sidebar:focus-within::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Final comprehensive approach - hide all scrollbar buttons */
+.sidebar::-webkit-scrollbar-button:start:decrement,
+.sidebar::-webkit-scrollbar-button:end:increment,
+.sidebar::-webkit-scrollbar-button:vertical:start:decrement,
+.sidebar::-webkit-scrollbar-button:vertical:end:increment,
+.sidebar::-webkit-scrollbar-button:horizontal:start:decrement,
+.sidebar::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
 }
 
 .sidebar.collapsed {
@@ -1882,10 +2155,13 @@ div:hover {
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-/* User Avatar */
-.user-avatar {
+/* User Avatar - Header */
+.header .user-avatar,
+.user-dropdown .user-avatar {
   position: relative;
   display: inline-block;
+  text-align: left;
+  margin-bottom: 0;
 }
 
 .user-avatar img {
@@ -1983,5 +2259,973 @@ div:hover {
   .card {
     box-shadow: none !important;
     border: 1px solid #000 !important;
+  }
+}
+
+/* Login page styling - no need to hide header as it's not loaded */
+
+/* Simple login page content styling */
+.login-page-content {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  margin: 0;
+}
+
+/* Lock screen page content styling */
+.lock-screen-page-content {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  margin: 0;
+}
+
+/* Ensure login page takes full height */
+body.login-page {
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure lock screen page takes full height */
+body.lock-screen-page {
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Login container - no background needed as it's handled by login-page-content */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.login-wrapper {
+  display: flex;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 1200px;
+  width: 100%;
+  min-height: 600px;
+}
+
+.login-wrapper-single {
+  display: flex;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 450px;
+  width: 100%;
+  min-height: 600px;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form-section {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.login-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.social-login {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.social-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.google-btn:hover {
+  border-color: #db4437;
+  color: #db4437;
+}
+
+.facebook-btn:hover {
+  border-color: #4267b2;
+  color: #4267b2;
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 2rem 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-color);
+  z-index: 1;
+}
+
+.divider span {
+  background: white;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.login-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.login-form .form-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.login-form .input-group {
+  position: relative;
+}
+
+.login-form .input-group-text {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-right: none;
+  color: var(--text-secondary);
+  padding: 0.75rem 1rem;
+}
+
+.login-form .form-control {
+  border: 2px solid var(--border-color);
+  border-left: none;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.login-form .form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: none;
+  outline: none;
+}
+
+.login-form .input-group:focus-within .input-group-text {
+  border-color: var(--primary-color);
+}
+
+.btn-toggle-password {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-left: none;
+  color: var(--text-secondary);
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.btn-toggle-password:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.form-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.form-check {
+  margin: 0;
+}
+
+.form-check-input {
+  margin-right: 0.5rem;
+}
+
+.form-check-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.forgot-password-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.forgot-password-link:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.btn-login {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-login:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  color: white;
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+.btn-login:disabled {
+  opacity: 0.7;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.btn-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--text-secondary);
+}
+
+.signup-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+  flex: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonials-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.testimonials-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-align: center;
+}
+
+.testimonial-quote {
+  margin-bottom: 3rem;
+}
+
+.testimonial-quote p {
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.testimonials-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.testimonial-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(10px);
+}
+
+.testimonial-avatar {
+  flex-shrink: 0;
+}
+
+.testimonial-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-info h6 {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.testimonial-info p {
+  margin: 0 0 0.5rem 0;
+  opacity: 0.8;
+  font-size: 0.875rem;
+}
+
+.testimonial-text {
+  font-size: 0.875rem !important;
+  line-height: 1.5;
+  opacity: 0.9 !important;
+  margin: 0 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+    margin: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .login-wrapper-single {
+    margin: 1rem;
+    border-radius: 0.75rem;
+    max-width: 100%;
+  }
+
+  .login-form-section {
+    padding: 2rem;
+  }
+
+  .testimonials-section {
+    padding: 2rem;
+    order: -1;
+  }
+
+  .testimonials-list {
+    gap: 1.5rem;
+  }
+
+  .testimonial-item {
+    padding: 1rem;
+  }
+
+  .social-login {
+    flex-direction: column;
+  }
+
+  .login-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1rem;
+  }
+
+  .login-form-section,
+  .testimonials-section {
+    padding: 1.5rem;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+  }
+
+  .testimonial-quote p {
+    font-size: 1.125rem;
+  }
+}
+
+/* ==========================================
+   LOCK SCREEN MODAL STYLES - Blur Background
+   ========================================== */
+
+/* Lock Screen Modal Overlay */
+.lock-screen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Lock Screen Modal */
+.lock-screen-modal {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  max-width: 450px;
+  width: 90%;
+  min-height: 500px;
+  animation: slideIn 0.3s ease;
+}
+
+/* Lock Screen Content */
+.lock-screen-content {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+/* Lock Screen Header */
+.lock-header {
+  margin-bottom: 2rem;
+}
+
+.lock-header .user-avatar {
+  margin-bottom: 1.5rem;
+}
+
+.lock-header .avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f8f9fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.lock-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.lock-subtitle {
+  color: #718096;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* Lock Screen Form */
+.lock-form {
+  margin-bottom: 2rem;
+}
+
+.lock-form .form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.lock-form .form-label {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.lock-form .input-group {
+  position: relative;
+}
+
+.lock-form .input-group-text {
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  color: #718096;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.lock-form .input-group-text:last-child {
+  border-radius: 0 0.5rem 0.5rem 0;
+  border-left: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lock-form .input-group-text:last-child:hover {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.lock-form .form-control {
+  border: 1px solid #e2e8f0;
+  border-left: 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  background-color: #f7fafc;
+  transition: all 0.2s ease;
+}
+
+.lock-form .form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background-color: white;
+}
+
+.lock-form .form-control:focus + .input-group-text {
+  border-color: #667eea;
+}
+
+.lock-form .form-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.lock-form .form-check-input {
+  margin-right: 0.5rem;
+}
+
+.lock-form .form-check-label {
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin-bottom: 0;
+}
+
+/* Unlock Button */
+.btn-unlock {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-unlock:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  color: white;
+}
+
+.btn-unlock:active {
+  transform: translateY(0);
+}
+
+.btn-unlock:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Lock Footer */
+.lock-footer {
+  text-align: center;
+}
+
+.lock-help {
+  color: #718096;
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
+.lock-help .highlight {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* Form Options */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.forgot-password-link {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.forgot-password-link:hover {
+  color: #5a67d8;
+  text-decoration: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lock-screen-modal {
+    max-width: 100%;
+    width: 95%;
+    min-height: auto;
+  }
+
+  .lock-screen-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .lock-title {
+    font-size: 1.5rem;
+  }
+
+  .lock-header .avatar-img {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lock-screen-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .lock-title {
+    font-size: 1.25rem;
+  }
+
+  .lock-header .avatar-img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f8f9fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Lock Screen specific styles */
+
+.lock-screen-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.lock-screen-wrapper {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 450px;
+  width: 100%;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock-form-section {
+  width: 100%;
+  padding: 3rem 2rem;
+}
+
+.lock-form-container {
+  text-align: center;
+}
+
+.lock-header {
+  margin-bottom: 2.5rem;
+}
+
+.lock-screen-container .user-avatar {
+  margin-bottom: 1.5rem;
+}
+
+.avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f8f9fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.lock-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.lock-subtitle {
+  color: #718096;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+.lock-form {
+  margin-bottom: 2rem;
+}
+
+.lock-form .form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.lock-form .form-label {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.lock-form .input-group {
+  position: relative;
+}
+
+.lock-form .input-group-text {
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  color: #718096;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.lock-form .input-group-text:last-child {
+  border-radius: 0 0.5rem 0.5rem 0;
+  border-left: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lock-form .input-group-text:last-child:hover {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.lock-form .form-control {
+  border: 1px solid #e2e8f0;
+  border-left: 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  background-color: #f7fafc;
+  transition: all 0.2s ease;
+}
+
+.lock-form .form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background-color: white;
+}
+
+.lock-form .form-control:focus + .input-group-text {
+  border-color: #667eea;
+}
+
+.lock-form .form-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.lock-form .form-check-input {
+  margin-right: 0.5rem;
+}
+
+.lock-form .form-check-label {
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin-bottom: 0;
+}
+
+.btn-unlock {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-unlock:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  color: white;
+}
+
+.btn-unlock:active {
+  transform: translateY(0);
+}
+
+.btn-unlock:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.lock-footer {
+  text-align: center;
+}
+
+.lock-help {
+  color: #718096;
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
+.lock-help .highlight {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* Lock Screen Responsive Design */
+@media (max-width: 768px) {
+  .lock-screen-container {
+    padding: 1rem;
+  }
+
+  .lock-screen-wrapper {
+    max-width: 100%;
+    min-height: auto;
+  }
+
+  .lock-form-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .lock-title {
+    font-size: 1.5rem;
+  }
+
+  .avatar-img {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lock-form-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .lock-title {
+    font-size: 1.25rem;
+  }
+
+  .avatar-img {
+    width: 60px;
+    height: 60px;
   }
 }

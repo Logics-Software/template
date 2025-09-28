@@ -158,7 +158,6 @@ $header = '
                                 </div>
                                 <div class="user-info text-start" >
                                     <h6>' . (Session::get('user_name') ?? 'Admin') . '</h6>
-                                    
                                 </div>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">

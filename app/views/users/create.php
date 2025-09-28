@@ -9,17 +9,27 @@ $content = '
                 </h5>
             </div>
             <div class="card-body">
-                <form method="POST" action="' . APP_URL . '/users" id="createUserForm">
+                <form method="POST" action="' . APP_URL . '/users" id="createUserForm" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="' . $csrf_token . '">
                     
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="name" name="name" required>
+                                <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                                <div class="form-text">Username must be unique</div>
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="namalengkap" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="namalengkap" name="namalengkap" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="email" name="email" required>
@@ -54,8 +64,10 @@ $content = '
                                 <select class="form-select" id="role" name="role" required>
                                     <option value="">Select Role</option>
                                     <option value="admin">Administrator</option>
+                                    <option value="manajemen">Manajemen</option>
                                     <option value="user">User</option>
-                                    <option value="moderator">Moderator</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="customer">Customer</option>
                                 </select>
                             </div>
                         </div>
@@ -63,21 +75,24 @@ $content = '
                             <div class="mb-3">
                                 <label for="status" class="form-label">Status</label>
                                 <select class="form-select" id="status" name="status">
-                                    <option value="active" selected>Active</option>
-                                    <option value="inactive">Inactive</option>
+                                    <option value="aktif" selected>Aktif</option>
+                                    <option value="non_aktif">Non Aktif</option>
+                                    <option value="register">Register</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-md-12">
                             <div class="mb-3">
-                                <label for="notes" class="form-label">Notes</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Optional notes about this user..."></textarea>
+                                <label for="picture" class="form-label">Profile Picture</label>
+                                <input type="file" class="form-control" id="picture" name="picture" accept="image/*">
+                                <div class="form-text">Upload a profile picture (optional)</div>
                             </div>
                         </div>
                     </div>
+
 
                     <div class="d-flex justify-content-between">
                         <a href="' . APP_URL . '/users" class="btn btn-secondary">
@@ -123,7 +138,8 @@ document.getElementById("createUserForm").addEventListener("submit", function(e)
         method: "POST",
         body: formData,
         headers: {
-            "X-CSRF-Token": window.csrfToken
+            "X-CSRF-Token": window.csrfToken,
+            "X-Requested-With": "XMLHttpRequest"
         }
     })
     .then(response => response.json())

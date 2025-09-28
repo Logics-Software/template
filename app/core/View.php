@@ -27,8 +27,8 @@ class View
         
         // Get content from buffer or from $content variable
         $bufferContent = ob_get_clean();
-        if (empty($bufferContent) && isset($content)) {
-            $content = $content;
+        if (isset($content) && !empty($content)) {
+            // Use content variable if it exists and is not empty
         } else {
             $content = $bufferContent;
         }

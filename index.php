@@ -1,6 +1,6 @@
 <?php
 /**
- * Hando PHP MVC Template
+ * Logics PHP APP Template
  * Main entry point for the application
  */
 
