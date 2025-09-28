@@ -5,7 +5,7 @@
 class User extends Model
 {
     protected $table = 'users';
-    protected $fillable = ['username', 'namalengkap', 'email', 'password', 'role', 'picture', 'status'];
+    protected $fillable = ['username', 'namalengkap', 'email', 'password', 'role', 'registration_reason', 'picture', 'status'];
     protected $hidden = ['password'];
 
     public function findByEmail($email)

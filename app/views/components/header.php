@@ -64,7 +64,7 @@ $header = '
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="' . APP_URL . '/assets/images/users/user-1.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
-                                            <div class="avatar-fallback" style="display:none; width:40px; height:40px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:14px;">C</div>
+                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">C</div>
                                         </div>
                                         <div class="notification-content">
                                             <h6 class="mb-1">Carl Steadham</h6>
@@ -77,7 +77,7 @@ $header = '
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="' . APP_URL . '/assets/images/users/user-2.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
-                                            <div class="avatar-fallback" style="display:none; width:40px; height:40px; background:linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:14px;">O</div>
+                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #28a745 0%, #20c997 100%);">O</div>
                                         </div>
                                         <div class="notification-content">
                                             <h6 class="mb-1">Olivia McGuire</h6>
@@ -90,7 +90,7 @@ $header = '
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="' . APP_URL . '/assets/images/users/user-3.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
-                                            <div class="avatar-fallback" style="display:none; width:40px; height:40px; background:linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:14px;">T</div>
+                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);">T</div>
                                         </div>
                                         <div class="notification-content">
                                             <h6 class="mb-1">Travis Williams</h6>
@@ -103,7 +103,7 @@ $header = '
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="' . APP_URL . '/assets/images/users/user-1.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
-                                            <div class="avatar-fallback" style="display:none; width:40px; height:40px; background:linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:14px;">V</div>
+                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);">V</div>
                                         </div>
                                         <div class="notification-content">
                                             <h6 class="mb-1">Violette Lasky</h6>
@@ -116,7 +116,7 @@ $header = '
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="' . APP_URL . '/assets/images/users/user-2.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
-                                            <div class="avatar-fallback" style="display:none; width:40px; height:40px; background:linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:14px;">R</div>
+                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);">R</div>
                                         </div>
                                         <div class="notification-content">
                                             <h6 class="mb-1">Ralph Edwards</h6>
@@ -129,7 +129,7 @@ $header = '
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="' . APP_URL . '/assets/images/users/user-3.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
-                                            <div class="avatar-fallback" style="display:none; width:40px; height:40px; background:linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:14px;">J</div>
+                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);">J</div>
                                         </div>
                                         <div class="notification-content">
                                             <h6 class="mb-1">Jocab jones</h6>
@@ -149,12 +149,17 @@ $header = '
                     <div class="user-dropdown">
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                                <div class="user-avatar me-2">
-                                    ' . (Session::get('user_avatar') ? 
-                                        '<img src="' . APP_URL . '/assets/images/users/' . Session::get('user_avatar') . '" alt="User" class="rounded-circle" width="32" height="32" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'block\';">' .
-                                        '<div class="avatar-fallback" style="display:none; width:32px; height:32px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:16px;">' . strtoupper(substr(Session::get('user_name') ?? 'A', 0, 1)) . '</div>' :
-                                        '<div class="avatar-fallback" style="width:32px; height:32px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:13px;">' . strtoupper(substr(Session::get('user_name') ?? 'A', 0, 1)) . '</div>'
-                                    ) . '
+                                <div class="user-avatar me-2">';
+                                
+                                if (Session::get('user_picture')) {
+                                    // Jika ada profile picture, tampilkan gambar saja
+                                    $header .= '<img src="' . APP_URL . '/' . Session::get('user_picture') . '" alt="User" class="rounded-circle" width="32" height="32">';
+                                } else {
+                                    // Jika tidak ada profile picture, tampilkan avatar fallback
+                                    $header .= '<div class="avatar-fallback avatar-sm" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">' . strtoupper(substr(Session::get('user_name') ?? 'A', 0, 1)) . '</div>';
+                                }
+                                
+                                $header .= '
                                 </div>
                                 <div class="user-info text-start" >
                                     <h6>' . (Session::get('user_name') ?? 'Admin') . '</h6>
@@ -164,8 +169,8 @@ $header = '
                                 <li><a class="dropdown-item" href="' . APP_URL . '/profile">
                                     <i class="fas fa-user me-2"></i>My Account
                                 </a></li>
-                                <li><a class="dropdown-item" href="' . APP_URL . '/settings">
-                                    <i class="fas fa-cog me-2"></i>Settings
+                                <li><a class="dropdown-item" href="' . APP_URL . '/change-password">
+                                    <i class="fas fa-key me-2"></i>Change Password
                                 </a></li>
                                 <li><a class="dropdown-item" href="' . APP_URL . '/lock-screen">
                                     <i class="fas fa-lock me-2"></i>Lock Screen

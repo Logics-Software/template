@@ -14,8 +14,8 @@ $content = '
                     <div class="col-md-12 text-center">
                         <div class="mb-3">
                             ' . ($user['picture'] ? 
-                                '<img src="' . htmlspecialchars($user['picture']) . '" alt="Profile Picture" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">' :
-                                '<div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle text-white" style="width: 120px; height: 120px;">
+                                '<img src="' . htmlspecialchars($user['picture']) . '" alt="Profile Picture" class="rounded-circle profile-img-lg">' :
+                                '<div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle text-white profile-img-lg">
                                     <i class="fas fa-user" style="font-size: 48px;"></i>
                                 </div>'
                             ) . '
@@ -141,7 +141,6 @@ function deleteUser(id) {
             }
         })
         .catch(error => {
-            console.error("Error:", error);
             alert("An error occurred while deleting the user");
         });
     }

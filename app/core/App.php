@@ -23,13 +23,12 @@ class App
             Session::start();
             
             // Handle CSRF protection
-            // Temporarily disabled for testing
-            // if ($this->request->isPost()) {
-            //     if (!$this->validateCSRF()) {
-            //         $this->response->json(['error' => 'CSRF token mismatch'], 403);
-            //         return;
-            //     }
-            // }
+            if ($this->request->isPost()) {
+                if (!$this->validateCSRF()) {
+                    $this->response->json(['error' => 'CSRF token mismatch'], 403);
+                    return;
+                }
+            }
 
             // Route the request
             $this->router->dispatch($this->request, $this->response);
@@ -69,6 +68,8 @@ class App
         $this->router->get('/users/{id}/edit', 'UserController@edit');
         $this->router->put('/users/{id}', 'UserController@update');
         $this->router->delete('/users/{id}', 'UserController@destroy');
+        $this->router->post('/users/{id}/activate', 'UserController@activateUser');
+        $this->router->post('/users/{id}/reject', 'UserController@rejectUser');
         
         // Settings routes
         $this->router->get('/settings', 'UserController@settings');
@@ -77,6 +78,12 @@ class App
         // Profile routes
         $this->router->get('/profile', 'UserController@profile');
         $this->router->post('/profile', 'UserController@updateProfile');
+        $this->router->get('/profile/updated', 'UserController@profileUpdated');
+        
+        // Change Password routes
+        $this->router->get('/change-password', 'UserController@changePassword');
+        $this->router->post('/change-password', 'UserController@updatePassword');
+        $this->router->get('/change-password/updated', 'UserController@passwordUpdated');
         
         // Analytics routes
         $this->router->get('/analytics', 'DashboardController@analytics');

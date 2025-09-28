@@ -98,7 +98,7 @@ $content = '
                                 <div class="mt-2">
                                     <label class="form-label fw-bold">Current Picture:</label>
                                     <div>
-                                        <img src="' . APP_URL . '/' . htmlspecialchars($user['picture']) . '" alt="Current Profile Picture" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                                        <img src="' . APP_URL . '/' . htmlspecialchars($user['picture']) . '" alt="Current Profile Picture" class="rounded-circle profile-img-md">
                                     </div>
                                 </div>';
                                 }
@@ -192,7 +192,6 @@ document.getElementById("editUserForm").addEventListener("submit", function(e) {
         }
     })
     .catch(error => {
-        console.error("Error:", error);
         alert("An error occurred while updating the user");
     })
     .finally(() => {

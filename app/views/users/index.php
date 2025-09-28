@@ -85,15 +85,15 @@ foreach ($users['data'] as $user) {
         'admin' => 'danger',
         'manajemen' => 'primary',
         'marketing' => 'info',
-        'customer' => 'secondary',
+        'customer' => 'warning',
         default => 'info'
     };
     
     // Picture handling
     $pictureUrl = $user['picture'] ?? null;
     $pictureHtml = $pictureUrl ? 
-        '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">' :
-        '<div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+        '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle profile-img-sm">' :
+        '<div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center">
             <i class="fas fa-user text-white" style="font-size: 14px;"></i>
         </div>';
     
@@ -118,7 +118,24 @@ foreach ($users['data'] as $user) {
                         <td>' . $lastLogin . '</td>
                         <td>' . date('M d, Y', strtotime($user['created_at'] ?? 'now')) . '</td>
                         <td>
-                            <div class="btn-group" role="group">
+                            <div class="btn-group" role="group">';
+    
+    // Show different actions based on user status
+    if ($user['status'] === 'register') {
+        // For pending registration users - show approve/reject buttons
+        $content .= '
+                                <button class="btn btn-sm btn-success" onclick="approveUser(' . $user['id'] . ')">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="rejectUser(' . $user['id'] . ')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <a href="' . APP_URL . '/users/' . $user['id'] . '" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>';
+    } else {
+        // For active/inactive users - show normal actions
+        $content .= '
                                 <a href="' . APP_URL . '/users/' . $user['id'] . '" class="btn btn-sm btn-outline-primary">
                                     <i class="fas fa-eye"></i>
                                 </a>
@@ -127,7 +144,10 @@ foreach ($users['data'] as $user) {
                                 </a>
                                 <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(' . $user['id'] . ')">
                                     <i class="fas fa-trash"></i>
-                                </button>
+                                </button>';
+    }
+    
+    $content .= '
                             </div>
                         </td>
                     </tr>
@@ -140,7 +160,7 @@ $content .= '
         </div>
 
         <!-- Pagination -->
-        <nav aria-label="Users pagination">
+        <nav>
             <ul class="pagination justify-content-center">
 ';
 
@@ -202,8 +222,48 @@ $content .= '
     </div>
 </div>
 
+<!-- Approve Confirmation Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Approval</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to approve this user? They will be able to login to the system.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="confirmApprove">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Confirmation Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Rejection</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reject this user? This action will permanently delete their account and cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmReject">Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 let deleteUserId = null;
+let approveUserId = null;
+let rejectUserId = null;
 
 function deleteUser(id) {
     deleteUserId = id;
@@ -211,6 +271,19 @@ function deleteUser(id) {
     modal.show();
 }
 
+function approveUser(id) {
+    approveUserId = id;
+    const modal = new bootstrap.Modal(document.getElementById("approveModal"));
+    modal.show();
+}
+
+function rejectUser(id) {
+    rejectUserId = id;
+    const modal = new bootstrap.Modal(document.getElementById("rejectModal"));
+    modal.show();
+}
+
+// Delete user confirmation
 document.getElementById("confirmDelete").addEventListener("click", function() {
     if (deleteUserId) {
         fetch("' . APP_URL . '/users/" + deleteUserId, {
@@ -230,8 +303,57 @@ document.getElementById("confirmDelete").addEventListener("click", function() {
             }
         })
         .catch(error => {
-            console.error("Error:", error);
             alert("An error occurred while deleting the user");
+        });
+    }
+});
+
+// Approve user confirmation
+document.getElementById("confirmApprove").addEventListener("click", function() {
+    if (approveUserId) {
+        fetch("' . APP_URL . '/users/" + approveUserId + "/activate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": window.csrfToken,
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert("Error: " + (data.error || "Failed to approve user"));
+            }
+        })
+        .catch(error => {
+            alert("An error occurred while approving the user");
+        });
+    }
+});
+
+// Reject user confirmation
+document.getElementById("confirmReject").addEventListener("click", function() {
+    if (rejectUserId) {
+        fetch("' . APP_URL . '/users/" + rejectUserId + "/reject", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": window.csrfToken,
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert("Error: " + (data.error || "Failed to reject user"));
+            }
+        })
+        .catch(error => {
+            alert("An error occurred while rejecting the user");
         });
     }
 });

@@ -14,10 +14,11 @@ class UserController extends BaseController
 
     public function index($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id') && APP_DEBUG === false) {
-        //     $this->redirect('/login');
-        // }
+        // Check if user is logged in
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
 
         $page = (int) ($request->input('page') ?? 1);
         $search = $request->input('search') ?? '';
@@ -50,10 +51,9 @@ class UserController extends BaseController
 
     public function create($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id') && APP_DEBUG === false) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $this->view('users/create', [
             'title' => 'Create User',
@@ -63,10 +63,9 @@ class UserController extends BaseController
 
     public function store($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id') && APP_DEBUG === false) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $validator = $request->validate([
             'username' => 'required|min:3|unique:users',
@@ -177,10 +176,9 @@ class UserController extends BaseController
 
     public function show($request, $response, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id') && APP_DEBUG === false) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $id = $params[0] ?? $request->input('id');
         $user = $this->userModel->find($id);
@@ -203,10 +201,9 @@ class UserController extends BaseController
 
     public function edit($request, $response, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id') && APP_DEBUG === false) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $id = $params[0] ?? $request->input('id');
         
@@ -226,10 +223,9 @@ class UserController extends BaseController
 
     public function update($request, $response, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id') && APP_DEBUG === false) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $id = $params[0] ?? $request->input('id');
         $user = $this->userModel->find($id);
@@ -251,28 +247,6 @@ class UserController extends BaseController
             'role' => 'required'
         ]);
 
-        // Custom validation for unique fields excluding current user
-        // Temporarily disabled for testing
-        // $username = $request->input('username');
-        // $email = $request->input('email');
-
-        // Validate password confirmation if password is provided
-        // Temporarily disabled for testing
-        // if ($request->input('password')) {
-        //     $passwordValidator = $request->validate([
-        //         'password' => 'min:6|confirmed'
-        //     ]);
-        //     
-        //     if (!$passwordValidator->validate()) {
-        //         if ($request->isAjax()) {
-        //             $this->json(['errors' => $passwordValidator->errors()], 422);
-        //         } else {
-        //             $this->withErrors($passwordValidator->errors());
-        //             $this->redirect("/users/{$id}/edit");
-        //         }
-        //         return;
-        //     }
-        // }
 
         if (!$validator->validate()) {
             if ($request->isAjax()) {
@@ -384,10 +358,9 @@ class UserController extends BaseController
 
     public function destroy($request, $response, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id')) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $id = $params[0] ?? $request->input('id');
         $user = $this->userModel->find($id);
@@ -425,10 +398,9 @@ class UserController extends BaseController
 
     public function settings($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id')) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $this->view('users/settings', [
             'title' => 'Settings',
@@ -439,10 +411,9 @@ class UserController extends BaseController
 
     public function updateSettings($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id')) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $this->withSuccess('Settings updated successfully');
         $this->redirect('/settings');
@@ -450,12 +421,12 @@ class UserController extends BaseController
 
     public function profile($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id')) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $user = $this->userModel->find(Session::get('user_id'));
+        
 
         $this->view('users/profile', [
             'title' => 'Profile',
@@ -467,26 +438,238 @@ class UserController extends BaseController
 
     public function updateProfile($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id')) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
 
-        $this->withSuccess('Profile updated successfully');
+        $userId = Session::get('user_id');
+        $user = $this->userModel->find($userId);
+        
+        if (!$user) {
+            $this->withError('User not found');
+            $this->redirect('/profile');
+            return;
+        }
+
+        // Get form data
+        $namalengkap = $request->input('namalengkap');
+        $email = $request->input('email');
+
+        // Validate required fields
+        if (empty($namalengkap) || empty($email)) {
+            $this->withError('Name and email are required');
+            $this->redirect('/profile');
+            return;
+        }
+
+        // Validate email format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->withError('Invalid email format');
+            $this->redirect('/profile');
+            return;
+        }
+
+        // Check if email is already used by another user
+        $existingUser = $this->userModel->findByEmail($email);
+        if ($existingUser && $existingUser['id'] != $userId) {
+            $this->withError('Email is already in use by another user');
+            $this->redirect('/profile');
+            return;
+        }
+
+        // Prepare update data
+        $updateData = [
+            'namalengkap' => $namalengkap,
+            'email' => $email
+        ];
+
+
+        // Handle file upload
+        if (isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/images/users/';
+            
+            // Create directory if it doesn't exist
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+            
+            $fileExtension = pathinfo($_FILES['picture']['name'], PATHINFO_EXTENSION);
+            $fileName = 'user_' . $userId . '_' . time() . '.' . $fileExtension;
+            $uploadPath = $uploadDir . $fileName;
+            
+            // Validate file type
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            if (!in_array(strtolower($fileExtension), $allowedTypes)) {
+                $this->withError('Invalid file type. Only JPG, PNG, GIF, and WebP are allowed');
+                $this->redirect('/profile');
+                return;
+            }
+            
+            // Validate file size (2MB max)
+            if ($_FILES['picture']['size'] > 2 * 1024 * 1024) {
+                $this->withError('File size too large. Maximum 2MB allowed');
+                $this->redirect('/profile');
+                return;
+            }
+            
+            if (move_uploaded_file($_FILES['picture']['tmp_name'], $uploadPath)) {
+                // Delete old picture if exists
+                if (!empty($user['picture']) && file_exists($uploadDir . $user['picture'])) {
+                    unlink($uploadDir . $user['picture']);
+                }
+                
+                $updateData['picture'] = $fileName;
+            }
+        }
+
+        // Update user data
+        if ($this->userModel->update($userId, $updateData)) {
+            // Update session data
+            Session::set('user_name', $namalengkap);
+            Session::set('user_email', $email);
+            if (isset($updateData['picture'])) {
+                Session::set('user_picture', $updateData['picture']);
+            }
+
+            $this->withSuccess('Profile updated successfully');
+            
+            // Redirect to a page that will use JavaScript to go back
+            $this->redirect('/profile/updated');
+        } else {
+            $this->withError('Failed to update profile');
         $this->redirect('/profile');
+        }
+    }
+
+    public function profileUpdated($request = null, $response = null, $params = [])
+    {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
+        // This page will use JavaScript to go back to previous page
+        $this->view('users/profile-updated', [
+            'title' => 'Profile Updated',
+            'current_page' => 'profile'
+        ]);
+    }
+
+    public function changePassword($request = null, $response = null, $params = [])
+    {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
+        $user = $this->userModel->find(Session::get('user_id'));
+        
+        if (!$user) {
+            $this->withError('User not found');
+            $this->redirect('/profile');
+            return;
+        }
+
+        $this->view('users/change-password', [
+            'title' => 'Change Password',
+            'current_page' => 'change-password',
+            'user' => $user,
+            'csrf_token' => $this->csrfToken()
+        ]);
+    }
+
+    public function updatePassword($request = null, $response = null, $params = [])
+    {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
+        $userId = Session::get('user_id');
+        $user = $this->userModel->find($userId);
+        
+        if (!$user) {
+            $this->withError('User not found');
+            $this->redirect('/change-password');
+            return;
+        }
+
+        // Get form data
+        $currentPassword = $request->input('current_password');
+        $newPassword = $request->input('new_password');
+        $confirmPassword = $request->input('confirm_password');
+
+        // Validate required fields
+        if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+            $this->withError('All password fields are required');
+            $this->redirect('/change-password');
+            return;
+        }
+
+        // Verify current password
+        if (!password_verify($currentPassword, $user['password'])) {
+            $this->withError('Current password is incorrect');
+            $this->redirect('/change-password');
+            return;
+        }
+
+        // Validate new password
+        if ($newPassword !== $confirmPassword) {
+            $this->withError('New passwords do not match');
+            $this->redirect('/change-password');
+            return;
+        }
+        
+        if (strlen($newPassword) < 6) {
+            $this->withError('New password must be at least 6 characters long');
+            $this->redirect('/change-password');
+            return;
+        }
+
+        // Check if new password is different from current
+        if (password_verify($newPassword, $user['password'])) {
+            $this->withError('New password must be different from current password');
+            $this->redirect('/change-password');
+            return;
+        }
+
+        // Update password
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        
+        if ($this->userModel->update($userId, ['password' => $hashedPassword])) {
+            $this->withSuccess('Password updated successfully');
+            $this->redirect('/change-password/updated');
+        } else {
+            $this->withError('Failed to update password');
+            $this->redirect('/change-password');
+        }
+    }
+
+    public function passwordUpdated($request = null, $response = null, $params = [])
+    {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
+        // This page will use JavaScript to go back to previous page
+        $this->view('users/password-updated', [
+            'title' => 'Password Updated',
+            'current_page' => 'change-password'
+        ]);
     }
 
     public function uploadPicture($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id')) {
-        //     if ($request->isAjax()) {
-        //         $this->json(['error' => 'Unauthorized'], 401);
-        //     } else {
-        //         $this->redirect('/login');
-        //     }
-        //     return;
-        // }
+        if (!Session::has('user_id')) {
+            if ($request->isAjax()) {
+                $this->json(['error' => 'Unauthorized'], 401);
+            } else {
+                $this->redirect('/login');
+            }
+            return;
+        }
 
         $userId = $params[0] ?? Session::get('user_id');
         $user = $this->userModel->find($userId);
@@ -599,10 +782,9 @@ class UserController extends BaseController
 
     public function activateUser($request = null, $response = null, $params = [])
     {
-        // Temporarily disabled for testing
-        // if (!Session::has('user_id')) {
-        //     $this->redirect('/login');
-        // }
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
 
         $id = $params[0] ?? $request->input('id');
         $user = $this->userModel->find($id);
@@ -634,6 +816,62 @@ class UserController extends BaseController
                 $this->json(['error' => 'Failed to activate user'], 500);
             } else {
                 $this->withError('Failed to activate user');
+                $this->redirect('/users');
+            }
+        }
+    }
+
+    public function rejectUser($request = null, $response = null, $params = [])
+    {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
+
+        $id = $params[0] ?? $request->input('id');
+        $user = $this->userModel->find($id);
+
+        if (!$user) {
+            if ($request->isAjax()) {
+                $this->json(['error' => 'User not found'], 404);
+            } else {
+                $this->withError('User not found');
+                $this->redirect('/users');
+            }
+            return;
+        }
+
+        if ($user['status'] !== 'register') {
+            if ($request->isAjax()) {
+                $this->json(['error' => 'User is not in pending status'], 400);
+            } else {
+                $this->withError('User is not in pending status');
+                $this->redirect('/users');
+            }
+            return;
+        }
+
+        try {
+            // Delete user picture if exists
+            if ($user['picture'] && file_exists($user['picture'])) {
+                unlink($user['picture']);
+            }
+
+            $this->userModel->beginTransaction();
+            $this->userModel->delete($id);
+            $this->userModel->commit();
+
+            if ($request->isAjax()) {
+                $this->json(['success' => true, 'message' => 'User rejected and deleted successfully']);
+            } else {
+                $this->withSuccess('User rejected and deleted successfully');
+                $this->redirect('/users');
+            }
+        } catch (Exception $e) {
+            $this->userModel->rollback();
+            if ($request->isAjax()) {
+                $this->json(['error' => 'Failed to reject user'], 500);
+            } else {
+                $this->withError('Failed to reject user');
                 $this->redirect('/users');
             }
         }

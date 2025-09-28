@@ -103,8 +103,10 @@ class AuthController extends BaseController
             'username' => 'required|min:3|unique:users',
             'namalengkap' => 'required|min:3',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
-            'password_confirmation' => 'required'
+            'role' => 'required|in:user,sales,customer',
+            'registration_reason' => 'required|min:10',
+            'password' => 'required|min:6',
+            'confirm_password' => 'required|same:password'
         ]);
 
         if (!$validator->validate()) {
@@ -116,8 +118,9 @@ class AuthController extends BaseController
             'username' => $this->input('username'),
             'namalengkap' => $this->input('namalengkap'),
             'email' => $this->input('email'),
-            'password' => $this->input('password'), // Will be hashed in model
-            'role' => 'user'
+            'role' => $this->input('role'),
+            'registration_reason' => $this->input('registration_reason'),
+            'password' => $this->input('password') // Will be hashed in model
         ];
 
         try {

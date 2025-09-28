@@ -539,7 +539,7 @@ function initializeCharts() {
                 window.salesChart = salesChart;
                 
             } catch (e) {
-                console.warn("Error creating sales chart:", e);
+                // Chart creation failed silently
             }
         }
         
@@ -591,7 +591,7 @@ function initializeCharts() {
                 window.pipelineChart = pipelineChart;
                 
             } catch (e) {
-                console.warn("Error creating pipeline chart:", e);
+                // Chart creation failed silently
             }
         }
     }, 100);

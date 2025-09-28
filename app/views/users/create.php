@@ -173,7 +173,6 @@ document.getElementById("createUserForm").addEventListener("submit", function(e)
         }
     })
     .catch(error => {
-        console.error("Error:", error);
         const alertDiv = document.createElement("div");
         alertDiv.className = "alert alert-danger alert-dismissible fade show";
         alertDiv.innerHTML = `

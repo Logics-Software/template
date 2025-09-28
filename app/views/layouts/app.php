@@ -8,16 +8,16 @@ $isLoginPage = (strpos($currentUrl, '/login') !== false) ||
 $isLockScreenPage = (strpos($currentUrl, '/lock-screen') !== false) ||
                    (strpos($currentUrl, '/unlock') !== false) ||
                    (strpos($currentUrl, '/lock') !== false);
+$isRegisterPage = (strpos($currentUrl, '/register') !== false);
 
-// If not logged in and not on login page or lock screen, redirect to login
-// Temporarily disabled for testing
-// if (!$isLoggedIn && !$isLoginPage && !$isLockScreenPage) {
-//     header('Location: ' . APP_URL . '/login');
-//     exit;
-// }
+// If not logged in and not on login page, register page, or lock screen, redirect to login
+if (!$isLoggedIn && !$isLoginPage && !$isLockScreenPage && !$isRegisterPage) {
+    header('Location: ' . APP_URL . '/login');
+    exit;
+}
 
-// If logged in and on login page, redirect to dashboard
-if ($isLoggedIn && $isLoginPage) {
+// If logged in and on login page or register page, redirect to dashboard
+if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     header('Location: ' . APP_URL . '/dashboard');
     exit;
 }
@@ -28,6 +28,11 @@ if ($isLoggedIn && $isLoginPage) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title ?? 'Hando PHP MVC'; ?></title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="<?php echo APP_URL; ?>/assets/images/favicon.png">
+    <link rel="shortcut icon" href="<?php echo APP_URL; ?>/assets/images/favicon.png">
+    <link rel="apple-touch-icon" href="<?php echo APP_URL; ?>/assets/images/favicon.png">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -51,6 +56,8 @@ if ($isLoggedIn && $isLoginPage) {
 $bodyClass = 'bg-light';
 if ($isLoginPage) {
     $bodyClass = 'login-page';
+} elseif ($isRegisterPage) {
+    $bodyClass = 'register-page';
 } elseif ($isLockScreenPage) {
     $bodyClass = 'lock-screen-page';
 }
