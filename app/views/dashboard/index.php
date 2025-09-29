@@ -169,7 +169,7 @@ $content = '
                     <div class="task-item">
                         <div class="task-info">
                             <h6>Update User Database</h6>
-                            <p>Hando project s2 to amazon cloud database setup</p>
+                            <p>Logics project s2 to amazon cloud database setup</p>
                         </div>
                         <div class="task-status">
                             <span class="badge bg-warning">Pending</span>
@@ -178,7 +178,7 @@ $content = '
                     <div class="task-item">
                         <div class="task-info">
                             <h6>Update Front-end project UI</h6>
-                            <p>For the handover of the project, update the new UI design</p>
+                            <p>For the logicsver of the project, update the new UI design</p>
                         </div>
                         <div class="task-status">
                             <span class="badge bg-primary">In Progress</span>

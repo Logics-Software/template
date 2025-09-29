@@ -1,9 +1,9 @@
-// Hando Admin Template - Main JavaScript File
+// Logics Admin Template - Main JavaScript File
 // Author: Your Name
 // Version: 1.0.0
 
-// Global Hando object
-window.Hando = {
+// Global Logics object
+window.Logics = {
   theme: "light",
   sidebarCollapsed: false,
 };
@@ -80,7 +80,7 @@ function initSidebarToggle() {
 
 // Theme management functions
 function initTheme() {
-  const savedTheme = getCookie("hando_theme") || "light";
+  const savedTheme = getCookie("logics_theme") || "light";
 
   applyTheme(savedTheme);
   updateThemeIcon(savedTheme);
@@ -89,8 +89,8 @@ function initTheme() {
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-bs-theme", theme);
   document.body.setAttribute("data-bs-theme", theme);
-  window.Hando.theme = theme;
-  setCookie("hando_theme", theme);
+  window.Logics.theme = theme;
+  setCookie("logics_theme", theme);
 
   // Force re-render
   document.documentElement.style.colorScheme = theme;
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
       e.stopPropagation();
 
-      const currentTheme = window.Hando.theme || "light";
+      const currentTheme = window.Logics.theme || "light";
       const newTheme = currentTheme === "light" ? "dark" : "light";
 
       toggleTheme(newTheme);
@@ -246,10 +246,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Export functions for global access
-window.Hando.initSidebarToggle = initSidebarToggle;
-window.Hando.initTheme = initTheme;
-window.Hando.toggleTheme = toggleTheme;
-window.Hando.updateThemeIcon = updateThemeIcon;
+window.Logics.initSidebarToggle = initSidebarToggle;
+window.Logics.initTheme = initTheme;
+window.Logics.toggleTheme = toggleTheme;
+window.Logics.updateThemeIcon = updateThemeIcon;
 
 // Fallback initialization for theme toggle
 // This ensures theme toggle works even if there are timing issues
@@ -261,7 +261,7 @@ setTimeout(function () {
       e.preventDefault();
       e.stopPropagation();
 
-      const currentTheme = window.Hando.theme || "light";
+      const currentTheme = window.Logics.theme || "light";
       const newTheme = currentTheme === "light" ? "dark" : "light";
 
       toggleTheme(newTheme);

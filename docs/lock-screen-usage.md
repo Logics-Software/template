@@ -2,7 +2,7 @@
 
 ## Overview
 
-Lock Screen module adalah fitur keamanan yang memungkinkan pengguna untuk mengunci layar mereka setelah periode tidak aktif. Modul ini terinspirasi dari desain [Hando Lock Screen](https://zoyothemes.com/hando/html/auth-lock-screen) dengan beberapa penyesuaian.
+Lock Screen module adalah fitur keamanan yang memungkinkan pengguna untuk mengunci layar mereka setelah periode tidak aktif. Modul ini terinspirasi dari desain [Logics Lock Screen](https://zoyothemes.com/logics/html/auth-lock-screen) dengan beberapa penyesuaian.
 
 ## Features
 

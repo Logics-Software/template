@@ -1,12 +1,12 @@
 {
-  "name": "hando/php-mvc-template",
-  "description": "A lightweight PHP MVC template based on Hando dashboard design",
+  "name": "logics/php-mvc-template",
+  "description": "A lightweight PHP MVC template based on Logics dashboard design",
   "type": "project",
   "license": "MIT",
   "authors": [
     {
-      "name": "Hando Team",
-      "email": "info@hando.com"
+      "name": "Logics Team",
+      "email": "info@logics.com"
     }
   ],
   "require": {

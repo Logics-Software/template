@@ -1,6 +1,6 @@
-# Hando PHP MVC Template
+# Logics PHP MVC Template
 
-A lightweight, modern PHP MVC template based on the Hando dashboard design. This template provides a solid foundation for building web applications with clean architecture, modern UI components, and multi-database support.
+A lightweight, modern PHP MVC template based on the Logics dashboard design. This template provides a solid foundation for building web applications with clean architecture, modern UI components, and multi-database support.
 
 ## Features
 
@@ -27,8 +27,8 @@ A lightweight, modern PHP MVC template based on the Hando dashboard design. This
 ### 1. Clone or Download
 
 ```bash
-git clone https://github.com/your-repo/hando-php-mvc.git
-cd hando-php-mvc
+git clone https://github.com/your-repo/logics-php-mvc.git
+cd logics-php-mvc
 ```
 
 ### 2. Configure Database
@@ -38,7 +38,7 @@ Edit `app/config/config.php` and update the database settings:
 ```php
 define('DB_TYPE', 'mysql'); // mysql, sqlsrv, pgsql
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'hando_db');
+define('DB_NAME', 'logics_db');
 define('DB_USER', 'your_username');
 define('DB_PASS', 'your_password');
 define('DB_PORT', 3306);
@@ -50,7 +50,7 @@ Create the database and run migrations:
 
 ```bash
 # Create database (replace with your database name)
-mysql -u root -p -e "CREATE DATABASE hando_db;"
+mysql -u root -p -e "CREATE DATABASE logics_db;"
 
 # Run migrations
 php database/migrate.php
@@ -70,13 +70,13 @@ chmod 644 .htaccess
 
 Open your browser and navigate to your application URL. The default login credentials are:
 
-- **Email**: admin@hando.com
+- **Email**: admin@logics.com
 - **Password**: password
 
 ## Project Structure
 
 ```
-hando-php-mvc/
+logics-php-mvc/
 ├── app/
 │   ├── config/
 │   │   └── config.php          # Application configuration
@@ -138,7 +138,7 @@ The application supports three database types:
 ```php
 define('DB_TYPE', 'mysql');
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'hando_db');
+define('DB_NAME', 'logics_db');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_PORT', 3306);
@@ -149,7 +149,7 @@ define('DB_PORT', 3306);
 ```php
 define('DB_TYPE', 'sqlsrv');
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'hando_db');
+define('DB_NAME', 'logics_db');
 define('DB_USER', 'sa');
 define('DB_PASS', 'your_password');
 define('DB_PORT', 1433);
@@ -160,7 +160,7 @@ define('DB_PORT', 1433);
 ```php
 define('DB_TYPE', 'pgsql');
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'hando_db');
+define('DB_NAME', 'logics_db');
 define('DB_USER', 'postgres');
 define('DB_PASS', 'your_password');
 define('DB_PORT', 5432);
@@ -230,12 +230,12 @@ try {
 
 ```javascript
 // Making AJAX requests
-Hando.ajaxRequest("/api/users", {
+Logics.ajaxRequest("/api/users", {
   method: "POST",
   body: JSON.stringify({ name: "John", email: "john@example.com" }),
 }).then((data) => {
   if (data.success) {
-    Hando.showAlert("User created successfully", "success");
+    Logics.showAlert("User created successfully", "success");
   }
 });
 ```
@@ -326,8 +326,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support and questions:
 
 - Create an issue on GitHub
-- Email: support@hando.com
-- Documentation: [docs.hando.com](https://docs.hando.com)
+- Email: support@logics.com
+- Documentation: [docs.logics.com](https://docs.logics.com)
 
 ## Changelog
 

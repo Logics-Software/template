@@ -15,13 +15,13 @@ $content = '
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="site_name">Site Name</label>
-                                    <input type="text" class="form-control" id="site_name" name="site_name" value="Hando PHP MVC">
+                                    <input type="text" class="form-control" id="site_name" name="site_name" value="Logics PHP MVC">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="site_email">Site Email</label>
-                                    <input type="email" class="form-control" id="site_email" name="site_email" value="admin@hando.com">
+                                    <input type="email" class="form-control" id="site_email" name="site_email" value="admin@logics.com">
                                 </div>
                             </div>
                         </div>

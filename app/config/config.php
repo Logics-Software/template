@@ -39,7 +39,7 @@ define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx']
 
 // Theme settings
 define('DEFAULT_THEME', 'light');
-define('THEME_COOKIE_NAME', 'hando_theme');
+define('THEME_COOKIE_NAME', 'logics_theme');
 
 // Base URL configuration for sub-folder deployment
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';

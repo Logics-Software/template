@@ -32,7 +32,7 @@ class LockScreenController extends BaseController
 
         // Render lock screen view
         $this->view('auth/lock-screen', [
-            'title' => 'Lock Screen - Hando PHP MVC',
+            'title' => 'Lock Screen - Logics PHP MVC',
             'user_name' => $userData['user_name'],
             'user_email' => $userData['user_email'],
             'user_picture' => $userData['user_picture'],

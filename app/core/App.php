@@ -91,6 +91,14 @@ class App
         $this->router->post('/change-password', 'UserController@updatePassword');
         $this->router->get('/change-password/updated', 'UserController@passwordUpdated');
         
+        // Konfigurasi routes
+        $this->router->get('/konfigurasi', 'KonfigurasiController@index');
+        $this->router->get('/konfigurasi/create', 'KonfigurasiController@create');
+        $this->router->post('/konfigurasi', 'KonfigurasiController@store');
+        $this->router->get('/konfigurasi/edit', 'KonfigurasiController@edit');
+        $this->router->post('/konfigurasi/update', 'KonfigurasiController@update');
+        $this->router->put('/konfigurasi/update', 'KonfigurasiController@update');
+        
         // Analytics routes
         $this->router->get('/analytics', 'DashboardController@analytics');
         
@@ -108,7 +116,8 @@ class App
 
     private function validateCSRF()
     {
-        $token = $this->request->input('_token');
+        // Try multiple token names for compatibility
+        $token = $this->request->input('_token') ?: $this->request->input('csrf_token');
         return Session::validateCSRF($token);
     }
 

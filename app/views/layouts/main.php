@@ -54,7 +54,7 @@ if ($isLoggedIn && $isLoginPage) {
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="<?php echo APP_URL; ?>">
-                <i class="fas fa-home me-2"></i><i class="fas fa-star me-1" style="color: yellow;"></i><i class="fas fa-heart me-1" style="color: red;"></i>Hando
+                <i class="fas fa-home me-2"></i><i class="fas fa-star me-1" style="color: yellow;"></i><i class="fas fa-heart me-1" style="color: red;"></i>Logics
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -204,7 +204,7 @@ if ($isLoggedIn && $isLoginPage) {
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <span class="text-muted">&copy; <?php echo date('Y'); ?> Hando PHP MVC. All rights reserved.</span>
+                    <span class="text-muted">&copy; <?php echo date('Y'); ?> Logics PHP MVC. All rights reserved.</span>
                 </div>
                 <div class="col-md-6 text-end">
                     <span class="text-muted">Version <?php echo APP_VERSION; ?></span>
