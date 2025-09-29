@@ -68,7 +68,7 @@ class AuthController extends BaseController
             Session::regenerate();
 
             // Update last login
-            $this->userModel->updateLastLogin($user['id']);
+            $updateResult = $this->userModel->updateLastLogin($user['id']);
 
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'redirect' => '/dashboard']);

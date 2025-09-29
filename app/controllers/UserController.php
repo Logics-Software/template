@@ -23,21 +23,41 @@ class UserController extends BaseController
         $page = (int) ($request->input('page') ?? 1);
         $search = $request->input('search') ?? '';
         $status = $request->input('status') ?? '';
+        $role = $request->input('role') ?? '';
+        $perPage = (int) ($request->input('per_page') ?? DEFAULT_PAGE_SIZE);
+        $sort = $request->input('sort') ?? 'id';
+        $order = $request->input('order') ?? 'asc';
 
         $where = '1=1';
-        $params = [];
+        $whereParams = [];
 
         if ($search) {
             $where .= ' AND (username LIKE :search OR namalengkap LIKE :search OR email LIKE :search)';
-            $params['search'] = "%{$search}%";
+            $whereParams['search'] = "%{$search}%";
         }
 
         if ($status) {
             $where .= ' AND status = :status';
-            $params['status'] = $status;
+            $whereParams['status'] = $status;
         }
 
-        $users = $this->userModel->paginate($page, DEFAULT_PAGE_SIZE, $where, $params);
+        if ($role) {
+            $where .= ' AND role = :role';
+            $whereParams['role'] = $role;
+        }
+
+        // Validate sort field
+        $allowedSorts = ['id', 'username', 'namalengkap', 'email', 'role', 'status', 'created_at'];
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'id';
+        }
+
+        // Validate order
+        if (!in_array(strtolower($order), ['asc', 'desc'])) {
+            $order = 'asc';
+        }
+
+        $users = $this->userModel->paginate($page, $perPage, $where, $whereParams, $sort, $order);
 
         $this->view('users/index', [
             'title' => 'Users',
@@ -45,6 +65,7 @@ class UserController extends BaseController
             'users' => $users,
             'search' => $search,
             'status' => $status,
+            'role' => $role,
             'csrf_token' => $this->csrfToken()
         ]);
     }

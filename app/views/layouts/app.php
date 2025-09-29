@@ -46,6 +46,25 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <!-- Prevent sidebar flash effect -->
+    <style>
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 0;
+        }
+        
+        .top-header.sidebar-collapsed {
+            left: 0;
+        }
+    </style>
+    
     <!-- Custom CSS -->
     <link href="<?php echo BASE_URL; ?>assets/css/style.css" rel="stylesheet">
     
@@ -227,69 +246,33 @@ echo ' class="' . $bodyClass . '"';
     <!-- Custom JS -->
     <script src="<?php echo BASE_URL; ?>assets/js/app.js"></script>
     
+    
     <!-- CSRF Token for AJAX -->
     <script>
         window.csrfToken = '<?php echo $csrf_token ?? ''; ?>';
         window.appUrl = '<?php echo BASE_URL; ?>';
         
-        // Initialize theme on page load
+        // Prevent sidebar flash - apply state immediately
         document.addEventListener('DOMContentLoaded', function() {
-            // Theme management functions
-            function getCookie(name) {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return parts.pop().split(";").shift();
-                return null;
-            }
+            const isCollapsed = document.cookie.split('; ').find(row => row.startsWith('sidebar_collapsed='))?.split('=')[1] === 'true';
             
-            function setCookie(name, value, days = 365) {
-                const expires = new Date(Date.now() + days * 864e5).toUTCString();
-                document.cookie = `${name}=${value}; expires=${expires}; path=/`;
-            }
-            
-            function applyTheme(theme) {
-                document.documentElement.setAttribute("data-bs-theme", theme);
-                setCookie("hando_theme", theme);
-            }
-            
-            function toggleTheme(theme) {
-                applyTheme(theme);
+            if (isCollapsed) {
+                const sidebar = document.querySelector('.sidebar');
+                const mainContent = document.querySelector('.main-content');
+                const topHeader = document.querySelector('.top-header');
                 
-                // Update theme toggle icon
-                const themeIcon = document.getElementById("themeIcon");
-                if (themeIcon) {
-                    if (theme === "dark") {
-                        themeIcon.className = "fas fa-moon";
-                    } else {
-                        themeIcon.className = "fas fa-sun";
-                    }
+                if (sidebar) {
+                    sidebar.classList.add('collapsed');
                 }
+                if (mainContent) mainContent.classList.add('sidebar-collapsed');
+                if (topHeader) topHeader.classList.add('sidebar-collapsed');
             }
-            
-            // Initialize theme
-            const savedTheme = getCookie("hando_theme") || "light";
-            applyTheme(savedTheme);
-            
-            // Initialize theme icon
-            const themeIcon = document.getElementById("themeIcon");
-            if (themeIcon) {
-                if (savedTheme === "dark") {
-                    themeIcon.className = "fas fa-moon";
-                } else {
-                    themeIcon.className = "fas fa-sun";
-                }
-            }
-            
-            // Theme toggle event listener
-            const themeToggle = document.getElementById("themeToggle");
-            if (themeToggle) {
-                themeToggle.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    const currentTheme = document.documentElement.getAttribute("data-bs-theme") || "light";
-                    const newTheme = currentTheme === "light" ? "dark" : "light";
-                    toggleTheme(newTheme);
-                });
-            }
+        });
+        
+        // Initialize theme on page load (will be handled by app.js)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme initialization will be handled by app.js
+            // This prevents conflicts with duplicate theme management
         });
     </script>
 </body>

@@ -1,27 +1,34 @@
 <?php
 $content = '
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow">
+<div class="card">
             <div class="card-header">
-                <h5 class="m-0 font-weight-bold text-primary">
-                    <i class="fas fa-user me-2"></i>User Details
-                </h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">User Details</h5>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="' . APP_URL . '/dashboard" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="' . APP_URL . '/users" class="text-decoration-none">Users</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">View</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
             <div class="card-body">
                 <!-- Profile Picture Section -->
                 <div class="row mb-4">
                     <div class="col-md-12 text-center">
                         <div class="mb-3">
-                            ' . ($user['picture'] ? 
-                                '<img src="' . htmlspecialchars($user['picture']) . '" alt="Profile Picture" class="rounded-circle profile-img-lg">' :
+                            ' . (!empty($user['picture']) && file_exists($user['picture']) ? 
+                                '<img src="' . APP_URL . '/' . htmlspecialchars($user['picture']) . '" alt="Profile Picture" class="rounded-circle profile-img-lg">' :
                                 '<div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle text-white profile-img-lg">
                                     <i class="fas fa-user" style="font-size: 48px;"></i>
                                 </div>'
                             ) . '
                         </div>
-                        <h4 class="mb-1">' . htmlspecialchars($user['namalengkap'] ?? 'N/A') . '</h4>
-                        <p class="text-muted mb-0">@' . htmlspecialchars($user['username'] ?? 'N/A') . '</p>
                     </div>
                 </div>
 
@@ -29,81 +36,80 @@ $content = '
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Username</label>
-                            <p class="form-control-plaintext">' . htmlspecialchars($user['username'] ?? 'N/A') . '</p>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">' . htmlspecialchars($user['username'] ?? 'N/A') . '</div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Nama Lengkap</label>
-                            <p class="form-control-plaintext">' . htmlspecialchars($user['namalengkap'] ?? 'N/A') . '</p>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">' . htmlspecialchars($user['namalengkap'] ?? 'N/A') . '</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Email Address</label>
-                            <p class="form-control-plaintext">' . htmlspecialchars($user['email'] ?? 'N/A') . '</p>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">' . htmlspecialchars($user['email'] ?? 'N/A') . '</div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Role</label>
-                            <p class="form-control-plaintext">
+                            <div class="form-control-plaintext bg-light p-3 rounded border">
                                 <span class="badge bg-' . match($user['role'] ?? '') {
                                     'admin' => 'danger',
                                     'manajemen' => 'primary',
                                     'marketing' => 'info',
                                     'customer' => 'secondary',
-                                    default => 'light'
+                                    default => 'warning'
                                 } . '">' . ucfirst($user['role'] ?? 'N/A') . '</span>
-                            </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Status</label>
-                            <p class="form-control-plaintext">
+                            <div class="form-control-plaintext bg-light p-3 rounded border">
                                 <span class="badge bg-' . match($user['status'] ?? '') {
                                     'aktif' => 'success',
                                     'non_aktif' => 'danger',
                                     'register' => 'warning',
                                     default => 'secondary'
                                 } . '">' . ucfirst(str_replace('_', ' ', $user['status'] ?? 'N/A')) . '</span>
-                            </p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Last Login</label>
-                            <p class="form-control-plaintext">' . ($user['lastlogin'] ? date('M d, Y H:i', strtotime($user['lastlogin'])) : 'Never') . '</p>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">' . ($user['lastlogin'] ? date('M d, Y H:i', strtotime($user['lastlogin'])) : 'Never') . '</div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Created At</label>
-                            <p class="form-control-plaintext">' . date('M d, Y H:i', strtotime($user['created_at'] ?? '')) . '</p>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">' . date('M d, Y H:i', strtotime($user['created_at'] ?? '')) . '</div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Last Updated</label>
-                            <p class="form-control-plaintext">' . date('M d, Y H:i', strtotime($user['updated_at'] ?? '')) . '</p>
+                            <div class="form-control-plaintext bg-light p-3 rounded border">' . date('M d, Y H:i', strtotime($user['updated_at'] ?? '')) . '</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between">
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
                     <a href="' . APP_URL . '/users" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-1"></i>Back to Users
                     </a>
@@ -118,8 +124,6 @@ $content = '
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 <script>
 function deleteUser(id) {

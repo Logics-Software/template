@@ -247,7 +247,7 @@ $content = '
                     <div class="transaction-item">
                         <div class="transaction-info">
                             <div class="transaction-avatar">
-                                <img src="' . APP_URL . '/assets/images/users/user-1.jpg" alt="User" class="rounded-circle">
+                                <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle">
                             </div>
                             <div class="transaction-details">
                                 <h6>Bob Dean</h6>
@@ -263,7 +263,7 @@ $content = '
                     <div class="transaction-item">
                         <div class="transaction-info">
                             <div class="transaction-avatar">
-                                <img src="' . APP_URL . '/assets/images/users/user-2.jpg" alt="User" class="rounded-circle">
+                                <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle">
                             </div>
                             <div class="transaction-details">
                                 <h6>Bank of America</h6>
@@ -279,7 +279,7 @@ $content = '
                     <div class="transaction-item">
                         <div class="transaction-info">
                             <div class="transaction-avatar">
-                                <img src="' . APP_URL . '/assets/images/users/user-3.jpg" alt="User" class="rounded-circle">
+                                <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle">
                             </div>
                             <div class="transaction-details">
                                 <h6>Slack</h6>
@@ -295,7 +295,7 @@ $content = '
                     <div class="transaction-item">
                         <div class="transaction-info">
                             <div class="transaction-avatar">
-                                <img src="' . APP_URL . '/assets/images/users/user-1.jpg" alt="User" class="rounded-circle">
+                                <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle">
                             </div>
                             <div class="transaction-details">
                                 <h6>Asana</h6>
@@ -311,7 +311,7 @@ $content = '
                     <div class="transaction-item">
                         <div class="transaction-info">
                             <div class="transaction-avatar">
-                                <img src="' . APP_URL . '/assets/images/users/user-2.jpg" alt="User" class="rounded-circle">
+                                <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle">
                             </div>
                             <div class="transaction-details">
                                 <h6>Github Copilot</h6>
@@ -379,7 +379,7 @@ $content = '
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="' . APP_URL . '/assets/images/users/user-1.jpg" alt="User" class="rounded-circle me-2" width="32" height="32">
+                                        <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle me-2" width="32" height="32">
                                         <span>John Hamilton</span>
                                     </div>
                                 </td>
@@ -394,7 +394,7 @@ $content = '
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="' . APP_URL . '/assets/images/users/user-2.jpg" alt="User" class="rounded-circle me-2" width="32" height="32">
+                                        <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle me-2" width="32" height="32">
                                         <span>Janice Reese</span>
                                     </div>
                                 </td>
@@ -409,7 +409,7 @@ $content = '
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="' . APP_URL . '/assets/images/users/user-3.jpg" alt="User" class="rounded-circle me-2" width="32" height="32">
+                                        <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle me-2" width="32" height="32">
                                         <span>Andrew Kim</span>
                                     </div>
                                 </td>
@@ -424,7 +424,7 @@ $content = '
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="' . APP_URL . '/assets/images/users/user-1.jpg" alt="User" class="rounded-circle me-2" width="32" height="32">
+                                        <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle me-2" width="32" height="32">
                                         <span>Kathryn Sanchez</span>
                                     </div>
                                 </td>
@@ -439,7 +439,7 @@ $content = '
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="' . APP_URL . '/assets/images/users/user-2.jpg" alt="User" class="rounded-circle me-2" width="32" height="32">
+                                        <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle me-2" width="32" height="32">
                                         <span>Diane Richards</span>
                                     </div>
                                 </td>

@@ -1,67 +1,98 @@
 <?php
 $content = '
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Users Management</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="' . APP_URL . '/users/create" class="btn btn-primary">
-            <i class="fas fa-plus-circle me-1"></i>Add User
-        </a>
-    </div>
-</div>
-
-<!-- Search and Filter -->
-<div class="card shadow mb-4">
-    <div class="card-body">
-        <form method="GET" action="' . APP_URL . '/users" class="row g-3">
-            <div class="col-md-4">
-                <label for="search" class="form-label">Search</label>
-                <input type="text" class="form-control" id="search" name="search" value="' . htmlspecialchars($search) . '" placeholder="Search by name or email...">
-            </div>
-            <div class="col-md-3">
-                <label for="status" class="form-label">Status</label>
-                <select class="form-select" id="status" name="status">
-                    <option value="">All Status</option>
-                    <option value="aktif"' . ($status === 'aktif' ? ' selected' : '') . '>Aktif</option>
-                    <option value="non_aktif"' . ($status === 'non_aktif' ? ' selected' : '') . '>Non Aktif</option>
-                    <option value="register"' . ($status === 'register' ? ' selected' : '') . '>Register</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="per_page" class="form-label">Per Page</label>
-                <select class="form-select" id="per_page" name="per_page">
-                    <option value="10"' . ($users['per_page'] == 10 ? ' selected' : '') . '>10</option>
-                    <option value="25"' . ($users['per_page'] == 25 ? ' selected' : '') . '>25</option>
-                    <option value="50"' . ($users['per_page'] == 50 ? ' selected' : '') . '>50</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">&nbsp;</label>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-outline-primary">
-                        <i class="fas fa-search me-1"></i>Filter
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Users Table -->
-<div class="card shadow">
+<!-- Users Table with Search and Filter -->
+<div class="card">
     <div class="card-header">
-        <h6 class="m-0 font-weight-bold text-primary">Users List</h6>
+        <div class="d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">Users List</h6>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="' . APP_URL . '/dashboard" class="text-decoration-none">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Users</li>
+                </ol>
+            </nav>
+        </div>
     </div>
     <div class="card-body">
+        <!-- Search and Filter -->
+        <div class="mb-4">
+            <form method="GET" action="' . APP_URL . '/users" class="row g-3">
+                <div class="col-md-3">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text" class="form-control" id="search" name="search" value="' . htmlspecialchars($search) . '" placeholder="Search by name or email...">
+                </div>
+                <div class="col-md-2">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="">All Status</option>
+                        <option value="aktif"' . ($status === 'aktif' ? ' selected' : '') . '>Aktif</option>
+                        <option value="non_aktif"' . ($status === 'non_aktif' ? ' selected' : '') . '>Non Aktif</option>
+                        <option value="register"' . ($status === 'register' ? ' selected' : '') . '>Register</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="role" class="form-label">Role</label>
+                    <select class="form-select" id="role" name="role">
+                        <option value="">All Roles</option>
+                        <option value="admin"' . ($role === 'admin' ? ' selected' : '') . '>Admin</option>
+                        <option value="manajemen"' . ($role === 'manajemen' ? ' selected' : '') . '>Manajemen</option>
+                        <option value="marketing"' . ($role === 'marketing' ? ' selected' : '') . '>Marketing</option>
+                        <option value="customer"' . ($role === 'customer' ? ' selected' : '') . '>Customer</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label for="per_page" class="form-label">Per Page</label>
+                    <select class="form-select" id="per_page" name="per_page">
+                        <option value="5"' . ($users['per_page'] == 5 ? ' selected' : '') . '>5</option>
+                        <option value="10"' . ($users['per_page'] == 10 ? ' selected' : '') . '>10</option>
+                        <option value="15"' . ($users['per_page'] == 15 ? ' selected' : '') . '>15</option>
+                        <option value="20"' . ($users['per_page'] == 20 ? ' selected' : '') . '>20</option>
+                        <option value="25"' . ($users['per_page'] == 25 ? ' selected' : '') . '>25</option>
+                        <option value="50"' . ($users['per_page'] == 50 ? ' selected' : '') . '>50</option>
+                        <option value="100"' . ($users['per_page'] == 100 ? ' selected' : '') . '>100</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-outline-primary flex-fill">
+                            <i class="fas fa-search me-1"></i>Filter
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="d-flex gap-2">
+                        <a href="' . APP_URL . '/users/create" class="btn btn-primary flex-fill">
+                            <i class="fas fa-plus-circle me-1"></i>Add User
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered" id="usersTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Picture</th>
-                        <th>Username</th>
-                        <th>Nama Lengkap</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th class="sortable" data-sort="username">
+                            Username 
+                            <i class="fas fa-sort text-muted ms-1"></i>
+                        </th>
+                        <th class="sortable" data-sort="namalengkap">
+                            Nama Lengkap 
+                            <i class="fas fa-sort text-muted ms-1"></i>
+                        </th>
+                        <th class="sortable" data-sort="email">
+                            Email 
+                            <i class="fas fa-sort text-muted ms-1"></i>
+                        </th>
+                        <th class="sortable" data-sort="role">
+                            Role 
+                            <i class="fas fa-sort text-muted ms-1"></i>
+                        </th>
                         <th>Status</th>
                         <th>Last Login</th>
                         <th>Created</th>
@@ -104,7 +135,6 @@ foreach ($users['data'] as $user) {
     
     $content .= '
                     <tr>
-                        <td>' . $user['id'] . '</td>
                         <td>' . $pictureHtml . '</td>
                         <td>' . htmlspecialchars($user['username'] ?? 'N/A') . '</td>
                         <td>' . htmlspecialchars($user['namalengkap'] ?? 'N/A') . '</td>
@@ -124,10 +154,10 @@ foreach ($users['data'] as $user) {
     if ($user['status'] === 'register') {
         // For pending registration users - show approve/reject buttons
         $content .= '
-                                <button class="btn btn-sm btn-success" onclick="approveUser(' . $user['id'] . ')">
+                                <button class="btn btn-sm btn-success" onclick="approveUser(' . $user['id'] . ')" data-registration-reason="' . htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan') . '">
                                     <i class="fas fa-check"></i>
                                 </button>
-                                <button class="btn btn-sm btn-danger" onclick="rejectUser(' . $user['id'] . ')">
+                                <button class="btn btn-sm btn-danger" onclick="rejectUser(' . $user['id'] . ')" data-registration-reason="' . htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan') . '">
                                     <i class="fas fa-times"></i>
                                 </button>
                                 <a href="' . APP_URL . '/users/' . $user['id'] . '" class="btn btn-sm btn-outline-primary">
@@ -164,11 +194,25 @@ $content .= '
             <ul class="pagination justify-content-center">
 ';
 
+// Build query parameters
+$queryParams = [];
+if (!empty($search)) $queryParams['search'] = $search;
+if (!empty($status)) $queryParams['status'] = $status;
+if (!empty($role)) $queryParams['role'] = $role;
+if (!empty($users['per_page'])) $queryParams['per_page'] = $users['per_page'];
+if (!empty($_GET['sort'])) $queryParams['sort'] = $_GET['sort'];
+if (!empty($_GET['order'])) $queryParams['order'] = $_GET['order'];
+
+$currentPerPage = $_GET['per_page'] ?? $users['per_page'] ?? DEFAULT_PAGE_SIZE;
+$queryParams['per_page'] = $currentPerPage;
+
+$queryString = http_build_query($queryParams);
+
 // Previous page
 if ($users['current_page'] > 1) {
     $content .= '
                 <li class="page-item">
-                    <a class="page-link" href="' . APP_URL . '/users?page=' . ($users['current_page'] - 1) . '&search=' . urlencode($search) . '&status=' . urlencode($status) . '">Previous</a>
+                    <a class="page-link" href="' . APP_URL . '/users?page=' . ($users['current_page'] - 1) . '&' . $queryString . '">Previous</a>
                 </li>
     ';
 }
@@ -178,7 +222,7 @@ for ($i = 1; $i <= $users['last_page']; $i++) {
     $activeClass = $i == $users['current_page'] ? ' active' : '';
     $content .= '
                 <li class="page-item' . $activeClass . '">
-                    <a class="page-link" href="' . APP_URL . '/users?page=' . $i . '&search=' . urlencode($search) . '&status=' . urlencode($status) . '">' . $i . '</a>
+                    <a class="page-link" href="' . APP_URL . '/users?page=' . $i . '&' . $queryString . '">' . $i . '</a>
                 </li>
     ';
 }
@@ -187,7 +231,7 @@ for ($i = 1; $i <= $users['last_page']; $i++) {
 if ($users['current_page'] < $users['last_page']) {
     $content .= '
                 <li class="page-item">
-                    <a class="page-link" href="' . APP_URL . '/users?page=' . ($users['current_page'] + 1) . '&search=' . urlencode($search) . '&status=' . urlencode($status) . '">Next</a>
+                    <a class="page-link" href="' . APP_URL . '/users?page=' . ($users['current_page'] + 1) . '&' . $queryString . '">Next</a>
                 </li>
     ';
 }
@@ -231,7 +275,13 @@ $content .= '
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to approve this user? They will be able to login to the system.
+                <p class="mb-3">Are you sure you want to approve this user? They will be able to login to the system.</p>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Alasan Registrasi:</label>
+                    <div class="form-control-plaintext bg-light p-3 rounded border" id="approveRegistrationReason">
+                        <!-- Alasan registrasi akan diisi via JavaScript -->
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -250,7 +300,13 @@ $content .= '
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to reject this user? This action will permanently delete their account and cannot be undone.
+                <p class="mb-3">Are you sure you want to reject this user? This action will permanently delete their account and cannot be undone.</p>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Alasan Registrasi:</label>
+                    <div class="form-control-plaintext bg-light p-3 rounded border" id="rejectRegistrationReason">
+                        <!-- Alasan registrasi akan diisi via JavaScript -->
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -265,6 +321,59 @@ let deleteUserId = null;
 let approveUserId = null;
 let rejectUserId = null;
 
+// Table sorting functionality
+document.addEventListener("DOMContentLoaded", function() {
+    const sortableHeaders = document.querySelectorAll(".sortable");
+    
+    sortableHeaders.forEach(header => {
+        header.addEventListener("click", function() {
+            const sortField = this.getAttribute("data-sort");
+            const currentSort = new URLSearchParams(window.location.search).get("sort");
+            const currentOrder = new URLSearchParams(window.location.search).get("order");
+            
+            let newOrder = "asc";
+            if (currentSort === sortField && currentOrder === "asc") {
+                newOrder = "desc";
+            }
+            
+            // Update URL with new sort parameters
+            const url = new URL(window.location);
+            url.searchParams.set("sort", sortField);
+            url.searchParams.set("order", newOrder);
+            
+            // Redirect to new URL
+            window.location.href = url.toString();
+        });
+    });
+    
+    // Update sort indicators based on current sort
+    const currentSort = new URLSearchParams(window.location.search).get("sort");
+    const currentOrder = new URLSearchParams(window.location.search).get("order");
+    
+    if (currentSort) {
+        const activeHeader = document.querySelector("[data-sort=\"" + currentSort + "\"]");
+        if (activeHeader) {
+            activeHeader.classList.add("sort-" + (currentOrder || "asc"));
+        }
+    }
+    
+    // Auto-submit form when per_page changes
+    const perPageSelect = document.getElementById("per_page");
+    if (perPageSelect) {
+        perPageSelect.addEventListener("change", function() {
+            this.form.submit();
+        });
+    }
+    
+    // Auto-submit form when role changes
+    const roleSelect = document.getElementById("role");
+    if (roleSelect) {
+        roleSelect.addEventListener("change", function() {
+            this.form.submit();
+        });
+    }
+});
+
 function deleteUser(id) {
     deleteUserId = id;
     const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
@@ -273,12 +382,26 @@ function deleteUser(id) {
 
 function approveUser(id) {
     approveUserId = id;
+    // Get registration reason from button data attribute
+    const button = event.target.closest(\'button\');
+    const registrationReason = button.getAttribute(\'data-registration-reason\') || \'Tidak ada alasan yang diberikan\';
+    
+    // Set the registration reason in modal
+    document.getElementById(\'approveRegistrationReason\').textContent = registrationReason;
+    
     const modal = new bootstrap.Modal(document.getElementById("approveModal"));
     modal.show();
 }
 
 function rejectUser(id) {
     rejectUserId = id;
+    // Get registration reason from button data attribute
+    const button = event.target.closest(\'button\');
+    const registrationReason = button.getAttribute(\'data-registration-reason\') || \'Tidak ada alasan yang diberikan\';
+    
+    // Set the registration reason in modal
+    document.getElementById(\'rejectRegistrationReason\').textContent = registrationReason;
+    
     const modal = new bootstrap.Modal(document.getElementById("rejectModal"));
     modal.show();
 }

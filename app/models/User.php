@@ -5,7 +5,7 @@
 class User extends Model
 {
     protected $table = 'users';
-    protected $fillable = ['username', 'namalengkap', 'email', 'password', 'role', 'registration_reason', 'picture', 'status'];
+    protected $fillable = ['username', 'namalengkap', 'email', 'password', 'role', 'registration_reason', 'picture', 'status', 'lastlogin'];
     protected $hidden = ['password'];
 
     public function findByEmail($email)
@@ -43,7 +43,9 @@ class User extends Model
     public function updateLastLogin($id)
     {
         $data = ['lastlogin' => date('Y-m-d H:i:s')];
-        return $this->update($id, $data);
+        $result = $this->update($id, $data);
+        
+        return $result;
     }
 
     public function changePassword($id, $newPassword)

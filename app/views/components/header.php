@@ -63,7 +63,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/user-1.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">C</div>
                                         </div>
                                         <div class="notification-content">
@@ -76,7 +76,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/user-2.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #28a745 0%, #20c997 100%);">O</div>
                                         </div>
                                         <div class="notification-content">
@@ -89,7 +89,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/user-3.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);">T</div>
                                         </div>
                                         <div class="notification-content">
@@ -102,7 +102,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/user-1.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);">V</div>
                                         </div>
                                         <div class="notification-content">
@@ -115,7 +115,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/user-2.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);">R</div>
                                         </div>
                                         <div class="notification-content">
@@ -128,7 +128,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/user-3.jpg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);">J</div>
                                         </div>
                                         <div class="notification-content">

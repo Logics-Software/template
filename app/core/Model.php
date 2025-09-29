@@ -59,13 +59,19 @@ abstract class Model
         return $this->db->delete($this->table, "{$this->primaryKey} = :id", ['id' => $id]);
     }
 
-    public function paginate($page = 1, $perPage = DEFAULT_PAGE_SIZE, $where = '', $params = [])
+    public function paginate($page = 1, $perPage = DEFAULT_PAGE_SIZE, $where = '', $params = [], $sort = null, $order = 'asc')
     {
         $sql = "SELECT * FROM {$this->table}";
         if ($where) {
             $sql .= " WHERE {$where}";
         }
-        $sql .= " ORDER BY {$this->primaryKey} DESC";
+        
+        // Add sorting
+        if ($sort) {
+            $sql .= " ORDER BY {$sort} {$order}";
+        } else {
+            $sql .= " ORDER BY {$this->primaryKey} DESC";
+        }
         
         return $this->db->paginate($sql, $params, $page, $perPage);
     }

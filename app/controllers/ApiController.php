@@ -59,4 +59,78 @@ class ApiController extends BaseController
             'per_page' => $perPage
         ]);
     }
+
+    /**
+     * Check session validity
+     */
+    public function checkSession()
+    {
+        $isValid = Session::isValid();
+        $timeRemaining = 0;
+        
+        if ($isValid) {
+            $lastActivity = Session::get('_last_activity', time());
+            $sessionLifetime = defined('SESSION_LIFETIME') ? SESSION_LIFETIME : 3600;
+            $timeRemaining = $sessionLifetime - (time() - $lastActivity);
+        }
+        
+        $this->json([
+            'valid' => $isValid,
+            'timeRemaining' => max(0, $timeRemaining),
+            'user' => $isValid ? [
+                'id' => Session::get('user_id'),
+                'name' => Session::get('user_name'),
+                'email' => Session::get('user_email'),
+                'role' => Session::get('user_role')
+            ] : null
+        ]);
+    }
+
+    /**
+     * Extend session lifetime
+     */
+    public function extendSession()
+    {
+        if (Session::extendSession()) {
+            // Update last login when session is extended
+            $userId = Session::get('user_id');
+            if ($userId) {
+                $userModel = new User();
+                $userModel->updateLastLogin($userId);
+            }
+            
+            $this->json([
+                'success' => true,
+                'message' => 'Session extended successfully',
+                'timeRemaining' => defined('SESSION_LIFETIME') ? SESSION_LIFETIME : 3600
+            ]);
+        } else {
+            $this->json([
+                'success' => false,
+                'error' => 'Unable to extend session'
+            ], 401);
+        }
+    }
+
+    /**
+     * Get session warning info
+     */
+    public function getSessionWarning()
+    {
+        if (!Session::isValid()) {
+            $this->json(['warning' => false]);
+            return;
+        }
+        
+        $lastActivity = Session::get('_last_activity', time());
+        $sessionLifetime = defined('SESSION_LIFETIME') ? SESSION_LIFETIME : 3600;
+        $warningTime = defined('SESSION_WARNING_TIME') ? SESSION_WARNING_TIME : 300; // 5 minutes
+        $timeRemaining = $sessionLifetime - (time() - $lastActivity);
+        
+        $this->json([
+            'warning' => $timeRemaining <= $warningTime,
+            'timeRemaining' => max(0, $timeRemaining),
+            'warningTime' => $warningTime
+        ]);
+    }
 }

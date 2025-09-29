@@ -11,6 +11,12 @@ class LockScreenManager {
     this.warningTime = 14 * 60 * 1000; // 14 minutes (1 minute warning)
     this.warningShown = false;
 
+    // Session auto-refresh settings
+    this.sessionCheckInterval = null;
+    this.sessionRefreshInterval = 30 * 60 * 1000; // 30 minutes
+    this.sessionWarningInterval = 5 * 60 * 1000; // 5 minutes
+    this.lastSessionCheck = 0;
+
     this.init();
   }
 
@@ -21,6 +27,7 @@ class LockScreenManager {
     }
 
     this.startIdleTimer();
+    this.startSessionCheck();
     this.bindEvents();
     this.checkRememberMe();
   }
@@ -92,6 +99,199 @@ class LockScreenManager {
     this.idleTime = 0;
     this.warningShown = false;
     this.hideWarning();
+  }
+
+  /**
+   * Start session check interval
+   */
+  startSessionCheck() {
+    // Check session every 5 minutes
+    this.sessionCheckInterval = setInterval(() => {
+      this.checkSession();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    // Initial session check
+    this.checkSession();
+  }
+
+  /**
+   * Check session validity and extend if needed
+   */
+  async checkSession() {
+    try {
+      const response = await fetch("/api/session-check");
+      const data = await response.json();
+
+      if (!data.valid) {
+        // Session expired, redirect to login
+        this.handleSessionExpired();
+        return;
+      }
+
+      // Check if we need to extend session
+      if (this.shouldExtendSession()) {
+        await this.extendSession();
+      }
+
+      // Check for session warning
+      await this.checkSessionWarning();
+    } catch (error) {}
+  }
+
+  /**
+   * Check if session should be extended
+   */
+  shouldExtendSession() {
+    const now = Date.now();
+    const timeSinceLastCheck = now - this.lastSessionCheck;
+
+    // Extend session if user is active and it's been more than 30 minutes
+    return (
+      this.idleTime < 5 * 60 * 1000 &&
+      timeSinceLastCheck > this.sessionRefreshInterval
+    );
+  }
+
+  /**
+   * Extend session lifetime
+   */
+  async extendSession() {
+    try {
+      const response = await fetch("/api/extend-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": window.csrfToken || "",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        this.lastSessionCheck = Date.now();
+      }
+    } catch (error) {}
+  }
+
+  /**
+   * Check for session warning
+   */
+  async checkSessionWarning() {
+    try {
+      const response = await fetch("/api/session-warning");
+      const data = await response.json();
+
+      if (data.warning) {
+        this.showSessionWarning(data.timeRemaining);
+      }
+    } catch (error) {}
+  }
+
+  /**
+   * Show session warning
+   */
+  showSessionWarning(timeRemaining) {
+    const minutes = Math.ceil(timeRemaining / 60);
+    const warningMessage = `Your session will expire in ${minutes} minutes. Click "Stay Active" to extend your session.`;
+
+    // Create warning modal if it doesn't exist
+    if (!document.getElementById("sessionWarningModal")) {
+      this.createSessionWarningModal();
+    }
+
+    // Update warning message
+    const modal = document.getElementById("sessionWarningModal");
+    const messageElement = modal.querySelector(".session-warning-message");
+    if (messageElement) {
+      messageElement.textContent = warningMessage;
+    }
+
+    // Show modal
+    const bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+  }
+
+  /**
+   * Create session warning modal
+   */
+  createSessionWarningModal() {
+    const modalHtml = `
+      <div class="modal fade" id="sessionWarningModal" tabindex="-1" aria-labelledby="sessionWarningModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+              <h5 class="modal-title" id="sessionWarningModalLabel">
+                <i class="fas fa-exclamation-triangle me-2"></i>Session Warning
+              </h5>
+            </div>
+            <div class="modal-body">
+              <p class="session-warning-message">Your session will expire soon.</p>
+              <p class="text-muted">Click "Stay Active" to extend your session, or "Logout" to end your session safely.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="lockScreenManager.handleLogout()">
+                <i class="fas fa-sign-out-alt me-1"></i>Logout
+              </button>
+              <button type="button" class="btn btn-primary" onclick="lockScreenManager.stayActive()">
+                <i class="fas fa-hand-paper me-1"></i>Stay Active
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", modalHtml);
+  }
+
+  /**
+   * Handle session expired
+   */
+  handleSessionExpired() {
+    // Show session expired message
+    alert(
+      "Your session has expired. You will be redirected to the login page."
+    );
+
+    // Redirect to login
+    window.location.href = "/login?expired=1";
+  }
+
+  /**
+   * Handle logout
+   */
+  handleLogout() {
+    // Close modal
+    const modal = document.getElementById("sessionWarningModal");
+    if (modal) {
+      const bsModal = bootstrap.Modal.getInstance(modal);
+      if (bsModal) {
+        bsModal.hide();
+      }
+    }
+
+    // Redirect to logout
+    window.location.href = "/logout";
+  }
+
+  /**
+   * Stay active - extend session
+   */
+  async stayActive() {
+    // Close modal
+    const modal = document.getElementById("sessionWarningModal");
+    if (modal) {
+      const bsModal = bootstrap.Modal.getInstance(modal);
+      if (bsModal) {
+        bsModal.hide();
+      }
+    }
+
+    // Extend session
+    await this.extendSession();
+
+    // Reset idle time
+    this.resetIdleTime();
   }
 
   showWarning() {
@@ -257,6 +457,12 @@ class LockScreenManager {
       clearInterval(this.idleInterval);
       this.idleInterval = null;
     }
+
+    if (this.sessionCheckInterval) {
+      clearInterval(this.sessionCheckInterval);
+      this.sessionCheckInterval = null;
+    }
+
     this.hideWarning();
   }
 }

@@ -6,7 +6,7 @@
 // Application settings
 define('APP_NAME', 'Logics Template Application');
 define('APP_VERSION', '1.0.0');
-define('APP_DEBUG', true);
+define('APP_DEBUG', false);
 define('APP_TIMEZONE', 'Asia/Jakarta');
 
 // Database configuration
@@ -19,8 +19,10 @@ define('DB_PORT', 3306);
 define('DB_CHARSET', 'utf8mb4');
 
 // Session configuration
-define('SESSION_LIFETIME', 3600); // 1 hour
+define('SESSION_LIFETIME', 8 * 3600); // 8 hours for work sessions
 define('SESSION_NAME', 'LOGICS_SESSION');
+define('SESSION_REFRESH_INTERVAL', 30 * 60); // 30 minutes - auto refresh interval
+define('SESSION_WARNING_TIME', 5 * 60); // 5 minutes - warning before expiry
 
 // Security
 define('ENCRYPTION_KEY', 'your-secret-key-here');

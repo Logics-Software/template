@@ -79,4 +79,65 @@ class Session
         self::remove("_flash_{$key}");
         return $value;
     }
+
+    /**
+     * Check and regenerate session if needed
+     */
+    public static function checkAndRegenerate()
+    {
+        if (self::has('user_id')) {
+            $lastRegeneration = self::get('_last_regeneration', 0);
+            $refreshInterval = defined('SESSION_REFRESH_INTERVAL') ? SESSION_REFRESH_INTERVAL : 1800; // 30 minutes default
+            
+            if ((time() - $lastRegeneration) > $refreshInterval) {
+                self::regenerate();
+                self::set('_last_regeneration', time());
+                return true; // Session was refreshed
+            }
+        }
+        return false; // Session was not refreshed
+    }
+
+    /**
+     * Extend session lifetime
+     */
+    public static function extendSession()
+    {
+        if (self::has('user_id')) {
+            // Update session cookie with new lifetime
+            session_set_cookie_params(SESSION_LIFETIME);
+            
+            // Update last regeneration time
+            self::set('_last_regeneration', time());
+            
+            // Regenerate session ID for security
+            self::regenerate();
+            
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if session is valid and not expired
+     */
+    public static function isValid()
+    {
+        if (!self::has('user_id')) {
+            return false;
+        }
+        
+        $lastActivity = self::get('_last_activity', time());
+        $sessionLifetime = defined('SESSION_LIFETIME') ? SESSION_LIFETIME : 3600;
+        
+        // Check if session has expired
+        if ((time() - $lastActivity) > $sessionLifetime) {
+            self::destroy();
+            return false;
+        }
+        
+        // Update last activity
+        self::set('_last_activity', time());
+        return true;
+    }
 }

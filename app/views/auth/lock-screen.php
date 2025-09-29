@@ -11,7 +11,7 @@ $content = '
             <!-- Lock Screen Header -->
             <div class="lock-header">
                 <div class="user-avatar">
-                    <img src="' . ($user_picture ?? APP_URL . '/assets/images/users/user-1.jpg') . '" alt="User Avatar" class="avatar-img">
+                    <img src="' . ($user_picture ?? APP_URL . '/assets/images/users/avatar.svg') . '" alt="User Avatar" class="avatar-img">
                 </div>
                 <h1 class="lock-title">Hello ' . ($user_name ?? 'User') . '!</h1>
                 <p class="lock-subtitle">' . ($user_email ?? 'user@example.com') . '</p>
