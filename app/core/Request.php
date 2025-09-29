@@ -39,6 +39,22 @@ class Request
         $uri = parse_url($uri, PHP_URL_PATH);
         $uri = $uri ?? '/';
         
+        // Remove sub-folder path if exists (dynamic detection for /app/template/)
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+        $scriptDir = dirname($scriptName);
+        
+        // If script is in a subdirectory, remove that path from URI
+        if ($scriptDir !== '/' && $scriptDir !== '.') {
+            if (strpos($uri, $scriptDir) === 0) {
+                $uri = substr($uri, strlen($scriptDir));
+            }
+        }
+        
+        // Handle query parameters
+        if (strpos($uri, '?') !== false) {
+            $uri = substr($uri, 0, strpos($uri, '?'));
+        }
+        
         // Normalize double slashes and trailing slashes
         $uri = preg_replace('#/+#', '/', $uri);
         $uri = rtrim($uri, '/') ?: '/';

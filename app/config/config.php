@@ -39,5 +39,20 @@ define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx']
 define('DEFAULT_THEME', 'light');
 define('THEME_COOKIE_NAME', 'hando_theme');
 
+// Base URL configuration for sub-folder deployment
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+$scriptDir = dirname($scriptName);
+
+// Build base URL dynamically for /app/template/ sub-folder
+if ($scriptDir === '/' || $scriptDir === '.') {
+    // Root directory
+    define('BASE_URL', $protocol . '://' . $host . '/');
+} else {
+    // Subdirectory - for /app/template/
+    define('BASE_URL', $protocol . '://' . $host . $scriptDir . '/');
+}
+
 // Set timezone
 date_default_timezone_set(APP_TIMEZONE);

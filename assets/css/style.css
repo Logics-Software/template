@@ -115,7 +115,7 @@
   --border-color: #2d3748;
   --border-dark: #1a202c;
 
-  /* Form specific colors for dark theme */
+  /* Form specific colors for dark theme - Match lock screen styling */
   --form-bg: #252836;
   --form-bg-secondary: #1f2028;
   --form-bg-tertiary: #2d3748;
@@ -128,10 +128,104 @@
   --form-input-bg: #252836;
   --form-input-bg-readonly: #1f2028;
 
-  /* Lock screen specific colors for dark theme */
+  /* Lock screen specific colors for dark theme - Apply to all forms */
   --lock-bg-primary: linear-gradient(135deg, #1f2028 0%, #252836 100%);
   --lock-bg-secondary: #252836;
   --lock-bg-tertiary: #1f2028;
+}
+
+/* Dark theme form containers - Match lock screen styling */
+[data-bs-theme="dark"] .login-form-section,
+[data-bs-theme="dark"] .register-form-section,
+[data-bs-theme="dark"] .profile-form-section {
+  background: var(--lock-bg-primary);
+}
+
+[data-bs-theme="dark"] .login-wrapper,
+[data-bs-theme="dark"] .register-wrapper,
+[data-bs-theme="dark"] .profile-wrapper {
+  background: var(--lock-bg-secondary);
+  border: 1px solid var(--form-border);
+}
+
+/* Dark theme form inputs - Match lock screen styling */
+[data-bs-theme="dark"] .login-form .form-control,
+[data-bs-theme="dark"] .register-form .form-control,
+[data-bs-theme="dark"] .profile-form .form-control {
+  background-color: var(--form-input-bg);
+  border-color: var(--form-border);
+  color: var(--form-text);
+}
+
+[data-bs-theme="dark"] .login-form .form-control:focus,
+[data-bs-theme="dark"] .register-form .form-control:focus,
+[data-bs-theme="dark"] .profile-form .form-control:focus {
+  background-color: var(--form-input-bg);
+  border-color: var(--form-border-focus);
+  color: var(--form-text);
+}
+
+/* Dark theme input group text - Match lock screen styling */
+[data-bs-theme="dark"] .login-form .input-group-text,
+[data-bs-theme="dark"] .register-form .input-group-text,
+[data-bs-theme="dark"] .profile-form .input-group-text {
+  background-color: var(--form-bg-tertiary);
+  border-color: var(--form-border);
+  color: var(--form-text-secondary);
+}
+
+/* Dark theme form labels - Match lock screen styling */
+[data-bs-theme="dark"] .login-form .form-label,
+[data-bs-theme="dark"] .register-form .form-label,
+[data-bs-theme="dark"] .profile-form .form-label {
+  color: var(--form-text);
+}
+
+/* Dark theme form text - Match lock screen styling */
+[data-bs-theme="dark"] .login-form .form-text,
+[data-bs-theme="dark"] .register-form .form-text,
+[data-bs-theme="dark"] .profile-form .form-text {
+  color: var(--form-text-tertiary);
+}
+
+/* Dark theme register button - Match login button styling */
+[data-bs-theme="dark"] .register-btn {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+[data-bs-theme="dark"] .register-btn:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  color: white;
+}
+
+/* Dark theme registration notice - Match dark theme styling */
+[data-bs-theme="dark"] .register-notice {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 0.75rem;
+  padding: var(--padding-xl);
+  margin-top: 1.5rem;
+}
+
+[data-bs-theme="dark"] .register-notice .alert-icon {
+  color: #60a5fa;
+  margin-right: 0.5rem;
+}
+
+[data-bs-theme="dark"] .register-notice strong {
+  color: #60a5fa;
+}
+
+[data-bs-theme="dark"] .register-notice p {
+  margin: 0;
+  color: #93c5fd;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 /* Auto theme - follows system preference */
@@ -154,7 +248,7 @@
     --border-color: #2d3748;
     --border-dark: #1a202c;
 
-    /* Form specific colors for dark theme */
+    /* Form specific colors for dark theme - Match lock screen styling */
     --form-bg: #252836;
     --form-bg-secondary: #1f2028;
     --form-bg-tertiary: #2d3748;
@@ -167,10 +261,106 @@
     --form-input-bg: #252836;
     --form-input-bg-readonly: #1f2028;
 
-    /* Lock screen specific colors for dark theme */
+    /* Lock screen specific colors for dark theme - Apply to all forms */
     --lock-bg-primary: linear-gradient(135deg, #1f2028 0%, #252836 100%);
     --lock-bg-secondary: #252836;
     --lock-bg-tertiary: #1f2028;
+  }
+}
+
+/* Auto theme form containers - Match lock screen styling when dark */
+@media (prefers-color-scheme: dark) {
+  [data-bs-theme="auto"] .login-form-section,
+  [data-bs-theme="auto"] .register-form-section,
+  [data-bs-theme="auto"] .profile-form-section {
+    background: var(--lock-bg-primary);
+  }
+
+  [data-bs-theme="auto"] .login-wrapper,
+  [data-bs-theme="auto"] .register-wrapper,
+  [data-bs-theme="auto"] .profile-wrapper {
+    background: var(--lock-bg-secondary);
+    border: 1px solid var(--form-border);
+  }
+
+  /* Auto theme form inputs - Match lock screen styling */
+  [data-bs-theme="auto"] .login-form .form-control,
+  [data-bs-theme="auto"] .register-form .form-control,
+  [data-bs-theme="auto"] .profile-form .form-control {
+    background-color: var(--form-input-bg);
+    border-color: var(--form-border);
+    color: var(--form-text);
+  }
+
+  [data-bs-theme="auto"] .login-form .form-control:focus,
+  [data-bs-theme="auto"] .register-form .form-control:focus,
+  [data-bs-theme="auto"] .profile-form .form-control:focus {
+    background-color: var(--form-input-bg);
+    border-color: var(--form-border-focus);
+    color: var(--form-text);
+  }
+
+  /* Auto theme input group text - Match lock screen styling */
+  [data-bs-theme="auto"] .login-form .input-group-text,
+  [data-bs-theme="auto"] .register-form .input-group-text,
+  [data-bs-theme="auto"] .profile-form .input-group-text {
+    background-color: var(--form-bg-tertiary);
+    border-color: var(--form-border);
+    color: var(--form-text-secondary);
+  }
+
+  /* Auto theme form labels - Match lock screen styling */
+  [data-bs-theme="auto"] .login-form .form-label,
+  [data-bs-theme="auto"] .register-form .form-label,
+  [data-bs-theme="auto"] .profile-form .form-label {
+    color: var(--form-text);
+  }
+
+  /* Auto theme form text - Match lock screen styling */
+  [data-bs-theme="auto"] .login-form .form-text,
+  [data-bs-theme="auto"] .register-form .form-text,
+  [data-bs-theme="auto"] .profile-form .form-text {
+    color: var(--form-text-tertiary);
+  }
+
+  /* Auto theme register button - Match login button styling */
+  [data-bs-theme="auto"] .register-btn {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+  }
+
+  [data-bs-theme="auto"] .register-btn:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    color: white;
+  }
+
+  /* Auto theme registration notice - Match dark theme styling when dark */
+  [data-bs-theme="auto"] .register-notice {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    border: 1px solid #3b82f6;
+    border-radius: 0.75rem;
+    padding: var(--padding-xl);
+    margin-top: 1.5rem;
+  }
+
+  [data-bs-theme="auto"] .register-notice .alert-icon {
+    color: #60a5fa;
+    margin-right: 0.5rem;
+  }
+
+  [data-bs-theme="auto"] .register-notice strong {
+    color: #60a5fa;
+  }
+
+  [data-bs-theme="auto"] .register-notice p {
+    margin: 0;
+    color: #93c5fd;
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 }
 
@@ -3658,20 +3848,16 @@ body.lock-screen-page {
 }
 
 .register-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--form-text);
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
-  background: var(--lock-bg-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .register-subtitle {
-  font-size: 1.1rem;
-  color: var(--form-text-tertiary);
-  margin-bottom: 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin: 0;
 }
 
 .register-form {
@@ -3729,22 +3915,24 @@ body.lock-screen-page {
 
 .register-btn {
   width: 100%;
-  background: var(--lock-bg-primary);
-  border: none;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   color: white;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
   font-weight: 600;
-  border-radius: 0.75rem;
-  transition: all 0.3s ease;
+  border-radius: var(--border-radius-md);
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
   margin-bottom: var(--margin-2xl);
 }
 
 .register-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
   color: white;
 }
 
@@ -3828,7 +4016,7 @@ body.lock-screen-page {
   }
 
   .register-title {
-    font-size: 2.2rem;
+    font-size: 1.75rem;
   }
 }
 
@@ -3847,7 +4035,7 @@ body.lock-screen-page {
   }
 
   .register-title {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .register-subtitle {
@@ -3865,7 +4053,7 @@ body.lock-screen-page {
   }
 
   .register-title {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   .register-form .form-group {

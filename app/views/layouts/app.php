@@ -12,13 +12,13 @@ $isRegisterPage = (strpos($currentUrl, '/register') !== false);
 
 // If not logged in and not on login page, register page, or lock screen, redirect to login
 if (!$isLoggedIn && !$isLoginPage && !$isLockScreenPage && !$isRegisterPage) {
-    header('Location: ' . APP_URL . '/login');
+    header('Location: ' . BASE_URL . 'login');
     exit;
 }
 
 // If logged in and on login page or register page, redirect to dashboard
 if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
-    header('Location: ' . APP_URL . '/dashboard');
+    header('Location: ' . BASE_URL . 'dashboard');
     exit;
 }
 ?>
@@ -30,9 +30,9 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <title><?php echo $title ?? 'Hando PHP MVC'; ?></title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="<?php echo APP_URL; ?>/assets/images/favicon.png">
-    <link rel="shortcut icon" href="<?php echo APP_URL; ?>/assets/images/favicon.png">
-    <link rel="apple-touch-icon" href="<?php echo APP_URL; ?>/assets/images/favicon.png">
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>assets/images/favicon.png">
+    <link rel="shortcut icon" href="<?php echo BASE_URL; ?>assets/images/favicon.png">
+    <link rel="apple-touch-icon" href="<?php echo BASE_URL; ?>assets/images/favicon.png">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -47,10 +47,10 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom CSS -->
-    <link href="<?php echo APP_URL; ?>/assets/css/style.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL; ?>assets/css/style.css" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="<?php echo APP_URL; ?>/assets/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>assets/images/favicon.ico">
 </head>
 <body<?php 
 $bodyClass = 'bg-light';
@@ -225,12 +225,12 @@ echo ' class="' . $bodyClass . '"';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JS -->
-    <script src="<?php echo APP_URL; ?>/assets/js/app.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/app.js"></script>
     
     <!-- CSRF Token for AJAX -->
     <script>
         window.csrfToken = '<?php echo $csrf_token ?? ''; ?>';
-        window.appUrl = '<?php echo APP_URL; ?>';
+        window.appUrl = '<?php echo BASE_URL; ?>';
         
         // Initialize theme on page load
         document.addEventListener('DOMContentLoaded', function() {

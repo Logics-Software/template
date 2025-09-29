@@ -1,0 +1,27 @@
+# Alternative .htaccess for shared hosting without mod_rewrite
+# If mod_rewrite is not available, use this version
+
+# Basic security
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files ".env">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Protect directories
+<Directory "database">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+<Directory "app">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+# If mod_rewrite is available, use the main .htaccess
+# If not, you may need to use URL like: domain.com/app/template/index.php/login

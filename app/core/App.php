@@ -87,6 +87,17 @@ class App
         
         // Analytics routes
         $this->router->get('/analytics', 'DashboardController@analytics');
+        
+        // Fallback route for debugging
+        $this->router->get('/debug', function($request, $response) {
+            $response->json([
+                'request_uri' => $_SERVER['REQUEST_URI'] ?? 'not set',
+                'script_name' => $_SERVER['SCRIPT_NAME'] ?? 'not set',
+                'method' => $request->method(),
+                'uri' => $request->uri(),
+                'routes' => 'Check if routes are properly registered'
+            ]);
+        });
     }
 
     private function validateCSRF()
