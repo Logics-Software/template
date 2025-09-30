@@ -53,18 +53,29 @@ $sidebar = '
                 <hr class="sidebar-divider">
             </li>
             
+            <!-- Settings Dropdown -->
             <li class="nav-item">
-                <a class="nav-link ' . (($current_page ?? '') === 'users' ? 'active' : '') . '" href="' . APP_URL . '/users">
-                    <i class="fas fa-users"></i>
-                    <span>Manajemen Users</span>
-                </a>
-            </li>
-            
-            <li class="nav-item">
-                <a class="nav-link ' . (($current_page ?? '') === 'konfigurasi' ? 'active' : '') . '" href="' . APP_URL . '/konfigurasi">
+                <a class="nav-link dropdown-toggle ' . ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi') ? 'parent-active' : '') . '" href="#" data-bs-toggle="collapse" data-bs-target="#settingsMenu" aria-expanded="' . ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi') ? 'true' : 'false') . '" aria-controls="settingsMenu">
                     <i class="fas fa-cog"></i>
-                    <span>Konfigurasi</span>
+                    <span>Setting</span>
+                    <i class="fa-chevron-down fa-chevron-down"></i>
                 </a>
+                <div class="collapse ' . ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi') ? 'show' : '') . '" id="settingsMenu">
+                    <ul class="nav nav-pills flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link ' . (($current_page ?? '') === 'users' ? 'active' : '') . '" href="' . APP_URL . '/users">
+                                <i class="fas fa-users"></i>
+                                <span>Manajemen Users</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ' . (($current_page ?? '') === 'konfigurasi' ? 'active' : '') . '" href="' . APP_URL . '/konfigurasi">
+                                <i class="fas fa-cog"></i>
+                                <span>Konfigurasi</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
     </div>

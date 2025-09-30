@@ -208,6 +208,108 @@ document.addEventListener("webkitfullscreenchange", updateFullscreenIcon);
 document.addEventListener("mozfullscreenchange", updateFullscreenIcon);
 document.addEventListener("MSFullscreenChange", updateFullscreenIcon);
 
+// Initialize sidebar dropdown with switching system
+function initSidebarDropdown() {
+  // Handle dropdown toggle clicks (manual open/close)
+  document.addEventListener("click", function (e) {
+    const toggle = e.target.closest(".sidebar .dropdown-toggle");
+    if (toggle) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const targetId = toggle.getAttribute("data-bs-target");
+      const collapse = document.querySelector(targetId);
+
+      if (collapse) {
+        const isCurrentlyOpen = collapse.classList.contains("show");
+
+        if (isCurrentlyOpen) {
+          // User wants to close - allow it
+          collapse.classList.remove("show");
+          collapse.style.display = "none";
+          toggle.setAttribute("aria-expanded", "false");
+          collapse.removeAttribute("data-keep-open");
+          // Clear sessionStorage when manually closed
+          sessionStorage.removeItem("sidebar_dropdown_open");
+        } else {
+          // User wants to open - allow it
+          collapse.classList.add("show");
+          collapse.style.display = "block";
+          toggle.setAttribute("aria-expanded", "true");
+          collapse.setAttribute("data-keep-open", "true");
+        }
+      }
+      return false;
+    }
+  });
+
+  // Handle submenu clicks - keep dropdown open
+  document.addEventListener("click", function (e) {
+    const submenuLink = e.target.closest(".sidebar .collapse .nav-link");
+    if (submenuLink) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const parentCollapse = submenuLink.closest(".collapse");
+      if (parentCollapse) {
+        // Ensure dropdown stays open when submenu is clicked
+        parentCollapse.classList.add("show");
+        parentCollapse.style.display = "block";
+        parentCollapse.setAttribute("data-keep-open", "true");
+        const toggle = document.querySelector(
+          `[data-bs-target="#${parentCollapse.id}"]`
+        );
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "true");
+        }
+
+        // Store state in sessionStorage before navigation
+        sessionStorage.setItem("sidebar_dropdown_open", parentCollapse.id);
+
+        // Navigate to the link
+        const href = submenuLink.getAttribute("href");
+        if (href && href !== "#") {
+          setTimeout(() => {
+            window.location.href = href;
+          }, 100);
+        }
+      }
+      return false;
+    }
+  });
+
+  // Prevent Bootstrap from auto-closing dropdowns
+  const sidebarDropdowns = document.querySelectorAll(".sidebar .collapse");
+  sidebarDropdowns.forEach((dropdown) => {
+    // Check if dropdown should be open based on active submenu
+    const hasActiveSubmenu = dropdown.querySelector(".nav-link.active");
+    const wasOpenBeforeNavigation =
+      sessionStorage.getItem("sidebar_dropdown_open") === dropdown.id;
+
+    if (hasActiveSubmenu || wasOpenBeforeNavigation) {
+      dropdown.classList.add("show");
+      dropdown.style.display = "block";
+      dropdown.setAttribute("data-keep-open", "true");
+      const toggle = document.querySelector(
+        `[data-bs-target="#${dropdown.id}"]`
+      );
+      if (toggle) {
+        toggle.setAttribute("aria-expanded", "true");
+      }
+    }
+
+    // Prevent auto-collapse
+    dropdown.addEventListener("hide.bs.collapse", function (e) {
+      const shouldKeepOpen = this.getAttribute("data-keep-open") === "true";
+      if (shouldKeepOpen) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    });
+  });
+}
+
 // Initialize all functionality when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize sidebar state
@@ -215,6 +317,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize sidebar toggle
   initSidebarToggle();
+
+  // Initialize sidebar dropdown
+  initSidebarDropdown();
 
   // Initialize theme
   initTheme();

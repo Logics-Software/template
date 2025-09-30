@@ -32,6 +32,7 @@ class KonfigurasiController extends BaseController
 
         $this->view('konfigurasi/index', [
             'title' => 'Konfigurasi Sistem',
+            'current_page' => 'konfigurasi',
             'konfigurasi' => $konfigurasi
         ]);
     }
@@ -54,7 +55,8 @@ class KonfigurasiController extends BaseController
         }
 
         $this->view('konfigurasi/create', [
-            'title' => 'Buat Konfigurasi Sistem'
+            'title' => 'Buat Konfigurasi Sistem',
+            'current_page' => 'konfigurasi'
         ]);
     }
 
@@ -168,6 +170,7 @@ class KonfigurasiController extends BaseController
 
         $this->view('konfigurasi/edit', [
             'title' => 'Edit Konfigurasi Sistem',
+            'current_page' => 'konfigurasi',
             'konfigurasi' => $konfigurasi
         ]);
     }

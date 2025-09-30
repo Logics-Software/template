@@ -61,7 +61,6 @@ class App
         // API routes
         $this->router->get('/api/theme', 'ApiController@getTheme');
         $this->router->post('/api/theme', 'ApiController@setTheme');
-        $this->router->get('/api/stats', 'ApiController@getStats');
         $this->router->get('/api/session-check', 'ApiController@checkSession');
         $this->router->post('/api/extend-session', 'ApiController@extendSession');
         $this->router->get('/api/session-warning', 'ApiController@getSessionWarning');

@@ -22,23 +22,6 @@ class ApiController extends BaseController
         $this->json(['success' => true, 'theme' => $theme]);
     }
 
-    public function getStats()
-    {
-        if (!Session::has('user_id')) {
-            $this->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $statsModel = new Stats();
-        $stats = [
-            'total_customers' => $statsModel->getTotalCustomers(),
-            'total_revenue' => $statsModel->getTotalRevenue(),
-            'conversion_rate' => $statsModel->getConversionRate(),
-            'pending_tasks' => $statsModel->getPendingTasks()
-        ];
-
-        $this->json($stats);
-    }
-
     public function searchUsers()
     {
         if (!Session::has('user_id')) {
