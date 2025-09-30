@@ -46,12 +46,14 @@ $header = '
                         <i class="fa-solid fa-sun" id="themeIcon"></i>
                     </button>
                     
+                    <!-- =================================================== -->
                     <!-- Notifications -->
+                    <!-- =================================================== -->
                     <div class="notification-dropdown me-3">
                         <button class="btn btn-link position-relative" data-bs-toggle="dropdown">
                             <i class="fa-regular fa-bell"></i>
                             <span class="position-absolute badge rounded-pill bg-danger">
-                                9
+                                5
                             </span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end notification-menu">
@@ -67,8 +69,8 @@ $header = '
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">C</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Carl Steadham</h6>
-                                            <p class="mb-0 text-muted">Completed Improve workflow in Figma</p>
+                                            <h6 class="mb-1">Sudarmi</h6>
+                                            <p class="mb-0 text-muted">Otorisasi Edit Data Penjualan</p>
                                             <small class="text-muted">5 min ago</small>
                                         </div>
                                     </div>
@@ -80,8 +82,8 @@ $header = '
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #28a745 0%, #20c997 100%);">O</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Olivia McGuire</h6>
-                                            <p class="mb-0 text-muted">dark-themes.zip 2.4 MB</p>
+                                            <h6 class="mb-1">Ari Kusuma</h6>
+                                            <p class="mb-0 text-muted">Otorisasi Edit Pembelian</p>
                                             <small class="text-muted">1 min ago</small>
                                         </div>
                                     </div>
@@ -93,8 +95,8 @@ $header = '
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);">T</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Travis Williams</h6>
-                                            <p class="mb-0 text-muted">@Patryk Please make sure that you\'re....</p>
+                                            <h6 class="mb-1">Eny Kurniawati</h6>
+                                            <p class="mb-0 text-muted">Otorisasi/Approval Discount dan Harga Jualan Barang</p>
                                             <small class="text-muted">7 min ago</small>
                                         </div>
                                     </div>
@@ -106,8 +108,8 @@ $header = '
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);">V</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Violette Lasky</h6>
-                                            <p class="mb-0 text-muted">Completed Create new components</p>
+                                            <h6 class="mb-1">Wiwin Lena</h6>
+                                            <p class="mb-0 text-muted">Perubahan Harga Barang Amoxillyn 20mg 100 tablet</p>
                                             <small class="text-muted">5 min ago</small>
                                         </div>
                                     </div>
@@ -119,22 +121,9 @@ $header = '
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);">R</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Ralph Edwards</h6>
-                                            <p class="mb-0 text-muted">Completed Improve workflow in React</p>
+                                            <h6 class="mb-1">Yulie Andriati</h6>
+                                            <p class="mb-0 text-muted">Otorisasi Approval/ACC Piutang Customer</p>
                                             <small class="text-muted">5 min ago</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="notification-item">
-                                    <div class="d-flex">
-                                        <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
-                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);">J</div>
-                                        </div>
-                                        <div class="notification-content">
-                                            <h6 class="mb-1">Jocab jones</h6>
-                                            <p class="mb-0 text-muted">@Patryk Please make sure that you\'re....</p>
-                                            <small class="text-muted">7 min ago</small>
                                         </div>
                                     </div>
                                 </div>
@@ -144,7 +133,8 @@ $header = '
                             </div>
                         </div>
                     </div>
-                    
+                    <!-- =================================================== -->
+
                     <!-- User Profile -->
                     <div class="user-dropdown">
                         <div class="dropdown">
@@ -166,6 +156,11 @@ $header = '
                                 </div>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="' . APP_URL . '/messages">
+                                    <i class="fas fa-envelope me-2"></i>Pesan
+                                    <span class="badge bg-danger ms-auto" id="unread-count-badge" style="display: none;">0</span>
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="' . APP_URL . '/profile">
                                     <i class="fas fa-user me-2"></i>My Account
                                 </a></li>

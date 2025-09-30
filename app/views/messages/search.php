@@ -1,0 +1,160 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    Hasil Pencarian
+                    <small class="text-muted">untuk: "<?php echo htmlspecialchars($search_term); ?>"</small>
+                </h5>
+                <a href="<?php echo APP_URL; ?>/messages" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Inbox
+                </a>
+            </div>
+            
+            <div class="card-body">
+                <!-- Search Form -->
+                <form method="GET" action="<?php echo APP_URL; ?>/messages/search" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Cari pesan..." value="<?php echo htmlspecialchars($search_term); ?>">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <?php if (empty($messages)): ?>
+                    <div class="text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Tidak ada hasil ditemukan</h5>
+                        <p class="text-muted">Tidak ada pesan yang sesuai dengan pencarian "<?php echo htmlspecialchars($search_term); ?>"</p>
+                        <a href="<?php echo APP_URL; ?>/messages" class="btn btn-primary">
+                            <i class="fas fa-inbox me-1"></i>Lihat Semua Pesan
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Ditemukan <?php echo count($messages); ?> pesan yang sesuai dengan pencarian "<?php echo htmlspecialchars($search_term); ?>"
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="5%"></th>
+                                    <th width="25%">Pengirim</th>
+                                    <th width="40%">Subjek</th>
+                                    <th width="15%">Tanggal</th>
+                                    <th width="15%">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($messages as $message): ?>
+                                    <tr class="<?php echo !$message['is_read'] ? 'table-warning' : ''; ?>">
+                                        <td>
+                                            <?php if (!$message['is_read']): ?>
+                                                <i class="fas fa-circle text-primary" title="Belum dibaca"></i>
+                                            <?php else: ?>
+                                                <i class="fas fa-check-circle text-success" title="Sudah dibaca"></i>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <?php if (!empty($message['sender_picture'])): ?>
+                                                    <img src="<?php echo APP_URL; ?>/<?php echo htmlspecialchars($message['sender_picture']); ?>" 
+                                                            alt="<?php echo htmlspecialchars($message['sender_name']); ?>" 
+                                                            class="avatar-sm rounded-circle me-2" 
+                                                            style="width: 32px; height: 32px; object-fit: cover;">
+                                                <?php else: ?>
+                                                    <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                                        <?php echo strtoupper(substr($message['sender_name'], 0, 1)); ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                                <div>
+                                                    <div class="fw-bold"><?php echo htmlspecialchars($message['sender_name']); ?></div>
+                                                    <small class="text-muted"><?php echo htmlspecialchars($message['sender_email']); ?></small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold"><?php echo htmlspecialchars($message['subject']); ?></div>
+                                            <small class="text-muted">
+                                                <?php 
+                                                $content = strip_tags($message['content']);
+                                                $highlighted = str_ireplace($search_term, '<mark>' . $search_term . '</mark>', $content);
+                                                echo substr($highlighted, 0, 100);
+                                                ?>
+                                                <?php if (strlen($content) > 100): ?>...<?php endif; ?>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">
+                                                <?php echo date('d/m/Y H:i', strtotime($message['created_at'])); ?>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteMessage(<?php echo $message['id']; ?>)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <?php if ($page > 1): ?>
+                        <nav aria-label="Search pagination">
+                            <ul class="pagination justify-content-center">
+                                <?php if ($page > 1): ?>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?q=<?php echo urlencode($search_term); ?>&page=<?php echo $page - 1; ?>">Sebelumnya</a>
+                                    </li>
+                                <?php endif; ?>
+                                
+                                <li class="page-item active">
+                                    <span class="page-link"><?php echo $page; ?></span>
+                                </li>
+                                
+                                <li class="page-item">
+                                    <a class="page-link" href="?q=<?php echo urlencode($search_term); ?>&page=<?php echo $page + 1; ?>">Selanjutnya</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function deleteMessage(messageId) {
+    if (confirm('Apakah Anda yakin ingin menghapus pesan ini?')) {
+        fetch(`<?php echo APP_URL; ?>/messages/${messageId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Gagal menghapus pesan: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Terjadi kesalahan saat menghapus pesan');
+        });
+    }
+}
+</script>

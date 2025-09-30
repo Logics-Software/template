@@ -53,6 +53,7 @@ $sidebar = '
                 <hr class="sidebar-divider">
             </li>
             
+            
             <!-- Settings Dropdown -->
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle ' . ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi') ? 'parent-active' : '') . '" href="#" data-bs-toggle="collapse" data-bs-target="#settingsMenu" aria-expanded="' . ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi') ? 'true' : 'false') . '" aria-controls="settingsMenu">

@@ -498,7 +498,7 @@ body {
 .card-header h6 {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #495057;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -2437,7 +2437,7 @@ div:hover {
 
 /* Card Header Enhancements */
 .card-header h5 {
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
@@ -2638,14 +2638,6 @@ a[href*="/users/create"]:hover {
 
 .breadcrumb-item a {
   font-weight: 400;
-}
-
-/* Unified Add User Form Styling */
-.card-header h5 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #495057;
-  margin: 0;
 }
 
 .form-label {

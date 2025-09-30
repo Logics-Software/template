@@ -373,3 +373,203 @@ setTimeout(function () {
     });
   }
 }, 1000);
+
+// Message/Chat functionality
+function initMessageSystem() {
+  // Update unread count badge
+  function updateUnreadCount() {
+    fetch(`${window.appUrl}api/messages/unread-count`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          const badge = document.getElementById("unread-count-badge");
+          if (badge) {
+            if (data.unread_count > 0) {
+              badge.textContent = data.unread_count;
+              badge.style.display = "inline";
+            } else {
+              badge.style.display = "none";
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching unread count:", error);
+      });
+  }
+
+  // Update unread count on page load
+  updateUnreadCount();
+
+  // Update unread count every 30 seconds
+  setInterval(updateUnreadCount, 30000);
+
+  // Auto-refresh message list if on messages page
+  if (
+    window.location.pathname.includes("/messages") &&
+    !window.location.pathname.includes("/create")
+  ) {
+    setInterval(() => {
+      // Only refresh if user is not actively interacting with the page
+      if (
+        document.visibilityState === "visible" &&
+        !document.querySelector(":focus")
+      ) {
+        location.reload();
+      }
+    }, 60000); // Refresh every minute
+  }
+
+  // Mark message as read when viewing
+  const messageId = new URLSearchParams(window.location.search).get("id");
+  if (messageId && window.location.pathname.includes("/messages/")) {
+    fetch(`${window.appUrl}api/messages/mark-read`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body: JSON.stringify({
+        message_id: messageId,
+      }),
+    });
+  }
+
+  // Auto-save draft functionality
+  const messageForm = document.getElementById("messageForm");
+  if (messageForm) {
+    const subjectInput = messageForm.querySelector('input[name="subject"]');
+    const contentTextarea = messageForm.querySelector(
+      'textarea[name="content"]'
+    );
+    const recipientsSelect = messageForm.querySelector(
+      'select[name="recipients[]"]'
+    );
+
+    function saveDraft() {
+      // Get Quill content if editor exists
+      let content = contentTextarea.value;
+      if (window.quill) {
+        content = window.quill.root.innerHTML;
+      }
+
+      const draft = {
+        subject: subjectInput.value,
+        content: content,
+        recipients: Array.from(recipientsSelect.selectedOptions).map(
+          (option) => option.value
+        ),
+        timestamp: Date.now(),
+      };
+      localStorage.setItem("message_draft", JSON.stringify(draft));
+    }
+
+    function loadDraft() {
+      // Check if user just sent a message (from URL parameter)
+      const urlParams = new URLSearchParams(window.location.search);
+      const justSent = urlParams.get("sent");
+
+      if (justSent === "true") {
+        // Clear any existing draft if user just sent a message
+        localStorage.removeItem("message_draft");
+        return;
+      }
+
+      const draft = localStorage.getItem("message_draft");
+      if (draft) {
+        try {
+          const draftData = JSON.parse(draft);
+          // Only load draft if it's less than 24 hours old
+          if (Date.now() - draftData.timestamp < 24 * 60 * 60 * 1000) {
+            if (draftData.subject) subjectInput.value = draftData.subject;
+            if (draftData.content) {
+              contentTextarea.value = draftData.content;
+              // Load content into Quill editor if it exists
+              if (window.quill) {
+                window.quill.root.innerHTML = draftData.content;
+              }
+            }
+            if (draftData.recipients && draftData.recipients.length > 0) {
+              Array.from(recipientsSelect.options).forEach((option) => {
+                option.selected = draftData.recipients.includes(option.value);
+              });
+            }
+          }
+        } catch (e) {
+          localStorage.removeItem("message_draft");
+        }
+      }
+    }
+
+    // Load draft on page load
+    loadDraft();
+
+    // Save draft on input change
+    [subjectInput, contentTextarea].forEach((input) => {
+      if (input) {
+        input.addEventListener("input", saveDraft);
+      }
+    });
+
+    if (recipientsSelect) {
+      recipientsSelect.addEventListener("change", saveDraft);
+    }
+
+    // Clear draft on successful send
+    messageForm.addEventListener("submit", function () {
+      setTimeout(() => {
+        localStorage.removeItem("message_draft");
+      }, 1000);
+    });
+  }
+
+  // Message search functionality
+  const searchForm = document.querySelector('form[action*="/messages/search"]');
+  if (searchForm) {
+    const searchInput = searchForm.querySelector('input[name="q"]');
+    if (searchInput) {
+      // Add search suggestions (basic implementation)
+      searchInput.addEventListener("input", function () {
+        const query = this.value;
+        if (query.length > 2) {
+          // Could implement search suggestions here
+        }
+      });
+    }
+  }
+
+  // Print message functionality
+  window.printMessage = function () {
+    window.print();
+  };
+
+  // Delete message with confirmation
+  window.deleteMessage = function (messageId) {
+    if (confirm("Apakah Anda yakin ingin menghapus pesan ini?")) {
+      fetch(`${window.appUrl}messages/${messageId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert("Gagal menghapus pesan: " + data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Terjadi kesalahan saat menghapus pesan");
+        });
+    }
+  };
+}
+
+// Initialize message system when DOM is loaded
+document.addEventListener("DOMContentLoaded", function () {
+  initMessageSystem();
+});

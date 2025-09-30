@@ -27,9 +27,19 @@ class App
             
             // Handle CSRF protection
             if ($this->request->isPost()) {
-                if (!$this->validateCSRF()) {
-                    $this->response->json(['error' => 'CSRF token mismatch'], 403);
-                    return;
+                // Skip CSRF validation for certain API endpoints
+                $uri = $this->request->uri();
+                $skipCSRF = [
+                    '/api/messages/mark-read',
+                    '/api/messages/unread-count',
+                    '/api/messages/search-users'
+                ];
+                
+                if (!in_array($uri, $skipCSRF)) {
+                    if (!$this->validateCSRF()) {
+                        $this->response->json(['error' => 'CSRF token mismatch'], 403);
+                        return;
+                    }
                 }
             }
 
@@ -101,6 +111,18 @@ class App
         // Analytics routes
         $this->router->get('/analytics', 'DashboardController@analytics');
         
+        // Message/Chat routes
+        $this->router->get('/messages', 'MessageController@index');
+        $this->router->get('/messages/sent', 'MessageController@sent');
+        $this->router->get('/messages/create', 'MessageController@create');
+        $this->router->post('/messages', 'MessageController@store');
+        $this->router->get('/messages/{id}', 'MessageController@show');
+        $this->router->delete('/messages/{id}', 'MessageController@destroy');
+        $this->router->get('/messages/search', 'MessageController@search');
+        $this->router->get('/api/messages/unread-count', 'MessageController@getUnreadCount');
+        $this->router->post('/api/messages/mark-read', 'MessageController@markAsRead');
+        $this->router->get('/api/messages/search-users', 'MessageController@searchUsers');
+        
         // Fallback route for debugging
         $this->router->get('/debug', function($request, $response) {
             $response->json([
@@ -115,8 +137,12 @@ class App
 
     private function validateCSRF()
     {
-        // Try multiple token names for compatibility
-        $token = $this->request->input('_token') ?: $this->request->input('csrf_token');
+        // Try multiple token sources for compatibility
+        $token = $this->request->input('_token') 
+                ?: $this->request->input('csrf_token')
+                ?: $this->request->header('X-CSRF-Token')
+                ?: $this->request->header('X-CSRF-TOKEN');
+        
         return Session::validateCSRF($token);
     }
 

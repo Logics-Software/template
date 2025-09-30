@@ -154,4 +154,28 @@ class Request
         $validator = new Validator($this->data, $rules);
         return $validator;
     }
+
+    public function header($name)
+    {
+        $name = strtoupper(str_replace('-', '_', $name));
+        $headerName = 'HTTP_' . $name;
+        return $_SERVER[$headerName] ?? null;
+    }
+
+    public function getAllHeaders()
+    {
+        $headers = [];
+        foreach ($_SERVER as $key => $value) {
+            if (strpos($key, 'HTTP_') === 0) {
+                $headerName = str_replace('_', '-', substr($key, 5));
+                $headers[$headerName] = $value;
+            }
+        }
+        return $headers;
+    }
+
+    public function all()
+    {
+        return $this->data;
+    }
 }
