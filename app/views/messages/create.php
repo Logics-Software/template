@@ -21,9 +21,9 @@
                     <input type="hidden" name="_token" value="<?php echo Session::generateCSRF(); ?>">
                     <div class="row">
                         <div class="col-12">
-                            <div class="mb-3">
-                                <label for="subject" class="form-label">Subjek <span class="text-danger">*</span></label>
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="subject" name="subject" 
+                                        placeholder="Subjek" 
                                         value="<?php 
                                             if (isset($reply_data) && $reply_data) {
                                                 echo 'Reply: ' . htmlspecialchars($reply_data['subject']);
@@ -32,6 +32,7 @@
                                             }
                                         ?>" 
                                         required>
+                                <label for="subject">Subjek <span class="text-danger">*</span></label>
                             </div>
                             
                             <div class="mb-3">

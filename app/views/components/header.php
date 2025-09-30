@@ -29,7 +29,7 @@ ob_start();
                     <!-- Greeting Message -->
                     <div class="greeting-message">
                         <h6 class="mb-0 text-muted" id="greetingText">
-                            <?php echo getGreetingMessage(); ?>, <?php echo Session::get('user_name') ?? 'Admin'; ?>
+                            <?php echo getGreetingMessage(); ?>
                         </h6>
                     </div>
                 </div>
