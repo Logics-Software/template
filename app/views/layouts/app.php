@@ -244,13 +244,12 @@ echo ' class="' . $bodyClass . '"';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JS -->
-    <script src="<?php echo BASE_URL; ?>assets/js/app.js"></script>
-    
+    <script src="<?php echo APP_URL; ?>/assets/js/app.js"></script>
     
     <!-- CSRF Token for AJAX -->
     <script>
         window.csrfToken = '<?php echo $csrf_token ?? ''; ?>';
-        window.appUrl = '<?php echo BASE_URL; ?>';
+        window.appUrl = '<?php echo APP_URL; ?>';
         
         // Prevent sidebar flash - apply state immediately
         document.addEventListener('DOMContentLoaded', function() {

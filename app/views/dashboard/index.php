@@ -33,8 +33,8 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h3>2,839</h3>
-                    <p>Task Pending</p>
+                    <h3>Rp. 24,839,398</h3>
+                    <p>Omset Penjualan</p>
                     <div class="stats-change">
                         <span class="text-warning">
                             <i class="fas fa-arrow-up"></i> 1.5%
@@ -53,8 +53,8 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h3>2,254</h3>
-                    <p>Total Deals</p>
+                    <h3>Rp. 23,254</h3>
+                    <p>Retur Penjualan</p>
                     <div class="stats-change">
                         <span class="text-success">
                             <i class="fas fa-arrow-up"></i> 12.8%
@@ -73,8 +73,8 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h3>$45,780</h3>
-                    <p>Total Revenue</p>
+                    <h3>Rp. 24,245,780</h3>
+                    <p>Omset Penerimaan/Inkaso</p>
                     <div class="stats-change">
                         <span class="text-success">
                             <i class="fas fa-arrow-up"></i> 18%

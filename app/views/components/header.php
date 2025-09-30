@@ -13,7 +13,8 @@ function getGreetingMessage() {
     }
 }
 
-$header = '
+ob_start();
+?>
 <!-- Top Header -->
 <div class="top-header">
     <div class="container-fluid">
@@ -28,7 +29,7 @@ $header = '
                     <!-- Greeting Message -->
                     <div class="greeting-message">
                         <h6 class="mb-0 text-muted" id="greetingText">
-                            ' . getGreetingMessage() . ', ' . (Session::get('user_name') ?? 'Admin') . '
+                            <?php echo getGreetingMessage(); ?>, <?php echo Session::get('user_name') ?? 'Admin'; ?>
                         </h6>
                     </div>
                 </div>
@@ -65,7 +66,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">C</div>
                                         </div>
                                         <div class="notification-content">
@@ -78,7 +79,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #28a745 0%, #20c997 100%);">O</div>
                                         </div>
                                         <div class="notification-content">
@@ -91,7 +92,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);">T</div>
                                         </div>
                                         <div class="notification-content">
@@ -104,7 +105,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);">V</div>
                                         </div>
                                         <div class="notification-content">
@@ -117,7 +118,7 @@ $header = '
                                 <div class="notification-item">
                                     <div class="d-flex">
                                         <div class="notification-avatar">
-                                            <img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                                            <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);">R</div>
                                         </div>
                                         <div class="notification-content">
@@ -135,43 +136,68 @@ $header = '
                     </div>
                     <!-- =================================================== -->
 
+                    <!-- =================================================== -->
+                    <!-- Messages -->
+                    <!-- =================================================== -->
+                    <div class="message-dropdown me-3">
+                        <button class="btn btn-link position-relative" data-bs-toggle="dropdown" id="messageToggle">
+                            <i class="fa-regular fa-envelope"></i>
+                            <span class="position-absolute badge rounded-pill bg-danger" id="messageBadge" style="display: none;">
+                                0
+                            </span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end message-menu">
+                            <div class="dropdown-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">Pesan</h6>
+                                <button class="btn btn-sm btn-outline-primary" id="markAllAsReadBtn">Tandai Sudah Dibaca</button>
+                            </div>
+                            <div class="message-list" id="messageList">
+                                <div class="text-center p-3">
+                                    <div class="spinner-border spinner-border-sm" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2 mb-0 text-muted">Memuat pesan...</p>
+                                </div>
+                            </div>
+                            <div class="dropdown-footer">
+                                <a href="<?php echo APP_URL; ?>/messages" class="btn btn-outline-primary btn-sm w-100">Buka Semua Pesan</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- =================================================== -->
+
                     <!-- User Profile -->
                     <div class="user-dropdown">
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                                <div class="user-avatar me-2">';
-                                
-                                if (Session::get('user_picture')) {
-                                    // Jika ada profile picture, tampilkan gambar saja
-                                    $header .= '<img src="' . APP_URL . '/' . Session::get('user_picture') . '" alt="User" class="rounded-circle" width="32" height="32">';
-                                } else {
-                                    // Jika tidak ada profile picture, tampilkan avatar fallback
-                                    $header .= '<div class="avatar-fallback avatar-sm" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">' . strtoupper(substr(Session::get('user_name') ?? 'A', 0, 1)) . '</div>';
-                                }
-                                
-                                $header .= '
+                                <div class="user-avatar me-2">
+                                    <?php if (Session::get('user_picture')): ?>
+                                        <img src="<?php echo APP_URL; ?>/<?php echo Session::get('user_picture'); ?>" alt="User" class="rounded-circle" width="32" height="32">
+                                    <?php else: ?>
+                                        <div class="avatar-fallback avatar-sm" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);"><?php echo strtoupper(substr(Session::get('user_name') ?? 'A', 0, 1)); ?></div>
+                                    <?php endif; ?>
                                 </div>
-                                <div class="user-info text-start" >
-                                    <h6>' . (Session::get('user_name') ?? 'Admin') . '</h6>
+                                <div class="user-info text-start">
+                                    <h6><?php echo Session::get('user_name') ?? 'Admin'; ?></h6>
                                 </div>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="' . APP_URL . '/messages">
+                                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/messages">
                                     <i class="fas fa-envelope me-2"></i>Pesan
                                     <span class="badge bg-danger ms-auto" id="unread-count-badge" style="display: none;">0</span>
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="' . APP_URL . '/profile">
+                                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/profile">
                                     <i class="fas fa-user me-2"></i>My Account
                                 </a></li>
-                                <li><a class="dropdown-item" href="' . APP_URL . '/change-password">
+                                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/change-password">
                                     <i class="fas fa-key me-2"></i>Change Password
                                 </a></li>
-                                <li><a class="dropdown-item" href="' . APP_URL . '/lock-screen">
+                                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/lock-screen">
                                     <i class="fas fa-lock me-2"></i>Lock Screen
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="' . APP_URL . '/logout">
+                                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/logout">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout
                                 </a></li>
                             </ul>
@@ -182,5 +208,6 @@ $header = '
         </div>
     </div>
 </div>
-';
+<?php
+$header = ob_get_clean();
 ?>

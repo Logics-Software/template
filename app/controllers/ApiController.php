@@ -116,4 +116,60 @@ class ApiController extends BaseController
             'warningTime' => $warningTime
         ]);
     }
+
+    /**
+     * Get unread message count
+     */
+    public function getUnreadMessageCount()
+    {
+        if (!Session::has('user_id')) {
+            $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $messageModel = new Message();
+        $count = $messageModel->getUnreadCount(Session::get('user_id'));
+        
+        $this->json(['count' => $count]);
+    }
+
+    /**
+     * Get recent unread messages for header dropdown
+     */
+    public function getRecentMessages()
+    {
+        if (!Session::has('user_id')) {
+            $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $messageModel = new Message();
+        $messages = $messageModel->getInboxMessages(Session::get('user_id'), 10, 0); // Get more messages to filter
+        
+        // Filter only unread messages and format for display
+        $formattedMessages = [];
+        foreach ($messages as $message) {
+            // Only include unread messages
+            if (!$message['is_read']) {
+                $formattedMessages[] = [
+                    'id' => $message['id'],
+                    'subject' => $message['subject'],
+                    'sender_name' => $message['sender_name'],
+                    'sender_picture' => $message['sender_picture'],
+                    'created_at' => $message['created_at'],
+                    'is_read' => $message['is_read'],
+                    'url' => APP_URL . '/messages/' . $message['id']
+                ];
+                
+                // Limit to 5 unread messages
+                if (count($formattedMessages) >= 5) {
+                    break;
+                }
+            }
+        }
+        
+        $this->json([
+            'success' => true,
+            'messages' => $formattedMessages,
+            'count' => count($formattedMessages)
+        ]);
+    }
 }

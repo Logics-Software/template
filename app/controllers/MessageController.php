@@ -352,6 +352,32 @@ class MessageController extends BaseController
     }
 
     /**
+     * Mark all messages as read (AJAX)
+     */
+    public function markAllAsRead()
+    {
+        // Check if user is logged in
+        if (!Session::has('user_id')) {
+            $this->json(['success' => false, 'message' => 'Not authenticated'], 401);
+            return;
+        }
+
+        $userId = Session::get('user_id');
+
+        try {
+            $result = $this->messageModel->markAllAsRead($userId);
+            
+            if ($result) {
+                $this->json(['success' => true, 'message' => 'All messages marked as read']);
+            } else {
+                $this->json(['success' => false, 'message' => 'Failed to mark messages as read']);
+            }
+        } catch (Exception $e) {
+            $this->json(['success' => false, 'message' => 'Failed to mark messages as read']);
+        }
+    }
+
+    /**
      * Mark message as read (AJAX)
      */
     public function markAsRead()

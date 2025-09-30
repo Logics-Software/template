@@ -378,7 +378,7 @@ setTimeout(function () {
 function initMessageSystem() {
   // Update unread count badge
   function updateUnreadCount() {
-    fetch(`${window.appUrl}api/messages/unread-count`)
+    fetch(`${window.appUrl}/api/messages/unread-count`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -423,7 +423,7 @@ function initMessageSystem() {
   // Mark message as read when viewing
   const messageId = new URLSearchParams(window.location.search).get("id");
   if (messageId && window.location.pathname.includes("/messages/")) {
-    fetch(`${window.appUrl}api/messages/mark-read`, {
+    fetch(`${window.appUrl}/api/messages/mark-read`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -546,7 +546,7 @@ function initMessageSystem() {
   // Delete message with confirmation
   window.deleteMessage = function (messageId) {
     if (confirm("Apakah Anda yakin ingin menghapus pesan ini?")) {
-      fetch(`${window.appUrl}messages/${messageId}`, {
+      fetch(`${window.appUrl}/messages/${messageId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -572,4 +572,199 @@ function initMessageSystem() {
 // Initialize message system when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
   initMessageSystem();
+  initHeaderMessageDropdown();
 });
+
+// Header Message Dropdown functionality
+function initHeaderMessageDropdown() {
+  const messageToggle = document.getElementById("messageToggle");
+  const messageBadge = document.getElementById("messageBadge");
+  const messageList = document.getElementById("messageList");
+
+  if (!messageToggle || !messageBadge || !messageList) {
+    return;
+  }
+
+  // Load unread count and recent messages
+  function loadMessageData() {
+    // Load unread count
+    fetch(`${window.appUrl}/api/messages/unread-count`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success && data.unread_count > 0) {
+          messageBadge.textContent = data.unread_count;
+          messageBadge.style.display = "inline";
+        } else {
+          messageBadge.style.display = "none";
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading unread count:", error);
+      });
+
+    // Load recent messages
+    fetch(`${window.appUrl}/api/messages/recent`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success && data.messages && data.messages.length > 0) {
+          let html = "";
+          data.messages.forEach((message) => {
+            const timeAgo = getTimeAgo(message.created_at);
+            const senderInitial = message.sender_name.charAt(0).toUpperCase();
+            const gradientColors = [
+              "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              "linear-gradient(135deg, #28a745 0%, #20c997 100%)",
+              "linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%)",
+              "linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%)",
+              "linear-gradient(135deg, #dc3545 0%, #fd7e14 100%)",
+            ];
+            const randomGradient =
+              gradientColors[Math.floor(Math.random() * gradientColors.length)];
+
+            // Use actual sender picture if available, otherwise fallback to avatar
+            let pictureUrl = `${window.appUrl}/assets/images/users/avatar.svg`; // Default fallback
+
+            if (message.sender_picture) {
+              // Check if the picture path already includes the full path
+              if (message.sender_picture.startsWith("assets/images/users/")) {
+                pictureUrl = `${window.appUrl}/${message.sender_picture}`;
+              } else {
+                pictureUrl = `${window.appUrl}/assets/images/users/${message.sender_picture}`;
+              }
+            }
+
+            html += `
+              <div class="message-item" data-message-id="${
+                message.id
+              }" data-message-url="${message.url}">
+                <div class="d-flex">
+                  <div class="message-avatar">
+                    <img src="${pictureUrl}" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="avatar-fallback avatar-md" style="display:none; background:${randomGradient};">${senderInitial}</div>
+                  </div>
+                  <div class="message-content">
+                    <h6 class="mb-1">${escapeHtml(message.sender_name)}</h6>
+                    <p class="mb-0 text-muted">${escapeHtml(
+                      message.subject
+                    )}</p>
+                    <small class="text-muted">${timeAgo}</small>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          messageList.innerHTML = html;
+
+          // Add click handlers to message items
+          messageList.querySelectorAll(".message-item").forEach((item) => {
+            item.addEventListener("click", function () {
+              const messageUrl = this.getAttribute("data-message-url");
+              if (messageUrl) {
+                window.location.href = messageUrl;
+              }
+            });
+          });
+        } else {
+          messageList.innerHTML = `
+            <div class="text-center p-4">
+              <i class="fa-regular fa-envelope fa-2x text-muted mb-3"></i>
+              <p class="text-muted mb-0">Tidak ada pesan</p>
+            </div>
+          `;
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading recent messages:", error);
+        messageList.innerHTML = `
+          <div class="text-center p-4">
+            <i class="fa-solid fa-exclamation-triangle fa-2x text-warning mb-3"></i>
+            <p class="text-muted mb-0">Gagal memuat pesan</p>
+          </div>
+        `;
+      });
+  }
+
+  // Helper function to escape HTML
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Helper function to get time ago
+  function getTimeAgo(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+
+    if (diffInSeconds < 60) {
+      return "Baru saja";
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes} menit yang lalu`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours} jam yang lalu`;
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days} hari yang lalu`;
+    }
+  }
+
+  // Load data on page load
+  loadMessageData();
+
+  // Refresh data when dropdown is opened
+  messageToggle.addEventListener("click", function () {
+    setTimeout(loadMessageData, 100);
+  });
+
+  // Mark all as read button handler
+  const markAllAsReadBtn = document.getElementById("markAllAsReadBtn");
+  if (markAllAsReadBtn) {
+    markAllAsReadBtn.addEventListener("click", function () {
+      // Show loading state
+      const originalText = this.textContent;
+      this.textContent = "Memproses...";
+      this.disabled = true;
+
+      fetch(`${window.appUrl}/api/messages/mark-all-read`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            // Reload message data to reflect changes
+            loadMessageData();
+            // Show success message briefly
+            this.textContent = "Berhasil!";
+            setTimeout(() => {
+              this.textContent = originalText;
+              this.disabled = false;
+            }, 2000);
+          } else {
+            alert("Gagal menandai pesan sebagai sudah dibaca");
+            this.textContent = originalText;
+            this.disabled = false;
+          }
+        })
+        .catch((error) => {
+          console.error("Error marking all as read:", error);
+          alert("Terjadi kesalahan saat menandai pesan");
+          this.textContent = originalText;
+          this.disabled = false;
+        });
+    });
+  }
+
+  // Refresh data every 30 seconds
+  setInterval(loadMessageData, 30000);
+}

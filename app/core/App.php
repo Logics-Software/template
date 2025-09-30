@@ -31,6 +31,7 @@ class App
                 $uri = $this->request->uri();
                 $skipCSRF = [
                     '/api/messages/mark-read',
+                    '/api/messages/mark-all-read',
                     '/api/messages/unread-count',
                     '/api/messages/search-users'
                 ];
@@ -121,18 +122,10 @@ class App
         $this->router->get('/messages/search', 'MessageController@search');
         $this->router->get('/api/messages/unread-count', 'MessageController@getUnreadCount');
         $this->router->post('/api/messages/mark-read', 'MessageController@markAsRead');
+        $this->router->post('/api/messages/mark-all-read', 'MessageController@markAllAsRead');
         $this->router->get('/api/messages/search-users', 'MessageController@searchUsers');
-        
-        // Fallback route for debugging
-        $this->router->get('/debug', function($request, $response) {
-            $response->json([
-                'request_uri' => $_SERVER['REQUEST_URI'] ?? 'not set',
-                'script_name' => $_SERVER['SCRIPT_NAME'] ?? 'not set',
-                'method' => $request->method(),
-                'uri' => $request->uri(),
-                'routes' => 'Check if routes are properly registered'
-            ]);
-        });
+        $this->router->get('/api/messages/recent', 'ApiController@getRecentMessages');
+        $this->router->get('/api/messages/count', 'ApiController@getUnreadMessageCount');
     }
 
     private function validateCSRF()

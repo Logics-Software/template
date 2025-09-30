@@ -148,6 +148,20 @@ class Message extends Model
     }
 
     /**
+     * Mark all messages as read for user (update message_recipients table)
+     */
+    public function markAllAsRead($userId)
+    {
+        $sql = "
+            UPDATE message_recipients 
+            SET is_read = 1, read_at = NOW() 
+            WHERE recipient_id = ? AND is_read = 0
+        ";
+        
+        return $this->db->query($sql, [$userId]);
+    }
+
+    /**
      * Get unread message count for user
      */
     public function getUnreadCount($userId)
