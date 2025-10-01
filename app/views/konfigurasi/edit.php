@@ -231,7 +231,6 @@ document.getElementById('konfigurasiForm').addEventListener('submit', function(e
             try {
                 return JSON.parse(text);
             } catch (e) {
-                console.error('Invalid JSON response:', text);
                 throw new Error('Server returned invalid response');
             }
         });
@@ -248,7 +247,6 @@ document.getElementById('konfigurasiForm').addEventListener('submit', function(e
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         alert('Terjadi kesalahan saat menyimpan: ' + error.message);
     })
     .finally(() => {

@@ -340,35 +340,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const search = userSearch.value;
         const role = roleFilter.value;
         
-        console.log('Loading users with search:', search, 'role:', role);
         
         const params = new URLSearchParams();
         if (search) params.append('search', search);
         if (role) params.append('role', role);
         
         const url = `<?php echo APP_URL; ?>/api/messages/search-users?${params.toString()}`;
-        console.log('Fetching URL:', url);
         
         fetch(url)
             .then(response => {
-                console.log('Response status:', response.status);
                 if (!response.ok) {
                     throw new Error('HTTP error! status: ' + response.status);
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('API Response:', data);
                 if (data.success) {
                     allUsers = data.users;
                     displayUsers(data.users);
                 } else {
-                    console.error('API Error:', data.message);
                     usersList.innerHTML = '<div class="p-3 text-center text-danger">Error: ' + data.message + '</div>';
                 }
             })
             .catch(error => {
-                console.error('Fetch Error:', error);
                 usersList.innerHTML = '<div class="p-3 text-center text-danger">Error loading users: ' + error.message + '</div>';
             });
     }
@@ -425,7 +419,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Display users in the list
     function displayUsers(users) {
-        console.log('Displaying users:', users);
         
         if (users.length === 0) {
             usersList.innerHTML = '<div class="p-3 text-center text-muted">Tidak ada pengguna yang ditemukan</div>';
@@ -485,7 +478,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add click functionality to user cards
     function addCardClickHandlers() {
         const userCards = document.querySelectorAll('.user-selection-item');
-        console.log('Adding click handlers to', userCards.length, 'user cards');
         
         userCards.forEach(card => {
             // Remove existing listeners to avoid duplicates
@@ -496,23 +488,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Separate function for card click handling
     function handleCardClick(e) {
-        console.log('Card clicked:', e.target);
         
         // Don't trigger if clicking on checkbox
         if (e.target.type === 'checkbox') {
-            console.log('Checkbox clicked, not handling card click');
             return;
         }
         
         const userId = parseInt(this.dataset.userId);
-        console.log('Toggling user:', userId);
         
         const checkbox = this.querySelector('input[type="checkbox"]');
         if (checkbox) {
             checkbox.checked = !checkbox.checked;
             toggleUser(userId);
         } else {
-            console.error('Checkbox not found for user:', userId);
         }
     }
     

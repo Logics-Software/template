@@ -24,18 +24,6 @@ $autoloader->register();
 
 // Start the application
 try {
-    // Debug routing for troubleshooting
-    if (APP_DEBUG && isset($_GET['debug'])) {
-        echo '<h3>Debug Info:</h3>';
-        echo 'REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'not set') . '<br>';
-        echo 'SCRIPT_NAME: ' . ($_SERVER['SCRIPT_NAME'] ?? 'not set') . '<br>';
-        echo 'REQUEST_METHOD: ' . ($_SERVER['REQUEST_METHOD'] ?? 'not set') . '<br>';
-        
-        $request = new Request();
-        echo 'Processed URI: ' . $request->uri() . '<br>';
-        echo 'Method: ' . $request->method() . '<br>';
-        exit;
-    }
     
     $app = new App();
     $app->run();

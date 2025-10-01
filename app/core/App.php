@@ -106,6 +106,15 @@ class App
         $this->router->post('/konfigurasi/update', 'KonfigurasiController@update');
         $this->router->put('/konfigurasi/update', 'KonfigurasiController@update');
         
+        // Call Center routes
+        $this->router->get('/call-center', 'CallCenterController@index');
+        $this->router->get('/call-center/create', 'CallCenterController@create');
+        $this->router->post('/call-center', 'CallCenterController@store');
+        $this->router->get('/call-center/{id}', 'CallCenterController@show');
+        $this->router->get('/call-center/{id}/edit', 'CallCenterController@edit');
+        $this->router->put('/call-center/{id}', 'CallCenterController@update');
+        $this->router->post('/call-center/{id}/delete', 'CallCenterController@delete');
+        
         // Analytics routes
         $this->router->get('/analytics', 'DashboardController@analytics');
         
