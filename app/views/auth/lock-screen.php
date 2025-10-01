@@ -7,16 +7,15 @@ $content = '
 <!-- Lock Screen Modal Overlay -->
 <div class="lock-screen-overlay" id="lockScreenOverlay">
     <div class="lock-screen-modal">
-        <div class="lock-screen-content">
-            <!-- Lock Screen Header -->
-            <div class="lock-header">
-                <div class="user-avatar">
-                    <img src="' . ($user_picture ?? APP_URL . '/assets/images/users/avatar.svg') . '" alt="User Avatar" class="avatar-img">
+        <div class="card">
+            <div class="card-header text-center">
+                <div class="mb-3">
+                    <img src="' . ($user_picture ?? APP_URL . '/assets/images/users/avatar.svg') . '" alt="User Avatar" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover; border: 4px solid #f8f9fa; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
                 </div>
-                <h1 class="lock-title">Hello ' . ($user_name ?? 'User') . '!</h1>
-                <p class="lock-subtitle">' . ($user_email ?? 'user@example.com') . '</p>
+                <h4 class="mb-1">Hello ' . ($user_name ?? 'User') . '!</h4>
+                <p class="text-muted mb-0">' . ($user_email ?? 'user@example.com') . '</p>
             </div>
-
+            <div class="card-body">
             <!-- Error Messages -->
             ' . ($errorMessage ? '
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -34,46 +33,42 @@ $content = '
             ' : '') . '
 
             <!-- Lock Screen Form -->
-            <form method="POST" action="' . APP_URL . '/unlock" id="unlockForm" class="lock-form">
+            <form method="POST" action="' . APP_URL . '/unlock" id="unlockForm">
                 <input type="hidden" name="_token" value="' . $csrf_token . '">
                 
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
-                        <input type="password" class="form-control" id="password" name="password" 
-                               placeholder="Enter your password" required>
-                        <button class="btn btn-toggle-password" type="button" id="togglePassword">
-                            <i class="fas fa-eye" id="passwordToggleIcon"></i>
-                        </button>
-                    </div>
+                <div class="form-floating mb-3 position-relative">
+                    <input type="password" class="form-control" id="password" name="password" 
+                           placeholder="" required style="padding-right: 2.5rem;">
+                    <label for="password">
+                        <i class="fas fa-lock me-2"></i>Password
+                    </label>
+                    <button class="position-absolute top-50 end-0 translate-middle-y" 
+                            type="button" id="togglePassword" 
+                            style="border: none; background: transparent; z-index: 10; padding: 0; width: 2.5rem; height: calc(3.5rem + 2px); color: #6c757d; margin-right: 0;">
+                        <i class="fas fa-eye" id="passwordToggleIcon"></i>
+                    </button>
                 </div>
 
-                <div class="form-options">
+                <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="remember" name="remember_me">
                         <label class="form-check-label" for="remember">
                             Remember me
                         </label>
                     </div>
-                    <a href="' . APP_URL . '/logout" class="forgot-password-link">Login again</a>
+                    <a href="' . APP_URL . '/logout" class="text-primary text-decoration-none">Login again</a>
                 </div>
 
-                <button type="submit" class="btn btn-unlock">
-                    <span class="btn-text">Unlock</span>
-                    <div class="btn-loader" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i>
-                    </div>
+                <button type="submit" class="btn btn-primary w-100 mb-3" id="unlockBtn">
+                    <i class="fas fa-unlock me-2"></i>Unlock
                 </button>
+
+                <div class="text-center">
+                    <p class="text-muted small mb-0">
+                        Try unlock with <span class="text-primary fw-bold">Finger print</span> / <span class="text-primary fw-bold">Face Id</span>
+                    </p>
+                </div>
             </form>
-
-
-            <div class="lock-footer">
-                <p class="lock-help">
-                    Try unlock with <span class="highlight">Finger print</span> / <span class="highlight">Face Id</span>
-                </p>
             </div>
         </div>
     </div>
@@ -104,16 +99,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Form submission with loading state
     const unlockForm = document.getElementById("unlockForm");
-    if (unlockForm) {
-        const submitBtn = unlockForm.querySelector(".btn-login");
-        const btnText = submitBtn?.querySelector(".btn-text");
-        const btnLoader = submitBtn?.querySelector(".btn-loader");
-
+    const unlockBtn = document.getElementById("unlockBtn");
+    
+    if (unlockForm && unlockBtn) {
         unlockForm.addEventListener("submit", function(e) {
             // Show loading state
-            if (btnText) btnText.style.display = "none";
-            if (btnLoader) btnLoader.style.display = "block";
-            if (submitBtn) submitBtn.disabled = true;
+            unlockBtn.disabled = true;
+            unlockBtn.innerHTML = \'<i class="fas fa-spinner fa-spin me-2"></i>Unlocking...\';
         });
     }
 

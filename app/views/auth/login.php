@@ -8,14 +8,12 @@ $content = '
 <!-- Login Page with Centered Design -->
 <div class="login-container">
     <div class="login-wrapper-single">
-        <!-- Login Form -->
-        <div class="login-form-section">
-            <div class="login-form-container">
-                <div class="login-header">
-                    <h1 class="login-title">Welcome back!</h1>
-                    <p class="login-subtitle">Please sign in to continue</p>
-                </div>
-
+        <div class="card">
+            <div class="card-header text-center">
+                <h4 class="mb-1">Welcome back!</h4>
+                <p class="text-muted mb-0">Please sign in to continue</p>
+            </div>
+            <div class="card-body mt-3 mb-3">
                 <!-- Error Messages -->
                 ' . ($errorMessage ? '
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -45,55 +43,49 @@ $content = '
                 </div>
                 ' : '') . '
 
-                <form method="POST" action="' . APP_URL . '/login" id="loginForm" class="login-form">
+                <form method="POST" action="' . APP_URL . '/login" id="loginForm">
                     <input type="hidden" name="_token" value="' . $csrf_token . '">
                     
-                    <div class="form-group">
-                        <label for="username_email" class="form-label">Username or Email</label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-user"></i>
-                            </span>
-                            <input type="text" class="form-control" id="username_email" name="username_email" 
-                                   placeholder="Enter your username or email" required>
-                        </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="username_email" name="username_email" 
+                               placeholder="" required>
+                        <label for="username_email">
+                            <i class="fas fa-user me-2"></i>Username or Email
+                        </label>
                     </div>
 
-                    <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-lock"></i>
-                            </span>
-                            <input type="password" class="form-control" id="password" name="password" 
-                                   placeholder="Enter your password" required>
-                            <button class="btn btn-toggle-password" type="button" id="togglePassword">
-                                <i class="fas fa-eye" id="passwordToggleIcon"></i>
-                            </button>
-                        </div>
+                    <div class="form-floating mb-3 position-relative">
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="" required style="padding-right: 2.5rem;">
+                        <label for="password">
+                            <i class="fas fa-lock me-2"></i>Password
+                        </label>
+                        <button class="position-absolute top-50 end-0 translate-middle-y" 
+                                type="button" id="togglePassword" 
+                                style="border: none; background: transparent; z-index: 10; padding: 0; width: 2.5rem; height: calc(3.5rem + 2px); color: #6c757d; margin-right: 0;">
+                            <i class="fas fa-eye" id="passwordToggleIcon"></i>
+                        </button>
                     </div>
 
-                    <div class="form-options">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="remember" name="remember">
                             <label class="form-check-label" for="remember">
                                 Remember me
                             </label>
                         </div>
-                        <a href="#" class="forgot-password-link">Forgot password?</a>
+                        <a href="#" class="text-primary text-decoration-none">Forgot password?</a>
                     </div>
 
-                    <button type="submit" class="btn btn-login">
-                        <span class="btn-text">Log In</span>
-                        <div class="btn-loader" style="display: none;">
-                            <i class="fas fa-spinner fa-spin"></i>
-                        </div>
+                    <button type="submit" class="btn btn-primary w-100 mb-3" id="loginBtn">
+                        <i class="fas fa-sign-in-alt me-2"></i>Log In
                     </button>
-                </form>
 
-                <div class="signup-link">
-                    <p>Don\'t have an account? <a href="' . APP_URL . '/register">Sign up</a></p>
-                </div>
+                    <div class="text-center">
+                        <span class="text-muted">Don\'t have an account?</span>
+                        <a href="' . APP_URL . '/register" class="text-primary text-decoration-none fw-bold ms-1">Sign up</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -124,16 +116,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Form submission with loading state
     const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        const submitBtn = loginForm.querySelector(".btn-login");
-        const btnText = submitBtn?.querySelector(".btn-text");
-        const btnLoader = submitBtn?.querySelector(".btn-loader");
-
+    const loginBtn = document.getElementById("loginBtn");
+    
+    if (loginForm && loginBtn) {
         loginForm.addEventListener("submit", function(e) {
             // Show loading state
-            if (btnText) btnText.style.display = "none";
-            if (btnLoader) btnLoader.style.display = "block";
-            if (submitBtn) submitBtn.disabled = true;
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = \'<i class="fas fa-spinner fa-spin me-2"></i>Logging in...\';
         });
     }
 });

@@ -38,19 +38,19 @@ ob_start();
                 <div class="d-flex align-items-center justify-content-end">
                     
                     <!-- Full Screen Toggle -->
-                    <button class="btn btn-link me-3" id="fullscreenToggle">
+                    <button class="btn btn-link" id="fullscreenToggle">
                         <i class="fa-solid fa-expand"></i>
                     </button>
                     
                     <!-- Theme Toggle -->
-                    <button class="btn btn-link me-3" id="themeToggle">
+                    <button class="btn btn-link" id="themeToggle">
                         <i class="fa-solid fa-sun" id="themeIcon"></i>
                     </button>
                     
                     <!-- =================================================== -->
                     <!-- Notifications -->
                     <!-- =================================================== -->
-                    <div class="notification-dropdown me-3">
+                    <div class="notification-dropdown">
                         <button class="btn btn-link position-relative" data-bs-toggle="dropdown">
                             <i class="fa-regular fa-bell"></i>
                             <span class="position-absolute badge rounded-pill bg-danger">
@@ -149,7 +149,7 @@ ob_start();
                     <!-- =================================================== -->
                     <!-- Messages -->
                     <!-- =================================================== -->
-                    <div class="message-dropdown me-3">
+                    <div class="message-dropdown">
                         <button class="btn btn-link position-relative" data-bs-toggle="dropdown" id="messageToggle">
                             <i class="fa-regular fa-envelope"></i>
                             <span class="position-absolute badge rounded-pill bg-danger" id="messageBadge" style="display: none;">

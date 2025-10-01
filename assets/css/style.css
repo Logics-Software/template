@@ -149,17 +149,17 @@
 }
 
 /* Dark theme form inputs - Match lock screen styling */
-[data-bs-theme="dark"] .login-form .form-control,
-[data-bs-theme="dark"] .register-form .form-control,
-[data-bs-theme="dark"] .profile-form .form-control {
+[data-bs-theme="dark"] .login-form .input-group .form-control,
+[data-bs-theme="dark"] .register-form .input-group .form-control,
+[data-bs-theme="dark"] .profile-form .input-group .form-control {
   background-color: var(--form-input-bg);
   border-color: var(--form-border);
   color: var(--form-text);
 }
 
-[data-bs-theme="dark"] .login-form .form-control:focus,
-[data-bs-theme="dark"] .register-form .form-control:focus,
-[data-bs-theme="dark"] .profile-form .form-control:focus {
+[data-bs-theme="dark"] .login-form .input-group .form-control:focus,
+[data-bs-theme="dark"] .register-form .input-group .form-control:focus,
+[data-bs-theme="dark"] .profile-form .input-group .form-control:focus {
   background-color: var(--form-input-bg);
   border-color: var(--form-border-focus);
   color: var(--form-text);
@@ -284,17 +284,17 @@
   }
 
   /* Auto theme form inputs - Match lock screen styling */
-  [data-bs-theme="auto"] .login-form .form-control,
-  [data-bs-theme="auto"] .register-form .form-control,
-  [data-bs-theme="auto"] .profile-form .form-control {
+  [data-bs-theme="auto"] .login-form .input-group .form-control,
+  [data-bs-theme="auto"] .register-form .input-group .form-control,
+  [data-bs-theme="auto"] .profile-form .input-group .form-control {
     background-color: var(--form-input-bg);
     border-color: var(--form-border);
     color: var(--form-text);
   }
 
-  [data-bs-theme="auto"] .login-form .form-control:focus,
-  [data-bs-theme="auto"] .register-form .form-control:focus,
-  [data-bs-theme="auto"] .profile-form .form-control:focus {
+  [data-bs-theme="auto"] .login-form .input-group .form-control:focus,
+  [data-bs-theme="auto"] .register-form .input-group .form-control:focus,
+  [data-bs-theme="auto"] .profile-form .input-group .form-control:focus {
     background-color: var(--form-input-bg);
     border-color: var(--form-border-focus);
     color: var(--form-text);
@@ -486,7 +486,7 @@ body {
 .card {
   border: none;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   overflow: hidden;
 }
 
@@ -494,7 +494,7 @@ body {
   background-color: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
   padding: 1rem 1.5rem;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .card-header h6 {
@@ -672,52 +672,6 @@ body {
   padding: 0.5rem 1rem;
 }
 
-/* DataTables specific styling matching Logics template */
-
-.dataTables_paginate .paginate_button {
-  font-size: 0.875rem;
-  padding: 0.5rem 0.75rem;
-  margin: 0 0.125rem;
-  border: 1px solid #dee2e6;
-  border-radius: 0.375rem;
-  color: #0d6efd;
-  background-color: #ffffff;
-}
-
-.dataTables_paginate .paginate_button:hover {
-  background-color: #e9ecef;
-  border-color: #dee2e6;
-  color: #0a58ca;
-}
-
-.dataTables_paginate .paginate_button.current {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-  color: #ffffff;
-}
-
-.dataTables_paginate .paginate_button.disabled {
-  color: #6c757d;
-  background-color: #ffffff;
-  border-color: #dee2e6;
-}
-
-/* Table header styling for DataTables */
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter,
-.dataTables_wrapper .dataTables_info,
-.dataTables_wrapper .dataTables_processing,
-.dataTables_wrapper .dataTables_paginate {
-  margin-bottom: 1rem;
-}
-
-.dataTables_wrapper .dataTables_length label,
-.dataTables_wrapper .dataTables_filter label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #495057;
-}
-
 /* Enhanced table styling */
 .table-striped tbody tr:nth-of-type(odd) {
   background-color: rgba(0, 0, 0, 0.02);
@@ -805,7 +759,7 @@ div:hover {
   padding: 0;
   position: fixed;
   top: 0;
-  left: 280px;
+  left: 265px;
   right: 0;
   z-index: 1000;
   flex-shrink: 0;
@@ -1289,7 +1243,7 @@ div:hover {
   background-color: var(--bg-primary);
   border-right: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
-  width: 280px;
+  width: 265px;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -1798,7 +1752,7 @@ div:hover {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  margin-left: 280px;
+  margin-left: 265px;
   transition: margin-left 0.3s ease;
 }
 
@@ -1856,15 +1810,6 @@ div:hover {
   font-weight: 400;
 }
 
-/* ===========================================
-   ANALYTICS DASHBOARD STYLES
-   =========================================== */
-
-.country-stats small {
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
 /* Table Enhancements */
 .table-sm th {
   font-size: 0.75rem;
@@ -1906,37 +1851,6 @@ div:hover {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
   color: white;
-}
-
-/* Responsive Adjustments for Analytics */
-@media (max-width: 768px) {
-  .analytics-stats-card .stats-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 1.25rem;
-  }
-
-  .analytics-stats-card .stats-content h3 {
-    font-size: 1.5rem;
-  }
-
-  .earnings-card h3 {
-    font-size: 2rem;
-  }
-
-  .country-stats {
-    margin-bottom: 1rem;
-  }
-
-  .visits-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .visits-percentage {
-    align-self: flex-end;
-  }
 }
 
 /* Stats Cards */
@@ -2160,7 +2074,6 @@ a[href*="/users/create"]:hover {
 }
 
 /* Charts */
-.chart-area,
 
 /* Footer */
 .footer {
@@ -2264,7 +2177,7 @@ a[href*="/users/create"]:hover {
   transition: all 0.3s ease;
   height: 100%;
   min-height: 120px;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   overflow: hidden;
 }
 
@@ -3059,73 +2972,12 @@ body.lock-screen-page {
 }
 
 .login-wrapper-single {
-  display: flex;
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  max-width: 450px;
+  min-width: 350px;
   width: 100%;
-  min-height: 600px;
-  justify-content: center;
-  align-items: center;
 }
 
-.login-form-section {
-  flex: 1;
-  padding: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-form-container {
-  width: 100%;
-  max-width: 400px;
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.login-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-}
-
-.login-subtitle {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  margin: 0;
-}
-
-.divider {
-  position: relative;
-  text-align: center;
-  margin: var(--margin-3xl) 0;
-  color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
-.divider::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--border-color);
-  z-index: 1;
-}
-
-.divider span {
-  background: white;
-  padding: 0 1rem;
-  position: relative;
-  z-index: 2;
+.login-wrapper-single .card {
+  height: 100%;
 }
 
 /* ===========================================
@@ -3167,10 +3019,10 @@ body.lock-screen-page {
 }
 
 /* Common form control styling - Match add/edit users form styling */
-.login-form .form-control,
-.register-form .form-control,
-.lock-form .form-control,
-.profile-form .form-control {
+.login-form .input-group .form-control,
+.register-form .input-group .form-control,
+.lock-form .input-group .form-control,
+.profile-form .input-group .form-control {
   border: 1px solid var(--border-color);
   border-left: none;
   padding: var(--padding-md) var(--padding-lg);
@@ -3180,10 +3032,10 @@ body.lock-screen-page {
   transition: all 0.3s ease;
 }
 
-.login-form .form-control:focus,
-.register-form .form-control:focus,
-.lock-form .form-control:focus,
-.profile-form .form-control:focus {
+.login-form .input-group .form-control:focus,
+.register-form .input-group .form-control:focus,
+.lock-form .input-group .form-control:focus,
+.profile-form .input-group .form-control:focus {
   border-color: transparent;
   box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
   background-color: var(--bg-primary);
@@ -3467,6 +3319,27 @@ body.lock-screen-page {
 .form-floating input[type="password"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+/* Remove browser autofill background color */
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus,
+.form-control:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #495057 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Dark theme - autofill */
+[data-bs-theme="dark"] .form-control:-webkit-autofill,
+[data-bs-theme="dark"] .form-control:-webkit-autofill:hover,
+[data-bs-theme="dark"] .form-control:-webkit-autofill:focus,
+[data-bs-theme="dark"] .form-control:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--form-input-bg) inset !important;
+  box-shadow: 0 0 0 30px var(--form-input-bg) inset !important;
+  -webkit-text-fill-color: var(--form-text) !important;
 }
 
 /* Floating label with toggle button */
@@ -3950,17 +3823,6 @@ body.lock-screen-page {
   background-color: var(--primary-color);
 }
 
-.login-form .form-label {
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-/* Login form specific styles removed - now using unified styles above */
-
-/* Toggle password button styles removed - now using unified styles above */
-
 .form-text {
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -3988,20 +3850,6 @@ body.lock-screen-page {
   cursor: pointer;
 }
 
-.forgot-password-link {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.forgot-password-link:hover {
-  color: var(--primary-color);
-  text-decoration: underline;
-}
-
-/* Login button styles removed - now using unified styles above */
-
 .btn-loader {
   position: absolute;
   top: 50%;
@@ -4025,18 +3873,6 @@ body.lock-screen-page {
   text-decoration: underline;
 }
 
-.testimonial-info h6 {
-  margin: 0 0 0.25rem 0;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.testimonial-info p {
-  margin: 0 0 0.5rem 0;
-  opacity: 0.8;
-  font-size: 0.875rem;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .login-wrapper {
@@ -4055,19 +3891,6 @@ body.lock-screen-page {
     padding: 2rem;
   }
 
-  .testimonials-section {
-    padding: 2rem;
-    order: -1;
-  }
-
-  .testimonials-list {
-    gap: 1.5rem;
-  }
-
-  .testimonial-item {
-    padding: var(--padding-lg);
-  }
-
   .login-title {
     font-size: 1.75rem;
   }
@@ -4078,17 +3901,12 @@ body.lock-screen-page {
     padding: var(--padding-lg);
   }
 
-  .login-form-section,
-  .testimonials-section {
+  .login-form-section {
     padding: 1.5rem;
   }
 
   .login-title {
     font-size: 1.5rem;
-  }
-
-  .testimonial-quote p {
-    font-size: 1.125rem;
   }
 }
 
@@ -4115,146 +3933,13 @@ body.lock-screen-page {
 
 /* Lock Screen Modal */
 .lock-screen-modal {
-  background: var(--lock-bg-secondary);
-  border-radius: 1rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  max-width: 450px;
+  max-width: 350px;
   width: 90%;
-  min-height: 500px;
   animation: slideIn 0.3s ease;
 }
 
-/* Lock Screen Content */
-.lock-screen-content {
-  padding: 3rem 2rem;
-  text-align: center;
-}
-
-/* Lock Screen Header */
-.lock-header {
-  margin-bottom: 2rem;
-}
-
-.lock-header .user-avatar {
-  margin-bottom: var(--margin-2xl);
-}
-
-.lock-header .avatar-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #f8f9fa;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.lock-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--form-text);
-  margin-bottom: 0.5rem;
-}
-
-.lock-subtitle {
-  color: var(--form-text-tertiary);
-  font-size: 0.95rem;
-  margin-bottom: 0;
-}
-
-/* Lock Screen Form */
-.lock-form {
-  margin-bottom: 2rem;
-}
-
-.lock-form .form-group {
-  margin-bottom: var(--margin-2xl);
-  text-align: left;
-}
-
-.lock-form .form-label {
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-}
-
-/* Lock form specific styles removed - now using unified styles above */
-
-.lock-form .form-control {
-  border: 1px solid var(--form-border);
-  border-left: 0;
-  border-radius: 0 0.5rem 0.5rem 0;
-  padding: 0.75rem 1rem;
-  font-size: 0.95rem;
-  background-color: var(--form-input-bg-readonly);
-  transition: all 0.2s ease;
-}
-
-.lock-form .form-control:focus {
-  border-color: transparent;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  background-color: var(--form-input-bg);
-}
-
-.lock-form .form-control:focus + .input-group-text {
-  border-color: transparent;
-}
-
-.lock-form .form-check {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
-}
-
-.lock-form .form-check-input {
-  margin-right: 0.5rem;
-}
-
-.lock-form .form-check-label {
-  font-size: 0.9rem;
-  color: var(--form-text-secondary);
-  margin-bottom: 0;
-}
-
-/* Unlock Button */
-/* Lock screen button styles removed - now using unified styles above */
-
-/* Lock Footer */
-.lock-footer {
-  text-align: center;
-}
-
-.lock-help {
-  color: var(--form-text-tertiary);
-  font-size: 0.85rem;
-  margin-bottom: 0;
-}
-
-.lock-help .highlight {
-  color: var(--form-border-focus);
-  font-weight: 600;
-}
-
-/* Form Options */
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.forgot-password-link {
-  color: var(--form-border-focus);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.forgot-password-link:hover {
-  color: var(--form-border-focus);
-  text-decoration: none;
+.lock-screen-modal .card {
+  height: 100%;
 }
 
 /* Animations */
@@ -4283,218 +3968,6 @@ body.lock-screen-page {
   .lock-screen-modal {
     max-width: 100%;
     width: 95%;
-    min-height: auto;
-  }
-
-  .lock-screen-content {
-    padding: 2rem 1.5rem;
-  }
-
-  .lock-title {
-    font-size: 1.5rem;
-  }
-
-  .lock-header .avatar-img {
-    width: 70px;
-    height: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .lock-screen-content {
-    padding: 1.5rem 1rem;
-  }
-
-  .lock-title {
-    font-size: 1.25rem;
-  }
-
-  .lock-header .avatar-img {
-    width: 60px;
-    height: 60px;
-  }
-}
-
-.avatar-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #f8f9fa;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Lock Screen specific styles */
-
-.lock-screen-container {
-  min-height: 100vh;
-  background: var(--lock-bg-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1rem;
-}
-
-.lock-screen-wrapper {
-  background: var(--lock-bg-secondary);
-  border-radius: 1rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  max-width: 450px;
-  width: 100%;
-  min-height: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lock-form-section {
-  width: 100%;
-  padding: 3rem 2rem;
-}
-
-.lock-form-container {
-  text-align: center;
-}
-
-.lock-header {
-  margin-bottom: 2.5rem;
-}
-
-.lock-screen-container .user-avatar {
-  margin-bottom: var(--margin-2xl);
-}
-
-.avatar-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #f8f9fa;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.lock-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--form-text);
-  margin-bottom: 0.5rem;
-}
-
-.lock-subtitle {
-  color: var(--form-text-tertiary);
-  font-size: 0.95rem;
-  margin-bottom: 0;
-}
-
-.lock-form {
-  margin-bottom: 2rem;
-}
-
-.lock-form .form-group {
-  margin-bottom: var(--margin-2xl);
-  text-align: left;
-}
-
-.lock-form .form-label {
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-}
-
-/* Lock form specific styles removed - now using unified styles above */
-
-.lock-form .form-control {
-  border: 1px solid var(--form-border);
-  border-left: 0;
-  border-radius: 0 0.5rem 0.5rem 0;
-  padding: 0.75rem 1rem;
-  font-size: 0.95rem;
-  background-color: var(--form-input-bg-readonly);
-  transition: all 0.2s ease;
-}
-
-.lock-form .form-control:focus {
-  border-color: transparent;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  background-color: var(--form-input-bg);
-}
-
-.lock-form .form-control:focus + .input-group-text {
-  border-color: transparent;
-}
-
-.lock-form .form-check {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
-}
-
-.lock-form .form-check-input {
-  margin-right: 0.5rem;
-}
-
-.lock-form .form-check-label {
-  font-size: 0.9rem;
-  color: var(--form-text-secondary);
-  margin-bottom: 0;
-}
-
-/* Lock screen button styles removed - now using unified styles above */
-
-.lock-footer {
-  text-align: center;
-}
-
-.lock-help {
-  color: var(--form-text-tertiary);
-  font-size: 0.85rem;
-  margin-bottom: 0;
-}
-
-.lock-help .highlight {
-  color: var(--form-border-focus);
-  font-weight: 600;
-}
-
-/* Lock Screen Responsive Design */
-@media (max-width: 768px) {
-  .lock-screen-container {
-    padding: var(--padding-lg);
-  }
-
-  .lock-screen-wrapper {
-    max-width: 100%;
-    min-height: auto;
-  }
-
-  .lock-form-section {
-    padding: 2rem 1.5rem;
-  }
-
-  .lock-title {
-    font-size: 1.5rem;
-  }
-
-  .avatar-img {
-    width: 70px;
-    height: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .lock-form-section {
-    padding: 1.5rem 1rem;
-  }
-
-  .lock-title {
-    font-size: 1.25rem;
-  }
-
-  .avatar-img {
-    width: 60px;
-    height: 60px;
   }
 }
 
