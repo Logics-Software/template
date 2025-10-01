@@ -5,18 +5,14 @@
  */
 ?>
 
-<div class="profile-wrapper">
-    <div class="profile-form-section">
-        <div class="profile-form-container">
-            <div class="profile-header">
-                <div class="text-center mb-4">
-                    <div class="success-icon mb-3">
-                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
-                    </div>
-                    <h1 class="profile-title text-success">Profile Updated!</h1>
-                    <p class="profile-subtitle">Your profile has been successfully updated.</p>
-                </div>
+<div class="success-page-container">
+    <div class="success-page-wrapper">
+        <div class="success-page-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
             </div>
+            <h1 class="success-title">Profile Updated!</h1>
+            <p class="success-message">Your profile has been successfully updated.</p>
 
             <div class="text-center">
                 <div class="spinner-border text-primary mb-3" role="status">
@@ -60,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<style>
+<!-- Success page styles moved to style.css -->
+<!--
 .profile-container {
     min-height: 100vh;
     display: flex;
@@ -163,4 +160,4 @@ document.addEventListener('DOMContentLoaded', function() {
     color: white;
     transform: translateY(-1px);
 }
-</style>
+-->

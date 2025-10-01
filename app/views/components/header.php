@@ -67,12 +67,14 @@ ob_start();
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">C</div>
+                                            <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #28a745 0%, #20c997 100%);">O</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Sudarmi</h6>
-                                            <p class="mb-0 text-muted">Otorisasi Edit Data Penjualan</p>
-                                            <small class="text-muted">5 min ago</small>
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <h6 class="mb-0">Sudarmu</h6>
+                                                <small class="text-muted">1 min ago</small>
+                                            </div>
+                                            <p class="mb-0 text-muted">Otorisasi Edit ACC Penjualan</p>
                                         </div>
                                     </div>
                                 </div>
@@ -83,9 +85,11 @@ ob_start();
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #28a745 0%, #20c997 100%);">O</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Ari Kusuma</h6>
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <h6 class="mb-0">Ari Kusuma</h6>
+                                                <small class="text-muted">1 min ago</small>
+                                            </div>
                                             <p class="mb-0 text-muted">Otorisasi Edit Pembelian</p>
-                                            <small class="text-muted">1 min ago</small>
                                         </div>
                                     </div>
                                 </div>
@@ -96,9 +100,11 @@ ob_start();
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);">T</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Eny Kurniawati</h6>
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <h6 class="mb-0">Eny Kurniawati</h6>
+                                                <small class="text-muted">7 min ago</small>
+                                            </div>
                                             <p class="mb-0 text-muted">Otorisasi/Approval Discount dan Harga Jualan Barang</p>
-                                            <small class="text-muted">7 min ago</small>
                                         </div>
                                     </div>
                                 </div>
@@ -109,9 +115,11 @@ ob_start();
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);">V</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Wiwin Lena</h6>
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <h6 class="mb-0">Wiwin Lena</h6>
+                                                <small class="text-muted">5 min ago</small>
+                                            </div>
                                             <p class="mb-0 text-muted">Perubahan Harga Barang Amoxillyn 20mg 100 tablet</p>
-                                            <small class="text-muted">5 min ago</small>
                                         </div>
                                     </div>
                                 </div>
@@ -122,9 +130,11 @@ ob_start();
                                             <div class="avatar-fallback avatar-md" style="display:none; background:linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);">R</div>
                                         </div>
                                         <div class="notification-content">
-                                            <h6 class="mb-1">Yulie Andriati</h6>
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <h6 class="mb-0">Yulie Andriati</h6>
+                                                <small class="text-muted">5 min ago</small>
+                                            </div>
                                             <p class="mb-0 text-muted">Otorisasi Approval/ACC Piutang Customer</p>
-                                            <small class="text-muted">5 min ago</small>
                                         </div>
                                     </div>
                                 </div>

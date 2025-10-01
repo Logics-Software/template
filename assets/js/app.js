@@ -544,6 +544,9 @@ function initMessageSystem() {
   };
 
   // Delete message with confirmation
+  // NOTE: This function is now implemented in each message view file with Bootstrap modal
+  // Commented out to prevent conflict with modal implementation
+  /*
   window.deleteMessage = function (messageId) {
     if (confirm("Apakah Anda yakin ingin menghapus pesan ini?")) {
       fetch(`${window.appUrl}/messages/${messageId}`, {
@@ -567,6 +570,7 @@ function initMessageSystem() {
         });
     }
   };
+  */
 }
 
 // Initialize message system when DOM is loaded
@@ -647,11 +651,13 @@ function initHeaderMessageDropdown() {
                     <div class="avatar-fallback avatar-md" style="display:none; background:${randomGradient};">${senderInitial}</div>
                   </div>
                   <div class="message-content">
-                    <h6 class="mb-1">${escapeHtml(message.sender_name)}</h6>
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                      <h6 class="mb-0">${escapeHtml(message.sender_name)}</h6>
+                      <small class="text-muted">${timeAgo}</small>
+                    </div>
                     <p class="mb-0 text-muted">${escapeHtml(
                       message.subject
                     )}</p>
-                    <small class="text-muted">${timeAgo}</small>
                   </div>
                 </div>
               </div>

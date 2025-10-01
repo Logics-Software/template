@@ -18,7 +18,7 @@ $content = '
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="' . APP_URL . '/users/' . $user['id'] . '/update" id="editUserForm" enctype="multipart/form-data">
+                <form method="POST" action="' . APP_URL . '/users/' . $user['id'] . '" id="editUserForm" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="' . $csrf_token . '">
                     <input type="hidden" name="_method" value="PUT">
                     
@@ -50,8 +50,8 @@ $content = '
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="new-password" required>
-                                <label for="password">Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="new-password">
+                                <label for="password">Password (leave empty to keep current)</label>
                                 <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center" type="button" id="togglePassword" style="z-index: 10; border: none; background: transparent;">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -59,8 +59,8 @@ $content = '
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" autocomplete="new-password" required>
-                                <label for="password_confirmation">Confirm Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" autocomplete="new-password">
+                                <label for="password_confirmation">Confirm Password</label>
                                 <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center" type="button" id="togglePasswordConfirmation" style="z-index: 10; border: none; background: transparent;">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -128,23 +128,83 @@ $content = '
                     </div>
 
 
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <a href="' . APP_URL . '/users" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to Users
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Update User
+                        </button>
+                    </div>
                 </form>
-            </div>
-            <div class="card-footer">
-                <div class="d-flex justify-content-between align-items-center">
-                    <a href="' . APP_URL . '/users" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i>Back to Users
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save me-1"></i>Update User
-                    </button>
-                </div>
             </div>
         </div>
 ';
 
 $content .= '
 <script>
+// File upload handling functions (defined early for inline handlers)
+function handleFileSelect(input) {
+    const file = input.files[0];
+    
+    if (file) {
+        // Validate file type
+        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+        if (!allowedTypes.includes(file.type)) {
+            alert("Please select a valid image file (JPG, PNG, GIF, WEBP)");
+            input.value = "";
+            return;
+        }
+        
+        // Validate file size (5MB max)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            alert("File size must be less than 5MB");
+            input.value = "";
+            return;
+        }
+        
+        showPreview(file);
+    }
+}
+
+function showPreview(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const preview = document.getElementById("file-preview");
+        const previewImage = document.getElementById("preview-image");
+        const previewFilename = document.getElementById("preview-filename");
+        const previewSize = document.getElementById("preview-size");
+        
+        if (previewImage) {
+            previewImage.src = e.target.result;
+        }
+        if (previewFilename) previewFilename.textContent = file.name;
+        if (previewSize) previewSize.textContent = formatFileSize(file.size);
+        
+        if (preview) {
+            preview.classList.remove("d-none");
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+function removePreview() {
+    const pictureInput = document.getElementById("picture");
+    if (pictureInput) pictureInput.value = "";
+    
+    const preview = document.getElementById("file-preview");
+    if (preview) preview.classList.add("d-none");
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+}
+
 // Password toggle functionality
 document.addEventListener("DOMContentLoaded", function() {
     // Password toggle
@@ -183,17 +243,17 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // Form submission with AJAX
-document.getElementById("createUserForm").addEventListener("submit", function(e) {
+document.getElementById("editUserForm").addEventListener("submit", function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
     const submitBtn = this.querySelector("button[type=submit]");
     const originalText = submitBtn.innerHTML;
     
-    submitBtn.innerHTML = "<i class=\"fas fa-hourglass-split me-1\"></i>Creating...";
+    submitBtn.innerHTML = "<i class=\"fas fa-hourglass-split me-1\"></i>Updating...";
     submitBtn.disabled = true;
     
-    fetch("' . APP_URL . '/users", {
+    fetch("' . APP_URL . '/users/' . $user['id'] . '", {
         method: "POST",
         body: formData,
         headers: {
@@ -212,9 +272,6 @@ document.getElementById("createUserForm").addEventListener("submit", function(e)
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
             document.querySelector(".card-body").insertBefore(alertDiv, document.querySelector("form"));
-            
-            // Reset form
-            this.reset();
             
             // Redirect after 2 seconds
             setTimeout(() => {
@@ -235,7 +292,7 @@ document.getElementById("createUserForm").addEventListener("submit", function(e)
         const alertDiv = document.createElement("div");
         alertDiv.className = "alert alert-danger alert-dismissible fade show";
         alertDiv.innerHTML = `
-            An error occurred while creating the user
+            An error occurred while updating the user
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
         document.querySelector(".card-body").insertBefore(alertDiv, document.querySelector("form"));
@@ -248,72 +305,3 @@ document.getElementById("createUserForm").addEventListener("submit", function(e)
 </script>
 ';
 ?>
-
-<script>
-// Simple and reliable file upload handling
-function handleFileSelect(input) {
-    const file = input.files[0];
-    
-    if (file) {
-        // Validate file type
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-        if (!allowedTypes.includes(file.type)) {
-            alert('Please select a valid image file (JPG, PNG, GIF, WEBP)');
-            input.value = '';
-            return;
-        }
-        
-        // Validate file size (5MB max)
-        const maxSize = 5 * 1024 * 1024; // 5MB
-        if (file.size > maxSize) {
-            alert('File size must be less than 5MB');
-            input.value = '';
-            return;
-        }
-        
-        showPreview(file);
-    }
-}
-
-function showPreview(file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        // Full preview
-        const preview = document.getElementById('file-preview');
-        const previewImage = document.getElementById('preview-image');
-        const previewFilename = document.getElementById('preview-filename');
-        const previewSize = document.getElementById('preview-size');
-        
-        if (previewImage) {
-            previewImage.src = e.target.result;
-        }
-        if (previewFilename) previewFilename.textContent = file.name;
-        if (previewSize) previewSize.textContent = formatFileSize(file.size);
-        
-        if (preview) {
-            preview.classList.remove('d-none');
-        }
-    };
-    reader.readAsDataURL(file);
-}
-
-function removePreview() {
-    const pictureInput = document.getElementById('picture');
-    if (pictureInput) pictureInput.value = '';
-    
-    const preview = document.getElementById('file-preview');
-    if (preview) preview.classList.add('d-none');
-}
-
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-// Make functions globally available
-window.removePreview = removePreview;
-window.handleFileSelect = handleFileSelect;
-</script>

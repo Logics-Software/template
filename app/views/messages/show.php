@@ -4,11 +4,11 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div>
                     <h5 class="mb-0">
-                        <?php echo htmlspecialchars($message['subject']); ?>
+                        <?php echo htmlspecialchars($message['subject'] ?? '(No Subject)'); ?>
                     </h5>
                     <small class="text-muted">
-                        Dari: <?php echo htmlspecialchars($message['sender_name']); ?> 
-                        (<?php echo htmlspecialchars($message['sender_email']); ?>)
+                        Dari: <?php echo htmlspecialchars($message['sender_name'] ?? 'Unknown'); ?> 
+                        (<?php echo htmlspecialchars($message['sender_email'] ?? '-'); ?>)
                     </small>
                 </div>
                 <nav aria-label="breadcrumb">
@@ -38,10 +38,10 @@
                                         </div>
                                     <?php endif; ?>
                                     <div>
-                                        <h6 class="mb-1"><?php echo htmlspecialchars($message['sender_name']); ?></h6>
+                                        <h6 class="mb-1"><?php echo htmlspecialchars($message['sender_name'] ?? 'Unknown'); ?></h6>
                                         <small class="text-muted">
-                                            <?php echo date('d F Y, H:i', strtotime($message['created_at'])); ?>
-                                            <?php if ($message['status'] === 'read'): ?>
+                                            <?php echo date('d F Y, H:i', strtotime($message['created_at'] ?? 'now')); ?>
+                                            <?php if (($message['status'] ?? '') === 'read'): ?>
                                                 <span class="badge bg-success ms-2">Sudah dibaca</span>
                                             <?php endif; ?>
                                         </small>
@@ -50,7 +50,7 @@
                             </div>
                             
                             <div class="message-body">
-                                <?php echo $message['content']; ?>
+                                <?php echo $message['content'] ?? ''; ?>
                             </div>
                             
                             <?php if (!empty($message['attachments'])): ?>
@@ -158,10 +158,39 @@
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteMessageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this message? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteMessage">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+let deleteMessageId = null;
+
 function deleteMessage(messageId) {
-    if (confirm('Apakah Anda yakin ingin menghapus pesan ini?')) {
-        fetch(`<?php echo APP_URL; ?>/messages/${messageId}`, {
+    deleteMessageId = messageId;
+    const modal = new bootstrap.Modal(document.getElementById("deleteMessageModal"));
+    modal.show();
+}
+
+// Delete message confirmation and mark as read handler
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("confirmDeleteMessage").addEventListener("click", function() {
+        if (deleteMessageId) {
+        fetch(`<?php echo APP_URL; ?>/messages/${deleteMessageId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -173,21 +202,38 @@ function deleteMessage(messageId) {
             if (data.success) {
                 window.location.href = '<?php echo APP_URL; ?>/messages';
             } else {
-                alert('Gagal menghapus pesan: ' + data.message);
+                // Close modal first
+                const modal = bootstrap.Modal.getInstance(document.getElementById("deleteMessageModal"));
+                modal.hide();
+                
+                // Show error alert
+                const alertDiv = document.createElement("div");
+                alertDiv.className = "alert alert-danger alert-dismissible fade show";
+                alertDiv.innerHTML = `
+                    <i class="fas fa-exclamation-circle me-1"></i>${data.message || 'Gagal menghapus pesan'}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector(".card-body").insertBefore(alertDiv, document.querySelector(".message-content"));
             }
         })
         .catch(error => {
-            alert('Terjadi kesalahan saat menghapus pesan');
+            // Close modal first
+            const modal = bootstrap.Modal.getInstance(document.getElementById("deleteMessageModal"));
+            modal.hide();
+            
+            // Show error alert
+            const alertDiv = document.createElement("div");
+            alertDiv.className = "alert alert-danger alert-dismissible fade show";
+            alertDiv.innerHTML = `
+                <i class="fas fa-exclamation-circle me-1"></i>Terjadi kesalahan saat menghapus pesan
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.querySelector(".card-body").insertBefore(alertDiv, document.querySelector(".message-content"));
         });
-    }
-}
+        }
+    });
 
-function printMessage() {
-    window.print();
-}
-
-// Mark as read when page loads
-document.addEventListener('DOMContentLoaded', function() {
+    // Mark as read when page loads
     <?php if ($is_recipient): ?>
     fetch('<?php echo APP_URL; ?>/api/messages/mark-read', {
         method: 'POST',
@@ -203,4 +249,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     <?php endif; ?>
 });
+
+function printMessage() {
+    window.print();
+}
 </script>

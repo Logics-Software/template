@@ -94,8 +94,6 @@ $content = '
                             <i class="fas fa-sort text-muted ms-1"></i>
                         </th>
                         <th>Status</th>
-                        <th>Last Login</th>
-                        <th>Created</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -145,8 +143,6 @@ foreach ($users['data'] as $user) {
                         <td>
                             <span class="badge bg-' . $statusClass . '">' . ucfirst(str_replace('_', ' ', $user['status'] ?? 'N/A')) . '</span>
                         </td>
-                        <td>' . $lastLogin . '</td>
-                        <td>' . date('M d, Y', strtotime($user['created_at'] ?? 'now')) . '</td>
                         <td>
                             <div class="btn-group" role="group">';
     

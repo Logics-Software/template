@@ -47,23 +47,7 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Prevent sidebar flash effect -->
-    <style>
-        .sidebar {
-            transition: transform 0.3s ease;
-        }
-        
-        .sidebar.collapsed {
-            transform: translateX(-100%);
-        }
-        
-        .main-content.sidebar-collapsed {
-            margin-left: 0;
-        }
-        
-        .top-header.sidebar-collapsed {
-            left: 0;
-        }
-    </style>
+    <!-- Sidebar styles moved to style.css -->
     
     <!-- Custom CSS -->
     <link href="<?php echo BASE_URL; ?>assets/css/style.css" rel="stylesheet">

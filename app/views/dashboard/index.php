@@ -33,7 +33,7 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h4>Rp. 24,839,398</h4>
+                    <h5>Rp. 24,839,398</h5>
                     <p>Omset Penjualan</p>
                     <div class="stats-change">
                         <span class="text-warning">
@@ -73,8 +73,8 @@ $content = '
         <div class="card stats-card">
             <div class="card-body">
                 <div class="stats-info">
-                    <h4>Rp. 24,245,780</h4>
-                    <p>Omset Penerimaan/Inkaso</p>
+                    <h5>Rp. 24,245,780</h5>
+                    <p>Penerimaan/Inkaso</p>
                     <div class="stats-change">
                         <span class="text-success">
                             <i class="fas fa-arrow-up"></i> 18%
@@ -154,47 +154,85 @@ function initializeCharts() {
                     data: {
                         labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
                         datasets: [{
-                            label: "Sales",
+                            label: "Penjualan",
                             data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 35000],
                             backgroundColor: "rgba(54, 162, 235, 0.2)",
                             borderColor: "rgba(54, 162, 235, 1)",
                             borderWidth: 2,
-                            tension: 0.4
+                            tension: 0.4,
+                            fill: true
                         },{
-                            label: "Sales",
+                            label: "Pembelian",
                             data: [10000, 9000, 25000, 22000, 21000, 29000, 18000, 37000],
-                            backgroundColor: "rgba(54, 162, 235, 0.2)",
-                            borderColor: "rgb(255, 0, 0)",
+                            backgroundColor: "rgba(255, 99, 132, 0.2)",
+                            borderColor: "rgb(255, 99, 132)",
                             borderWidth: 2,
-                            tension: 0.4
+                            tension: 0.4,
+                            fill: true
                         },{
-                            label: "Sales",
+                            label: "Inkaso",
                             data: [11000, 13000, 21000, 23000, 24000, 31000, 22000, 32000],
-                            backgroundColor: "rgba(54, 162, 235, 0.2)",
-                            borderColor: "rgb(0, 255, 30)",
+                            backgroundColor: "rgba(75, 192, 192, 0.2)",
+                            borderColor: "rgb(75, 192, 192)",
                             borderWidth: 2,
-                            tension: 0.4
+                            tension: 0.4,
+                            fill: true
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: "index"
+                        },
                         plugins: {
                             legend: {
-                                display: false
+                                display: true,
+                                position: "top",
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: "rgba(0, 0, 0, 0.8)",
+                                titleColor: "white",
+                                bodyColor: "white",
+                                borderColor: "rgba(255, 255, 255, 0.1)",
+                                borderWidth: 1
                             }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
                                 grid: {
-                                    color: "rgba(0,0,0,0.1)"
+                                    color: "rgba(0,0,0,0.1)",
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    color: "rgba(0,0,0,0.6)",
+                                    font: {
+                                        size: 12
+                                    }
                                 }
                             },
                             x: {
                                 grid: {
                                     display: false
+                                },
+                                ticks: {
+                                    color: "rgba(0,0,0,0.6)",
+                                    font: {
+                                        size: 12
+                                    }
                                 }
+                            }
+                        },
+                        elements: {
+                            point: {
+                                radius: 4,
+                                hoverRadius: 6
                             }
                         }
                     }
@@ -265,6 +303,36 @@ function initializeCharts() {
 // Initialize charts when DOM is ready
 document.addEventListener("DOMContentLoaded", function() {
     initializeCharts();
+    
+    // Add responsive functionality for sidebar toggle
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener("click", function() {
+            // Resize charts after sidebar animation completes
+            setTimeout(function() {
+                if (window.salesChart && !window.salesChart.destroyed) {
+                    window.salesChart.resize();
+                }
+                if (window.pipelineChart && !window.pipelineChart.destroyed) {
+                    window.pipelineChart.resize();
+                }
+            }, 350); // Wait for sidebar animation (300ms + 50ms buffer)
+        });
+    }
+    
+    // Handle window resize for responsive behavior
+    let resizeTimeout;
+    window.addEventListener("resize", function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            if (window.salesChart && !window.salesChart.destroyed) {
+                window.salesChart.resize();
+            }
+            if (window.pipelineChart && !window.pipelineChart.destroyed) {
+                window.pipelineChart.resize();
+            }
+        }, 250);
+    });
 });
 
 // Re-initialize charts when page becomes visible (handles tab switching)
@@ -286,6 +354,7 @@ window.addEventListener("beforeunload", function() {
     }
 });
 </script>
+
 ';
 
 // Echo the content

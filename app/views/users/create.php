@@ -127,23 +127,83 @@ $content = '
                     </div>
 
 
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <a href="' . APP_URL . '/users" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to Users
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check-circle me-1"></i>Create User
+                        </button>
+                    </div>
                 </form>
-            </div>
-            <div class="card-footer">
-                <div class="d-flex justify-content-between align-items-center">
-                    <a href="' . APP_URL . '/users" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i>Back to Users
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-check-circle me-1"></i>Create User
-                    </button>
-                </div>
             </div>
         </div>
 ';
 
 $content .= '
 <script>
+// File upload handling functions (defined early for inline handlers)
+function handleFileSelect(input) {
+    const file = input.files[0];
+    
+    if (file) {
+        // Validate file type
+        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+        if (!allowedTypes.includes(file.type)) {
+            alert("Please select a valid image file (JPG, PNG, GIF, WEBP)");
+            input.value = "";
+            return;
+        }
+        
+        // Validate file size (5MB max)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            alert("File size must be less than 5MB");
+            input.value = "";
+            return;
+        }
+        
+        showPreview(file);
+    }
+}
+
+function showPreview(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const preview = document.getElementById("file-preview");
+        const previewImage = document.getElementById("preview-image");
+        const previewFilename = document.getElementById("preview-filename");
+        const previewSize = document.getElementById("preview-size");
+        
+        if (previewImage) {
+            previewImage.src = e.target.result;
+        }
+        if (previewFilename) previewFilename.textContent = file.name;
+        if (previewSize) previewSize.textContent = formatFileSize(file.size);
+        
+        if (preview) {
+            preview.classList.remove("d-none");
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+function removePreview() {
+    const pictureInput = document.getElementById("picture");
+    if (pictureInput) pictureInput.value = "";
+    
+    const preview = document.getElementById("file-preview");
+    if (preview) preview.classList.add("d-none");
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+}
+
 // Password toggle functionality
 document.addEventListener("DOMContentLoaded", function() {
     // Password toggle
@@ -247,72 +307,3 @@ document.getElementById("createUserForm").addEventListener("submit", function(e)
 </script>
 ';
 ?>
-
-<script>
-// Simple and reliable file upload handling
-function handleFileSelect(input) {
-    const file = input.files[0];
-    
-    if (file) {
-        // Validate file type
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-        if (!allowedTypes.includes(file.type)) {
-            alert('Please select a valid image file (JPG, PNG, GIF, WEBP)');
-            input.value = '';
-            return;
-        }
-        
-        // Validate file size (5MB max)
-        const maxSize = 5 * 1024 * 1024; // 5MB
-        if (file.size > maxSize) {
-            alert('File size must be less than 5MB');
-            input.value = '';
-            return;
-        }
-        
-        showPreview(file);
-    }
-}
-
-function showPreview(file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        // Full preview
-        const preview = document.getElementById('file-preview');
-        const previewImage = document.getElementById('preview-image');
-        const previewFilename = document.getElementById('preview-filename');
-        const previewSize = document.getElementById('preview-size');
-        
-        if (previewImage) {
-            previewImage.src = e.target.result;
-        }
-        if (previewFilename) previewFilename.textContent = file.name;
-        if (previewSize) previewSize.textContent = formatFileSize(file.size);
-        
-        if (preview) {
-            preview.classList.remove('d-none');
-        }
-    };
-    reader.readAsDataURL(file);
-}
-
-function removePreview() {
-    const pictureInput = document.getElementById('picture');
-    if (pictureInput) pictureInput.value = '';
-    
-    const preview = document.getElementById('file-preview');
-    if (preview) preview.classList.add('d-none');
-}
-
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-// Make functions globally available
-window.removePreview = removePreview;
-window.handleFileSelect = handleFileSelect;
-</script>

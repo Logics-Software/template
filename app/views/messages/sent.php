@@ -57,14 +57,14 @@
                                             <i class="fas fa-paper-plane text-primary" title="Pesan terkirim"></i>
                                         </td>
                                         <td>
-                                            <div class="fw-bold"><?php echo htmlspecialchars($message['subject']); ?></div>
+                                            <div class="fw-bold"><?php echo htmlspecialchars($message['subject'] ?? ''); ?></div>
                                             <small class="text-muted">
-                                                <?php echo htmlspecialchars(substr(strip_tags($message['content']), 0, 100)); ?>
-                                                <?php if (strlen(strip_tags($message['content'])) > 100): ?>...<?php endif; ?>
+                                                <?php echo htmlspecialchars(substr(strip_tags($message['content'] ?? ''), 0, 100)); ?>
+                                                <?php if (strlen(strip_tags($message['content'] ?? '')) > 100): ?>...<?php endif; ?>
                                             </small>
                                         </td>
                                         <td>
-                                            <small class="text-muted"><?php echo htmlspecialchars($message['recipients']); ?></small>
+                                            <small class="text-muted"><?php echo htmlspecialchars($message['recipients'] ?? '-'); ?></small>
                                         </td>
                                         <td>
                                             <small class="text-muted">
@@ -113,10 +113,39 @@
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteMessageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this message? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteMessage">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+let deleteMessageId = null;
+
 function deleteMessage(messageId) {
-    if (confirm('Apakah Anda yakin ingin menghapus pesan ini?')) {
-        fetch(`<?php echo APP_URL; ?>/messages/${messageId}`, {
+    deleteMessageId = messageId;
+    const modal = new bootstrap.Modal(document.getElementById("deleteMessageModal"));
+    modal.show();
+}
+
+// Delete message confirmation
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("confirmDeleteMessage").addEventListener("click", function() {
+        if (deleteMessageId) {
+        fetch(`<?php echo APP_URL; ?>/messages/${deleteMessageId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,12 +157,35 @@ function deleteMessage(messageId) {
             if (data.success) {
                 location.reload();
             } else {
-                alert('Gagal menghapus pesan: ' + data.message);
+                // Close modal first
+                const modal = bootstrap.Modal.getInstance(document.getElementById("deleteMessageModal"));
+                modal.hide();
+                
+                // Show error alert
+                const alertDiv = document.createElement("div");
+                alertDiv.className = "alert alert-danger alert-dismissible fade show";
+                alertDiv.innerHTML = `
+                    <i class="fas fa-exclamation-circle me-1"></i>${data.message || 'Gagal menghapus pesan'}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector(".card-body").insertBefore(alertDiv, document.querySelector(".row"));
             }
         })
         .catch(error => {
-            alert('Terjadi kesalahan saat menghapus pesan');
+            // Close modal first
+            const modal = bootstrap.Modal.getInstance(document.getElementById("deleteMessageModal"));
+            modal.hide();
+            
+            // Show error alert
+            const alertDiv = document.createElement("div");
+            alertDiv.className = "alert alert-danger alert-dismissible fade show";
+            alertDiv.innerHTML = `
+                <i class="fas fa-exclamation-circle me-1"></i>Terjadi kesalahan saat menghapus pesan
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.querySelector(".card-body").insertBefore(alertDiv, document.querySelector(".row"));
         });
-    }
-}
+        }
+    });
+});
 </script>

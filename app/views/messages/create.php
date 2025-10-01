@@ -144,139 +144,7 @@
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
-<!-- Custom CSS for responsive user list -->
-<style>
-.user-item {
-    transition: all 0.2s ease;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-.user-item.card {
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-.user-item:hover {
-    transform: translateY(-1px);
-    box-shadow: none !important;
-    border: none !important;
-    outline: none !important;
-}
-
-.user-item.selected {
-    background-color: #e7f3ff;
-    box-shadow: none !important;
-    border: none !important;
-    outline: none !important;
-}
-
-.user-item .card-body {
-    padding: 0.25rem;
-    margin: 0.1rem;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-.user-item .form-check-input {
-    margin-top: 0;
-}
-
-.user-item .text-truncate {
-    max-width: 100%;
-}
-
-/* Remove all shadows and borders from user-item and its children */
-.user-item * {
-    box-shadow: none !important;
-    border: none !important;
-    outline: none !important;
-}
-
-.user-item .card,
-.user-item .card-body,
-.user-item .form-check-input,
-.user-item .avatar-sm,
-.user-item .fw-bold,
-.user-item small {
-    box-shadow: none !important;
-    border: none !important;
-    outline: none !important;
-}
-
-.badge-sm {
-    font-size: 0.7em;
-    padding: 0.25em 0.5em;
-}
-
-@media (max-width: 1200px) {
-    .user-item {
-        height: 55px !important;
-    }
-}
-
-@media (max-width: 992px) {
-    .user-item {
-        height: 50px !important;
-    }
-    
-    .user-item .card-body {
-        padding: 0.2rem;
-        margin: 0.1rem;
-    }
-    
-    .user-item .fw-bold {
-        font-size: 0.75rem !important;
-    }
-    
-    .user-item small {
-        font-size: 0.65rem !important;
-    }
-    
-    .user-item .badge {
-        font-size: 0.55rem !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .user-item {
-        height: 45px !important;
-    }
-    
-    .user-item .card-body {
-        padding: 0.15rem;
-        margin: 0.1rem;
-    }
-    
-    .user-item .avatar-sm {
-        width: 20px !important;
-        height: 20px !important;
-        font-size: 8px !important;
-    }
-}
-
-@media (max-width: 576px) {
-    .user-item {
-        height: 40px !important;
-    }
-    
-    .user-item .card-body {
-        padding: 0.1rem;
-        margin: 0.1rem;
-    }
-    
-    .user-item .fw-bold {
-        font-size: 0.7rem !important;
-    }
-    
-    .user-item small {
-        font-size: 0.6rem !important;
-    }
-}
-</style>
+<!-- User selection styles moved to style.css -->
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -433,32 +301,43 @@ document.addEventListener('DOMContentLoaded', function() {
         const search = userSearch.value;
         const role = roleFilter.value;
         
+        console.log('Loading users with search:', search, 'role:', role);
+        
         const params = new URLSearchParams();
         if (search) params.append('search', search);
         if (role) params.append('role', role);
         
-        fetch(`<?php echo APP_URL; ?>/api/messages/search-users?${params.toString()}`)
+        const url = `<?php echo APP_URL; ?>/api/messages/search-users?${params.toString()}`;
+        console.log('Fetching URL:', url);
+        
+        fetch(url)
             .then(response => {
+                console.log('Response status:', response.status);
                 if (!response.ok) {
                     throw new Error('HTTP error! status: ' + response.status);
                 }
                 return response.json();
             })
             .then(data => {
+                console.log('API Response:', data);
                 if (data.success) {
                     allUsers = data.users;
                     displayUsers(data.users);
                 } else {
+                    console.error('API Error:', data.message);
                     usersList.innerHTML = '<div class="p-3 text-center text-danger">Error: ' + data.message + '</div>';
                 }
             })
             .catch(error => {
+                console.error('Fetch Error:', error);
                 usersList.innerHTML = '<div class="p-3 text-center text-danger">Error loading users: ' + error.message + '</div>';
             });
     }
     
     // Display users in the list
     function displayUsers(users) {
+        console.log('Displaying users:', users);
+        
         if (users.length === 0) {
             usersList.innerHTML = '<div class="p-3 text-center text-muted">Tidak ada pengguna yang ditemukan</div>';
             return;
@@ -472,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             return `
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-1">
-                    <div class="card user-item ${isSelected ? 'selected' : ''}" data-user-id="${user.id}" style="cursor: pointer; transition: all 0.2s; height: 60px;">
+                    <div class="card user-selection-item ${isSelected ? 'selected' : ''}" data-user-id="${user.id}" style="cursor: pointer; height: 60px;">
                         <div class="card-body p-1 h-100 d-flex align-items-center">
                             <input type="checkbox" class="form-check-input me-1" ${isSelected ? 'checked' : ''} onchange="toggleUser(${user.id})" style="transform: scale(0.8);">
                             ${userPicture}
@@ -512,18 +391,36 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add click functionality to user cards
     function addCardClickHandlers() {
-        const userCards = document.querySelectorAll('.user-item');
+        const userCards = document.querySelectorAll('.user-selection-item');
+        console.log('Adding click handlers to', userCards.length, 'user cards');
+        
         userCards.forEach(card => {
-            card.addEventListener('click', function(e) {
-                // Don't trigger if clicking on checkbox
-                if (e.target.type === 'checkbox') return;
-                
-                const userId = parseInt(this.dataset.userId);
-                const checkbox = this.querySelector('input[type="checkbox"]');
-                checkbox.checked = !checkbox.checked;
-                toggleUser(userId);
-            });
+            // Remove existing listeners to avoid duplicates
+            card.removeEventListener('click', handleCardClick);
+            card.addEventListener('click', handleCardClick);
         });
+    }
+    
+    // Separate function for card click handling
+    function handleCardClick(e) {
+        console.log('Card clicked:', e.target);
+        
+        // Don't trigger if clicking on checkbox
+        if (e.target.type === 'checkbox') {
+            console.log('Checkbox clicked, not handling card click');
+            return;
+        }
+        
+        const userId = parseInt(this.dataset.userId);
+        console.log('Toggling user:', userId);
+        
+        const checkbox = this.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked;
+            toggleUser(userId);
+        } else {
+            console.error('Checkbox not found for user:', userId);
+        }
     }
     
     // Update selected recipients display
