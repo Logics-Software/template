@@ -542,35 +542,6 @@ function initMessageSystem() {
   window.printMessage = function () {
     window.print();
   };
-
-  // Delete message with confirmation
-  // NOTE: This function is now implemented in each message view file with Bootstrap modal
-  // Commented out to prevent conflict with modal implementation
-  /*
-  window.deleteMessage = function (messageId) {
-    if (confirm("Apakah Anda yakin ingin menghapus pesan ini?")) {
-      fetch(`${window.appUrl}/messages/${messageId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            location.reload();
-          } else {
-            alert("Gagal menghapus pesan: " + data.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          alert("Terjadi kesalahan saat menghapus pesan");
-        });
-    }
-  };
-  */
 }
 
 // Initialize message system when DOM is loaded
