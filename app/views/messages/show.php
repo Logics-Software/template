@@ -117,9 +117,9 @@
                                             </div>
                                             <div>
                                                 <?php if ($recipient['is_read']): ?>
-                                                    <i class="fas fa-check-circle text-success" title="Sudah dibaca"></i>
+                                                    <i class="fas fa-check-circle text-success"></i>
                                                 <?php else: ?>
-                                                    <i class="fas fa-clock text-warning" title="Belum dibaca"></i>
+                                                    <i class="fas fa-clock text-warning"></i>
                                                 <?php endif; ?>
                                             </div>
                                         </div>

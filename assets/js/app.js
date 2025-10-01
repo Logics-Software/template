@@ -376,10 +376,25 @@ setTimeout(function () {
 
 // Message/Chat functionality
 function initMessageSystem() {
+  // Check if user is logged in before making API calls
+  const isLoggedIn =
+    document.querySelector(".user-dropdown") ||
+    document.querySelector(".sidebar") ||
+    document.querySelector(".main-content");
+
+  if (!isLoggedIn) {
+    return; // Exit if user is not logged in
+  }
+
   // Update unread count badge
   function updateUnreadCount() {
     fetch(`${window.appUrl}/api/messages/unread-count`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unauthorized");
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.success) {
           const badge = document.getElementById("unread-count-badge");
@@ -394,7 +409,10 @@ function initMessageSystem() {
         }
       })
       .catch((error) => {
-        console.error("Error fetching unread count:", error);
+        // Silently handle unauthorized errors
+        if (error.message !== "Unauthorized") {
+          console.error("Error fetching unread count:", error);
+        }
       });
   }
 
@@ -446,6 +464,11 @@ function initMessageSystem() {
       'select[name="recipients[]"]'
     );
 
+    // For messages form, we might have a different structure
+    const selectedRecipientsInput = messageForm.querySelector(
+      'input[name="recipients[]"]'
+    );
+
     function saveDraft() {
       // Get Quill content if editor exists
       let content = contentTextarea.value;
@@ -453,12 +476,25 @@ function initMessageSystem() {
         content = window.quill.root.innerHTML;
       }
 
+      // Get recipients based on form structure
+      let recipients = [];
+      if (recipientsSelect) {
+        // Traditional select dropdown
+        recipients = Array.from(recipientsSelect.selectedOptions).map(
+          (option) => option.value
+        );
+      } else if (selectedRecipientsInput) {
+        // Hidden input with comma-separated values
+        const recipientsValue = selectedRecipientsInput.value;
+        recipients = recipientsValue
+          ? recipientsValue.split(",").filter((id) => id.trim())
+          : [];
+      }
+
       const draft = {
         subject: subjectInput.value,
         content: content,
-        recipients: Array.from(recipientsSelect.selectedOptions).map(
-          (option) => option.value
-        ),
+        recipients: recipients,
         timestamp: Date.now(),
       };
       localStorage.setItem("message_draft", JSON.stringify(draft));
@@ -490,9 +526,15 @@ function initMessageSystem() {
               }
             }
             if (draftData.recipients && draftData.recipients.length > 0) {
-              Array.from(recipientsSelect.options).forEach((option) => {
-                option.selected = draftData.recipients.includes(option.value);
-              });
+              if (recipientsSelect) {
+                // Traditional select dropdown
+                Array.from(recipientsSelect.options).forEach((option) => {
+                  option.selected = draftData.recipients.includes(option.value);
+                });
+              } else if (selectedRecipientsInput) {
+                // Hidden input with comma-separated values
+                selectedRecipientsInput.value = draftData.recipients.join(",");
+              }
             }
           }
         } catch (e) {
@@ -513,6 +555,10 @@ function initMessageSystem() {
 
     if (recipientsSelect) {
       recipientsSelect.addEventListener("change", saveDraft);
+    }
+
+    if (selectedRecipientsInput) {
+      selectedRecipientsInput.addEventListener("change", saveDraft);
     }
 
     // Clear draft on successful send
@@ -544,14 +590,32 @@ function initMessageSystem() {
   };
 }
 
-// Initialize message system when DOM is loaded
+// Initialize message system when DOM is loaded (only if user is logged in)
 document.addEventListener("DOMContentLoaded", function () {
-  initMessageSystem();
-  initHeaderMessageDropdown();
+  // Check if user is logged in by looking for user session elements
+  const isLoggedIn =
+    document.querySelector(".user-dropdown") ||
+    document.querySelector(".sidebar") ||
+    document.querySelector(".main-content");
+
+  if (isLoggedIn) {
+    initMessageSystem();
+    initHeaderMessageDropdown();
+  }
 });
 
 // Header Message Dropdown functionality
 function initHeaderMessageDropdown() {
+  // Check if user is logged in before making API calls
+  const isLoggedIn =
+    document.querySelector(".user-dropdown") ||
+    document.querySelector(".sidebar") ||
+    document.querySelector(".main-content");
+
+  if (!isLoggedIn) {
+    return; // Exit if user is not logged in
+  }
+
   const messageToggle = document.getElementById("messageToggle");
   const messageBadge = document.getElementById("messageBadge");
   const messageList = document.getElementById("messageList");
@@ -565,6 +629,9 @@ function initHeaderMessageDropdown() {
     // Load unread count
     fetch(`${window.appUrl}/api/messages/unread-count`)
       .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unauthorized");
+        }
         return response.json();
       })
       .then((data) => {
@@ -576,12 +643,18 @@ function initHeaderMessageDropdown() {
         }
       })
       .catch((error) => {
-        console.error("Error loading unread count:", error);
+        // Silently handle unauthorized errors
+        if (error.message !== "Unauthorized") {
+          console.error("Error loading unread count:", error);
+        }
       });
 
     // Load recent messages
     fetch(`${window.appUrl}/api/messages/recent`)
       .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unauthorized");
+        }
         return response.json();
       })
       .then((data) => {

@@ -87,9 +87,6 @@ class App
         $this->router->post('/users/{id}/activate', 'UserController@activateUser');
         $this->router->post('/users/{id}/reject', 'UserController@rejectUser');
         
-        // Settings routes
-        $this->router->get('/settings', 'UserController@settings');
-        $this->router->post('/settings', 'UserController@updateSettings');
         
         // Profile routes
         $this->router->get('/profile', 'UserController@profile');

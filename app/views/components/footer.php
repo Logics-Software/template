@@ -1,12 +1,10 @@
-<?php
-$footer = '
 <!-- Footer -->
 <footer class="footer">
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="footer-left">
-                    <p class="mb-0">&copy; ' . date('Y') . ' - Developed by <a href="https://www.logics-ti.com" target="_blank">Logics Software</a></p>
+                    <p class="mb-0">&copy; <?php echo date('Y'); ?> - Developed by <a href="https://www.logics-ti.com" target="_blank">Logics Software</a></p>
                 </div>
             </div>
             <div class="col-md-6">
@@ -32,5 +30,3 @@ $footer = '
         </div>
     </div>
 </footer>
-';
-?>

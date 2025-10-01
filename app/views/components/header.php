@@ -12,9 +12,8 @@ function getGreetingMessage() {
         return 'Selamat Malam';
     }
 }
-
-ob_start();
 ?>
+
 <!-- Top Header -->
 <div class="top-header">
     <div class="container-fluid">
@@ -218,6 +217,3 @@ ob_start();
         </div>
     </div>
 </div>
-<?php
-$header = ob_get_clean();
-?>

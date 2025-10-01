@@ -1,244 +1,225 @@
-<?php
-$content = '
-<!-- Users Table with Search and Filter -->
-<div class="card">
-    <div class="card-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Users List</h5>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item">
-                        <a href="' . APP_URL . '/dashboard" class="text-decoration-none">Home</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">Users</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-    <div class="card-body">
-        <!-- Search and Filter -->
-        <div class="mb-4">
-            <form method="GET" action="' . APP_URL . '/users" class="row g-3">
-                <div class="col-md-3">
-                    <label for="search" class="form-label">Search</label>
-                    <input type="text" class="form-control" id="search" name="search" value="' . htmlspecialchars($search) . '" placeholder="Search by name or email...">
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Users List</h5>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Users</li>
+                        </ol>
+                    </nav>
                 </div>
-                <div class="col-md-2">
-                    <label for="status" class="form-label">Status</label>
-                    <select class="form-select" id="status" name="status">
-                        <option value="">All Status</option>
-                        <option value="aktif"' . ($status === 'aktif' ? ' selected' : '') . '>Aktif</option>
-                        <option value="non_aktif"' . ($status === 'non_aktif' ? ' selected' : '') . '>Non Aktif</option>
-                        <option value="register"' . ($status === 'register' ? ' selected' : '') . '>Register</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="role" class="form-label">Role</label>
-                    <select class="form-select" id="role" name="role">
-                        <option value="">All Roles</option>
-                        <option value="admin"' . ($role === 'admin' ? ' selected' : '') . '>Admin</option>
-                        <option value="manajemen"' . ($role === 'manajemen' ? ' selected' : '') . '>Manajemen</option>
-                        <option value="marketing"' . ($role === 'marketing' ? ' selected' : '') . '>Marketing</option>
-                        <option value="customer"' . ($role === 'customer' ? ' selected' : '') . '>Customer</option>
-                    </select>
-                </div>
-                <div class="col-md-1">
-                    <label for="per_page" class="form-label">Per Page</label>
-                    <select class="form-select" id="per_page" name="per_page">
-                        <option value="5"' . ($users['per_page'] == 5 ? ' selected' : '') . '>5</option>
-                        <option value="10"' . ($users['per_page'] == 10 ? ' selected' : '') . '>10</option>
-                        <option value="15"' . ($users['per_page'] == 15 ? ' selected' : '') . '>15</option>
-                        <option value="20"' . ($users['per_page'] == 20 ? ' selected' : '') . '>20</option>
-                        <option value="25"' . ($users['per_page'] == 25 ? ' selected' : '') . '>25</option>
-                        <option value="50"' . ($users['per_page'] == 50 ? ' selected' : '') . '>50</option>
-                        <option value="100"' . ($users['per_page'] == 100 ? ' selected' : '') . '>100</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">&nbsp;</label>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-outline-primary flex-fill">
-                            <i class="fas fa-search me-1"></i>Filter
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">&nbsp;</label>
-                    <div class="d-flex gap-2">
-                        <a href="' . APP_URL . '/users/create" class="btn btn-primary flex-fill">
-                            <i class="fas fa-plus-circle me-1"></i>Add User
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered" id="usersTable">
-                <thead>
-                    <tr>
-                        <th>Picture</th>
-                        <th class="sortable" data-sort="username">
-                            Username 
-                            <i class="fas fa-sort text-muted ms-1"></i>
-                        </th>
-                        <th class="sortable" data-sort="namalengkap">
-                            Nama Lengkap 
-                            <i class="fas fa-sort text-muted ms-1"></i>
-                        </th>
-                        <th class="sortable" data-sort="email">
-                            Email 
-                            <i class="fas fa-sort text-muted ms-1"></i>
-                        </th>
-                        <th class="sortable" data-sort="role">
-                            Role 
-                            <i class="fas fa-sort text-muted ms-1"></i>
-                        </th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-';
-
-foreach ($users['data'] as $user) {
-    // Status color mapping
-    $statusClass = match($user['status'] ?? '') {
-        'aktif' => 'success',
-        'non_aktif' => 'danger',
-        'register' => 'warning',
-        default => 'secondary'
-    };
-    
-    // Role color mapping
-    $roleClass = match($user['role'] ?? '') {
-        'admin' => 'danger',
-        'manajemen' => 'primary',
-        'marketing' => 'info',
-        'customer' => 'warning',
-        default => 'info'
-    };
-    
-    // Picture handling
-    $pictureUrl = $user['picture'] ?? null;
-    $pictureHtml = $pictureUrl ? 
-        '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle profile-img-sm">' :
-        '<div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center">
-            <i class="fas fa-user text-white" style="font-size: 14px;"></i>
-        </div>';
-    
-    // Last login formatting
-    $lastLogin = $user['lastlogin'] ? 
-        '<small class="text-muted">' . date('M d, Y H:i', strtotime($user['lastlogin'])) . '</small>' :
-        '<small class="text-muted">Never</small>';
-    
-    $content .= '
-                    <tr>
-                        <td>' . $pictureHtml . '</td>
-                        <td>' . htmlspecialchars($user['username'] ?? 'N/A') . '</td>
-                        <td>' . htmlspecialchars($user['namalengkap'] ?? 'N/A') . '</td>
-                        <td>' . htmlspecialchars($user['email'] ?? 'N/A') . '</td>
-                        <td>
-                            <span class="badge bg-' . $roleClass . '">' . ucfirst($user['role'] ?? 'N/A') . '</span>
-                        </td>
-                        <td>
-                            <span class="badge bg-' . $statusClass . '">' . ucfirst(str_replace('_', ' ', $user['status'] ?? 'N/A')) . '</span>
-                        </td>
-                        <td>
-                            <div class="btn-group" role="group">';
-    
-    // Show different actions based on user status
-    if ($user['status'] === 'register') {
-        // For pending registration users - show approve/reject buttons
-        $content .= '
-                                <button class="btn btn-sm btn-success" onclick="approveUser(' . $user['id'] . ')" data-registration-reason="' . htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan') . '">
-                                    <i class="fas fa-check"></i>
+            </div>
+            
+            <div class="card-body">
+                <!-- Search and Filter -->
+                <div class="mb-4">
+                    <form method="GET" action="<?php echo APP_URL; ?>/users" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="search" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="search" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search by name or email...">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="">All Status</option>
+                                <option value="aktif"<?php echo $status === 'aktif' ? ' selected' : ''; ?>>Aktif</option>
+                                <option value="non_aktif"<?php echo $status === 'non_aktif' ? ' selected' : ''; ?>>Non Aktif</option>
+                                <option value="register"<?php echo $status === 'register' ? ' selected' : ''; ?>>Register</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-select" id="role" name="role">
+                                <option value="">All Roles</option>
+                                <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
+                                <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
+                                <option value="marketing"<?php echo $role === 'marketing' ? ' selected' : ''; ?>>Marketing</option>
+                                <option value="customer"<?php echo $role === 'customer' ? ' selected' : ''; ?>>Customer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label for="per_page" class="form-label">Per Page</label>
+                            <select class="form-select" id="per_page" name="per_page">
+                                <option value="5"<?php echo $users['per_page'] == 5 ? ' selected' : ''; ?>>5</option>
+                                <option value="10"<?php echo $users['per_page'] == 10 ? ' selected' : ''; ?>>10</option>
+                                <option value="15"<?php echo $users['per_page'] == 15 ? ' selected' : ''; ?>>15</option>
+                                <option value="20"<?php echo $users['per_page'] == 20 ? ' selected' : ''; ?>>20</option>
+                                <option value="25"<?php echo $users['per_page'] == 25 ? ' selected' : ''; ?>>25</option>
+                                <option value="50"<?php echo $users['per_page'] == 50 ? ' selected' : ''; ?>>50</option>
+                                <option value="100"<?php echo $users['per_page'] == 100 ? ' selected' : ''; ?>>100</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-outline-primary flex-fill">
+                                    <i class="fas fa-search me-1"></i>Filter
                                 </button>
-                                <button class="btn btn-sm btn-danger" onclick="rejectUser(' . $user['id'] . ')" data-registration-reason="' . htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan') . '">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                                <a href="' . APP_URL . '/users/' . $user['id'] . '" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i>
-                                </a>';
-    } else {
-        // For active/inactive users - show normal actions
-        $content .= '
-                                <a href="' . APP_URL . '/users/' . $user['id'] . '" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="' . APP_URL . '/users/' . $user['id'] . '/edit" class="btn btn-sm btn-outline-warning">
-                                    <i class="fas fa-pencil"></i>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(' . $user['id'] . ')">
-                                    <i class="fas fa-trash"></i>
-                                </button>';
-    }
-    
-    $content .= '
                             </div>
-                        </td>
-                    </tr>
-    ';
-}
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-flex gap-2">
+                                <a href="<?php echo APP_URL; ?>/users/create" class="btn btn-primary flex-fill">
+                                    <i class="fas fa-plus-circle me-1"></i>Add User
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th class="sortable" data-sort="username">
+                                    Username 
+                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                </th>
+                                <th class="sortable" data-sort="namalengkap">
+                                    Nama Lengkap 
+                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                </th>
+                                <th class="sortable" data-sort="email">
+                                    Email 
+                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                </th>
+                                <th class="sortable" data-sort="role">
+                                    Role 
+                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                </th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users['data'] as $user): ?>
+                                <?php
+                                // Status color mapping
+                                $statusClass = match($user['status'] ?? '') {
+                                    'aktif' => 'success',
+                                    'non_aktif' => 'danger',
+                                    'register' => 'warning',
+                                    default => 'secondary'
+                                };
+                                
+                                // Role color mapping
+                                $roleClass = match($user['role'] ?? '') {
+                                    'admin' => 'danger',
+                                    'manajemen' => 'primary',
+                                    'marketing' => 'info',
+                                    'customer' => 'warning',
+                                    default => 'info'
+                                };
+                                
+                                // Picture handling
+                                $pictureUrl = $user['picture'] ?? null;
+                                $pictureHtml = $pictureUrl ? 
+                                    '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle profile-img-sm">' :
+                                    '<div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-user text-white" style="font-size: 14px;"></i>
+                                    </div>';
+                                
+                                // Last login formatting
+                                $lastLogin = $user['lastlogin'] ? 
+                                    '<small class="text-muted">' . date('M d, Y H:i', strtotime($user['lastlogin'])) . '</small>' :
+                                    '<small class="text-muted">Never</small>';
+                                ?>
+                                <tr>
+                                    <td><?php echo $pictureHtml; ?></td>
+                                    <td><?php echo htmlspecialchars($user['username'] ?? 'N/A'); ?></td>
+                                    <td><?php echo htmlspecialchars($user['namalengkap'] ?? 'N/A'); ?></td>
+                                    <td><?php echo htmlspecialchars($user['email'] ?? 'N/A'); ?></td>
+                                    <td>
+                                        <span class="badge bg-<?php echo $roleClass; ?>"><?php echo ucfirst($user['role'] ?? 'N/A'); ?></span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-<?php echo $statusClass; ?>"><?php echo ucfirst(str_replace('_', ' ', $user['status'] ?? 'N/A')); ?></span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <?php if ($user['status'] === 'register'): ?>
+                                                <!-- For pending registration users - show approve/reject buttons -->
+                                                <button class="btn btn-sm btn-success" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            <?php else: ?>
+                                                <!-- For active/inactive users - show normal actions -->
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-warning">
+                                                    <i class="fas fa-pencil"></i>
+                                                </a>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(<?php echo $user['id']; ?>)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-$content .= '
-                </tbody>
-            </table>
-        </div>
+                <!-- Pagination -->
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <?php
+                        // Build query parameters
+                        $queryParams = [];
+                        if (!empty($search)) $queryParams['search'] = $search;
+                        if (!empty($status)) $queryParams['status'] = $status;
+                        if (!empty($role)) $queryParams['role'] = $role;
+                        if (!empty($users['per_page'])) $queryParams['per_page'] = $users['per_page'];
+                        if (!empty($_GET['sort'])) $queryParams['sort'] = $_GET['sort'];
+                        if (!empty($_GET['order'])) $queryParams['order'] = $_GET['order'];
 
-        <!-- Pagination -->
-        <nav>
-            <ul class="pagination justify-content-center">
-';
+                        $currentPerPage = $_GET['per_page'] ?? $users['per_page'] ?? DEFAULT_PAGE_SIZE;
+                        $queryParams['per_page'] = $currentPerPage;
 
-// Build query parameters
-$queryParams = [];
-if (!empty($search)) $queryParams['search'] = $search;
-if (!empty($status)) $queryParams['status'] = $status;
-if (!empty($role)) $queryParams['role'] = $role;
-if (!empty($users['per_page'])) $queryParams['per_page'] = $users['per_page'];
-if (!empty($_GET['sort'])) $queryParams['sort'] = $_GET['sort'];
-if (!empty($_GET['order'])) $queryParams['order'] = $_GET['order'];
+                        $queryString = http_build_query($queryParams);
+                        ?>
+                        
+                        <?php if ($users['current_page'] > 1): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="<?php echo APP_URL; ?>/users?page=<?php echo $users['current_page'] - 1; ?>&<?php echo $queryString; ?>">Previous</a>
+                            </li>
+                        <?php endif; ?>
 
-$currentPerPage = $_GET['per_page'] ?? $users['per_page'] ?? DEFAULT_PAGE_SIZE;
-$queryParams['per_page'] = $currentPerPage;
+                        <?php for ($i = 1; $i <= $users['last_page']; $i++): ?>
+                            <?php $activeClass = $i == $users['current_page'] ? ' active' : ''; ?>
+                            <li class="page-item<?php echo $activeClass; ?>">
+                                <a class="page-link" href="<?php echo APP_URL; ?>/users?page=<?php echo $i; ?>&<?php echo $queryString; ?>"><?php echo $i; ?></a>
+                            </li>
+                        <?php endfor; ?>
 
-$queryString = http_build_query($queryParams);
+                        <?php if ($users['current_page'] < $users['last_page']): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="<?php echo APP_URL; ?>/users?page=<?php echo $users['current_page'] + 1; ?>&<?php echo $queryString; ?>">Next</a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
 
-// Previous page
-if ($users['current_page'] > 1) {
-    $content .= '
-                <li class="page-item">
-                    <a class="page-link" href="' . APP_URL . '/users?page=' . ($users['current_page'] - 1) . '&' . $queryString . '">Previous</a>
-                </li>
-    ';
-}
-
-// Page numbers
-for ($i = 1; $i <= $users['last_page']; $i++) {
-    $activeClass = $i == $users['current_page'] ? ' active' : '';
-    $content .= '
-                <li class="page-item' . $activeClass . '">
-                    <a class="page-link" href="' . APP_URL . '/users?page=' . $i . '&' . $queryString . '">' . $i . '</a>
-                </li>
-    ';
-}
-
-// Next page
-if ($users['current_page'] < $users['last_page']) {
-    $content .= '
-                <li class="page-item">
-                    <a class="page-link" href="' . APP_URL . '/users?page=' . ($users['current_page'] + 1) . '&' . $queryString . '">Next</a>
-                </li>
-    ';
-}
-
-$content .= '
-            </ul>
-        </nav>
-
-        <!-- Pagination Info -->
-        <div class="text-center text-muted">
-            Showing ' . $users['from'] . ' to ' . $users['to'] . ' of ' . $users['total'] . ' entries
+                <!-- Pagination Info -->
+                <div class="text-center text-muted">
+                    Showing <?php echo $users['from']; ?> to <?php echo $users['to']; ?> of <?php echo $users['total']; ?> entries
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -379,11 +360,11 @@ function deleteUser(id) {
 function approveUser(id) {
     approveUserId = id;
     // Get registration reason from button data attribute
-    const button = event.target.closest(\'button\');
-    const registrationReason = button.getAttribute(\'data-registration-reason\') || \'Tidak ada alasan yang diberikan\';
+    const button = event.target.closest('button');
+    const registrationReason = button.getAttribute('data-registration-reason') || 'Tidak ada alasan yang diberikan';
     
     // Set the registration reason in modal
-    document.getElementById(\'approveRegistrationReason\').textContent = registrationReason;
+    document.getElementById('approveRegistrationReason').textContent = registrationReason;
     
     const modal = new bootstrap.Modal(document.getElementById("approveModal"));
     modal.show();
@@ -392,11 +373,11 @@ function approveUser(id) {
 function rejectUser(id) {
     rejectUserId = id;
     // Get registration reason from button data attribute
-    const button = event.target.closest(\'button\');
-    const registrationReason = button.getAttribute(\'data-registration-reason\') || \'Tidak ada alasan yang diberikan\';
+    const button = event.target.closest('button');
+    const registrationReason = button.getAttribute('data-registration-reason') || 'Tidak ada alasan yang diberikan';
     
     // Set the registration reason in modal
-    document.getElementById(\'rejectRegistrationReason\').textContent = registrationReason;
+    document.getElementById('rejectRegistrationReason').textContent = registrationReason;
     
     const modal = new bootstrap.Modal(document.getElementById("rejectModal"));
     modal.show();
@@ -405,7 +386,7 @@ function rejectUser(id) {
 // Delete user confirmation
 document.getElementById("confirmDelete").addEventListener("click", function() {
     if (deleteUserId) {
-        fetch("' . APP_URL . '/users/" + deleteUserId, {
+        fetch("<?php echo APP_URL; ?>/users/" + deleteUserId, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -430,7 +411,7 @@ document.getElementById("confirmDelete").addEventListener("click", function() {
 // Approve user confirmation
 document.getElementById("confirmApprove").addEventListener("click", function() {
     if (approveUserId) {
-        fetch("' . APP_URL . '/users/" + approveUserId + "/activate", {
+        fetch("<?php echo APP_URL; ?>/users/" + approveUserId + "/activate", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -455,7 +436,7 @@ document.getElementById("confirmApprove").addEventListener("click", function() {
 // Reject user confirmation
 document.getElementById("confirmReject").addEventListener("click", function() {
     if (rejectUserId) {
-        fetch("' . APP_URL . '/users/" + rejectUserId + "/reject", {
+        fetch("<?php echo APP_URL; ?>/users/" + rejectUserId + "/reject", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -482,5 +463,3 @@ document.getElementById("confirmReject").addEventListener("click", function() {
 <script>
 window.csrfToken = "<?php echo Session::generateCSRF(); ?>";
 </script>
-';
-?>

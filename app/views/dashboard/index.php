@@ -1,5 +1,3 @@
-<?php
-$content = '
 <!-- Dashboard Header -->
 <div class="page-header">
     <div class="page-title">
@@ -355,9 +353,4 @@ window.addEventListener("beforeunload", function() {
 });
 </script>
 
-';
-
-// Echo the content
-echo $content;
-?>
 

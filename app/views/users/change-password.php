@@ -5,102 +5,110 @@ $successMessage = Session::getFlash('success');
 $validationErrors = Session::getFlash('errors');
 ?>
 
-<div class="profile-wrapper">
-    <div class="profile-form-section">
-        <div class="profile-form-container">
-            <div class="profile-header">
-                <h1 class="profile-title">Change Password</h1>
-                <p class="profile-subtitle">Update your account password</p>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Change Password</h5>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Change Password</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
-
-            <?php if ($errorMessage) : ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <ul class="mb-0">
-                    <li><?php echo htmlspecialchars($errorMessage); ?></li>
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            <?php endif; ?>
-
-            <?php if ($successMessage) : ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <ul class="mb-0">
-                    <li><?php echo htmlspecialchars($successMessage); ?></li>
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            <?php endif; ?>
-
-            <?php if ($validationErrors) : ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <ul class="mb-0">
-                    <?php foreach ($validationErrors as $error) : ?>
-                    <li><?php echo htmlspecialchars($error); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            <?php endif; ?>
-
-            <form method="POST" action="<?php echo APP_URL; ?>/change-password" id="changePasswordForm" class="profile-form">
-                <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
+            
+            <div class="card-body">
+                <!-- Error Messages -->
+                <?php if ($errorMessage): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($errorMessage); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
                 
-                <div class="form-group">
-                    <label for="current_password" class="form-label">Current Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
-                        <input type="password" class="form-control" id="current_password" name="current_password" 
-                                placeholder="Enter your current password" required>
-                        <button type="button" class="btn-toggle-password" onclick="togglePassword('current_password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
+                <!-- Success Messages -->
+                <?php if ($successMessage): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($successMessage); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
-                </div>
+                <?php endif; ?>
 
-                <div class="form-group">
-                    <label for="new_password" class="form-label">New Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-key"></i>
-                        </span>
-                        <input type="password" class="form-control" id="new_password" name="new_password" 
-                                placeholder="Enter your new password" required>
-                        <button type="button" class="btn-toggle-password" onclick="togglePassword('new_password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
+                <!-- Validation Errors -->
+                <?php if ($validationErrors): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <ul class="mb-0">
+                            <?php foreach ($validationErrors as $error): ?>
+                                <li><?php echo htmlspecialchars($error); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
-                    <small class="form-text text-muted">Password must be at least 6 characters long</small>
-                </div>
+                <?php endif; ?>
 
-                <div class="form-group">
-                    <label for="confirm_password" class="form-label">Confirm New Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-key"></i>
-                        </span>
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
-                                placeholder="Confirm your new password" required>
-                        <button type="button" class="btn-toggle-password" onclick="togglePassword('confirm_password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <small class="form-text text-muted" id="password-match-message"></small>
-                </div>
-
-                <div class="profile-actions">
-                    <button type="button" class="btn btn-secondary" onclick="goBack()">
-                        <i class="fas fa-times me-2"></i>Cancel
-                    </button>
-                    <button type="submit" class="btn btn-profile">
-                        <span class="btn-text">Update Password</span>
-                        <div class="btn-loader" style="display: none;">
-                            <i class="fas fa-spinner fa-spin"></i>
+                <form method="POST" action="<?php echo APP_URL; ?>/change-password" id="changePasswordForm">
+                    <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="current_password" name="current_password" 
+                                       placeholder="" required>
+                                <label for="current_password">Current Password <span class="text-danger">*</span></label>
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleCurrentPassword" style="z-index: 10; border: none; background: transparent;" tabindex="-1">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
-                    </button>
-                </div>
-            </form>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="new_password" name="new_password" 
+                                       placeholder="" required>
+                                <label for="new_password">New Password <span class="text-danger">*</span></label>
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleNewPassword" style="z-index: 10; border: none; background: transparent;" tabindex="-1">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <div class="form-text">Password minimal terdiri dari 6 karakter</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
+                                       placeholder="" required>
+                                <label for="confirm_password">Confirm New Password <span class="text-danger">*</span></label>
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleConfirmPassword" style="z-index: 10; border: none; background: transparent;" tabindex="-1">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <div class="form-text text-muted" id="password-match-message"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Form Footer -->
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <button type="button" class="btn btn-secondary" onclick="goBack()">
+                    <i class="fas fa-times me-1"></i>Cancel
+                </button>
+                <button type="submit" form="changePasswordForm" class="btn btn-primary">
+                    <span class="btn-text">
+                        <i class="fas fa-key me-1"></i>Update Password
+                    </span>
+                    <div class="btn-loader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin me-1"></i>Updating...
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -108,7 +116,7 @@ $validationErrors = Session::getFlash('errors');
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const changePasswordForm = document.getElementById("changePasswordForm");
-    const submitBtn = changePasswordForm.querySelector(".btn-profile");
+    const submitBtn = changePasswordForm.querySelector("button[type='submit']");
     const btnText = submitBtn?.querySelector(".btn-text");
     const btnLoader = submitBtn?.querySelector(".btn-loader");
     const newPasswordField = document.getElementById("new_password");
@@ -120,34 +128,60 @@ document.addEventListener("DOMContentLoaded", function() {
         changePasswordForm.addEventListener("submit", function() {
             if (btnText && btnLoader) {
                 btnText.style.display = "none";
-                btnLoader.style.display = "inline-block";
+                btnLoader.style.display = "block";
             }
             submitBtn.disabled = true;
         });
     }
 
-    // Set tabindex for input group elements to prevent focus on icons
-    const inputGroups = changePasswordForm.querySelectorAll('.input-group');
-    inputGroups.forEach(function(group) {
-        const inputGroupText = group.querySelector('.input-group-text');
-        const toggleButton = group.querySelector('.btn-toggle-password');
-        const formControl = group.querySelector('.form-control');
-        
-        // Set tabindex for input group text (icons)
-        if (inputGroupText) {
-            inputGroupText.setAttribute('tabindex', '-1');
-        }
-        
-        // Set tabindex for toggle button
-        if (toggleButton) {
-            toggleButton.setAttribute('tabindex', '-1');
-        }
-        
-        // Ensure form control is focusable
-        if (formControl) {
-            formControl.setAttribute('tabindex', '0');
-        }
-    });
+    // Password toggle functionality
+    const toggleCurrentPassword = document.getElementById("toggleCurrentPassword");
+    if (toggleCurrentPassword) {
+        toggleCurrentPassword.addEventListener("click", function() {
+            const passwordField = document.getElementById("current_password");
+            const icon = this.querySelector("i");
+            
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.className = "fas fa-eye-slash";
+            } else {
+                passwordField.type = "password";
+                icon.className = "fas fa-eye";
+            }
+        });
+    }
+
+    const toggleNewPassword = document.getElementById("toggleNewPassword");
+    if (toggleNewPassword) {
+        toggleNewPassword.addEventListener("click", function() {
+            const passwordField = document.getElementById("new_password");
+            const icon = this.querySelector("i");
+            
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.className = "fas fa-eye-slash";
+            } else {
+                passwordField.type = "password";
+                icon.className = "fas fa-eye";
+            }
+        });
+    }
+
+    const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+    if (toggleConfirmPassword) {
+        toggleConfirmPassword.addEventListener("click", function() {
+            const passwordField = document.getElementById("confirm_password");
+            const icon = this.querySelector("i");
+            
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.className = "fas fa-eye-slash";
+            } else {
+                passwordField.type = "password";
+                icon.className = "fas fa-eye";
+            }
+        });
+    }
 
     // Real-time password confirmation validation
     function validatePasswordMatch() {
@@ -174,23 +208,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-// Function to toggle password visibility
-function togglePassword(fieldId) {
-    const field = document.getElementById(fieldId);
-    const button = field.nextElementSibling;
-    const icon = button.querySelector('i');
-    
-    if (field.type === 'password') {
-        field.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        field.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-}
-
 // Function to go back to previous page
 function goBack() {
     // Check if there's a previous page in history
@@ -198,7 +215,7 @@ function goBack() {
         window.history.back();
     } else {
         // Fallback to dashboard if no history
-        window.location.href = '<?php echo APP_URL; ?>/dashboard';
+        window.location.href = "<?php echo APP_URL; ?>/dashboard";
     }
 }
 </script>

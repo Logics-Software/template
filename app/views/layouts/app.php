@@ -72,7 +72,6 @@ echo ' class="' . $bodyClass . '"';
         <?php 
         // Include Sidebar Component
         include APP_PATH . '/app/views/components/sidebar.php';
-        echo $sidebar;
         ?>
 
         <!-- Main Content Area -->
@@ -81,7 +80,6 @@ echo ' class="' . $bodyClass . '"';
             <?php 
             // Include Header Component
             include APP_PATH . '/app/views/components/header.php';
-            echo $header;
             ?>
 
             <div class="page-content">
@@ -122,7 +120,6 @@ echo ' class="' . $bodyClass . '"';
             <?php 
             // Include Footer Component
             include APP_PATH . '/app/views/components/footer.php';
-            echo $footer;
             ?>
         </div>
     </div>
@@ -133,7 +130,6 @@ echo ' class="' . $bodyClass . '"';
         <?php 
         // Include Sidebar Component
         include APP_PATH . '/app/views/components/sidebar.php';
-        echo $sidebar;
         ?>
 
         <!-- Main Content Area -->
@@ -142,7 +138,6 @@ echo ' class="' . $bodyClass . '"';
             <?php 
             // Include Header Component
             include APP_PATH . '/app/views/components/header.php';
-            echo $header;
             ?>
 
             <div class="page-content">
@@ -183,7 +178,6 @@ echo ' class="' . $bodyClass . '"';
             <?php 
             // Include Footer Component
             include APP_PATH . '/app/views/components/footer.php';
-            echo $footer;
             ?>
         </div>
     </div>

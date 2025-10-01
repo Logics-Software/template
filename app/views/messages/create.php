@@ -40,7 +40,7 @@
                                 
                                 <!-- Search and Filter Controls -->
                                 <div class="row mb-3">
-                                    <div class="col-md-8">
+                                    <div class="col-md-7">
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-search"></i>
@@ -48,7 +48,7 @@
                                             <input type="text" class="form-control" id="userSearch" placeholder="Cari berdasarkan nama, username, atau email...">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <select class="form-select" id="roleFilter">
                                             <option value="">Semua Role</option>
                                             <option value="admin">Admin</option>
@@ -57,6 +57,16 @@
                                             <option value="marketing">Marketing</option>
                                             <option value="customer">Customer</option>
                                         </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="btn-group d-flex justify-content-end" role="group">
+                                            <button type="button" class="btn btn-outline-primary btn-sm" id="selectAllBtn">
+                                                <i class="fas fa-check-double me-1"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" id="clearAllBtn">
+                                                <i class="fas fa-times me-1"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -117,11 +127,8 @@
                                 </div>
                             </div>
                             <?php endif; ?>
-                            
                         </div>
-                        
                     </div>
-                    
                 </form>
             </div>
             
@@ -280,11 +287,43 @@ document.addEventListener('DOMContentLoaded', function() {
     // Search functionality
     userSearch.addEventListener('input', function() {
         debounceSearch();
+        // Update button states after search
+        setTimeout(() => {
+            updateBulkSelectButtons();
+        }, 400);
     });
     
     // Filter functionality
     roleFilter.addEventListener('change', function() {
         debounceSearch();
+        // Update button states after filter
+        setTimeout(() => {
+            updateBulkSelectButtons();
+        }, 400);
+    });
+    
+    // Bulk select functionality
+    const selectAllBtn = document.getElementById('selectAllBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    
+    selectAllBtn.addEventListener('click', function() {
+        // Get all currently displayed users
+        const displayedUsers = getCurrentDisplayedUsers();
+        
+        displayedUsers.forEach(user => {
+            if (!selectedUsers.some(selected => selected.id == user.id)) {
+                selectedUsers.push(user);
+            }
+        });
+        
+        updateSelectedRecipients();
+        displayUsers(allUsers);
+    });
+    
+    clearAllBtn.addEventListener('click', function() {
+        selectedUsers = [];
+        updateSelectedRecipients();
+        displayUsers(allUsers);
     });
     
     // Debounce search to avoid too many requests
@@ -334,6 +373,56 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
     
+    // Get currently displayed users (for bulk select)
+    function getCurrentDisplayedUsers() {
+        // Get users based on current search and filter
+        let filteredUsers = allUsers;
+        
+        const search = userSearch.value.toLowerCase();
+        const role = roleFilter.value;
+        
+        if (search) {
+            filteredUsers = filteredUsers.filter(user => 
+                user.namalengkap.toLowerCase().includes(search) ||
+                user.username.toLowerCase().includes(search) ||
+                user.email.toLowerCase().includes(search)
+            );
+        }
+        
+        if (role) {
+            filteredUsers = filteredUsers.filter(user => user.role === role);
+        }
+        
+        return filteredUsers;
+    }
+    
+    
+    // Update bulk select button states
+    function updateBulkSelectButtons() {
+        const displayedUsers = getCurrentDisplayedUsers();
+        const selectedCount = displayedUsers.filter(user => 
+            selectedUsers.some(selected => selected.id == user.id)
+        ).length;
+        
+        // Update select all button
+        if (selectedCount === displayedUsers.length && displayedUsers.length > 0) {
+            selectAllBtn.innerHTML = '<i class="fas fa-check-double me-1"></i>';
+            selectAllBtn.disabled = true;
+        } else {
+            selectAllBtn.innerHTML = '<i class="fas fa-check-double me-1"></i>';
+            selectAllBtn.disabled = false;
+        }
+        
+        // Update clear all button
+        if (selectedUsers.length === 0) {
+            clearAllBtn.innerHTML = '<i class="fas fa-times me-1"></i>';
+            clearAllBtn.disabled = true;
+        } else {
+            clearAllBtn.innerHTML = `<i class="fas fa-times me-1"></i> (${selectedUsers.length})`;
+            clearAllBtn.disabled = false;
+        }
+    }
+    
     // Display users in the list
     function displayUsers(users) {
         console.log('Displaying users:', users);
@@ -356,8 +445,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <input type="checkbox" class="form-check-input me-1" ${isSelected ? 'checked' : ''} onchange="toggleUser(${user.id})" style="transform: scale(0.8);">
                             ${userPicture}
                             <div class="flex-grow-1" style="min-width: 0;">
-                                <div class="fw-bold text-truncate" title="${user.namalengkap}" style="font-size: 0.8rem; line-height: 1.2;">${user.namalengkap}</div>
-                                <small class="text-muted d-block text-truncate" title="${user.username} / ${user.email} / ${user.role}" style="font-size: 0.7rem;">${user.username} / ${user.email} / ${user.role}</small>
+                                <div class="fw-bold text-truncate" style="font-size: 0.8rem; line-height: 1.2;">${user.namalengkap}</div>
+                                <small class="text-muted d-block text-truncate" style="font-size: 0.7rem;">${user.username} / ${user.email} / ${user.role}</small>
                             </div>
                         </div>
                     </div>
@@ -371,6 +460,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             addCardClickHandlers();
         }, 100);
+        
+        // Update bulk select button states
+        updateBulkSelectButtons();
     }
     
     // Toggle user selection
@@ -387,6 +479,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         updateSelectedRecipients();
         displayUsers(allUsers);
+        updateBulkSelectButtons();
     };
     
     // Add click functionality to user cards
@@ -484,7 +577,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const submitBtn = this.querySelector('button[type="submit"]');
         if (submitBtn) {
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Mengirim...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1" tabindex="-1"></i>Mengirim...';
             submitBtn.disabled = true;
         }
         

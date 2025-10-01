@@ -22,7 +22,7 @@
                             <a href="<?php echo APP_URL; ?>/messages/create" class="btn btn-primary">
                                 <i class="fas fa-plus me-1"></i>Tulis Pesan
                             </a>
-                            <a href="<?php echo APP_URL; ?>/messages" class="btn btn-outline-secondary">
+                            <a href="<?php echo APP_URL; ?>/messages" class="btn btn-secondary">
                                 <i class="fas fa-inbox me-1"></i>Pesan Masuk
                             </a>
                         </div>
@@ -47,14 +47,14 @@
                                     <th width="40%">Subjek</th>
                                     <th width="30%">Penerima</th>
                                     <th width="15%">Tanggal</th>
-                                    <th width="10%">Aksi</th>
+                                    <th width="12%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($messages as $message): ?>
                                     <tr>
                                         <td>
-                                            <i class="fas fa-paper-plane text-primary" title="Pesan terkirim"></i>
+                                            <i class="fas fa-paper-plane text-primary"></i>
                                         </td>
                                         <td>
                                             <div class="fw-bold"><?php echo htmlspecialchars($message['subject'] ?? ''); ?></div>
@@ -72,11 +72,11 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm">
+                                            <div class="d-flex gap-1" style="min-width: 80px;">
+                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="Lihat">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteMessage(<?php echo $message['id']; ?>)">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" onclick="deleteMessage(<?php echo $message['id']; ?>)" title="Hapus">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>

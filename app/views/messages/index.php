@@ -25,7 +25,7 @@
                         <form method="GET" action="<?php echo APP_URL; ?>/messages/search" class="d-flex">
                             <div class="input-group">
                                 <input type="text" name="q" class="form-control" placeholder="Cari pesan..." value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>">
-                                <button type="submit" class="btn btn-outline-secondary">
+                                <button type="submit" class="btn btn-secondary">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -36,7 +36,7 @@
                             <a href="<?php echo APP_URL; ?>/messages/create" class="btn btn-primary">
                                 <i class="fas fa-plus me-1"></i>Tulis Pesan
                             </a>
-                            <a href="<?php echo APP_URL; ?>/messages/sent" class="btn btn-outline-secondary">
+                            <a href="<?php echo APP_URL; ?>/messages/sent" class="btn btn-secondary">
                                 <i class="fas fa-paper-plane me-1"></i>Pesan Terkirim
                             </a>
                         </div>
@@ -69,9 +69,9 @@
                                     <tr class="<?php echo !$message['is_read'] ? 'table-warning' : ''; ?>">
                                         <td>
                                             <?php if (!$message['is_read']): ?>
-                                                <i class="fas fa-circle text-primary" title="Belum dibaca"></i>
+                                                <i class="fas fa-circle text-primary"></i>
                                             <?php else: ?>
-                                                <i class="fas fa-check-circle text-success" title="Sudah dibaca"></i>
+                                                <i class="fas fa-check-circle text-success"></i>
                                             <?php endif; ?>
                                         </td>
                                         <td>
@@ -105,11 +105,11 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm">
+                                            <div class="d-flex gap-1" style="min-width: 80px;">
+                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="Lihat">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteMessage(<?php echo $message['id']; ?>)">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" onclick="deleteMessage(<?php echo $message['id']; ?>)" title="Hapus">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>

@@ -53,9 +53,9 @@
                                     <tr class="<?php echo !$message['is_read'] ? 'table-warning' : ''; ?>">
                                         <td>
                                             <?php if (!$message['is_read']): ?>
-                                                <i class="fas fa-circle text-primary" title="Belum dibaca"></i>
+                                                <i class="fas fa-circle text-primary"></i>
                                             <?php else: ?>
-                                                <i class="fas fa-check-circle text-success" title="Sudah dibaca"></i>
+                                                <i class="fas fa-check-circle text-success"></i>
                                             <?php endif; ?>
                                         </td>
                                         <td>

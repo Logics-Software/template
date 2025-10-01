@@ -3,8 +3,8 @@
 $errorMessage = Session::getFlash('error');
 $successMessage = Session::getFlash('success');
 $validationErrors = Session::getFlash('errors');
+?>
 
-$content = '
 <!-- Login Page with Centered Design -->
 <div class="login-container">
     <div class="login-wrapper-single">
@@ -15,36 +15,36 @@ $content = '
             </div>
             <div class="card-body mt-3 mb-3">
                 <!-- Error Messages -->
-                ' . ($errorMessage ? '
+                <?php if ($errorMessage): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>' . $errorMessage . '
+                    <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($errorMessage); ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                ' : '<!-- No error message -->') . '
+                <?php endif; ?>
                 
                 <!-- Success Messages -->
-                ' . ($successMessage ? '
+                <?php if ($successMessage): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>' . $successMessage . '
+                    <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($successMessage); ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                ' : '') . '
+                <?php endif; ?>
                 
                 <!-- Validation Errors -->
-                ' . ($validationErrors ? '
+                <?php if ($validationErrors): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>Please fix the following errors:
                     <ul class="mb-0 mt-2">
-                        ' . implode("", array_map(function($field, $errors) {
-                            return "<li>" . implode(", ", $errors) . "</li>";
-                        }, array_keys($validationErrors), $validationErrors)) . '
+                        <?php foreach ($validationErrors as $field => $errors): ?>
+                            <li><?php echo implode(", ", $errors); ?></li>
+                        <?php endforeach; ?>
                     </ul>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                ' : '') . '
+                <?php endif; ?>
 
-                <form method="POST" action="' . APP_URL . '/login" id="loginForm">
-                    <input type="hidden" name="_token" value="' . $csrf_token . '">
+                <form method="POST" action="<?php echo APP_URL; ?>/login" id="loginForm">
+                    <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="username_email" name="username_email" 
@@ -60,9 +60,9 @@ $content = '
                         <label for="password">
                             <i class="fas fa-lock me-2"></i>Password
                         </label>
-                        <button class="position-absolute top-50 end-0 translate-middle-y" 
+                        <button class="position-absolute top-50 end-0 translate-middle-y password-toggle-btn" 
                                 type="button" id="togglePassword" 
-                                style="border: none; background: transparent; z-index: 10; padding: 0; width: 2.5rem; height: calc(3.5rem + 2px); color: #6c757d; margin-right: 0;">
+                                style="border: none; background: transparent; z-index: 10; padding: 0; width: 2.5rem; height: calc(3.5rem + 2px); color: #6c757d; margin-right: 0;" tabindex="-1">
                             <i class="fas fa-eye" id="passwordToggleIcon"></i>
                         </button>
                     </div>
@@ -82,8 +82,8 @@ $content = '
                     </button>
 
                     <div class="text-center">
-                        <span class="text-muted">Don\'t have an account?</span>
-                        <a href="' . APP_URL . '/register" class="text-primary text-decoration-none fw-bold ms-1">Sign up</a>
+                        <span class="text-muted">Don't have an account?</span>
+                        <a href="<?php echo APP_URL; ?>/register" class="text-primary text-decoration-none fw-bold ms-1">Sign up</a>
                     </div>
                 </form>
             </div>
@@ -122,10 +122,8 @@ document.addEventListener("DOMContentLoaded", function() {
         loginForm.addEventListener("submit", function(e) {
             // Show loading state
             loginBtn.disabled = true;
-            loginBtn.innerHTML = \'<i class="fas fa-spinner fa-spin me-2"></i>Logging in...\';
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Logging in...';
         });
     }
 });
 </script>
-';
-?>

@@ -417,28 +417,6 @@ class UserController extends BaseController
         }
     }
 
-    public function settings($request = null, $response = null, $params = [])
-    {
-        if (!Session::has('user_id')) {
-            $this->redirect('/login');
-        }
-
-        $this->view('users/settings', [
-            'title' => 'Settings',
-            'current_page' => 'settings',
-            'csrf_token' => $this->csrfToken()
-        ]);
-    }
-
-    public function updateSettings($request = null, $response = null, $params = [])
-    {
-        if (!Session::has('user_id')) {
-            $this->redirect('/login');
-        }
-
-        $this->withSuccess('Settings updated successfully');
-        $this->redirect('/settings');
-    }
 
     public function profile($request = null, $response = null, $params = [])
     {
@@ -552,8 +530,6 @@ class UserController extends BaseController
             if (isset($updateData['picture'])) {
                 Session::set('user_picture', $updateData['picture']);
             }
-
-            $this->withSuccess('Profile updated successfully');
             
             // Redirect to a page that will use JavaScript to go back
             $this->redirect('/profile/updated');
@@ -659,7 +635,6 @@ class UserController extends BaseController
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         
         if ($this->userModel->update($userId, ['password' => $hashedPassword])) {
-            $this->withSuccess('Password updated successfully');
             $this->redirect('/change-password/updated');
         } else {
             $this->withError('Failed to update password');
