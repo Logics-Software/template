@@ -11,17 +11,17 @@ function getSidebarLogo() {
         if ($konfigurasi && !empty($konfigurasi['logo'])) {
             $logoPath = APP_URL . '/assets/images/konfigurasi/' . htmlspecialchars($konfigurasi['logo']);
             $logoAlt = htmlspecialchars($konfigurasi['namaperusahaan'] ?? 'Logo');
-            $companyName = htmlspecialchars($konfigurasi['namaperusahaan'] ?? 'Logics Template');
+            $companyName = htmlspecialchars($konfigurasi['namaperusahaan'] ?? APP_NAME);
         } else {
             $logoPath = APP_URL . '/assets/images/logo.png';
-            $logoAlt = 'Logics';
-            $companyName = 'Logics Template';
+            $logoAlt = APP_NAME;
+            $companyName = APP_NAME;
         }
         
         return ['path' => $logoPath, 'alt' => $logoAlt, 'company_name' => $companyName];
     } catch (Exception $e) {
         // Fallback to default logo if error occurs
-        return ['path' => APP_URL . '/assets/images/logo.png', 'alt' => 'Logics', 'company_name' => 'Logics Template'];
+        return ['path' => APP_URL . '/assets/images/logo.png', 'alt' => APP_NAME, 'company_name' => APP_NAME];
     }
 }
 
@@ -34,7 +34,7 @@ $logo = getSidebarLogo();
         <div class="sidebar-brand">
             <a href="<?php echo APP_URL; ?>" class="d-flex align-items-center">
                 <img src="<?php echo $logo['path']; ?>" alt="<?php echo $logo['alt']; ?>" height="32" class="me-2">
-                <span class="sidebar-brand-text"><?php echo htmlspecialchars($logo['company_name'] ?? 'Logics Template'); ?></span>
+                <span class="sidebar-brand-text"><?php echo htmlspecialchars($logo['company_name'] ?? APP_NAME); ?></span>
             </a>
         </div>
     </div>

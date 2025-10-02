@@ -21,17 +21,42 @@ function setCookie(name, value, days = 365) {
   document.cookie = `${name}=${value}; expires=${expires}; path=/`;
 }
 
-// Initialize sidebar state from cookie
+// Initialize sidebar state from cookie - SYNCHRONOUS to prevent flash
 function initSidebarState() {
   const isCollapsed = getCookie("sidebar_collapsed") === "true";
   const sidebar = document.querySelector(".sidebar");
   const mainContent = document.querySelector(".main-content");
   const topHeader = document.querySelector(".top-header");
 
-  if (isCollapsed && sidebar && mainContent && topHeader) {
-    sidebar.classList.add("collapsed");
-    mainContent.classList.add("sidebar-collapsed");
-    topHeader.classList.add("sidebar-collapsed");
+  if (sidebar) {
+    // Apply classes immediately without transition to prevent flash
+    if (isCollapsed && mainContent && topHeader) {
+      sidebar.style.transition = "none";
+      mainContent.style.transition = "none";
+      topHeader.style.transition = "none";
+
+      sidebar.classList.add("collapsed");
+      mainContent.classList.add("sidebar-collapsed");
+      topHeader.classList.add("sidebar-collapsed");
+
+      // Re-enable transitions after state is set
+      setTimeout(() => {
+        sidebar.style.transition = "";
+        mainContent.style.transition = "";
+        topHeader.style.transition = "";
+      }, 50);
+    }
+
+    // Show sidebar after state is applied
+    sidebar.classList.add("js-loaded");
+  }
+
+  // Also show main content and top header
+  if (mainContent) {
+    mainContent.classList.add("js-loaded");
+  }
+  if (topHeader) {
+    topHeader.classList.add("js-loaded");
   }
 }
 
@@ -310,9 +335,16 @@ function initSidebarDropdown() {
   });
 }
 
+// Initialize sidebar state IMMEDIATELY when script loads (before DOM ready)
+// This prevents flash by setting the state as early as possible
+// Use requestAnimationFrame to ensure DOM is available
+requestAnimationFrame(() => {
+  initSidebarState();
+});
+
 // Initialize all functionality when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize sidebar state
+  // Re-initialize sidebar state to ensure consistency
   initSidebarState();
 
   // Initialize sidebar toggle

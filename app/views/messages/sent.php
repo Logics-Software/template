@@ -15,9 +15,28 @@
             </div>
             
             <div class="card-body">
-                <!-- Action Buttons -->
+                <!-- Search Form with Action Buttons -->
                 <div class="row mb-4">
-                    <div class="col-12">
+                    <div class="col-md-6">
+                        <form method="GET" action="<?php echo APP_URL; ?>/messages/sent" class="d-flex">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Cari pesan terkirim..." value="<?php echo htmlspecialchars($search ?? ''); ?>">
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                            <option value="10"<?php echo ($pagination['per_page'] ?? 20) == 10 ? ' selected' : ''; ?>>10</option>
+                            <option value="20"<?php echo ($pagination['per_page'] ?? 20) == 20 ? ' selected' : ''; ?>>20</option>
+                            <option value="30"<?php echo ($pagination['per_page'] ?? 20) == 30 ? ' selected' : ''; ?>>30</option>
+                            <option value="50"<?php echo ($pagination['per_page'] ?? 20) == 50 ? ' selected' : ''; ?>>50</option>
+                            <option value="100"<?php echo ($pagination['per_page'] ?? 20) == 100 ? ' selected' : ''; ?>>100</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
                         <div class="d-flex gap-2 justify-content-end">
                             <a href="<?php echo APP_URL; ?>/messages/create" class="btn btn-primary">
                                 <i class="fas fa-plus me-1"></i>Tulis Pesan
@@ -29,14 +48,32 @@
                     </div>
                 </div>
 
+                <?php if (!empty($search)): ?>
+                    <div class="alert alert-info">
+                        <i class="fas fa-search me-1"></i>
+                        Hasil pencarian untuk: "<strong><?php echo htmlspecialchars($search); ?></strong>"
+                        <a href="<?php echo APP_URL; ?>/messages/sent" class="btn btn-sm btn-outline-secondary ms-2">
+                            <i class="fas fa-times me-1"></i>Hapus Filter
+                        </a>
+                    </div>
+                <?php endif; ?>
+
                 <?php if (empty($messages)): ?>
                     <div class="text-center py-5">
                         <i class="fas fa-paper-plane fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">Belum ada pesan terkirim</h5>
-                        <p class="text-muted">Anda belum mengirim pesan apapun.</p>
-                        <a href="<?php echo APP_URL; ?>/messages/create" class="btn btn-primary">
-                            <i class="fas fa-plus me-1"></i>Tulis Pesan Pertama
-                        </a>
+                        <?php if (!empty($search)): ?>
+                            <h5 class="text-muted">Tidak ada hasil pencarian</h5>
+                            <p class="text-muted">Tidak ada pesan terkirim yang sesuai dengan pencarian "<strong><?php echo htmlspecialchars($search); ?></strong>"</p>
+                            <a href="<?php echo APP_URL; ?>/messages/sent" class="btn btn-secondary">
+                                <i class="fas fa-list me-1"></i>Lihat Semua Pesan Terkirim
+                            </a>
+                        <?php else: ?>
+                            <h5 class="text-muted">Belum ada pesan terkirim</h5>
+                            <p class="text-muted">Anda belum mengirim pesan apapun.</p>
+                            <a href="<?php echo APP_URL; ?>/messages/create" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>Tulis Pesan Pertama
+                            </a>
+                        <?php endif; ?>
                     </div>
                 <?php else: ?>
                     <div class="table-responsive">
@@ -64,7 +101,26 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <small class="text-muted"><?php echo htmlspecialchars($message['recipients'] ?? '-'); ?></small>
+                                            <small class="text-muted">
+                                                <?php 
+                                                $recipients = $message['recipient_names'] ?? '';
+                                                $recipientCount = $message['recipient_count'] ?? 0;
+                                                
+                                                if (empty($recipients) || $recipientCount == 0) {
+                                                    echo '<span class="text-muted">Tidak ada penerima</span>';
+                                                } else {
+                                                    // Truncate long recipient names
+                                                    $displayRecipients = $recipients;
+                                                    if (strlen($recipients) > 50) {
+                                                        $displayRecipients = substr($recipients, 0, 50) . '...';
+                                                    }
+                                                    echo htmlspecialchars($displayRecipients);
+                                                    if ($recipientCount > 1) {
+                                                        echo ' <span class="badge bg-success">' . $recipientCount . '</span>';
+                                                    }
+                                                }
+                                                ?>
+                                            </small>
                                         </td>
                                         <td>
                                             <small class="text-muted">
@@ -88,25 +144,51 @@
                     </div>
 
                     <!-- Pagination -->
-                    <?php if ($page > 1): ?>
-                        <nav aria-label="Message pagination">
-                            <ul class="pagination justify-content-center">
-                                <?php if ($page > 1): ?>
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page=<?php echo $page - 1; ?>">Sebelumnya</a>
-                                    </li>
-                                <?php endif; ?>
-                                
-                                <li class="page-item active">
-                                    <span class="page-link"><?php echo $page; ?></span>
-                                </li>
-                                
-                                <li class="page-item">
-                                    <a class="page-link" href="?page=<?php echo $page + 1; ?>">Selanjutnya</a>
-                                </li>
-                            </ul>
-                        </nav>
+                    <?php if (isset($pagination)): ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <nav aria-label="Sent Messages pagination">
+                                <ul class="pagination justify-content-center">
+                                    <?php
+                                    // Build query parameters
+                                    $queryParams = [];
+                                    if (!empty($search)) $queryParams['search'] = $search;
+                                    if (!empty($pagination['per_page'])) $queryParams['per_page'] = $pagination['per_page'];
+
+                                    $queryString = http_build_query($queryParams);
+                                    ?>
+                                    
+                                    <?php if ($pagination['current_page'] > 1): ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/messages/sent?page=<?php echo $pagination['current_page'] - 1; ?>&<?php echo $queryString; ?>">Previous</a>
+                                        </li>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+                                        <?php $activeClass = $i == $pagination['current_page'] ? ' active' : ''; ?>
+                                        <li class="page-item<?php echo $activeClass; ?>">
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/messages/sent?page=<?php echo $i; ?>&<?php echo $queryString; ?>"><?php echo $i; ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+
+                                    <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/messages/sent?page=<?php echo $pagination['current_page'] + 1; ?>&<?php echo $queryString; ?>">Next</a>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </nav>
+
+                            <!-- Pagination Info -->
+                            <div class="text-center text-muted">
+                                Showing <?php echo (($pagination['current_page'] - 1) * $pagination['per_page']) + 1; ?> to 
+                                <?php echo min($pagination['current_page'] * $pagination['per_page'], $pagination['total_items']); ?> 
+                                of <?php echo $pagination['total_items']; ?> sent messages
+                            </div>
+                        </div>
+                    </div>
                     <?php endif; ?>
+
                 <?php endif; ?>
             </div>
         </div>

@@ -349,4 +349,116 @@ class Message extends Model
         
         return $message;
     }
+    
+    /**
+     * Get paginated inbox messages
+     */
+    public function getPaginatedInboxMessages($userId, $page = 1, $perPage = 20, $search = '')
+    {
+        $offset = ($page - 1) * $perPage;
+        
+        // Build WHERE clause for search
+        $whereClause = 'WHERE mr.recipient_id = ?';
+        $params = [$userId];
+        
+        if (!empty($search)) {
+            $whereClause .= ' AND (m.subject LIKE ? OR m.content LIKE ? OR u.namalengkap LIKE ?)';
+            $searchTerm = "%{$search}%";
+            $params = array_merge($params, [$searchTerm, $searchTerm, $searchTerm]);
+        }
+        
+        // Get total count
+        $countSql = "
+            SELECT COUNT(*) as total 
+            FROM messages m
+            INNER JOIN message_recipients mr ON m.id = mr.message_id
+            INNER JOIN users u ON m.sender_id = u.id
+            {$whereClause}
+        ";
+        $totalResult = $this->db->fetch($countSql, $params);
+        $total = $totalResult['total'] ?? 0;
+        
+        
+        // Get paginated data
+        $sql = "
+            SELECT 
+                m.*,
+                u.namalengkap as sender_name,
+                u.email as sender_email,
+                u.picture as sender_picture,
+                mr.is_read,
+                mr.read_at
+            FROM messages m
+            INNER JOIN message_recipients mr ON m.id = mr.message_id
+            INNER JOIN users u ON m.sender_id = u.id
+            {$whereClause}
+            ORDER BY m.created_at DESC
+            LIMIT {$perPage} OFFSET {$offset}
+        ";
+        $data = $this->db->fetchAll($sql, $params);
+        
+        $totalPages = ceil($total / $perPage);
+        $hasNext = $page < $totalPages;
+        $hasPrev = $page > 1;
+        
+        
+        return [
+            'data' => $data,
+            'total' => $total,
+            'page' => $page,
+            'per_page' => $perPage,
+            'total_pages' => $totalPages,
+            'has_next' => $hasNext,
+            'has_prev' => $hasPrev
+        ];
+    }
+    
+    /**
+     * Get paginated sent messages
+     */
+    public function getPaginatedSentMessages($userId, $page = 1, $perPage = 20, $search = '')
+    {
+        $offset = ($page - 1) * $perPage;
+        
+        // Build WHERE clause for search
+        $whereClause = 'WHERE m.sender_id = ?';
+        $params = [$userId];
+        
+        if (!empty($search)) {
+            $whereClause .= ' AND (m.subject LIKE ? OR m.content LIKE ?)';
+            $searchTerm = "%{$search}%";
+            $params = array_merge($params, [$searchTerm, $searchTerm]);
+        }
+        
+        // Get total count
+        $countSql = "SELECT COUNT(*) as total FROM messages m {$whereClause}";
+        $totalResult = $this->db->fetch($countSql, $params);
+        $total = $totalResult['total'] ?? 0;
+        
+        // Get paginated data
+        $sql = "
+            SELECT 
+                m.*,
+                (SELECT COUNT(*) FROM message_recipients mr WHERE mr.message_id = m.id) as recipient_count,
+                (SELECT GROUP_CONCAT(u.namalengkap SEPARATOR ', ') 
+                 FROM message_recipients mr 
+                 LEFT JOIN users u ON mr.recipient_id = u.id 
+                 WHERE mr.message_id = m.id) as recipient_names
+            FROM messages m
+            {$whereClause}
+            ORDER BY m.created_at DESC
+            LIMIT {$perPage} OFFSET {$offset}
+        ";
+        $data = $this->db->fetchAll($sql, $params);
+        
+        return [
+            'data' => $data,
+            'total' => $total,
+            'page' => $page,
+            'per_page' => $perPage,
+            'total_pages' => ceil($total / $perPage),
+            'has_next' => $page < ceil($total / $perPage),
+            'has_prev' => $page > 1
+        ];
+    }
 }

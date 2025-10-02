@@ -38,6 +38,7 @@
                                 <option value="">All Roles</option>
                                 <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
                                 <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
+                                <option value="user"<?php echo $role === 'user' ? ' selected' : ''; ?>>User</option>
                                 <option value="marketing"<?php echo $role === 'marketing' ? ' selected' : ''; ?>>Marketing</option>
                                 <option value="customer"<?php echo $role === 'customer' ? ' selected' : ''; ?>>Customer</option>
                             </select>
@@ -74,10 +75,10 @@
                 </div>
                 
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="usersTable">
+                    <table class="table table-striped table-hover table-sm" id="usersTable">
                         <thead>
                             <tr>
-                                <th>Picture</th>
+                                <th>Foto</th>
                                 <th class="sortable" data-sort="username">
                                     Username 
                                     <i class="fas fa-sort text-muted ms-1"></i>
@@ -95,7 +96,15 @@
                                     <i class="fas fa-sort text-muted ms-1"></i>
                                 </th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th class="sortable" data-sort="lastlogin">
+                                    Last Login 
+                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                </th>
+                                <th class="sortable" data-sort="updated_at">
+                                    Last Update 
+                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -130,6 +139,11 @@
                                 $lastLogin = $user['lastlogin'] ? 
                                     '<small class="text-muted">' . date('M d, Y H:i', strtotime($user['lastlogin'])) . '</small>' :
                                     '<small class="text-muted">Never</small>';
+                                
+                                // Last update formatting
+                                $lastUpdate = $user['updated_at'] ? 
+                                    '<small class="text-muted">' . date('M d, Y H:i', strtotime($user['updated_at'])) . '</small>' :
+                                    '<small class="text-muted">Never</small>';
                                 ?>
                                 <tr>
                                     <td><?php echo $pictureHtml; ?></td>
@@ -142,31 +156,71 @@
                                     <td>
                                         <span class="badge bg-<?php echo $statusClass; ?>"><?php echo ucfirst(str_replace('_', ' ', $user['status'] ?? 'N/A')); ?></span>
                                     </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
+                                    <td class="text-muted small">
+                                        <?php echo $lastLogin; ?>
+                                    </td>
+
+                                    <td class="text-muted small">
+                                        <?php echo $lastUpdate; ?>
+                                    </td>
+
+                                    <td align="center">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle action-menu-toggle action-btn-ellipsis" type="button" id="actionMenu<?php echo $user['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end action-menu-dropdown" aria-labelledby="actionMenu<?php echo $user['id']; ?>">
                                             <?php if ($user['status'] === 'register'): ?>
-                                                <!-- For pending registration users - show approve/reject buttons -->
-                                                <button class="btn btn-sm btn-success" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            <?php else: ?>
-                                                <!-- For active/inactive users - show normal actions -->
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-warning">
-                                                    <i class="fas fa-pencil"></i>
-                                                </a>
-                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(<?php echo $user['id']; ?>)">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                    <!-- For pending registration users -->
+                                                    <li>
+                                                        <a class="dropdown-item action-menu-item text-success" href="#" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>">
+                                                            <i class="fas fa-check me-2"></i>Approve User
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item action-menu-item text-danger" href="#" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>">
+                                                            <i class="fas fa-times me-2"></i>Reject User
+                                                        </a>
+                                                    </li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li>
+                                                        <a class="dropdown-item action-menu-item" href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>">
+                                                            <i class="fas fa-eye me-2"></i>View Details
+                                                        </a>
+                                                    </li>
+                                                <?php else: ?>
+                                                    <!-- For active/inactive users -->
+                                                    <li>
+                                                        <a class="dropdown-item action-menu-item" href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>">
+                                                            <i class="fas fa-eye me-2"></i>View Details
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item action-menu-item" href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit">
+                                                            <i class="fas fa-pencil me-2"></i>Edit User
+                                                        </a>
+                                                    </li>
+                                                    <?php if ($user['status'] === 'aktif'): ?>
+                                                        <li>
+                                                            <a class="dropdown-item action-menu-item text-warning" href="#" onclick="deactivateUser(<?php echo $user['id']; ?>)">
+                                                                <i class="fas fa-user-slash me-2"></i>Deactivate
+                                                            </a>
+                                                        </li>
+                                                    <?php elseif ($user['status'] === 'non_aktif'): ?>
+                                                        <li>
+                                                            <a class="dropdown-item action-menu-item text-success" href="#" onclick="activateUser(<?php echo $user['id']; ?>)">
+                                                                <i class="fas fa-user-check me-2"></i>Activate
+                                                            </a>
+                                                        </li>
+                                                    <?php endif; ?>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li>
+                                                        <a class="dropdown-item action-menu-item text-danger" href="#" onclick="deleteUser(<?php echo $user['id']; ?>)">
+                                                            <i class="fas fa-trash me-2"></i>Delete User
+                                                        </a>
+                                                    </li>
                                             <?php endif; ?>
+                                            </ul>
                                         </div>
                                     </td>
                                 </tr>
@@ -293,10 +347,50 @@
     </div>
 </div>
 
+<!-- Activate User Modal -->
+<div class="modal fade" id="activateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Activation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to activate this user? They will be able to login to the system.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="confirmActivate">Activate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deactivate User Modal -->
+<div class="modal fade" id="deactivateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deactivation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to deactivate this user? They will not be able to login to the system.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-warning" id="confirmDeactivate">Deactivate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 let deleteUserId = null;
 let approveUserId = null;
 let rejectUserId = null;
+let activateUserId = null;
+let deactivateUserId = null;
 
 // Table sorting functionality
 document.addEventListener("DOMContentLoaded", function() {
@@ -383,6 +477,18 @@ function rejectUser(id) {
     modal.show();
 }
 
+function activateUser(id) {
+    activateUserId = id;
+    const modal = new bootstrap.Modal(document.getElementById("activateModal"));
+    modal.show();
+}
+
+function deactivateUser(id) {
+    deactivateUserId = id;
+    const modal = new bootstrap.Modal(document.getElementById("deactivateModal"));
+    modal.show();
+}
+
 // Delete user confirmation
 document.getElementById("confirmDelete").addEventListener("click", function() {
     if (deleteUserId) {
@@ -457,9 +563,54 @@ document.getElementById("confirmReject").addEventListener("click", function() {
         });
     }
 });
-</script>
 
-<!-- CSRF Token for AJAX requests -->
-<script>
-window.csrfToken = "<?php echo Session::generateCSRF(); ?>";
+// Activate user confirmation
+document.getElementById("confirmActivate").addEventListener("click", function() {
+    if (activateUserId) {
+        fetch("<?php echo APP_URL; ?>/users/" + activateUserId + "/activate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": window.csrfToken,
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert("Error: " + (data.error || "Failed to activate user"));
+            }
+        })
+        .catch(error => {
+            alert("An error occurred while activating the user");
+        });
+    }
+});
+
+// Deactivate user confirmation
+document.getElementById("confirmDeactivate").addEventListener("click", function() {
+    if (deactivateUserId) {
+        fetch("<?php echo APP_URL; ?>/users/" + deactivateUserId + "/deactivate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": window.csrfToken,
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert("Error: " + (data.error || "Failed to deactivate user"));
+            }
+        })
+        .catch(error => {
+            alert("An error occurred while deactivating the user");
+        });
+    }
+});
 </script>

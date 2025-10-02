@@ -174,4 +174,32 @@ class Database
             'to' => min($offset + $perPage, $total)
         ];
     }
+
+    /**
+     * Get database version information
+     */
+    public function getVersion()
+    {
+        try {
+            if (!$this->connection) {
+                return 'Not connected';
+            }
+
+            switch (DB_TYPE) {
+                case 'mysql':
+                    $result = $this->query("SELECT VERSION() as version")->fetch();
+                    return 'MySQL ' . $result['version'];
+                case 'sqlsrv':
+                    $result = $this->query("SELECT @@VERSION as version")->fetch();
+                    return 'SQL Server ' . $result['version'];
+                case 'pgsql':
+                    $result = $this->query("SELECT version() as version")->fetch();
+                    return 'PostgreSQL ' . $result['version'];
+                default:
+                    return DB_TYPE . ' (Unknown version)';
+            }
+        } catch (Exception $e) {
+            return 'Error getting version: ' . $e->getMessage();
+        }
+    }
 }

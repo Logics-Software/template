@@ -7,30 +7,58 @@ class CallCenterController extends BaseController
     /**
      * Display call center list
      */
-    public function index()
+    public function index($request = null, $response = null, $params = [])
     {
-        $search = $_GET['search'] ?? '';
-        $callCenters = $search ? CallCenter::searchEntries($search) : CallCenter::getAll();
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
+        $search = $request->input('search') ?? '';
+        $page = (int) ($request->input('page') ?? 1);
+        $perPage = (int) ($request->input('per_page') ?? 10); // Items per page
+        
+        $callCenterModel = new CallCenter();
+        $result = $callCenterModel->getPaginated($page, $perPage, $search);
         
         $this->view('call-center/index', [
-            'callCenters' => $callCenters,
-            'search' => $search
+            'title' => 'Call Center',
+            'callCenters' => $result['data'],
+            'search' => $search,
+            'pagination' => [
+                'current_page' => $result['page'],
+                'total_pages' => $result['total_pages'],
+                'total_items' => $result['total'],
+                'per_page' => $result['per_page'],
+                'has_next' => $result['has_next'],
+                'has_prev' => $result['has_prev']
+            ]
         ]);
     }
     
     /**
      * Show create form
      */
-    public function create()
+    public function create($request = null, $response = null, $params = [])
     {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
         $this->view('call-center/create');
     }
     
     /**
      * Store new call center
      */
-    public function store()
+    public function store($request = null, $response = null, $params = [])
     {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect('/call-center');
             return;
@@ -68,7 +96,8 @@ class CallCenterController extends BaseController
         }
         
         // Create call center
-        if (CallCenter::createEntry($data)) {
+        $callCenterModel = new CallCenter();
+        if ($callCenterModel->createEntry($data)) {
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'message' => 'Call center entry created successfully']);
             } else {
@@ -88,8 +117,13 @@ class CallCenterController extends BaseController
     /**
      * Show edit form
      */
-    public function edit($request, $response, $params = [])
+    public function edit($request = null, $response = null, $params = [])
     {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
         $id = $params[0] ?? null;
         
         if (!$id) {
@@ -98,7 +132,8 @@ class CallCenterController extends BaseController
             return;
         }
         
-        $callCenter = CallCenter::getById($id);
+        $callCenterModel = new CallCenter();
+        $callCenter = $callCenterModel->getById($id);
         if (!$callCenter) {
             Session::flash('error', 'Call center entry not found');
             $this->redirect('/call-center');
@@ -111,8 +146,13 @@ class CallCenterController extends BaseController
     /**
      * Update call center
      */
-    public function update($request, $response, $params = [])
+    public function update($request = null, $response = null, $params = [])
     {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
         $id = $params[0] ?? null;
         
         if (!$id) {
@@ -133,7 +173,8 @@ class CallCenterController extends BaseController
             return;
         }
         
-        $callCenter = CallCenter::getById($id);
+        $callCenterModel = new CallCenter();
+        $callCenter = $callCenterModel->getById($id);
         if (!$callCenter) {
             Session::flash('error', 'Call center entry not found');
             $this->redirect('/call-center');
@@ -165,7 +206,8 @@ class CallCenterController extends BaseController
         }
         
         // Update call center
-        if (CallCenter::updateEntry($id, $data)) {
+        $callCenterModel = new CallCenter();
+        if ($callCenterModel->updateEntry($id, $data)) {
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'message' => 'Call center entry updated successfully']);
             } else {
@@ -185,8 +227,13 @@ class CallCenterController extends BaseController
     /**
      * Delete call center
      */
-    public function delete($request, $response, $params = [])
+    public function delete($request = null, $response = null, $params = [])
     {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
         $id = $params[0] ?? null;
         
         if (!$id) {
@@ -207,14 +254,16 @@ class CallCenterController extends BaseController
             return;
         }
         
-        $callCenter = CallCenter::getById($id);
+        $callCenterModel = new CallCenter();
+        $callCenter = $callCenterModel->getById($id);
         if (!$callCenter) {
             Session::flash('error', 'Call center entry not found');
             $this->redirect('/call-center');
             return;
         }
         
-        if (CallCenter::deleteEntry($id)) {
+        $callCenterModel = new CallCenter();
+        if ($callCenterModel->deleteEntry($id)) {
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'message' => 'Call center entry deleted successfully']);
             } else {
@@ -234,8 +283,13 @@ class CallCenterController extends BaseController
     /**
      * Show call center details
      */
-    public function show($request, $response, $params = [])
+    public function show($request = null, $response = null, $params = [])
     {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+            return;
+        }
+
         $id = $params[0] ?? null;
         
         if (!$id) {
@@ -244,7 +298,8 @@ class CallCenterController extends BaseController
             return;
         }
         
-        $callCenter = CallCenter::getById($id);
+        $callCenterModel = new CallCenter();
+        $callCenter = $callCenterModel->getById($id);
         if (!$callCenter) {
             Session::flash('error', 'Call center entry not found');
             $this->redirect('/call-center');

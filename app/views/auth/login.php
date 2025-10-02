@@ -10,10 +10,10 @@ $validationErrors = Session::getFlash('errors');
     <div class="login-wrapper-single">
         <div class="card">
             <div class="card-header text-center">
-                <h4 class="mb-1">Welcome back!</h4>
-                <p class="text-muted mb-0">Please sign in to continue</p>
+                <h4 class="mb-1">Selamat Datang!</h4>
+                <p class="text-muted mb-0">Silahkan login untuk melanjutkan</p>
             </div>
-            <div class="card-body mt-3 mb-3">
+            <div class="card-body m-3">
                 <!-- Error Messages -->
                 <?php if ($errorMessage): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -33,7 +33,7 @@ $validationErrors = Session::getFlash('errors');
                 <!-- Validation Errors -->
                 <?php if ($validationErrors): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Please fix the following errors:
+                    <i class="fas fa-exclamation-triangle me-2"></i>Harap diperbaiki kesalahan tersebut:
                     <ul class="mb-0 mt-2">
                         <?php foreach ($validationErrors as $field => $errors): ?>
                             <li><?php echo implode(", ", $errors); ?></li>
@@ -50,7 +50,7 @@ $validationErrors = Session::getFlash('errors');
                         <input type="text" class="form-control" id="username_email" name="username_email" 
                                placeholder="" required>
                         <label for="username_email">
-                            <i class="fas fa-user me-2"></i>Username or Email
+                            <i class="fas fa-user me-2"></i>Username atau Email
                         </label>
                     </div>
 
@@ -71,10 +71,9 @@ $validationErrors = Session::getFlash('errors');
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="remember" name="remember">
                             <label class="form-check-label" for="remember">
-                                Remember me
+                                Ingat saya
                             </label>
                         </div>
-                        <a href="#" class="text-primary text-decoration-none">Forgot password?</a>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mb-3" id="loginBtn">
@@ -82,8 +81,8 @@ $validationErrors = Session::getFlash('errors');
                     </button>
 
                     <div class="text-center">
-                        <span class="text-muted">Don't have an account?</span>
-                        <a href="<?php echo APP_URL; ?>/register" class="text-primary text-decoration-none fw-bold ms-1">Sign up</a>
+                        <span class="text-muted">Belum punya akun?</span>
+                        <a href="<?php echo APP_URL; ?>/register" class="text-primary text-decoration-none fw-bold ms-1">Daftar</a>
                     </div>
                 </form>
             </div>

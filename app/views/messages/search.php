@@ -13,14 +13,38 @@
             
             <div class="card-body">
                 <!-- Search Form -->
-                <form method="GET" action="<?php echo APP_URL; ?>/messages/search" class="mb-4">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Cari pesan..." value="<?php echo htmlspecialchars($search_term); ?>">
-                        <button type="submit" class="btn btn-outline-secondary">
-                            <i class="fas fa-search"></i>
-                        </button>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <form method="GET" action="<?php echo APP_URL; ?>/messages/search" class="d-flex">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" placeholder="Cari pesan..." value="<?php echo htmlspecialchars($search_term); ?>">
+                                <button type="submit" class="btn btn-outline-secondary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                    <div class="col-md-2">
+                        <label for="per_page" class="form-label">Per Page</label>
+                        <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                            <option value="10"<?php echo ($pagination['per_page'] ?? 20) == 10 ? ' selected' : ''; ?>>10</option>
+                            <option value="20"<?php echo ($pagination['per_page'] ?? 20) == 20 ? ' selected' : ''; ?>>20</option>
+                            <option value="30"<?php echo ($pagination['per_page'] ?? 20) == 30 ? ' selected' : ''; ?>>30</option>
+                            <option value="50"<?php echo ($pagination['per_page'] ?? 20) == 50 ? ' selected' : ''; ?>>50</option>
+                            <option value="100"<?php echo ($pagination['per_page'] ?? 20) == 100 ? ' selected' : ''; ?>>100</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="<?php echo APP_URL; ?>/messages" class="btn btn-secondary">
+                                <i class="fas fa-inbox me-1"></i>Pesan Masuk
+                            </a>
+                            <a href="<?php echo APP_URL; ?>/messages/sent" class="btn btn-outline-secondary">
+                                <i class="fas fa-paper-plane me-1"></i>Pesan Terkirim
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
                 <?php if (empty($messages)): ?>
                     <div class="text-center py-5">
@@ -108,26 +132,6 @@
                         </table>
                     </div>
 
-                    <!-- Pagination -->
-                    <?php if ($page > 1): ?>
-                        <nav aria-label="Search pagination">
-                            <ul class="pagination justify-content-center">
-                                <?php if ($page > 1): ?>
-                                    <li class="page-item">
-                                        <a class="page-link" href="?q=<?php echo urlencode($search_term); ?>&page=<?php echo $page - 1; ?>">Sebelumnya</a>
-                                    </li>
-                                <?php endif; ?>
-                                
-                                <li class="page-item active">
-                                    <span class="page-link"><?php echo $page; ?></span>
-                                </li>
-                                
-                                <li class="page-item">
-                                    <a class="page-link" href="?q=<?php echo urlencode($search_term); ?>&page=<?php echo $page + 1; ?>">Selanjutnya</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>
@@ -210,3 +214,49 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
+<!-- Pagination -->
+<?php if (isset($pagination)): ?>
+<div class="row mt-4">
+    <div class="col-12">
+        <nav aria-label="Search Results pagination">
+            <ul class="pagination justify-content-center">
+                <?php
+                // Build query parameters
+                $queryParams = [];
+                if (!empty($search_term)) $queryParams['q'] = $search_term;
+                if (!empty($pagination['per_page'])) $queryParams['per_page'] = $pagination['per_page'];
+
+                $queryString = http_build_query($queryParams);
+                ?>
+                
+                <?php if ($pagination['current_page'] > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="<?php echo APP_URL; ?>/messages/search?page=<?php echo $pagination['current_page'] - 1; ?>&<?php echo $queryString; ?>">Previous</a>
+                    </li>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+                    <?php $activeClass = $i == $pagination['current_page'] ? ' active' : ''; ?>
+                    <li class="page-item<?php echo $activeClass; ?>">
+                        <a class="page-link" href="<?php echo APP_URL; ?>/messages/search?page=<?php echo $i; ?>&<?php echo $queryString; ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+
+                <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="<?php echo APP_URL; ?>/messages/search?page=<?php echo $pagination['current_page'] + 1; ?>&<?php echo $queryString; ?>">Next</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
+        
+        <!-- Pagination Info -->
+        <div class="text-center text-muted">
+            Showing <?php echo (($pagination['current_page'] - 1) * $pagination['per_page']) + 1; ?> to 
+            <?php echo min($pagination['current_page'] * $pagination['per_page'], $pagination['total_items']); ?> 
+            of <?php echo $pagination['total_items']; ?> search results
+        </div>
+    </div>
+</div>
+<?php endif; ?>

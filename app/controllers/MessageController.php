@@ -26,20 +26,28 @@ class MessageController extends BaseController
         }
 
         $userId = Session::get('user_id');
-        $page = $this->request->input('page', 1);
-        $limit = 20;
-        $offset = ($page - 1) * $limit;
+        $page = (int) ($this->request->input('page') ?? 1);
+        $search = $this->request->input('search') ?? '';
+        $perPage = (int) ($this->request->input('per_page') ?? 20);
 
-        // Get messages
-        $messages = $this->messageModel->getInboxMessages($userId, $limit, $offset);
+        // Get paginated messages
+        $result = $this->messageModel->getPaginatedInboxMessages($userId, $page, $perPage, $search);
         $unreadCount = $this->messageModel->getUnreadCount($userId);
 
         $this->view('messages/index', [
             'title' => 'Pesan Masuk',
             'current_page' => 'messages',
-            'messages' => $messages,
+            'messages' => $result['data'],
             'unread_count' => $unreadCount,
-            'page' => $page
+            'search' => $search,
+            'pagination' => [
+                'current_page' => $result['page'],
+                'total_pages' => $result['total_pages'],
+                'total_items' => $result['total'],
+                'per_page' => $result['per_page'],
+                'has_next' => $result['has_next'],
+                'has_prev' => $result['has_prev']
+            ]
         ]);
     }
 
@@ -55,18 +63,26 @@ class MessageController extends BaseController
         }
 
         $userId = Session::get('user_id');
-        $page = $this->request->input('page', 1);
-        $limit = 20;
-        $offset = ($page - 1) * $limit;
+        $page = (int) ($this->request->input('page') ?? 1);
+        $search = $this->request->input('search') ?? '';
+        $perPage = (int) ($this->request->input('per_page') ?? 20);
 
-        // Get sent messages
-        $messages = $this->messageModel->getSentMessages($userId, $limit, $offset);
+        // Get paginated sent messages
+        $result = $this->messageModel->getPaginatedSentMessages($userId, $page, $perPage, $search);
 
         $this->view('messages/sent', [
             'title' => 'Pesan Terkirim',
             'current_page' => 'messages',
-            'messages' => $messages,
-            'page' => $page
+            'messages' => $result['data'],
+            'search' => $search,
+            'pagination' => [
+                'current_page' => $result['page'],
+                'total_pages' => $result['total_pages'],
+                'total_items' => $result['total'],
+                'per_page' => $result['per_page'],
+                'has_next' => $result['has_next'],
+                'has_prev' => $result['has_prev']
+            ]
         ]);
     }
 
@@ -200,7 +216,7 @@ class MessageController extends BaseController
     /**
      * Show specific message
      */
-    public function show($request = null, $response = null, $routeParams = [])
+    public function show($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
@@ -208,7 +224,7 @@ class MessageController extends BaseController
             return;
         }
 
-        $messageId = $routeParams[0] ?? $this->request->input('id');
+        $messageId = $params[0] ?? $this->request->input('id');
         $userId = Session::get('user_id');
 
         if (!$messageId) {
@@ -251,7 +267,7 @@ class MessageController extends BaseController
     /**
      * Delete message
      */
-    public function destroy($request = null, $response = null, $routeParams = [])
+    public function destroy($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
@@ -259,7 +275,7 @@ class MessageController extends BaseController
             return;
         }
 
-        $messageId = $routeParams[0] ?? $this->request->input('id');
+        $messageId = $params[0] ?? $this->request->input('id');
         $userId = Session::get('user_id');
 
         if (!$messageId) {
@@ -313,24 +329,30 @@ class MessageController extends BaseController
 
         $userId = Session::get('user_id');
         $searchTerm = $this->request->input('q', '');
-        $page = $this->request->input('page', 1);
-        $limit = 20;
-        $offset = ($page - 1) * $limit;
+        $page = (int) ($this->request->input('page') ?? 1);
+        $perPage = (int) ($this->request->input('per_page') ?? 20);
 
         if (empty($searchTerm)) {
             $this->redirect('/messages');
             return;
         }
 
-        // Search messages
-        $messages = $this->messageModel->searchMessages($userId, $searchTerm, $limit, $offset);
+        // Search messages with pagination
+        $result = $this->messageModel->getPaginatedInboxMessages($userId, $page, $perPage, $searchTerm);
 
         $this->view('messages/search', [
             'title' => 'Hasil Pencarian',
             'current_page' => 'messages',
-            'messages' => $messages,
+            'messages' => $result['data'],
             'search_term' => $searchTerm,
-            'page' => $page
+            'pagination' => [
+                'current_page' => $result['page'],
+                'total_pages' => $result['total_pages'],
+                'total_items' => $result['total'],
+                'per_page' => $result['per_page'],
+                'has_next' => $result['has_next'],
+                'has_prev' => $result['has_prev']
+            ]
         ]);
     }
 

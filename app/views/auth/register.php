@@ -10,10 +10,9 @@ $validationErrors = Session::getFlash('errors');
     <div class="register-wrapper">
         <div class="card">
             <div class="card-header text-center">
-                <h4 class="mb-1">Create Account</h4>
-                <p class="text-muted mb-0">Join us today and get started</p>
+                <h4 class="mb-1">Pendaftaran Akun</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body m-3">
                 <!-- Error Messages -->
                 <?php if ($errorMessage): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -33,7 +32,7 @@ $validationErrors = Session::getFlash('errors');
                 <!-- Validation Errors -->
                 <?php if ($validationErrors): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Please fix the following errors:
+                    <i class="fas fa-exclamation-triangle me-2"></i>Harap diperbaiki kesalahan tersebut:
                     <ul class="mb-0 mt-2">
                         <?php foreach ($validationErrors as $field => $errors): ?>
                             <li><?php echo implode(", ", $errors); ?></li>
@@ -62,7 +61,7 @@ $validationErrors = Session::getFlash('errors');
                                 <input type="text" class="form-control" id="namalengkap" name="namalengkap" 
                                        placeholder="" required>
                                 <label for="namalengkap">
-                                    <i class="fas fa-id-card me-2"></i>Full Name
+                                    <i class="fas fa-id-card me-2"></i>Nama Lengkap
                                 </label>
                             </div>
                         </div>
@@ -75,14 +74,14 @@ $validationErrors = Session::getFlash('errors');
                                 <input type="email" class="form-control" id="email" name="email" 
                                        placeholder="" required>
                                 <label for="email">
-                                    <i class="fas fa-envelope me-2"></i>Email Address
+                                    <i class="fas fa-envelope me-2"></i>Alamat Email
                                 </label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating mb-3">
                                 <select class="form-select" id="role" name="role" required>
-                                    <option value="">Select your role</option>
+                                    <option value="">Pilih role anda</option>
                                     <option value="user">User</option>
                                     <option value="marketing">Marketing</option>
                                     <option value="customer">Customer</option>
@@ -97,9 +96,9 @@ $validationErrors = Session::getFlash('errors');
                     <!-- Registration Reason -->
                     <div class="form-floating mb-3">
                         <textarea class="form-control" id="registration_reason" name="registration_reason" 
-                                  placeholder="" style="height: 100px;" required></textarea>
+                                  placeholder="" style="height: 60px;" required></textarea>
                         <label for="registration_reason">
-                            <i class="fas fa-comment me-2"></i>Reason for Registration
+                            <i class="fas fa-comment me-2"></i>Alasan Pendaftaran
                         </label>
                     </div>
 
@@ -124,7 +123,7 @@ $validationErrors = Session::getFlash('errors');
                                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
                                        placeholder="" required style="padding-right: 2.5rem;">
                                 <label for="confirm_password">
-                                    <i class="fas fa-lock me-2"></i>Confirm Password
+                                    <i class="fas fa-lock me-2"></i>Konfirmasi Password
                                 </label>
                                 <button class="position-absolute top-50 end-0 translate-middle-y password-toggle-btn" 
                                         type="button" id="toggleConfirmPassword" 
@@ -138,25 +137,25 @@ $validationErrors = Session::getFlash('errors');
                     <div class="form-check mb-3">
                         <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
                         <label class="form-check-label" for="terms">
-                            I agree to the <a href="#" class="text-primary">Terms and Conditions</a>
+                            Saya setuju dengan <a href="#" class="text-primary">Syarta & Ketentuan</a>
                         </label>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mb-3" id="registerBtn">
-                        <i class="fas fa-user-plus me-2"></i>Create Account
+                        <i class="fas fa-user-plus me-2"></i>Daftar Akun Saya
                     </button>
                 </form>
 
                 <div class="text-center">
-                    <span class="text-muted">Already have an account?</span>
-                    <a href="<?php echo APP_URL; ?>/login" class="text-primary text-decoration-none fw-bold ms-1">Sign In</a>
+                    <span class="text-muted">Sudah punya akun?</span>
+                    <a href="<?php echo APP_URL; ?>/login" class="text-primary text-decoration-none fw-bold ms-1">Login</a>
                 </div>
 
                 <!-- Registration Notice -->
-                <div class="alert alert-info mt-3" role="alert">
+                <div class="alert alert-info mt-3 text-secondary" role="alert">
                     <i class="fas fa-info-circle me-2"></i>
-                    <strong>Registration Notice:</strong> Your account will be reviewed by an administrator before activation. 
-                    You will receive an email notification once your account is approved.
+                    <strong>Pemberitahuan Pendaftaran :</strong> Akun Anda akan ditinjau oleh administrator sebelum akun Anda diaktifkan untuk digunakan. 
+                    Anda akan mendapatkan pemberitahuan melalui email setelah akun Anda disetujui.
                 </div>
             </div>
         </div>

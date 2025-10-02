@@ -12,7 +12,7 @@ class AuthController extends BaseController
         $this->userModel = new User();
     }
 
-    public function login()
+    public function login($request = null, $response = null, $params = [])
     {
         if (Session::has('user_id')) {
             $this->redirect('/dashboard');
@@ -25,7 +25,7 @@ class AuthController extends BaseController
         ]);
     }
 
-    public function authenticate()
+    public function authenticate($request = null, $response = null, $params = [])
     {
         $validator = $this->validate([
             'username_email' => 'required',
@@ -67,6 +67,12 @@ class AuthController extends BaseController
             Session::set('user_picture', $user['picture']);
             Session::regenerate();
 
+            // Handle Remember Me functionality
+            $rememberMe = $this->input('remember');
+            if ($rememberMe) {
+                Session::setRememberMe($user['id']);
+            }
+
             // Update last login
             $updateResult = $this->userModel->updateLastLogin($user['id']);
 
@@ -85,7 +91,7 @@ class AuthController extends BaseController
         }
     }
 
-    public function register()
+    public function register($request = null, $response = null, $params = [])
     {
         if (Session::has('user_id')) {
             $this->redirect('/dashboard');
@@ -97,7 +103,7 @@ class AuthController extends BaseController
         ]);
     }
 
-    public function store()
+    public function store($request = null, $response = null, $params = [])
     {
         $validator = $this->validate([
             'username' => 'required|min:3|unique:users',
@@ -145,9 +151,9 @@ class AuthController extends BaseController
         }
     }
 
-    public function logout()
+    public function logout($request = null, $response = null, $params = [])
     {
-        Session::destroy();
+        Session::logout();
         $this->redirect('/login');
     }
 }

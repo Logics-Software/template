@@ -15,7 +15,7 @@ $successMessage = Session::getFlash('success');
                 <h4 class="mb-1">Hello <?php echo $user_name ?? 'User'; ?>!</h4>
                 <p class="text-muted mb-0"><?php echo $user_email ?? 'user@example.com'; ?></p>
             </div>
-            <div class="card-body">
+            <div class="card-body m-3">
                 <!-- Error Messages -->
                 <?php if ($errorMessage): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">

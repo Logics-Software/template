@@ -22,6 +22,9 @@ class App
             // Start session
             Session::start();
             
+            // Check remember me cookie for auto-login
+            Session::checkRememberMe();
+            
             // Check and auto-refresh session if needed
             Session::checkAndRegenerate();
             
@@ -85,6 +88,7 @@ class App
         $this->router->put('/users/{id}', 'UserController@update');
         $this->router->delete('/users/{id}', 'UserController@destroy');
         $this->router->post('/users/{id}/activate', 'UserController@activateUser');
+        $this->router->post('/users/{id}/deactivate', 'UserController@deactivateUser');
         $this->router->post('/users/{id}/reject', 'UserController@rejectUser');
         
         

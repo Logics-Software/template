@@ -195,7 +195,7 @@ class UserController extends BaseController
         }
     }
 
-    public function show($request, $response, $params = [])
+    public function show($request = null, $response = null, $params = [])
     {
         if (!Session::has('user_id')) {
             $this->redirect('/login');
@@ -220,7 +220,7 @@ class UserController extends BaseController
         ]);
     }
 
-    public function edit($request, $response, $params = [])
+    public function edit($request = null, $response = null, $params = [])
     {
         if (!Session::has('user_id')) {
             $this->redirect('/login');
@@ -242,7 +242,7 @@ class UserController extends BaseController
         ]);
     }
 
-    public function update($request, $response, $params = [])
+    public function update($request = null, $response = null, $params = [])
     {
         if (!Session::has('user_id')) {
             $this->redirect('/login');
@@ -377,7 +377,7 @@ class UserController extends BaseController
         }
     }
 
-    public function destroy($request, $response, $params = [])
+    public function destroy($request = null, $response = null, $params = [])
     {
         if (!Session::has('user_id')) {
             $this->redirect('/login');
@@ -812,6 +812,47 @@ class UserController extends BaseController
                 $this->json(['error' => 'Failed to activate user'], 500);
             } else {
                 $this->withError('Failed to activate user');
+                $this->redirect('/users');
+            }
+        }
+    }
+
+    public function deactivateUser($request = null, $response = null, $params = [])
+    {
+        if (!Session::has('user_id')) {
+            $this->redirect('/login');
+        }
+
+        $id = $params[0] ?? $request->input('id');
+        $user = $this->userModel->find($id);
+
+        if (!$user) {
+            if ($request->isAjax()) {
+                $this->json(['error' => 'User not found'], 404);
+            } else {
+                $this->withError('User not found');
+                $this->redirect('/users');
+            }
+            return;
+        }
+
+        try {
+            $this->userModel->beginTransaction();
+            $this->userModel->deactivate($id);
+            $this->userModel->commit();
+
+            if ($request->isAjax()) {
+                $this->json(['success' => true, 'message' => 'User deactivated successfully']);
+            } else {
+                $this->withSuccess('User deactivated successfully');
+                $this->redirect('/users');
+            }
+        } catch (Exception $e) {
+            $this->userModel->rollback();
+            if ($request->isAjax()) {
+                $this->json(['error' => 'Failed to deactivate user'], 500);
+            } else {
+                $this->withError('Failed to deactivate user');
                 $this->redirect('/users');
             }
         }

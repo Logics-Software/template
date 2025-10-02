@@ -13,7 +13,7 @@ class KonfigurasiController extends BaseController
     /**
      * Display configuration page
      */
-    public function index()
+    public function index($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
@@ -40,7 +40,7 @@ class KonfigurasiController extends BaseController
     /**
      * Show create configuration form
      */
-    public function create()
+    public function create($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
@@ -63,7 +63,7 @@ class KonfigurasiController extends BaseController
     /**
      * Store new configuration
      */
-    public function store()
+    public function store($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
@@ -153,7 +153,7 @@ class KonfigurasiController extends BaseController
     /**
      * Show edit configuration form
      */
-    public function edit()
+    public function edit($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
@@ -178,7 +178,7 @@ class KonfigurasiController extends BaseController
     /**
      * Update configuration
      */
-    public function update()
+    public function update($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {

@@ -19,9 +19,20 @@
                 <!-- Search and Action Buttons -->
                 <div class="mb-4">
                     <form method="GET" action="<?php echo APP_URL; ?>/call-center" class="row g-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="search" class="form-label">Search</label>
                             <input type="text" class="form-control" id="search" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search by title, number, or description...">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="per_page" class="form-label">Per Page</label>
+                            <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                                <option value="5"<?php echo ($pagination['per_page'] ?? 10) == 5 ? ' selected' : ''; ?>>5</option>
+                                <option value="10"<?php echo ($pagination['per_page'] ?? 10) == 10 ? ' selected' : ''; ?>>10</option>
+                                <option value="15"<?php echo ($pagination['per_page'] ?? 10) == 15 ? ' selected' : ''; ?>>15</option>
+                                <option value="20"<?php echo ($pagination['per_page'] ?? 10) == 20 ? ' selected' : ''; ?>>20</option>
+                                <option value="25"<?php echo ($pagination['per_page'] ?? 10) == 25 ? ' selected' : ''; ?>>25</option>
+                                <option value="50"<?php echo ($pagination['per_page'] ?? 10) == 50 ? ' selected' : ''; ?>>50</option>
+                            </select>
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">&nbsp;</label>
@@ -56,19 +67,15 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th width="5%"></th>
                                     <th width="25%">Judul</th>
                                     <th width="20%">Nomor WhatsApp</th>
-                                    <th width="35%">Deskripsi</th>
+                                    <th width="40%">Deskripsi</th>
                                     <th width="15%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($callCenters as $callCenter): ?>
                                     <tr>
-                                        <td>
-                                            <i class="fab fa-whatsapp text-success"></i>
-                                        </td>
                                         <td>
                                             <div class="fw-bold"><?php echo htmlspecialchars($callCenter['judul']); ?></div>
                                         </td>
@@ -99,6 +106,53 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <?php if (isset($pagination)): ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <nav aria-label="Call Center pagination">
+                                <ul class="pagination justify-content-center">
+                                    <?php
+                                    // Build query parameters
+                                    $queryParams = [];
+                                    if (!empty($search)) $queryParams['search'] = $search;
+                                    if (!empty($pagination['per_page'])) $queryParams['per_page'] = $pagination['per_page'];
+
+                                    $queryString = http_build_query($queryParams);
+                                    ?>
+                                    
+                                    <?php if ($pagination['current_page'] > 1): ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/call-center?page=<?php echo $pagination['current_page'] - 1; ?>&<?php echo $queryString; ?>">Previous</a>
+                                        </li>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+                                        <?php $activeClass = $i == $pagination['current_page'] ? ' active' : ''; ?>
+                                        <li class="page-item<?php echo $activeClass; ?>">
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/call-center?page=<?php echo $i; ?>&<?php echo $queryString; ?>"><?php echo $i; ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+
+                                    <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/call-center?page=<?php echo $pagination['current_page'] + 1; ?>&<?php echo $queryString; ?>">Next</a>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </nav>
+
+                            <!-- Pagination Info -->
+                            <div class="text-center text-muted">
+                                Showing <?php echo (($pagination['current_page'] - 1) * $pagination['per_page']) + 1; ?> to 
+                                <?php echo min($pagination['current_page'] * $pagination['per_page'], $pagination['total_items']); ?> 
+                                of <?php echo $pagination['total_items']; ?> entries
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                    
                 <?php endif; ?>
             </div>
         </div>
@@ -153,3 +207,5 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
+

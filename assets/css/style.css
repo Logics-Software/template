@@ -409,8 +409,6 @@ body {
   font-size: 0.875rem;
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid #dee2e6;
-  border-radius: var(--border-radius-md);
   overflow: hidden;
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -419,8 +417,7 @@ body {
 
 .table thead th {
   background-color: var(--bg-secondary);
-  border-bottom: 2px solid var(--border-color);
-  border-right: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
   font-weight: 600;
   font-size: 0.8125rem;
   letter-spacing: 0.5px;
@@ -476,8 +473,6 @@ body {
 .table tbody td {
   padding: 0.875rem 0.75rem;
   vertical-align: middle;
-  border-bottom: 1px solid var(--border-color);
-  border-right: 1px solid var(--border-color);
   font-size: 0.875rem;
   color: var(--text-primary);
 }
@@ -816,6 +811,35 @@ div:hover {
   transition: left 0.3s ease;
   height: 70px;
   display: flex;
+  /* Prevent flash by hiding header until JS loads */
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Show top header after JS initialization */
+.top-header.js-loaded {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Fallback: Show top header after 1 second if JS hasn't loaded */
+.top-header:not(.js-loaded) {
+  animation: showTopHeaderFallback 0.1s ease-in-out 1s forwards;
+}
+
+@keyframes showTopHeaderFallback {
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Override fallback if JS loaded */
+.top-header.js-loaded {
+  animation: none;
+}
+
+.top-header {
   align-items: center;
 }
 
@@ -831,6 +855,7 @@ div:hover {
 /* Notification Dropdown */
 .notification-dropdown {
   position: relative;
+  display: inline-block;
 }
 
 /* Message Dropdown */
@@ -915,7 +940,8 @@ div:hover {
 
 /* Header Icons - Unified Styling */
 .sidebar-toggle-btn,
-.notification-dropdown > .btn,
+#notificationToggle,
+#whatsappToggle,
 .message-dropdown > .btn,
 #themeToggle,
 #fullscreenToggle {
@@ -936,7 +962,8 @@ div:hover {
 
 /* Standardize all header icon sizes - Using CSS variables */
 .sidebar-toggle-btn i,
-.notification-dropdown > .btn i,
+#notificationToggle i,
+#whatsappToggle i,
 .message-dropdown > .btn i,
 #themeToggle i,
 #fullscreenToggle i {
@@ -974,7 +1001,8 @@ div:hover {
 }
 
 /* Remove underline from all header icons */
-.notification-dropdown > .btn i,
+#notificationToggle i,
+#whatsappToggle i,
 .message-dropdown > .btn i,
 #themeToggle i,
 #fullscreenToggle i,
@@ -985,7 +1013,7 @@ div:hover {
 
 /* Header Icons Hover - Unified Styling */
 .sidebar-toggle-btn:hover,
-.notification-dropdown > .btn:hover,
+#notificationToggle:hover,
 .message-dropdown > .btn:hover,
 #themeToggle:hover,
 #fullscreenToggle:hover {
@@ -995,13 +1023,33 @@ div:hover {
   border: none !important;
 }
 
+/* WhatsApp Icon Special Styling */
+#whatsappToggle {
+  color: #25d366 !important; /* WhatsApp Green */
+}
+
+#whatsappToggle:hover {
+  color: #128c7e !important; /* Darker WhatsApp Green */
+  background-color: rgba(37, 211, 102, 0.1);
+}
+
+#whatsappToggle i {
+  color: inherit;
+}
+
 /* Ensure hover effects work for all header icons */
 .sidebar-toggle-btn:hover i,
-.notification-dropdown > .btn:hover i,
+#notificationToggle:hover i,
+#whatsappToggle:hover i,
 .message-dropdown > .btn:hover i,
 #themeToggle:hover i,
 #fullscreenToggle:hover i {
   color: var(--primary-color);
+}
+
+/* WhatsApp icon hover effect override */
+#whatsappToggle:hover i {
+  color: #128c7e !important;
 }
 
 /* Remove all underlines from header elements */
@@ -1023,15 +1071,17 @@ div:hover {
 }
 
 /* Notification Badge */
-.notification-dropdown .badge {
+#notificationToggle .badge {
   font-size: 0.7rem;
   padding: 0.2em 0.4em;
   min-width: 1.2em;
   height: 1.4em;
   line-height: 1;
   top: 3px;
-  left: 32px;
+  left: 25px;
   transform: none;
+  pointer-events: none;
+  z-index: 10;
 }
 
 /* Message Dropdown Styling */
@@ -1305,6 +1355,40 @@ div:hover {
   flex-direction: column;
   scrollbar-gutter: stable;
   scrollbar-width: thin; /* Firefox */
+  /* Prevent flash by hiding sidebar until JS loads */
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Show sidebar after JS initialization */
+.sidebar.js-loaded {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Fallback: Show sidebar after 1 second if JS hasn't loaded */
+.sidebar:not(.js-loaded) {
+  animation: showSidebarFallback 0.1s ease-in-out 1s forwards;
+}
+
+/* Apply collapsed state immediately if cookie exists (server-side) */
+.sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+@keyframes showSidebarFallback {
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Override fallback if JS loaded */
+.sidebar.js-loaded {
+  animation: none;
+}
+
+.sidebar {
   scrollbar-color: var(--border-color) transparent;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
@@ -1791,12 +1875,40 @@ div:hover {
   flex-direction: column;
   margin-left: 265px;
   transition: margin-left 0.3s ease;
+  /* Prevent flash by hiding content until JS loads */
+  opacity: 0;
+  visibility: hidden;
 }
 
+/* Show main content after JS initialization */
+.main-content.js-loaded {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Fallback: Show main content after 1 second if JS hasn't loaded */
+.main-content:not(.js-loaded) {
+  animation: showMainContentFallback 0.1s ease-in-out 1s forwards;
+}
+
+/* Apply collapsed state immediately if cookie exists (server-side) */
 .main-content.sidebar-collapsed {
   margin-left: 0;
 }
 
+@keyframes showMainContentFallback {
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Override fallback if JS loaded */
+.main-content.js-loaded {
+  animation: none;
+}
+
+/* Apply collapsed state immediately if cookie exists (server-side) */
 .top-header.sidebar-collapsed {
   left: 0;
 }
@@ -1838,7 +1950,6 @@ div:hover {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-secondary);
-  text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 2px solid var(--border-color);
   padding: 0.75rem 0.5rem;
@@ -2079,7 +2190,7 @@ a[href*="/users/create"]:hover {
   line-height: 1.4;
 }
 
-/* Dashboard Rows */
+/* Dashboard Rows - Legacy */
 .dashboard-row {
   margin-bottom: 1.5rem;
 }
@@ -2459,7 +2570,6 @@ a[href*="/users/create"]:hover {
   color: white;
   font-weight: bold;
   border-radius: 50%;
-  text-transform: uppercase;
   transition: all 0.3s ease;
 }
 
@@ -4348,17 +4458,14 @@ body[data-bs-theme="dark"] {
 /* Dark theme - Users page table and pagination */
 [data-bs-theme="dark"] .card .card-body .table {
   color: var(--form-text) !important;
-  border: 1px solid var(--form-border) !important;
 }
 
 [data-bs-theme="dark"] .card .card-body .table thead th {
   background-color: var(--form-bg-tertiary) !important;
-  border-color: var(--form-border) !important;
   color: var(--form-text) !important;
 }
 
 [data-bs-theme="dark"] .card .card-body .table tbody td {
-  border-color: var(--form-border) !important;
   color: var(--form-text) !important;
 }
 
@@ -4413,12 +4520,6 @@ body[data-bs-theme="dark"] {
 
 [data-bs-theme="dark"] .card-body {
   background-color: var(--bg-secondary) !important;
-}
-
-/* Dark theme - Table responsive wrapper styling */
-[data-bs-theme="dark"] .table-responsive {
-  border: 1px solid var(--border-color) !important;
-  border-radius: var(--border-radius-sm) !important;
 }
 
 [data-bs-theme="dark"] .form-floating > label {
@@ -4898,4 +4999,202 @@ button:has(i[class*="fas fa-eye-slash"]) {
 /* Alternative: Gunakan CSS untuk mencegah focus */
 .password-toggle-btn:focus-visible {
   outline: none;
+}
+
+/* ======================================================== */
+/* Activity Feed Styles for Dashboard */
+/* ======================================================== */
+.activity-feed {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.activity-icon i {
+  color: white;
+  font-size: 0.875rem;
+}
+
+.activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-content h6 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+
+.activity-content p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+.activity-content small {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+}
+
+/* Dashboard Row Spacing - Enhanced */
+.dashboard-row {
+  margin-bottom: 2rem;
+}
+
+.dashboard-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Enhanced Card Actions */
+.card-actions .btn-group .btn {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+}
+
+/* Responsive Activity Feed */
+@media (max-width: 768px) {
+  .activity-item {
+    padding: 0.75rem 0;
+  }
+
+  .activity-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 0.75rem;
+  }
+
+  .activity-icon i {
+    font-size: 0.75rem;
+  }
+
+  .activity-content h6 {
+    font-size: 0.8125rem;
+  }
+
+  .activity-content p {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ========================================
+   REUSABLE COMPONENTS - ACTION MENU & DROPDOWN
+   ======================================== */
+
+/* Action Menu Dropdown - Generic reusable styling */
+.action-menu-toggle::after {
+  display: none;
+}
+
+.action-menu-dropdown {
+  min-width: 180px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action-menu-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.action-menu-item:hover {
+  background-color: var(--bs-gray-100);
+}
+
+.action-menu-item.text-success:hover {
+  background-color: rgba(25, 135, 84, 0.1);
+}
+
+.action-menu-item.text-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.action-menu-item.text-warning:hover {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.action-menu-item i {
+  width: 16px;
+  text-align: center;
+}
+
+/* Action Button - Generic ellipsis button styling */
+.action-btn-ellipsis {
+  border-color: var(--bs-gray-300);
+  color: var(--bs-gray-600);
+  padding: 0.25rem 0.5rem;
+  min-width: 32px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn-ellipsis:hover {
+  background-color: var(--bs-gray-100);
+  border-color: var(--bs-gray-400);
+  color: var(--bs-gray-700);
+}
+
+.action-btn-ellipsis i {
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+/* Dark theme support for action components */
+[data-bs-theme="dark"] .action-menu-dropdown {
+  background-color: var(--bs-dark);
+  border-color: var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] .action-menu-item:hover {
+  background-color: var(--bs-gray-800);
+}
+
+[data-bs-theme="dark"] .action-menu-item.text-success:hover {
+  background-color: rgba(25, 135, 84, 0.2);
+}
+
+[data-bs-theme="dark"] .action-menu-item.text-danger:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+}
+
+[data-bs-theme="dark"] .action-menu-item.text-warning:hover {
+  background-color: rgba(255, 193, 7, 0.2);
+}
+
+[data-bs-theme="dark"] .action-btn-ellipsis {
+  border-color: var(--bs-gray-600);
+  color: var(--bs-gray-400);
+}
+
+[data-bs-theme="dark"] .action-btn-ellipsis:hover {
+  background-color: var(--bs-gray-700);
+  border-color: var(--bs-gray-500);
+  color: var(--bs-gray-300);
 }
