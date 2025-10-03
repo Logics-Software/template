@@ -5,6 +5,7 @@ $callCenterModel = new CallCenter();
 $callCenters = $callCenterModel->getAll();
 
 // Function to get greeting message based on time
+if (!function_exists('getGreetingMessage')) {
 function getGreetingMessage() {
     $hour = date('H');
     if ($hour >= 5 && $hour < 12) {
@@ -16,6 +17,7 @@ function getGreetingMessage() {
     } else {
         return 'Selamat Malam';
     }
+}
 }
 ?>
 

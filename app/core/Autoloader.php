@@ -8,6 +8,7 @@ class Autoloader
         'app/core/',
         'app/models/',
         'app/controllers/',
+        'app/services/',
         'app/views/',
         'app/helpers/',
         'app/middleware/',

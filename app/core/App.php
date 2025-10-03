@@ -146,6 +146,36 @@ class App
         $this->router->get('/modules/{id}/edit', 'ModuleController@edit');
         $this->router->put('/modules/{id}', 'ModuleController@update');
         $this->router->delete('/modules/{id}', 'ModuleController@destroy');
+
+        // Menu management routes
+        $this->router->get('/menu', 'MenuController@index');
+        $this->router->get('/menu/builder', 'MenuController@builder');
+        $this->router->get('/menu/permissions', 'MenuController@permissions');
+        $this->router->get('/menu/preview', 'MenuController@preview');
+        
+        // Menu group routes
+        $this->router->get('/menu/get-group/{id}', 'MenuController@getGroup');
+        $this->router->post('/menu/create-group', 'MenuController@createGroup');
+        $this->router->post('/menu/update-group', 'MenuController@updateGroup');
+        $this->router->post('/menu/delete-group', 'MenuController@deleteGroup');
+        
+        // Menu item routes
+        $this->router->get('/menu/get-menu-item/{id}', 'MenuController@getMenuItem');
+        $this->router->post('/menu/create-menu-item', 'MenuController@createMenuItem');
+        $this->router->post('/menu/update-menu-item', 'MenuController@updateMenuItem');
+        $this->router->post('/menu/delete-menu-item', 'MenuController@deleteMenuItem');
+        
+        // Legacy menu module routes (for backward compatibility)
+        $this->router->post('/menu/update-module', 'MenuController@updateMenuItem');
+        $this->router->post('/menu/toggle-visibility', 'MenuController@toggleVisibility');
+        $this->router->post('/menu/update-sort', 'MenuController@updateSortOrder');
+        
+        // Permission routes
+        $this->router->post('/menu/update-permissions', 'MenuController@updatePermissions');
+        
+        // Configuration routes
+        $this->router->get('/menu/export-config', 'MenuController@exportConfig');
+        $this->router->post('/menu/import-config', 'MenuController@importConfig');
     }
 
     private function validateCSRF()

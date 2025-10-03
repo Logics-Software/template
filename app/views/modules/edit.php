@@ -146,13 +146,13 @@ document.addEventListener("DOMContentLoaded", function() {
         
         if (checkedCount === totalCount) {
             // All selected - show "Unselect All"
-            toggleAllBtn.innerHTML = '<i class="fas fa-times me-1"></i><span>Unselect All</span>';
-            toggleAllBtn.className = 'btn btn-outline-danger btn-sm px-3';
+            toggleAllBtn.innerHTML = '<i class="fas fa-times"></i>';
+            toggleAllBtn.className = 'btn btn-outline-danger btn-sm';
             toggleAllBtn.title = 'Unselect All Roles';
         } else {
             // Not all selected - show "Select All"
-            toggleAllBtn.innerHTML = '<i class="fas fa-check-double me-1"></i><span>Select All</span>';
-            toggleAllBtn.className = 'btn btn-outline-secondary btn-sm px-3';
+            toggleAllBtn.innerHTML = '<i class="fas fa-check-double"></i>';
+            toggleAllBtn.className = 'btn btn-outline-secondary btn-sm';
             toggleAllBtn.title = 'Select All Roles';
         }
     }

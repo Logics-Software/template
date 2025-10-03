@@ -5,7 +5,9 @@
 class Request
 {
     private $data = [];
-
+    private $jsonData = null;
+    private $parsedJsonData = null;
+    
     public function __construct()
     {
         $this->data = array_merge($_GET, $_POST, $_FILES);
@@ -14,8 +16,10 @@ class Request
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
         if (strpos($contentType, 'application/json') !== false) {
             $jsonData = file_get_contents('php://input');
+            $this->jsonData = $jsonData; // Store raw JSON for later use
             $decodedData = json_decode($jsonData, true);
             if ($decodedData !== null) {
+                $this->parsedJsonData = $decodedData; // Store parsed data
                 $this->data = array_merge($this->data, $decodedData);
             }
         }
@@ -169,9 +173,23 @@ class Request
 
     public function header($name)
     {
+        // Normalize header name
         $name = strtoupper(str_replace('-', '_', $name));
-        $headerName = 'HTTP_' . $name;
-        return $_SERVER[$headerName] ?? null;
+        
+        // Try different variations
+        $variations = [
+            'HTTP_' . $name,
+            $name,
+            'X_' . $name
+        ];
+        
+        foreach ($variations as $headerName) {
+            if (isset($_SERVER[$headerName]) && !empty($_SERVER[$headerName])) {
+                return $_SERVER[$headerName];
+            }
+        }
+        
+        return null;
     }
 
     public function getAllHeaders()
@@ -196,19 +214,21 @@ class Request
      */
     public function json($key = null, $default = null)
     {
-        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-        if (strpos($contentType, 'application/json') !== false) {
-            $jsonData = file_get_contents('php://input');
-            $decodedData = json_decode($jsonData, true);
-            
+        // Use pre-parsed JSON data if available
+        if ($this->parsedJsonData !== null) {
             if ($key === null) {
-                return $decodedData;
+                return $this->parsedJsonData;
             }
-            
-            return $decodedData[$key] ?? $default;
+            return $this->parsedJsonData[$key] ?? $default;
         }
         
-        return $default;
+        // For JSON requests, data is already merged into $this->data
+        // So we can access it directly
+        if ($key === null) {
+            return $this->data;
+        }
+        
+        return $this->data[$key] ?? $default;
     }
 
     /**

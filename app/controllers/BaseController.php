@@ -48,6 +48,19 @@ abstract class BaseController
         return Session::generateCSRF();
     }
 
+    protected function validateCSRF($request = null)
+    {
+        $request = $request ?: $this->request;
+        
+        // Try multiple token sources for compatibility
+        $token = $request->input('_token') 
+                ?: $request->input('csrf_token')
+                ?: $request->header('X-CSRF-Token')
+                ?: $request->header('X-CSRF-TOKEN');
+        
+        return Session::validateCSRF($token);
+    }
+
     protected function flash($key, $value = null)
     {
         if ($value === null) {

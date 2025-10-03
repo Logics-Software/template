@@ -59,6 +59,8 @@ class Session
             return false;
         }
         
+        // Validate token - allow multiple uses within the same session
+        // Token will be regenerated when session is refreshed or regenerated
         return hash_equals($sessionToken, $token);
     }
 

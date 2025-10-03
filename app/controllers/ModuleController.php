@@ -302,42 +302,47 @@ class ModuleController extends BaseController
             'dashboard' => [
                 'value' => '/dashboard',
                 'label' => 'Dashboard',
-                'description' => 'Main dashboard page'
+                'description' => 'Main Dashboard'
             ],
-            'users' => [
-                'value' => '/users',
-                'label' => 'Users Management',
-                'description' => 'User management page'
+            'konfigurasi' => [
+                'value' => '/konfigurasi',
+                'label' => 'Konfigurasi App',
+                'description' => 'App Configuration'
             ],
             'modules' => [
                 'value' => '/modules',
-                'label' => 'Modules Management',
-                'description' => 'Module management page'
+                'label' => 'Manajemen Module App',
+                'description' => 'App Modules Management'
+            ],
+            'menu' => [
+                'value' => '/menu',
+                'label' => 'Manajemen Menu',
+                'description' => 'App Menu Management'
+            ],
+            'users' => [
+                'value' => '/users',
+                'label' => 'Manajemen User',
+                'description' => 'User Management'
             ],
             'messages' => [
                 'value' => '/messages',
-                'label' => 'Messages',
-                'description' => 'Message center'
+                'label' => 'Pesan',
+                'description' => 'Messages'
             ],
             'call-center' => [
                 'value' => '/call-center',
                 'label' => 'Call Center',
-                'description' => 'Call center management'
-            ],
-            'konfigurasi' => [
-                'value' => '/konfigurasi',
-                'label' => 'Configuration',
-                'description' => 'System configuration'
+                'description' => 'Call Center Setting'
             ],
             'profile' => [
                 'value' => '/profile',
-                'label' => 'Profile',
-                'description' => 'User profile page'
+                'label' => 'Profile User',
+                'description' => 'User Profile View'
             ],
             'change-password' => [
                 'value' => '/change-password',
-                'label' => 'Change Password',
-                'description' => 'Change user password'
+                'label' => 'Ganti Password',
+                'description' => 'Change User Password'
             ]
         ];
     }

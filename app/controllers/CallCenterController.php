@@ -242,6 +242,12 @@ class CallCenterController extends BaseController
             $this->json(['error' => 'Method not allowed'], 405);
             return;
         }
+
+        // Validate CSRF token
+        if (!$this->validateCSRF($request)) {
+            $this->json(['error' => 'CSRF token mismatch'], 403);
+            return;
+        }
         
         // Get orders data from JSON request
         $orders = $request->json('orders');
