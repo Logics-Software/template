@@ -42,7 +42,7 @@ $logo = getSidebarLogo();
     <div class="sidebar-body">
         <ul class="nav nav-pills flex-column">
             <li class="nav-item">
-                <a class="nav-link <?php echo (($current_page ?? '') === 'dashboard') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/dashboard">
+                <a class="nav-link <?php echo (($current_page ?? '') === 'dashboard') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/dashboard" title="Dashboard">
                     <i class="fa-regular fa-house"></i>
                     <span>Dashboard</span>
                 </a>
@@ -56,7 +56,7 @@ $logo = getSidebarLogo();
             
             <!-- Settings Dropdown -->
             <li class="nav-item">
-                <a class="nav-link dropdown-toggle <?php echo ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi' || ($current_page ?? '') === 'call-center' || ($current_page ?? '') === 'modules')) ? 'parent-active' : ''; ?>" href="#" data-bs-toggle="collapse" data-bs-target="#settingsMenu" aria-expanded="<?php echo ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi' || ($current_page ?? '') === 'call-center' || ($current_page ?? '') === 'modules')) ? 'true' : 'false'; ?>" aria-controls="settingsMenu">
+                <a class="nav-link dropdown-toggle <?php echo ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi' || ($current_page ?? '') === 'call-center' || ($current_page ?? '') === 'modules')) ? 'parent-active' : ''; ?>" href="#" data-bs-toggle="collapse" data-bs-target="#settingsMenu" aria-expanded="<?php echo ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi' || ($current_page ?? '') === 'call-center' || ($current_page ?? '') === 'modules')) ? 'true' : 'false'; ?>" aria-controls="settingsMenu" title="Pengaturan">
                     <i class="fas fa-cog"></i>
                     <span>Setting</span>
                     <i class="fa-chevron-down fa-chevron-down"></i>
@@ -64,25 +64,25 @@ $logo = getSidebarLogo();
                 <div class="collapse <?php echo ((($current_page ?? '') === 'users' || ($current_page ?? '') === 'konfigurasi' || ($current_page ?? '') === 'call-center' || ($current_page ?? '') === 'modules')) ? 'show' : ''; ?>" id="settingsMenu">
                     <ul class="nav nav-pills flex-column ms-3">
                         <li class="nav-item">
-                            <a class="nav-link <?php echo (($current_page ?? '') === 'users') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users">
+                            <a class="nav-link <?php echo (($current_page ?? '') === 'users') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users" title="Manajemen Users">
                                 <i class="fas fa-users"></i>
                                 <span>Manajemen Users</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo (($current_page ?? '') === 'modules') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/modules">
+                            <a class="nav-link <?php echo (($current_page ?? '') === 'modules') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/modules" title="Manajemen Modul">
                                 <i class="fas fa-puzzle-piece"></i>
                                 <span>Modules</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo (($current_page ?? '') === 'konfigurasi') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/konfigurasi">
+                            <a class="nav-link <?php echo (($current_page ?? '') === 'konfigurasi') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/konfigurasi" title="Konfigurasi Aplikasi">
                                 <i class="fas fa-cog"></i>
                                 <span>Konfigurasi</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo (($current_page ?? '') === 'call-center') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/call-center">
+                            <a class="nav-link <?php echo (($current_page ?? '') === 'call-center') ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/call-center" title="Manajemen Call Center">
                                 <i class="fab fa-whatsapp"></i>
                                 <span>Call Center</span>
                             </a>

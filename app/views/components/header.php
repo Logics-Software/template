@@ -26,12 +26,12 @@ function getGreetingMessage() {
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <!-- Sidebar Toggle -->
-                    <button class="btn btn-link sidebar-toggle-btn" id="sidebarToggle">
+                    <button class="btn btn-link sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
                         <i class="fa-solid fa-bars"></i>
                     </button>
                     
                     <!-- WhatsApp Contact -->
-                    <button class="btn btn-link" id="whatsappToggle" data-bs-toggle="modal" data-bs-target="#whatsappModal">
+                    <button class="btn btn-link" id="whatsappToggle" data-bs-toggle="modal" data-bs-target="#whatsappModal" title="Hubungi via WhatsApp">
                         <i class="fab fa-whatsapp"></i>
                     </button>
                     
@@ -159,7 +159,7 @@ function getGreetingMessage() {
                     <!-- Messages -->
                     <!-- =================================================== -->
                     <div class="message-dropdown">
-                        <button class="btn btn-link position-relative" data-bs-toggle="dropdown" id="messageToggle">
+                        <button class="btn btn-link position-relative" data-bs-toggle="dropdown" id="messageToggle" title="Pesan">
                             <i class="fa-regular fa-envelope"></i>
                             <span class="position-absolute badge rounded-pill bg-danger" id="messageBadge" style="display: none;">
                                 0
@@ -188,7 +188,7 @@ function getGreetingMessage() {
                     <!-- User Profile -->
                     <div class="user-dropdown">
                         <div class="dropdown">
-                            <button class="btn btn-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                            <button class="btn btn-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" title="Profil User">
                                 <div class="user-avatar me-2">
                                     <?php if (Session::get('user_picture')): ?>
                                         <img src="<?php echo APP_URL; ?>/<?php echo Session::get('user_picture'); ?>" alt="User" class="rounded-circle" width="32" height="32">

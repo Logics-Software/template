@@ -58,9 +58,21 @@ function renderIconPicker($selectedValue = '', $inputName = 'logo', $inputId = '
                         <!-- Category dropdown positioned next to search -->
                         <div class="category-dropdown">
                             <select class="form-select category-select" id="categorySelect">
-                                <?php $first = true; foreach ($icons as $category => $categoryIcons): ?>
+                                <!-- All Icons Option -->
+                                <option value="all-icons" selected data-target="#all-icons">
+                                    <?php 
+                                    // Calculate total icons count
+                                    $totalIcons = 0;
+                                    foreach ($icons as $category => $categoryIcons) {
+                                        $totalIcons += count($categoryIcons);
+                                    }
+                                    ?>
+                                    <i class="fas fa-th-large"></i> Semua Icon (<?php echo $totalIcons; ?> icons)
+                                </option>
+                                
+                                <!-- Category Options -->
+                                <?php foreach ($icons as $category => $categoryIcons): ?>
                                     <option value="<?php echo strtolower(str_replace([' ', '&'], ['-', ''], $category)); ?>" 
-                                            <?php echo $first ? 'selected' : ''; ?>
                                             data-target="#<?php echo strtolower(str_replace([' ', '&'], ['-', ''], $category)); ?>">
                                         <?php
                                         // Set icon for each category
@@ -83,7 +95,7 @@ function renderIconPicker($selectedValue = '', $inputName = 'logo', $inputId = '
                                         ?>
                                         <?php echo htmlspecialchars($category); ?> (<?php echo count($categoryIcons); ?> icons)
                                     </option>
-                                    <?php $first = false; endforeach; ?>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -94,13 +106,41 @@ function renderIconPicker($selectedValue = '', $inputName = 'logo', $inputId = '
         <!-- Modern icon grid -->
         <div class="icon-grid-container">
             <div class="tab-content" id="iconTabContent">
-                <?php $first = true; foreach ($icons as $category => $categoryIcons): ?>
-                    <div class="tab-pane fade <?php echo $first ? 'show active' : ''; ?>" id="<?php echo strtolower(str_replace([' ', '&'], ['-', ''], $category)); ?>" role="tabpanel">
+                <!-- All Icons Tab - Shows all icons from all categories -->
+                <div class="tab-pane fade show active" id="all-icons" role="tabpanel">
+                    <div class="icon-grid">
+                        <?php foreach ($icons as $category => $categoryIcons): ?>
+                            <?php foreach ($categoryIcons as $value => $label): ?>
+                                <div class="icon-item <?php echo ($selectedValue === $value) ? 'selected' : ''; ?>" 
+                                     data-icon="<?php echo htmlspecialchars($value); ?>" 
+                                     data-label="<?php echo htmlspecialchars($label); ?>"
+                                     data-category="<?php echo htmlspecialchars($category); ?>"
+                                     title="<?php echo htmlspecialchars($label); ?> (<?php echo htmlspecialchars($category); ?>)">
+                                    <div class="icon-item-inner">
+                                        <div class="icon-wrapper">
+                                            <i class="<?php echo htmlspecialchars($value); ?>"></i>
+                                        </div>
+                                        <div class="icon-label"><?php echo htmlspecialchars($label); ?></div>
+                                        <div class="icon-category"><?php echo htmlspecialchars($category); ?></div>
+                                    </div>
+                                    <div class="selection-indicator">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                
+                <!-- Category Tabs -->
+                <?php foreach ($icons as $category => $categoryIcons): ?>
+                    <div class="tab-pane fade" id="<?php echo strtolower(str_replace([' ', '&'], ['-', ''], $category)); ?>" role="tabpanel">
                         <div class="icon-grid">
                             <?php foreach ($categoryIcons as $value => $label): ?>
                                 <div class="icon-item <?php echo ($selectedValue === $value) ? 'selected' : ''; ?>" 
                                      data-icon="<?php echo htmlspecialchars($value); ?>" 
                                      data-label="<?php echo htmlspecialchars($label); ?>"
+                                     data-category="<?php echo htmlspecialchars($category); ?>"
                                      title="<?php echo htmlspecialchars($label); ?>">
                                     <div class="icon-item-inner">
                                         <div class="icon-wrapper">
@@ -115,7 +155,7 @@ function renderIconPicker($selectedValue = '', $inputName = 'logo', $inputId = '
                             <?php endforeach; ?>
                         </div>
                     </div>
-                    <?php $first = false; endforeach; ?>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -398,6 +438,19 @@ function renderIconPicker($selectedValue = '', $inputName = 'logo', $inputId = '
         color: white;
     }
     
+    .icon-category {
+        font-size: 10px;
+        font-weight: 500;
+        color: #6c757d;
+        margin-top: 2px;
+        opacity: 0.8;
+        line-height: 1.1;
+    }
+    
+    .icon-item.selected .icon-category {
+        color: rgba(255,255,255,0.8);
+    }
+    
     
     .selection-indicator {
         position: absolute;
@@ -584,8 +637,9 @@ function renderIconPicker($selectedValue = '', $inputName = 'logo', $inputId = '
                 activeCategoryItems.forEach(item => {
                     const iconLabel = item.dataset.label.toLowerCase();
                     const iconClass = item.dataset.icon.toLowerCase();
+                    const iconCategory = item.dataset.category ? item.dataset.category.toLowerCase() : '';
                     
-                    if (iconLabel.includes(searchTerm) || iconClass.includes(searchTerm)) {
+                    if (iconLabel.includes(searchTerm) || iconClass.includes(searchTerm) || iconCategory.includes(searchTerm)) {
                         item.style.display = '';
                         visibleCount++;
                     } else {

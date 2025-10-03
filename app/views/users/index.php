@@ -58,7 +58,7 @@
                         <div class="col-md-2">
                             <label class="form-label">&nbsp;</label>
                             <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-outline-primary flex-fill">
+                                <button type="submit" class="btn btn-outline-primary flex-fill" title="Filter Data User">
                                     <i class="fas fa-search me-1"></i>Filter
                                 </button>
                             </div>
@@ -66,7 +66,7 @@
                         <div class="col-md-2">
                             <label class="form-label">&nbsp;</label>
                             <div class="d-flex gap-2">
-                                <a href="<?php echo APP_URL; ?>/users/create" class="btn btn-primary flex-fill">
+                                <a href="<?php echo APP_URL; ?>/users/create" class="btn btn-primary flex-fill" title="Tambah User Baru">
                                     <i class="fas fa-plus-circle me-1"></i>Add User
                                 </a>
                             </div>
@@ -166,7 +166,7 @@
 
                                     <td align="center">
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle action-menu-toggle action-btn-ellipsis" type="button" id="actionMenu<?php echo $user['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle action-menu-toggle action-btn-ellipsis" type="button" id="actionMenu<?php echo $user['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Aksi">
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end action-menu-dropdown" aria-labelledby="actionMenu<?php echo $user['id']; ?>">

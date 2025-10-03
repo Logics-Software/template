@@ -10,13 +10,25 @@ class Request
     {
         $this->data = array_merge($_GET, $_POST, $_FILES);
         
+        // Handle JSON requests
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        if (strpos($contentType, 'application/json') !== false) {
+            $jsonData = file_get_contents('php://input');
+            $decodedData = json_decode($jsonData, true);
+            if ($decodedData !== null) {
+                $this->data = array_merge($this->data, $decodedData);
+            }
+        }
+        
         // Handle PUT/DELETE requests and POST with _method
         $actualMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         
         if ($actualMethod === 'PUT' || $actualMethod === 'DELETE') {
             // Real PUT/DELETE request - parse from php://input
-            parse_str(file_get_contents('php://input'), $putData);
-            $this->data = array_merge($this->data, $putData);
+            if (strpos($contentType, 'application/json') === false) {
+                parse_str(file_get_contents('php://input'), $putData);
+                $this->data = array_merge($this->data, $putData);
+            }
         } elseif ($actualMethod === 'POST' && isset($_POST['_method'])) {
             // POST with method spoofing - data is already in $_POST
             // No need to parse from php://input
@@ -177,5 +189,34 @@ class Request
     public function all()
     {
         return $this->data;
+    }
+
+    /**
+     * Get JSON data from request body
+     */
+    public function json($key = null, $default = null)
+    {
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        if (strpos($contentType, 'application/json') !== false) {
+            $jsonData = file_get_contents('php://input');
+            $decodedData = json_decode($jsonData, true);
+            
+            if ($key === null) {
+                return $decodedData;
+            }
+            
+            return $decodedData[$key] ?? $default;
+        }
+        
+        return $default;
+    }
+
+    /**
+     * Check if request contains JSON data
+     */
+    public function isJson()
+    {
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        return strpos($contentType, 'application/json') !== false;
     }
 }

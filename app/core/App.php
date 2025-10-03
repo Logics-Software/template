@@ -118,6 +118,7 @@ class App
         $this->router->get('/call-center/{id}/edit', 'CallCenterController@edit');
         $this->router->put('/call-center/{id}', 'CallCenterController@update');
         $this->router->post('/call-center/{id}/delete', 'CallCenterController@delete');
+        $this->router->post('/call-center/update-sort', 'CallCenterController@updateSortOrder');
         
         // Analytics routes
         $this->router->get('/analytics', 'DashboardController@analytics');

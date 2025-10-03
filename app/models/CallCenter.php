@@ -82,6 +82,41 @@ class CallCenter extends Model
     }
     
     /**
+     * Update sort order for a single call center entry
+     */
+    public function updateSortOrder($id, $newOrder)
+    {
+        try {
+            $sql = "UPDATE call_center SET sort_order = ? WHERE id = ?";
+            $this->db->query($sql, [$newOrder, $id]);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Update multiple sort orders at once
+     */
+    public function updateMultipleSortOrders($orders)
+    {
+        try {
+            $this->db->beginTransaction();
+            
+            foreach ($orders as $order) {
+                $sql = "UPDATE call_center SET sort_order = ? WHERE id = ?";
+                $this->db->query($sql, [$order['sort_order'], $order['id']]);
+            }
+            
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
+
+    /**
      * Get paginated call center entries
      */
     public function getPaginated($page = 1, $perPage = 10, $search = '')

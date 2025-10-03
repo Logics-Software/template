@@ -57,7 +57,7 @@
                         <div class="col-md-2">
                             <label class="form-label">&nbsp;</label>
                             <div class="d-flex gap-2">
-                                <a href="<?php echo APP_URL; ?>/modules/create" class="btn btn-primary flex-fill">
+                                <a href="<?php echo APP_URL; ?>/modules/create" class="btn btn-primary flex-fill" title="Tambah Modul Baru">
                                     <i class="fas fa-plus-circle me-1"></i>Add Module
                                 </a>
                             </div>
@@ -141,7 +141,7 @@
                                     </td>
                                     <td align="center">
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle action-menu-toggle action-btn-ellipsis" type="button" id="actionMenu<?php echo $module['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle action-menu-toggle action-btn-ellipsis" type="button" id="actionMenu<?php echo $module['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Aksi">
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end action-menu-dropdown" aria-labelledby="actionMenu<?php echo $module['id']; ?>">

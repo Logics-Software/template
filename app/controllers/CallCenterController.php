@@ -225,6 +225,59 @@ class CallCenterController extends BaseController
     }
     
     /**
+     * Update sort order for call center entries
+     */
+    public function updateSortOrder($request = null, $response = null, $params = [])
+    {
+        if (!Session::has('user_id')) {
+            if ($request->isAjax()) {
+                $this->json(['error' => 'Unauthorized'], 401);
+            } else {
+                $this->redirect('/login');
+            }
+            return;
+        }
+
+        if (!$request->isAjax()) {
+            $this->json(['error' => 'Method not allowed'], 405);
+            return;
+        }
+        
+        // Get orders data from JSON request
+        $orders = $request->json('orders');
+        
+        if (!$orders || !is_array($orders)) {
+            $this->json(['error' => 'Invalid data'], 400);
+            return;
+        }
+        
+        // Validate each order item
+        foreach ($orders as $order) {
+            if (!isset($order['id']) || !isset($order['sort_order'])) {
+                $this->json(['error' => 'Invalid data'], 400);
+                return;
+            }
+            
+            if (!is_numeric($order['id']) || !is_numeric($order['sort_order'])) {
+                $this->json(['error' => 'Invalid data'], 400);
+                return;
+            }
+        }
+        
+        try {
+            $result = $this->callCenterModel->updateMultipleSortOrders($orders);
+            
+            if ($result) {
+                $this->json(['success' => true, 'message' => 'Sort order updated successfully']);
+            } else {
+                $this->json(['error' => 'Failed to update sort order'], 500);
+            }
+        } catch (Exception $e) {
+            $this->json(['error' => 'Server error'], 500);
+        }
+    }
+
+    /**
      * Delete call center
      */
     public function delete($request = null, $response = null, $params = [])

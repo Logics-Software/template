@@ -32,6 +32,8 @@
                                 <option value="20"<?php echo ($pagination['per_page'] ?? 10) == 20 ? ' selected' : ''; ?>>20</option>
                                 <option value="25"<?php echo ($pagination['per_page'] ?? 10) == 25 ? ' selected' : ''; ?>>25</option>
                                 <option value="50"<?php echo ($pagination['per_page'] ?? 10) == 50 ? ' selected' : ''; ?>>50</option>
+                                <option value="100"<?php echo ($pagination['per_page'] ?? 10) == 100 ? ' selected' : ''; ?>>100</option>
+                                <option value="200"<?php echo ($pagination['per_page'] ?? 10) == 200 ? ' selected' : ''; ?>>200</option>
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -67,15 +69,19 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th width="5%"><i class="fas fa-grip-vertical text-muted"></i></th>
                                     <th width="25%">Judul</th>
                                     <th width="20%">Nomor WhatsApp</th>
-                                    <th width="40%">Deskripsi</th>
+                                    <th width="35%">Deskripsi</th>
                                     <th width="15%">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="sortable-call-center">
                                 <?php foreach ($callCenters as $callCenter): ?>
-                                    <tr>
+                                    <tr draggable="true" data-id="<?php echo $callCenter['id']; ?>" class="draggable-row">
+                                        <td>
+                                            <i class="fas fa-grip-vertical text-muted drag-handle" style="cursor: grab;"></i>
+                                        </td>
                                         <td>
                                             <div class="fw-bold"><?php echo htmlspecialchars($callCenter['judul']); ?></div>
                                         </td>
@@ -90,13 +96,13 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1" style="min-width: 80px;">
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-primary btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="View">
+                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-primary btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="Edit">
+                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="Edit Data">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" title="Delete">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" title="Hapus Data">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -178,6 +184,149 @@
     </div>
 </div>
 
+<style>
+/* Drag and Drop Styling */
+.draggable-row {
+    transition: all 0.3s ease;
+    cursor: move;
+}
+
+.draggable-row:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.draggable-row.dragging {
+    opacity: 0.6;
+    transform: rotate(2deg);
+    background-color: rgba(0, 123, 255, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.draggable-row.drag-over {
+    border-top: 3px solid #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.drag-handle {
+    transition: all 0.2s ease;
+    opacity: 0.6;
+}
+
+.drag-handle:hover {
+    color: #007bff !important;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.draggable-row:hover .drag-handle {
+    opacity: 1;
+}
+
+/* Visual feedback saat dragging */
+.draggable-row.dragging .drag-handle {
+    color: #007bff !important;
+    transform: scale(1.2);
+}
+
+/* Smooth transitions untuk semua elemen dalam row */
+.draggable-row td {
+    transition: all 0.3s ease;
+}
+
+/* Disable text selection saat dragging */
+.draggable-row.dragging {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Hover effect untuk action buttons saat dragging */
+.draggable-row.dragging .btn {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Loading state saat update sort order */
+.draggable-row.updating {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.draggable-row.updating::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dark theme support */
+[data-bs-theme="dark"] .draggable-row:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .draggable-row.dragging {
+    background-color: rgba(0, 123, 255, 0.2);
+}
+
+[data-bs-theme="dark"] .draggable-row.drag-over {
+    background-color: rgba(0, 123, 255, 0.15);
+}
+
+/* Toast Notifications */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 350px;
+    word-wrap: break-word;
+}
+
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.toast-error {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+}
+
+.toast-notification i {
+    font-size: 16px;
+}
+
+/* Dark theme support for toasts */
+[data-bs-theme="dark"] .toast-notification {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+</style>
+
 <script>
 let deleteCallCenterId = null;
 
@@ -205,7 +354,186 @@ document.addEventListener("DOMContentLoaded", function() {
             form.submit();
         }
     });
+
+    // Initialize Drag and Drop functionality
+    initializeDragAndDrop();
 });
+
+// Drag and Drop functionality
+function initializeDragAndDrop() {
+    const sortableTable = document.getElementById('sortable-call-center');
+    if (!sortableTable) return;
+
+    let draggedElement = null;
+    let draggedIndex = null;
+
+    // Add drag event listeners to all rows
+    document.querySelectorAll('.draggable-row').forEach(row => {
+        row.addEventListener('dragstart', handleDragStart);
+        row.addEventListener('dragend', handleDragEnd);
+        row.addEventListener('dragover', handleDragOver);
+        row.addEventListener('drop', handleDrop);
+        row.addEventListener('dragenter', handleDragEnter);
+        row.addEventListener('dragleave', handleDragLeave);
+    });
+
+    function handleDragStart(e) {
+        draggedElement = this;
+        draggedIndex = Array.from(this.parentNode.children).indexOf(this);
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.outerHTML);
+        
+        // Add visual feedback
+        this.style.cursor = 'grabbing';
+    }
+
+    function handleDragEnd(e) {
+        this.classList.remove('dragging');
+        this.style.cursor = 'move';
+        document.querySelectorAll('.draggable-row').forEach(row => {
+            row.classList.remove('drag-over');
+        });
+        draggedElement = null;
+        draggedIndex = null;
+    }
+
+    function handleDragOver(e) {
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    function handleDragEnter(e) {
+        if (this !== draggedElement) {
+            this.classList.add('drag-over');
+        }
+    }
+
+    function handleDragLeave(e) {
+        // Only remove if we're actually leaving the element
+        if (!this.contains(e.relatedTarget)) {
+            this.classList.remove('drag-over');
+        }
+    }
+
+    function handleDrop(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+
+        if (draggedElement !== this) {
+            const dropIndex = Array.from(this.parentNode.children).indexOf(this);
+            
+            // Move DOM element
+            if (draggedIndex < dropIndex) {
+                this.parentNode.insertBefore(draggedElement, this.nextSibling);
+            } else {
+                this.parentNode.insertBefore(draggedElement, this);
+            }
+            
+            // Update sort order in database
+            updateSortOrder();
+        }
+
+        this.classList.remove('drag-over');
+        return false;
+    }
+
+    function updateSortOrder() {
+        const rows = document.querySelectorAll('.draggable-row');
+        const orders = Array.from(rows).map((row, index) => ({
+            id: parseInt(row.dataset.id),
+            sort_order: index + 1
+        }));
+
+        // Show loading state
+        rows.forEach(row => {
+            row.classList.add('updating');
+        });
+
+        fetch('<?php echo APP_URL; ?>/call-center/update-sort', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
+            },
+            body: JSON.stringify({ orders: orders })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Remove loading state
+            rows.forEach(row => {
+                row.classList.remove('updating');
+            });
+
+            if (data.success) {
+                showSuccessMessage('Urutan berhasil diperbarui!');
+            } else {
+                showErrorMessage(data.error || 'Gagal memperbarui urutan');
+                // Reload page to reset order
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }
+        })
+        .catch(error => {
+            // Remove loading state
+            rows.forEach(row => {
+                row.classList.remove('updating');
+            });
+            
+            showErrorMessage('Terjadi kesalahan saat memperbarui urutan');
+            // Reload page to reset order
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        });
+    }
+
+    function showSuccessMessage(message) {
+        // Create toast notification
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification toast-success';
+        toast.innerHTML = `
+            <i class="fas fa-check-circle me-2"></i>
+            ${message}
+        `;
+        document.body.appendChild(toast);
+        
+        // Show toast
+        setTimeout(() => toast.classList.add('show'), 100);
+        
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => document.body.removeChild(toast), 300);
+        }, 3000);
+    }
+
+    function showErrorMessage(message) {
+        // Create toast notification
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification toast-error';
+        toast.innerHTML = `
+            <i class="fas fa-exclamation-circle me-2"></i>
+            ${message}
+        `;
+        document.body.appendChild(toast);
+        
+        // Show toast
+        setTimeout(() => toast.classList.add('show'), 100);
+        
+        // Remove toast after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => document.body.removeChild(toast), 300);
+        }, 5000);
+    }
+}
 </script>
 
 

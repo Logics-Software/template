@@ -63,11 +63,9 @@
                                 <div class="d-flex align-items-center mb-2">
                                     <label class="form-label mb-0 me-2">Role Access</label>
                                     <div class="d-flex gap-1">
-                                        <button type="button" class="btn btn-link btn-sm p-1" id="selectAllRoles" title="Select All Roles">
-                                            <i class="fas fa-check-double text-primary"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-link btn-sm p-1" id="unselectAllRoles" title="Unselect All Roles">
-                                            <i class="fas fa-times text-danger"></i>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm px-3" id="toggleAllRoles" title="Toggle Semua Role">
+                                            <i class="fas fa-check-double me-1"></i>
+                                            <span>Select All</span>
                                         </button>
                                     </div>
                                 </div>
@@ -122,10 +120,10 @@
             
             <!-- Form Footer -->
             <div class="card-footer d-flex justify-content-between align-items-center">
-                <a href="<?php echo APP_URL; ?>/modules" class="btn btn-secondary">
+                <a href="<?php echo APP_URL; ?>/modules" class="btn btn-secondary" title="Kembali ke Daftar Modul">
                     <i class="fas fa-arrow-left me-1"></i>Back to Modules
                 </a>
-                <button type="submit" form="editModuleForm" class="btn btn-primary">
+                <button type="submit" form="editModuleForm" class="btn btn-primary" title="Perbarui Modul">
                     <i class="fas fa-save me-1"></i>Update Module
                 </button>
             </div>
@@ -137,28 +135,60 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Note: Preview functionality removed as preview elements don't exist in this form
     
-    // Bulk select/unselect functionality for Role Access using event delegation
-    document.addEventListener('click', function(e) {
-        // Select All Roles button
-        if (e.target.closest('#selectAllRoles')) {
-            e.preventDefault();
-            e.stopPropagation();
-            const checkboxes = document.querySelectorAll('.role-checkbox');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = true;
-            });
-        }
+    // Toggle All Roles functionality
+    const toggleAllBtn = document.getElementById('toggleAllRoles');
+    const roleCheckboxes = document.querySelectorAll('.role-checkbox');
+    
+    // Check initial state and update button
+    function updateToggleButton() {
+        const checkedCount = document.querySelectorAll('.role-checkbox:checked').length;
+        const totalCount = roleCheckboxes.length;
         
-        // Unselect All Roles button
-        if (e.target.closest('#unselectAllRoles')) {
-            e.preventDefault();
-            e.stopPropagation();
-            const checkboxes = document.querySelectorAll('.role-checkbox');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
+        if (checkedCount === totalCount) {
+            // All selected - show "Unselect All"
+            toggleAllBtn.innerHTML = '<i class="fas fa-times me-1"></i><span>Unselect All</span>';
+            toggleAllBtn.className = 'btn btn-outline-danger btn-sm px-3';
+            toggleAllBtn.title = 'Unselect All Roles';
+        } else {
+            // Not all selected - show "Select All"
+            toggleAllBtn.innerHTML = '<i class="fas fa-check-double me-1"></i><span>Select All</span>';
+            toggleAllBtn.className = 'btn btn-outline-secondary btn-sm px-3';
+            toggleAllBtn.title = 'Select All Roles';
         }
+    }
+    
+    // Toggle functionality
+    toggleAllBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const checkedCount = document.querySelectorAll('.role-checkbox:checked').length;
+        const totalCount = roleCheckboxes.length;
+        
+        // If all are selected, unselect all; otherwise select all
+        const shouldSelectAll = checkedCount !== totalCount;
+        
+        roleCheckboxes.forEach(checkbox => {
+            checkbox.checked = shouldSelectAll;
+        });
+        
+        // Update button state
+        updateToggleButton();
+        
+        // Add animation feedback
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            this.style.transform = '';
+        }, 150);
     });
+    
+    // Listen for individual checkbox changes to update toggle button
+    roleCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateToggleButton);
+    });
+    
+    // Initialize button state
+    updateToggleButton();
     
 });
 </script>
