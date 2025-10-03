@@ -92,27 +92,32 @@ class KonfigurasiController extends BaseController
             }
         }
         
-        // Validate required fields
-        $requiredFields = ['namaperusahaan', 'alamatperusahaan', 'penanggungjawab'];
-        foreach ($requiredFields as $field) {
-            if (empty($data[$field])) {
-                if ($this->isAjax()) {
-                    $this->json(['success' => false, 'message' => "Field {$field} harus diisi"]);
-                } else {
-                    $this->withError("Field {$field} harus diisi");
-                    $this->redirect('/konfigurasi/create');
-                }
-                return;
+        // Modern validation
+        $validator = $request->validate([
+            'namaperusahaan' => 'required|string|max:255',
+            'alamatperusahaan' => 'required|string|max:500',
+            'penanggungjawab' => 'required|string|max:255'
+        ]);
+
+        if (!$validator->validate()) {
+            if ($request->isAjax()) {
+                $this->json(['errors' => $validator->errors()], 422);
+            } else {
+                $this->withErrors($validator->errors());
+                $this->redirect('/konfigurasi/create');
             }
         }
 
         try {
+            $this->konfigurasiModel->beginTransaction();
+            
             // Handle file upload for logo
             if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
                 $uploadResult = $this->handleLogoUpload($_FILES['logo']);
                 if ($uploadResult['success']) {
                     $data['logo'] = $uploadResult['filename'];
                 } else {
+                    $this->konfigurasiModel->rollback();
                     if ($this->isAjax()) {
                         $this->json(['success' => false, 'message' => $uploadResult['message']]);
                     } else {
@@ -126,6 +131,7 @@ class KonfigurasiController extends BaseController
             $result = $this->konfigurasiModel->create($data);
 
             if ($result) {
+                $this->konfigurasiModel->commit();
                 if ($this->isAjax()) {
                     $this->json(['success' => true, 'message' => 'Konfigurasi berhasil dibuat', 'redirect' => '/konfigurasi']);
                 } else {
@@ -133,6 +139,7 @@ class KonfigurasiController extends BaseController
                     $this->redirect('/konfigurasi');
                 }
             } else {
+                $this->konfigurasiModel->rollback();
                 if ($this->isAjax()) {
                     $this->json(['success' => false, 'message' => 'Gagal membuat konfigurasi']);
                 } else {
@@ -141,6 +148,7 @@ class KonfigurasiController extends BaseController
                 }
             }
         } catch (Exception $e) {
+            $this->konfigurasiModel->rollback();
             if ($this->isAjax()) {
                 $this->json(['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()]);
             } else {
@@ -197,27 +205,32 @@ class KonfigurasiController extends BaseController
             }
         }
         
-        // Validate required fields
-        $requiredFields = ['namaperusahaan', 'alamatperusahaan', 'penanggungjawab'];
-        foreach ($requiredFields as $field) {
-            if (empty($data[$field])) {
-                if ($this->isAjax()) {
-                    $this->json(['success' => false, 'message' => "Field {$field} harus diisi"]);
-                } else {
-                    $this->withError("Field {$field} harus diisi");
-                    $this->redirect('/konfigurasi/edit');
-                }
-                return;
+        // Modern validation
+        $validator = $request->validate([
+            'namaperusahaan' => 'required|string|max:255',
+            'alamatperusahaan' => 'required|string|max:500',
+            'penanggungjawab' => 'required|string|max:255'
+        ]);
+
+        if (!$validator->validate()) {
+            if ($request->isAjax()) {
+                $this->json(['errors' => $validator->errors()], 422);
+            } else {
+                $this->withErrors($validator->errors());
+                $this->redirect('/konfigurasi/edit');
             }
         }
 
         try {
+            $this->konfigurasiModel->beginTransaction();
+            
             // Handle file upload for logo
             if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
                 $uploadResult = $this->handleLogoUpload($_FILES['logo']);
                 if ($uploadResult['success']) {
                     $data['logo'] = $uploadResult['filename'];
                 } else {
+                    $this->konfigurasiModel->rollback();
                     if ($this->isAjax()) {
                         $this->json(['success' => false, 'message' => $uploadResult['message']]);
                     } else {
@@ -231,6 +244,7 @@ class KonfigurasiController extends BaseController
             $result = $this->konfigurasiModel->updateConfiguration($data);
 
             if ($result) {
+                $this->konfigurasiModel->commit();
                 if ($this->isAjax()) {
                     $this->json(['success' => true, 'message' => 'Konfigurasi berhasil diperbarui']);
                 } else {
@@ -238,6 +252,7 @@ class KonfigurasiController extends BaseController
                     $this->redirect('/konfigurasi');
                 }
             } else {
+                $this->konfigurasiModel->rollback();
                 if ($this->isAjax()) {
                     $this->json(['success' => false, 'message' => 'Gagal memperbarui konfigurasi']);
                 } else {
@@ -246,6 +261,7 @@ class KonfigurasiController extends BaseController
                 }
             }
         } catch (Exception $e) {
+            $this->konfigurasiModel->rollback();
             if ($this->isAjax()) {
                 $this->json(['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()]);
             } else {

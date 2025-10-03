@@ -4,7 +4,7 @@ class CallCenter extends Model
 {
     protected $table = 'call_center';
     
-    protected $fillable = ['judul', 'nomorwa', 'deskripsi'];
+    protected $fillable = ['judul', 'nomorwa', 'deskripsi', 'sort_order'];
     
     protected $casts = [
         'created_at' => 'datetime',
@@ -16,7 +16,7 @@ class CallCenter extends Model
      */
     public function getAll()
     {
-        $sql = "SELECT * FROM call_center ORDER BY created_at DESC";
+        $sql = "SELECT * FROM call_center ORDER BY sort_order ASC, created_at DESC";
         return $this->db->fetchAll($sql);
     }
     
@@ -105,7 +105,7 @@ class CallCenter extends Model
         
         
         // Get paginated data
-        $sql = "SELECT * FROM call_center {$whereClause} ORDER BY created_at DESC LIMIT {$perPage} OFFSET {$offset}";
+        $sql = "SELECT * FROM call_center {$whereClause} ORDER BY sort_order ASC, created_at DESC LIMIT {$perPage} OFFSET {$offset}";
         $data = $this->db->fetchAll($sql, $params);
         
         $totalPages = ceil($total / $perPage);

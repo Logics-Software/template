@@ -1,9 +1,15 @@
 <?php
 
-require_once APP_PATH . '/app/models/CallCenter.php';
 
 class CallCenterController extends BaseController
 {
+    private $callCenterModel;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->callCenterModel = new CallCenter();
+    }
     /**
      * Display call center list
      */
@@ -18,8 +24,7 @@ class CallCenterController extends BaseController
         $page = (int) ($request->input('page') ?? 1);
         $perPage = (int) ($request->input('per_page') ?? 10); // Items per page
         
-        $callCenterModel = new CallCenter();
-        $result = $callCenterModel->getPaginated($page, $perPage, $search);
+        $result = $this->callCenterModel->getPaginated($page, $perPage, $search);
         
         $this->view('call-center/index', [
             'title' => 'Call Center',
@@ -59,56 +64,54 @@ class CallCenterController extends BaseController
             return;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/call-center');
-            return;
+        $validator = $request->validate([
+            'judul' => 'required|string|max:255',
+            'nomorwa' => 'required|string|max:20',
+            'deskripsi' => 'string|max:500'
+        ]);
+
+        if (!$validator->validate()) {
+            if ($request->isAjax()) {
+                $this->json(['errors' => $validator->errors()], 422);
+            } else {
+                $this->withErrors($validator->errors());
+                $this->redirect('/call-center/create');
+            }
         }
-        
-        // Validate CSRF token
-        if (!Session::validateCSRF($_POST['_token'] ?? '')) {
-            Session::flash('error', 'Invalid CSRF token');
-            $this->redirect('/call-center');
-            return;
-        }
-        
+
         $data = [
-            'judul' => trim($_POST['judul'] ?? ''),
-            'nomorwa' => trim($_POST['nomorwa'] ?? ''),
-            'deskripsi' => trim($_POST['deskripsi'] ?? '')
+            'judul' => $request->input('judul'),
+            'nomorwa' => $request->input('nomorwa'),
+            'deskripsi' => $request->input('deskripsi')
         ];
         
-        // Validation
-        $errors = [];
-        if (empty($data['judul'])) {
-            $errors[] = 'Judul is required';
-        }
-        if (empty($data['nomorwa'])) {
-            $errors[] = 'Nomor WhatsApp is required';
-        }
-        if (!empty($data['nomorwa']) && !preg_match('/^[0-9+\-\s]+$/', $data['nomorwa'])) {
-            $errors[] = 'Nomor WhatsApp format is invalid';
-        }
-        
-        if (!empty($errors)) {
-            Session::flash('error', implode(', ', $errors));
-            $this->redirect('/call-center/create');
-            return;
-        }
-        
-        // Create call center
-        $callCenterModel = new CallCenter();
-        if ($callCenterModel->createEntry($data)) {
-            if ($this->isAjax()) {
-                $this->json(['success' => true, 'message' => 'Call center entry created successfully']);
+        try {
+            $this->callCenterModel->beginTransaction();
+            $callCenterId = $this->callCenterModel->createEntry($data);
+            
+            if ($callCenterId) {
+                $this->callCenterModel->commit();
+                if ($request->isAjax()) {
+                    $this->json(['success' => true, 'message' => 'Call center entry created successfully']);
+                } else {
+                    $this->withSuccess('Call center entry created successfully');
+                    $this->redirect('/call-center');
+                }
             } else {
-                Session::flash('success', 'Call center entry created successfully');
-                $this->redirect('/call-center');
+                $this->callCenterModel->rollback();
+                if ($request->isAjax()) {
+                    $this->json(['error' => 'Failed to create call center entry'], 500);
+                } else {
+                    $this->withError('Failed to create call center entry');
+                    $this->redirect('/call-center/create');
+                }
             }
-        } else {
-            if ($this->isAjax()) {
-                $this->json(['success' => false, 'error' => 'Failed to create call center entry'], 500);
+        } catch (Exception $e) {
+            $this->callCenterModel->rollback();
+            if ($request->isAjax()) {
+                $this->json(['error' => 'An error occurred while creating call center entry'], 500);
             } else {
-                Session::flash('error', 'Failed to create call center entry');
+                $this->withError('An error occurred while creating call center entry');
                 $this->redirect('/call-center/create');
             }
         }
@@ -132,8 +135,7 @@ class CallCenterController extends BaseController
             return;
         }
         
-        $callCenterModel = new CallCenter();
-        $callCenter = $callCenterModel->getById($id);
+        $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
             Session::flash('error', 'Call center entry not found');
             $this->redirect('/call-center');
@@ -173,8 +175,7 @@ class CallCenterController extends BaseController
             return;
         }
         
-        $callCenterModel = new CallCenter();
-        $callCenter = $callCenterModel->getById($id);
+        $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
             Session::flash('error', 'Call center entry not found');
             $this->redirect('/call-center');
@@ -206,8 +207,7 @@ class CallCenterController extends BaseController
         }
         
         // Update call center
-        $callCenterModel = new CallCenter();
-        if ($callCenterModel->updateEntry($id, $data)) {
+        if ($this->callCenterModel->updateEntry($id, $data)) {
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'message' => 'Call center entry updated successfully']);
             } else {
@@ -254,16 +254,14 @@ class CallCenterController extends BaseController
             return;
         }
         
-        $callCenterModel = new CallCenter();
-        $callCenter = $callCenterModel->getById($id);
+        $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
             Session::flash('error', 'Call center entry not found');
             $this->redirect('/call-center');
             return;
         }
         
-        $callCenterModel = new CallCenter();
-        if ($callCenterModel->deleteEntry($id)) {
+        if ($this->callCenterModel->deleteEntry($id)) {
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'message' => 'Call center entry deleted successfully']);
             } else {
@@ -298,8 +296,7 @@ class CallCenterController extends BaseController
             return;
         }
         
-        $callCenterModel = new CallCenter();
-        $callCenter = $callCenterModel->getById($id);
+        $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
             Session::flash('error', 'Call center entry not found');
             $this->redirect('/call-center');

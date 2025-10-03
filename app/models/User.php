@@ -100,4 +100,56 @@ class User extends Model
                 return '';
         }
     }
+
+    /**
+     * Get total users count
+     */
+    public function getTotalUsers()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $result = $this->db->fetch($sql);
+        return $result['total'] ?? 0;
+    }
+
+    /**
+     * Get active users count
+     */
+    public function getActiveUsers()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE status = 'aktif'";
+        $result = $this->db->fetch($sql);
+        return $result['total'] ?? 0;
+    }
+
+    /**
+     * Get pending users count
+     */
+    public function getPendingUsers()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE status = 'register'";
+        $result = $this->db->fetch($sql);
+        return $result['total'] ?? 0;
+    }
+
+    /**
+     * Get team members for management
+     */
+    public function getTeamMembers($managerId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id != :managerId AND status = 'aktif' ORDER BY namalengkap ASC";
+        return $this->db->fetchAll($sql, ['managerId' => $managerId]);
+    }
+
+    /**
+     * Update user preferences
+     */
+    public function updatePreferences($userId, $data)
+    {
+        // For now, we'll store preferences in a JSON field or separate table
+        // This is a placeholder implementation
+        $preferences = json_encode($data);
+        $updateData = ['preferences' => $preferences];
+        
+        return $this->update($userId, $updateData);
+    }
 }

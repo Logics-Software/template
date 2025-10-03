@@ -139,21 +139,25 @@ class MessageController extends BaseController
         $data = $this->request->input();
         $userId = Session::get('user_id');
 
-        // Validate required fields
-        $requiredFields = ['subject', 'content', 'recipients'];
-        foreach ($requiredFields as $field) {
-            if (empty($data[$field])) {
-                if ($this->isAjax()) {
-                    $this->json(['success' => false, 'message' => "Field {$field} harus diisi"]);
-                } else {
-                    $this->withError("Field {$field} harus diisi");
-                    $this->redirect('/messages/create');
-                }
-                return;
+        // Modern validation
+        $validator = $this->request->validate([
+            'subject' => 'required|string|max:255',
+            'content' => 'required|string|max:5000',
+            'recipients' => 'required'
+        ]);
+
+        if (!$validator->validate()) {
+            if ($this->isAjax()) {
+                $this->json(['errors' => $validator->errors()], 422);
+            } else {
+                $this->withErrors($validator->errors());
+                $this->redirect('/messages/create');
             }
         }
 
         try {
+            $this->messageModel->beginTransaction();
+            
             // Prepare message data
             $messageData = [
                 'sender_id' => $userId,
@@ -172,6 +176,7 @@ class MessageController extends BaseController
             }
 
             if (empty($recipientIds)) {
+                $this->messageModel->rollback();
                 if ($this->isAjax()) {
                     $this->json(['success' => false, 'message' => 'Pilih minimal satu penerima']);
                 } else {
@@ -189,6 +194,8 @@ class MessageController extends BaseController
                 if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
                     $this->handleAttachments($messageId, $_FILES['attachments']);
                 }
+                
+                $this->messageModel->commit();
                 if ($this->isAjax()) {
                     $this->json(['success' => true, 'message' => 'Pesan berhasil dikirim', 'redirect' => '/messages?sent=true']);
                 } else {
@@ -196,6 +203,7 @@ class MessageController extends BaseController
                     $this->redirect('/messages?sent=true');
                 }
             } else {
+                $this->messageModel->rollback();
                 if ($this->isAjax()) {
                     $this->json(['success' => false, 'message' => 'Gagal mengirim pesan']);
                 } else {
@@ -204,6 +212,7 @@ class MessageController extends BaseController
                 }
             }
         } catch (Exception $e) {
+            $this->messageModel->rollback();
             if ($this->isAjax()) {
                 $this->json(['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()]);
             } else {

@@ -15,12 +15,12 @@ class LockScreenController extends BaseController
     /**
      * Display lock screen
      */
-    public function index()
+    public function index($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
-            header('Location: ' . APP_URL . '/login');
-            exit;
+            $this->redirect('/login');
+            return;
         }
 
         // Get user data from session
@@ -43,53 +43,76 @@ class LockScreenController extends BaseController
     /**
      * Unlock screen with password
      */
-    public function unlock()
+    public function unlock($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
-            header('Location: ' . APP_URL . '/login');
-            exit;
+            $this->redirect('/login');
+            return;
         }
 
-        // Check CSRF token
-        if (!isset($_POST['_token']) || !Session::validateCSRF($_POST['_token'])) {
-            Session::flash('error', 'Invalid security token. Please try again.');
-            header('Location: ' . APP_URL . '/lock-screen');
-            exit;
+        // Modern validation
+        $validator = $request->validate([
+            'password' => 'required|min:1'
+        ]);
+
+        if (!$validator->validate()) {
+            if ($request->isAjax()) {
+                $this->json(['errors' => $validator->errors()], 422);
+            } else {
+                $this->withErrors($validator->errors());
+                $this->redirect('/lock-screen');
+            }
         }
 
-        // Validate input
-        $password = trim($_POST['password'] ?? '');
-        $remember_me = isset($_POST['remember_me']);
-
-        if (empty($password)) {
-            Session::flash('error', 'Password is required.');
-            header('Location: ' . APP_URL . '/lock-screen');
-            exit;
-        }
+        $password = $request->input('password');
+        $remember_me = $request->input('remember_me') ? true : false;
 
         // Get user ID from session
         $userId = Session::get('user_id');
 
         try {
+            $this->userModel->beginTransaction();
+            
             // Get user data from database
             $user = $this->userModel->find($userId);
             
             if (!$user) {
-                Session::flash('error', 'User not found.');
-                header('Location: ' . APP_URL . '/login');
-                exit;
+                $this->userModel->rollback();
+                if ($request->isAjax()) {
+                    $this->json(['error' => 'User not found'], 404);
+                } else {
+                    $this->withError('User not found');
+                    $this->redirect('/login');
+                }
+                return;
             }
 
             // Verify password
             if (!password_verify($password, $user['password'])) {
-                Session::flash('error', 'Invalid password. Please try again.');
-                header('Location: ' . APP_URL . '/lock-screen');
-                exit;
+                $this->userModel->rollback();
+                if ($request->isAjax()) {
+                    $this->json(['error' => 'Invalid password. Please try again.'], 401);
+                } else {
+                    $this->withError('Invalid password. Please try again.');
+                    $this->redirect('/lock-screen');
+                }
+                return;
             }
 
             // Update last login
-            $this->userModel->updateLastLogin($userId);
+            $updateResult = $this->userModel->updateLastLogin($userId);
+            
+            if (!$updateResult) {
+                $this->userModel->rollback();
+                if ($request->isAjax()) {
+                    $this->json(['error' => 'Failed to update login time'], 500);
+                } else {
+                    $this->withError('Failed to update login time');
+                    $this->redirect('/lock-screen');
+                }
+                return;
+            }
 
             // Set remember me if requested
             if ($remember_me) {
@@ -102,34 +125,48 @@ class LockScreenController extends BaseController
             // Clear lock screen session flag if you have one
             Session::remove('locked');
 
+            // Commit transaction
+            $this->userModel->commit();
+
             // Redirect to dashboard
-            header('Location: ' . APP_URL . '/dashboard');
-            exit;
+            if ($request->isAjax()) {
+                $this->json(['success' => true, 'message' => 'Screen unlocked successfully', 'redirect' => '/dashboard']);
+            } else {
+                $this->withSuccess('Screen unlocked successfully');
+                $this->redirect('/dashboard');
+            }
 
         } catch (Exception $e) {
-            Session::flash('error', 'An error occurred. Please try again.');
-            header('Location: ' . APP_URL . '/lock-screen');
-            exit;
+            $this->userModel->rollback();
+            if ($request->isAjax()) {
+                $this->json(['error' => 'An error occurred. Please try again.'], 500);
+            } else {
+                $this->withError('An error occurred. Please try again.');
+                $this->redirect('/lock-screen');
+            }
         }
     }
 
     /**
      * Lock the screen (called when user is inactive)
      */
-    public function lock()
+    public function lock($request = null, $response = null, $params = [])
     {
         // Check if user is logged in
         if (!Session::has('user_id')) {
-            header('Location: ' . APP_URL . '/login');
-            exit;
+            $this->redirect('/login');
+            return;
         }
 
         // Set lock flag
         Session::set('locked', true);
 
         // Redirect to lock screen
-        header('Location: ' . APP_URL . '/lock-screen');
-        exit;
+        if ($request->isAjax()) {
+            $this->json(['success' => true, 'message' => 'Screen locked', 'redirect' => '/lock-screen']);
+        } else {
+            $this->redirect('/lock-screen');
+        }
     }
 
 }

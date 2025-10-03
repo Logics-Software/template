@@ -136,6 +136,15 @@ class App
         $this->router->get('/api/messages/search-users', 'MessageController@searchUsers');
         $this->router->get('/api/messages/recent', 'ApiController@getRecentMessages');
         $this->router->get('/api/messages/count', 'ApiController@getUnreadMessageCount');
+        
+        // Module management routes
+        $this->router->get('/modules', 'ModuleController@index');
+        $this->router->get('/modules/create', 'ModuleController@create');
+        $this->router->post('/modules', 'ModuleController@store');
+        $this->router->get('/modules/{id}', 'ModuleController@show');
+        $this->router->get('/modules/{id}/edit', 'ModuleController@edit');
+        $this->router->put('/modules/{id}', 'ModuleController@update');
+        $this->router->delete('/modules/{id}', 'ModuleController@destroy');
     }
 
     private function validateCSRF()

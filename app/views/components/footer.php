@@ -907,11 +907,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (appInfoModal) {
         appInfoModal.addEventListener('show.bs.modal', function () {
             // Add any dynamic content loading here if needed
-            console.log('App Info Modal opened');
         });
 
         appInfoModal.addEventListener('hide.bs.modal', function () {
-            console.log('App Info Modal closed');
         });
     }
 
@@ -919,7 +917,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const helpModal = document.getElementById('helpModal');
     if (helpModal) {
         helpModal.addEventListener('show.bs.modal', function () {
-            console.log('Help Modal opened');
             // Scroll to top when modal opens
             setTimeout(() => {
                 helpModal.querySelector('.help-modal-body').scrollTop = 0;
@@ -927,7 +924,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         helpModal.addEventListener('hide.bs.modal', function () {
-            console.log('Help Modal closed');
         });
     }
 });
