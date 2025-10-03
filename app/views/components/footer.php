@@ -107,69 +107,115 @@ try {
     </div>
 </div>
 
+<!-- ==================================================================================================== -->
 <!-- Help Modal -->
+<!-- ==================================================================================================== -->
 <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="helpModalLabel">
-                    <i class="fas fa-question-circle text-primary me-2"></i>Bantuan Aplikasi
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content help-modal-content">
+            <!-- Modern Header with Gradient -->
+            <div class="modal-header help-modal-header">
+                <div class="help-header-content">
+                    <div class="help-header-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <div class="help-header-text">
+                        <h4 class="modal-title mb-0" id="helpModalLabel">
+                            Logics PBF System
+                        </h4>
+                        <p class="help-subtitle mb-0">Solusi Digital Terpadu untuk Industri Farmasi</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            
+            <!-- Navigation Tabs -->
+            <div class="help-modal-nav">
+                <div class="nav nav-pills nav-fill" id="helpTabs" role="tablist">
+                    <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">
+                        <i class="fas fa-home me-2"></i>Overview
+                    </button>
+                    <button class="nav-link" id="features-tab" data-bs-toggle="pill" data-bs-target="#features" type="button" role="tab">
+                        <i class="fas fa-star me-2"></i>Fitur Utama
+                    </button>
+                    <button class="nav-link" id="benefits-tab" data-bs-toggle="pill" data-bs-target="#benefits" type="button" role="tab">
+                        <i class="fas fa-check-circle me-2"></i>Manfaat
+                    </button>
+                    <button class="nav-link" id="support-tab" data-bs-toggle="pill" data-bs-target="#support" type="button" role="tab">
+                        <i class="fas fa-headset me-2"></i>Dukungan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
             <div class="modal-body help-modal-body">
-                <div class="help-content">
-                    <!-- Halaman Depan -->
-                    <div class="help-header text-center mb-4">
-                        <div class="help-subtitle mb-2">
-                            <i class="fas fa-pills text-success me-2"></i>
-                            Distribusi Farmasi yang Cepat dan Terpercaya
-                        </div>
-                        <h2 class="help-title">
-                            <i class="fas fa-hospital text-primary me-2"></i>
-                            Farmalogic — Solusi Terpadu Distribusi Farmasi Digital Anda
-                        </h2>
-                        <!-- Banner Visual Alur Distribusi -->
-                        <div class="distribution-flow-banner mt-4">
-                            <div class="flow-container">
-                                <div class="flow-item">
-                                    <i class="fas fa-industry text-primary"></i>
-                                    <span>Pabrik</span>
+                <div class="tab-content" id="helpTabsContent">
+                    <!-- Overview Tab -->
+                    <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                        <div class="help-content">
+                            <!-- Hero Section -->
+                            <div class="help-hero text-center mb-5">
+                                <div class="hero-icon mb-3">
+                                    <i class="fas fa-pills"></i>
                                 </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-item">
-                                    <i class="fas fa-warehouse text-warning"></i>
-                                    <span>PBF</span>
-                                </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-item">
-                                    <i class="fas fa-store text-success"></i>
-                                    <span>Apotek</span>
-                                </div>
-                                <div class="flow-arrow">→</div>
-                                <div class="flow-item">
-                                    <i class="fas fa-user-md text-info"></i>
-                                    <span>Pasien</span>
+                                <h2 class="hero-title mb-3">Solusi Digital Terpadu untuk Industri Farmasi</h2>
+                                <p class="hero-subtitle mb-4">Menghubungkan seluruh rantai pasok farmasi dalam satu platform yang efisien dan aman</p>
+                                
+                                <!-- Interactive Flow Diagram -->
+                                <div class="distribution-flow-modern">
+                                    <div class="flow-step" data-step="1">
+                                        <div class="step-icon">
+                                            <i class="fas fa-industry"></i>
+                                        </div>
+                                        <div class="step-content">
+                                            <h6>Produsen</h6>
+                                            <p>Pabrik Farmasi</p>
+                                        </div>
+                                    </div>
+                                    <div class="flow-connector">
+                                        <div class="connector-line"></div>
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                    <div class="flow-step" data-step="2">
+                                        <div class="step-icon">
+                                            <i class="fas fa-warehouse"></i>
+                                        </div>
+                                        <div class="step-content">
+                                            <h6>PBF</h6>
+                                            <p>Pedagang Besar Farmasi</p>
+                                        </div>
+                                    </div>
+                                    <div class="flow-connector">
+                                        <div class="connector-line"></div>
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                    <div class="flow-step" data-step="3">
+                                        <div class="step-icon">
+                                            <i class="fas fa-store"></i>
+                                        </div>
+                                        <div class="step-content">
+                                            <h6>Outlet</h6>
+                                            <p>Apotek, Klinik, RS</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
                     <!-- Deskripsi Singkat -->
                     <div class="help-section">
                         <h4 class="help-section-title">
-                            <i class="fas fa-info-circle text-info me-2"></i>Tentang Farmalogic
+                            <i class="fas fa-info-circle text-info me-2"></i>Tentang Logics PBF System
                         </h4>
                         <div class="help-section-content">
-                            <p class="lead">Farmalogic adalah aplikasi B2B yang dirancang khusus untuk mempermudah dan mempercepat seluruh proses distribusi dan penjualan produk farmasi.</p>
-                            <p>Hubungkan produsen, Pedagang Besar Farmasi (PBF), apotek, dan klinik dalam satu platform digital yang efisien, transparan, dan terjamin keamanannya.</p>
+                            <p class="lead">Logics PBF System adalah aplikasi B2B yang dirancang khusus untuk mempermudah dan mempercepat seluruh proses distribusi dan penjualan produk farmasi.</p>
+                            <p>Hubungkan produsen, Pedagang Besar Farmasi (PBF) dan Outlet (Toko Obat, Apotek, Klinik, Rumah Sakit) dalam satu platform digital yang efisien, transparan, dan terjamin keamanannya.</p>
                         </div>
                     </div>
 
                     <!-- Tantangan yang Diatasi -->
                     <div class="help-section">
                         <h4 class="help-section-title">
-                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>Tantangan Kami Atasi
+                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>Masalah Kami Atasi
                         </h4>
                         <div class="help-section-content">
                             <div class="challenges-list">
@@ -413,17 +459,216 @@ try {
                             </div>
                         </div>
                     </div>
+                    </div>
+
+                    <!-- Features Tab -->
+                    <div class="tab-pane fade" id="features" role="tabpanel">
+                        <div class="help-content">
+                            <div class="features-grid">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="feature-card">
+                                            <div class="feature-icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <div class="feature-content">
+                                                <h5>Sistem Pemesanan Digital</h5>
+                                                <p>Proses pemesanan yang cepat dan efisien dengan antarmuka yang user-friendly.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="feature-card">
+                                            <div class="feature-icon">
+                                                <i class="fas fa-boxes"></i>
+                                            </div>
+                                            <div class="feature-content">
+                                                <h5>Manajemen Stok Real-time</h5>
+                                                <p>Monitoring stok secara real-time dengan notifikasi otomatis untuk restocking.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="feature-card">
+                                            <div class="feature-icon">
+                                                <i class="fas fa-truck"></i>
+                                            </div>
+                                            <div class="feature-content">
+                                                <h5>Tracking Pengiriman</h5>
+                                                <p>Lacak status pengiriman dari warehouse hingga sampai ke outlet tujuan.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="feature-card">
+                                            <div class="feature-icon">
+                                                <i class="fas fa-chart-line"></i>
+                                            </div>
+                                            <div class="feature-content">
+                                                <h5>Analytics & Reporting</h5>
+                                                <p>Dashboard analitik lengkap untuk monitoring performa bisnis dan penjualan.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="feature-card">
+                                            <div class="feature-icon">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <div class="feature-content">
+                                                <h5>Manajemen User & Role</h5>
+                                                <p>Sistem role-based access control untuk keamanan dan manajemen pengguna.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="feature-card">
+                                            <div class="feature-icon">
+                                                <i class="fas fa-mobile-alt"></i>
+                                            </div>
+                                            <div class="feature-content">
+                                                <h5>Mobile Responsive</h5>
+                                                <p>Akses sistem dari berbagai device dengan tampilan yang optimal di semua platform.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Benefits Tab -->
+                    <div class="tab-pane fade" id="benefits" role="tabpanel">
+                        <div class="help-content">
+                            <div class="benefits-showcase">
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <div class="benefit-card-modern">
+                                            <div class="benefit-icon-modern">
+                                                <i class="fas fa-clock"></i>
+                                            </div>
+                                            <h5>Efisiensi Waktu</h5>
+                                            <p>Mengurangi waktu pemesanan hingga 70% dengan sistem otomatis</p>
+                                            <div class="benefit-metric">
+                                                <span class="metric-number">70%</span>
+                                                <span class="metric-label">Lebih Cepat</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="benefit-card-modern">
+                                            <div class="benefit-icon-modern">
+                                                <i class="fas fa-shield-alt"></i>
+                                            </div>
+                                            <h5>Akurasi Data</h5>
+                                            <p>Mengurangi kesalahan input hingga 95% dengan validasi otomatis</p>
+                                            <div class="benefit-metric">
+                                                <span class="metric-number">95%</span>
+                                                <span class="metric-label">Lebih Akurat</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="benefit-card-modern">
+                                            <div class="benefit-icon-modern">
+                                                <i class="fas fa-dollar-sign"></i>
+                                            </div>
+                                            <h5>Penghematan Biaya</h5>
+                                            <p>Mengurangi biaya operasional hingga 40% dengan digitalisasi</p>
+                                            <div class="benefit-metric">
+                                                <span class="metric-number">40%</span>
+                                                <span class="metric-label">Lebih Hemat</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support Tab -->
+                    <div class="tab-pane fade" id="support" role="tabpanel">
+                        <div class="help-content">
+                            <div class="support-content">
+                                <div class="text-center mb-5">
+                                    <div class="support-icon mb-3">
+                                        <i class="fas fa-headset"></i>
+                                    </div>
+                                    <h3>Dukungan 24/7</h3>
+                                    <p class="lead">Tim support kami siap membantu Anda kapan saja</p>
+                                </div>
+
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="support-card">
+                                            <div class="support-card-icon">
+                                                <i class="fas fa-phone"></i>
+                                            </div>
+                                            <div class="support-card-content">
+                                                <h5>Telepon Support</h5>
+                                                <p>(021) 1234-5678</p>
+                                                <small class="text-muted">Senin - Jumat: 08:00 - 17:00</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="support-card">
+                                            <div class="support-card-icon">
+                                                <i class="fas fa-envelope"></i>
+                                            </div>
+                                            <div class="support-card-content">
+                                                <h5>Email Support</h5>
+                                                <p>support@logics-ti.com</p>
+                                                <small class="text-muted">Response dalam 24 jam</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="support-card">
+                                            <div class="support-card-icon">
+                                                <i class="fab fa-whatsapp"></i>
+                                            </div>
+                                            <div class="support-card-content">
+                                                <h5>WhatsApp</h5>
+                                                <p>+62 812-3456-7890</p>
+                                                <small class="text-muted">Chat langsung dengan tim support</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="support-card">
+                                            <div class="support-card-icon">
+                                                <i class="fas fa-book"></i>
+                                            </div>
+                                            <div class="support-card-content">
+                                                <h5>Dokumentasi</h5>
+                                                <p>User Guide & Tutorial</p>
+                                                <small class="text-muted">Panduan lengkap penggunaan sistem</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary" onclick="window.print()">
-                    <i class="fas fa-print me-1"></i>Cetak
-                </button>
+            
+            <!-- Modern Footer -->
+            <div class="modal-footer help-modal-footer">
+                <div class="footer-actions">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Tutup
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="window.open('https://www.logics-ti.com', '_blank')">
+                        <i class="fas fa-globe me-2"></i>Kunjungi Website
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<!-- ==================================================================================================== -->
 
 <style>
 
@@ -530,14 +775,482 @@ try {
     color: var(--primary-color);
 }
 
-/* Farmalogic Help Modal Styles */
+/* Modern Help Modal Styles */
+.help-modal-content {
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.help-modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.help-modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.help-header-content {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.help-header-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.help-header-icon i {
+    font-size: 24px;
+    color: white;
+}
+
+.help-header-text .modal-title {
+    color: white;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.help-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.help-modal-nav {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 0;
+}
+
+.help-modal-nav .nav-pills {
+    margin: 0;
+}
+
+.help-modal-nav .nav-link {
+    border: none;
+    border-radius: 0;
+    padding: 1rem 1.5rem;
+    color: #6c757d;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.help-modal-nav .nav-link:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+}
+
+.help-modal-nav .nav-link.active {
+    background: #667eea;
+    color: white;
+}
+
+.help-modal-nav .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #764ba2;
+}
+
 .help-modal-body {
     max-height: 70vh;
     overflow-y: auto;
+    padding: 2rem;
+    background: #ffffff;
 }
 
 .help-content {
     line-height: 1.6;
+}
+
+/* Hero Section */
+.help-hero {
+    position: relative;
+}
+
+.hero-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    animation: pulse 2s infinite;
+}
+
+.hero-icon i {
+    font-size: 32px;
+    color: white;
+}
+
+.hero-title {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.hero-subtitle {
+    color: #6c757d;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Modern Flow Diagram */
+.distribution-flow-modern {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.flow-step {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    min-width: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+.flow-step::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.flow-step:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: white;
+    font-size: 20px;
+}
+
+.step-content h6 {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.step-content p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.flow-connector {
+    display: flex;
+    align-items: center;
+    color: #667eea;
+    font-size: 18px;
+}
+
+.connector-line {
+    width: 30px;
+    height: 2px;
+    background: #667eea;
+    margin-right: 0.5rem;
+}
+
+/* Feature Cards */
+.feature-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid #f0f0f0;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    color: white;
+    font-size: 24px;
+}
+
+.feature-content h5 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.feature-content p {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Modern Benefit Cards */
+.benefit-card-modern {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.benefit-card-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.benefit-card-modern:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.benefit-icon-modern {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: white;
+    font-size: 28px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.benefit-card-modern h5 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.benefit-card-modern p {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.benefit-metric {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.metric-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Support Section */
+.support-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: white;
+    font-size: 32px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.support-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border: 1px solid #f0f0f0;
+}
+
+.support-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.support-card-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.support-card-content h5 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.support-card-content p {
+    color: #667eea;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.support-card-content small {
+    color: #6c757d;
+}
+
+/* Modern Footer */
+.help-modal-footer {
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 1.5rem 2rem;
+}
+
+.footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    50% {
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.6);
+    }
+    100% {
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.help-content .tab-pane {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .distribution-flow-modern {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .flow-connector {
+        transform: rotate(90deg);
+    }
+    
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .help-modal-body {
+        padding: 1rem;
+    }
+    
+    .help-modal-header {
+        padding: 1.5rem;
+    }
+    
+    .help-header-icon {
+        width: 50px;
+        height: 50px;
+        margin-right: 1rem;
+    }
+    
+    .help-header-icon i {
+        font-size: 20px;
+    }
 }
 
 .help-header {
@@ -921,9 +1634,95 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 helpModal.querySelector('.help-modal-body').scrollTop = 0;
             }, 100);
+            
+            // Animate flow steps
+            setTimeout(() => {
+                const flowSteps = helpModal.querySelectorAll('.flow-step');
+                flowSteps.forEach((step, index) => {
+                    setTimeout(() => {
+                        step.style.opacity = '0';
+                        step.style.transform = 'translateY(20px)';
+                        step.style.transition = 'all 0.5s ease';
+                        
+                        setTimeout(() => {
+                            step.style.opacity = '1';
+                            step.style.transform = 'translateY(0)';
+                        }, 100);
+                    }, index * 200);
+                });
+            }, 300);
         });
 
         helpModal.addEventListener('hide.bs.modal', function () {
+            // Reset animations
+            const flowSteps = helpModal.querySelectorAll('.flow-step');
+            flowSteps.forEach(step => {
+                step.style.opacity = '';
+                step.style.transform = '';
+                step.style.transition = '';
+            });
+        });
+        
+        // Tab switching animations
+        const tabButtons = helpModal.querySelectorAll('#helpTabs .nav-link');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Add loading effect
+                const tabContent = helpModal.querySelector('.help-modal-body');
+                tabContent.style.opacity = '0.5';
+                
+                setTimeout(() => {
+                    tabContent.style.opacity = '1';
+                }, 150);
+            });
+        });
+        
+        // Interactive flow step hover effects
+        const flowSteps = helpModal.querySelectorAll('.flow-step');
+        flowSteps.forEach(step => {
+            step.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            step.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Feature cards hover effects
+        const featureCards = helpModal.querySelectorAll('.feature-card');
+        featureCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Benefit cards hover effects
+        const benefitCards = helpModal.querySelectorAll('.benefit-card-modern');
+        benefitCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Support cards hover effects
+        const supportCards = helpModal.querySelectorAll('.support-card');
+        supportCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
         });
     }
 });
