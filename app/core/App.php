@@ -162,6 +162,7 @@ class App
         
         // Menu item routes
         $this->router->get('/menu/get-menu-item/{id}', 'MenuController@getMenuItem');
+        $this->router->get('/menu/get-parent-items/{id}', 'MenuController@getParentItems');
         $this->router->post('/menu/create-menu-item', 'MenuController@createMenuItem');
         $this->router->post('/menu/update-menu-item', 'MenuController@updateMenuItem');
         $this->router->post('/menu/delete-menu-item', 'MenuController@deleteMenuItem');

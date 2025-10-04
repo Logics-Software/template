@@ -350,7 +350,7 @@ class ModuleController extends BaseController
     /**
      * Get available Font Awesome icons for module logo selection
      */
-    private function getAvailableIcons()
+    public function getAvailableIcons()
     {
         return [
             'General' => [

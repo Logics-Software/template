@@ -164,24 +164,29 @@ class MenuItem extends Model
      */
     public function updateItem($id, $data)
     {
-        $fields = [];
-        $values = [];
-        
-        foreach ($data as $key => $value) {
-            if (in_array($key, $this->fillable)) {
-                $fields[] = "{$key} = ?";
-                $values[] = $value;
+        try {
+            $fields = [];
+            $values = [];
+            
+            foreach ($data as $key => $value) {
+                if (in_array($key, $this->fillable)) {
+                    $fields[] = "{$key} = ?";
+                    $values[] = $value;
+                }
             }
-        }
-        
-        if (empty($fields)) {
+            
+            if (empty($fields)) {
+                return false;
+            }
+            
+            $values[] = $id;
+            $sql = "UPDATE menu_items SET " . implode(', ', $fields) . " WHERE id = ?";
+            
+            $result = $this->db->query($sql, $values);
+            return $result;
+        } catch (Exception $e) {
             return false;
         }
-        
-        $values[] = $id;
-        $sql = "UPDATE menu_items SET " . implode(', ', $fields) . " WHERE id = ?";
-        
-        return $this->db->query($sql, $values);
     }
     
     /**
@@ -253,5 +258,18 @@ class MenuItem extends Model
                 WHERE role_id = ? AND menu_item_id = ?";
         $result = $this->db->fetch($sql, [$roleId, $menuItemId]);
         return $result['count'] > 0;
+    }
+
+    /**
+     * Get parent menu items for a specific group
+     */
+    public function getParentItemsByGroup($groupId)
+    {
+        $sql = "SELECT id, name, icon, sort_order 
+                FROM menu_items 
+                WHERE group_id = ? AND is_parent = 1 AND is_active = 1 
+                ORDER BY sort_order ASC, name ASC";
+        
+        return $this->db->fetchAll($sql, [$groupId]);
     }
 }

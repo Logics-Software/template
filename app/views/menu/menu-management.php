@@ -8,252 +8,110 @@ $csrf_token = Session::generateCSRF();
 // Start output buffering to capture content
 ob_start();
 ?>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Menu Management</li>
-                    </ol>
-                </div>
-                <h4 class="page-title">Menu Management</h4>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="row">
-        <div class="col-xl-3 col-md-6">
-            <div class="card widget-flat">
-                <div class="card-body">
-                    <div class="float-end">
-                        <i class="fas fa-puzzle-piece widget-icon bg-primary"></i>
-                    </div>
-                    <h5 class="text-muted fw-normal mt-0" title="Total Modules">Total Modules</h5>
-                    <h3 class="mt-3 mb-3"><?php echo $stats['total_modules'] ?? 0; ?></h3>
-                    <p class="mb-0 text-muted">
-                        <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                        <span class="text-nowrap">Since last month</span>
-                    </p>
+<!-- Action Buttons -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Menu Management</h5>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Menu Management</li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-6">
-            <div class="card widget-flat">
-                <div class="card-body">
-                    <div class="float-end">
-                        <i class="fas fa-folder widget-icon bg-success"></i>
-                    </div>
-                    <h5 class="text-muted fw-normal mt-0" title="Menu Groups">Menu Groups</h5>
-                    <h3 class="mt-3 mb-3"><?php echo $stats['total_groups'] ?? 0; ?></h3>
-                    <p class="mb-0 text-muted">
-                        <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 1.08%</span>
-                        <span class="text-nowrap">Since last month</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6">
-            <div class="card widget-flat">
-                <div class="card-body">
-                    <div class="float-end">
-                        <i class="fas fa-shield-alt widget-icon bg-warning"></i>
-                    </div>
-                    <h5 class="text-muted fw-normal mt-0" title="Total Permissions">Total Permissions</h5>
-                    <h3 class="mt-3 mb-3"><?php echo $stats['total_permissions'] ?? 0; ?></h3>
-                    <p class="mb-0 text-muted">
-                        <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                        <span class="text-nowrap">Since last month</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6">
-            <div class="card widget-flat">
-                <div class="card-body">
-                    <div class="float-end">
-                        <i class="fas fa-users widget-icon bg-info"></i>
-                    </div>
-                    <h5 class="text-muted fw-normal mt-0" title="Active Users">Active Users</h5>
-                    <h3 class="mt-3 mb-3">24</h3>
-                    <p class="mb-0 text-muted">
-                        <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 8.87%</span>
-                        <span class="text-nowrap">Since last month</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <h5 class="card-title">Menu Management</h5>
-                            <p class="text-muted">Manage your application's menu structure and permissions.</p>
+            <div class="card-body">
+                <!-- Menu Groups -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0"><i class="fas fa-server me-2"></i> Group Menu</h6>
+                            <button class="btn btn-sm btn-outline-primary" onclick="addGroup()">
+                                <i class="fas fa-plus"></i> Tambah Group Menu
+                            </button>
                         </div>
-                        <div class="col-md-6">
-                            <div class="text-md-end">
-                                <a href="<?php echo APP_URL; ?>/menu/builder" class="btn btn-primary me-2">
-                                    <i class="fas fa-plus"></i> Menu Builder
-                                </a>
-                                <a href="<?php echo APP_URL; ?>/menu/permissions" class="btn btn-success me-2">
-                                    <i class="fas fa-shield-alt"></i> Permissions
-                                </a>
-                                <button class="btn btn-info" onclick="exportConfig()">
-                                    <i class="fas fa-download"></i> Export
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Menu Groups -->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold mb-0">Menu Groups</h6>
-                                <button class="btn btn-primary btn-sm" onclick="addGroup()">
-                                    <i class="fas fa-plus"></i> Add Group
-                                </button>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Item Menu</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if (!empty($groups)): ?>
-                                            <?php foreach ($groups as $group): ?>
-                                                <tr class="group-row" data-group-id="<?php echo $group['id']; ?>">
-                                                    <td>
-                                                        <i class="<?php echo $group['icon']; ?> me-2"></i>
-                                                        <?php echo htmlspecialchars($group['name']); ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if (!empty($group['description'])): ?>
-                                                            <span class="text-muted small">
-                                                                <?php echo htmlspecialchars($group['description']); ?>
-                                                            </span>
-                                                        <?php else: ?>
-                                                            <span class="text-muted small fst-italic">No description</span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td>
-                                                        <span class="badge bg-primary">
-                                                            <?php echo $group['menu_items_count'] ?? 0; ?>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Item Menu</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($groups)): ?>
+                                        <?php foreach ($groups as $group): ?>
+                                            <tr class="group-row" data-group-id="<?php echo $group['id']; ?>">
+                                                <td>
+                                                    <i class="<?php echo $group['icon']; ?> me-2"></i>
+                                                    <?php echo htmlspecialchars($group['name']); ?>
+                                                </td>
+                                                <td>
+                                                    <?php if (!empty($group['description'])): ?>
+                                                        <span class="text-muted small">
+                                                            <?php echo htmlspecialchars($group['description']); ?>
                                                         </span>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-success me-1" onclick="addDetailMenu(<?php echo $group['id']; ?>)" title="Add Detail Menu">
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-info me-1" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)" title="View Detail Menu">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editGroup(<?php echo $group['id']; ?>)" title="Edit Group">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteGroup(<?php echo $group['id']; ?>)" title="Delete Group">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <!-- Expandable row for menu items -->
-                                                <tr class="detail-row collapse" id="detail-row-<?php echo $group['id']; ?>">
-                                                    <td colspan="4">
-                                                        <div class="detail-content p-3 bg-light">
-                                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                                <h6 class="mb-0">Menu Items in "<?php echo htmlspecialchars($group['name']); ?>"</h6>
-                                                                <button class="btn btn-sm btn-outline-primary" onclick="addMenuItemToGroup(<?php echo $group['id']; ?>)">
-                                                                    <i class="fas fa-plus"></i> Add Item
-                                                                </button>
-                                                            </div>
-                                                            <div class="menu-items-list" id="menu-items-<?php echo $group['id']; ?>">
-                                                                <div class="text-center text-muted py-3">
-                                                                    <i class="fas fa-spinner fa-spin"></i> Loading menu items...
-                                                                </div>
+                                                    <?php else: ?>
+                                                        <span class="text-muted small fst-italic">No description</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-primary">
+                                                        <?php echo $group['menu_items_count'] ?? 0; ?>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-success me-1" onclick="addDetailMenu(<?php echo $group['id']; ?>)" title="Add Detail Menu">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-info me-1" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)" title="View Detail Menu">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editGroup(<?php echo $group['id']; ?>)" title="Edit Group">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteGroup(<?php echo $group['id']; ?>)" title="Delete Group">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <!-- Expandable row for menu items -->
+                                            <tr class="detail-row collapse" id="detail-row-<?php echo $group['id']; ?>">
+                                                <td colspan="4">
+                                                    <div class="detail-content p-3 bg-light">
+                                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <h6 class="mb-0">Struktur Menu "<?php echo htmlspecialchars($group['name']); ?></h6>
+                                                            <button class="btn btn-sm btn-outline-primary" onclick="addMenuItemToGroup(<?php echo $group['id']; ?>)">
+                                                                <i class="fas fa-plus"></i> Tambah/Edit Item Menu
+                                                            </button>
+                                                        </div>
+                                                        <div class="menu-items-list" id="menu-items-<?php echo $group['id']; ?>">
+                                                            <div class="text-center text-muted py-3">
+                                                                <i class="fas fa-spinner fa-spin"></i> Loading menu items...
                                                             </div>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        <?php else: ?>
-                                            <tr>
-                                                <td colspan="4" class="text-center text-muted">No menu groups found</td>
+                                                    </div>
+                                                </td>
                                             </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Menu Modules -->
-                        <!-- <div class="col-md-6">
-                            <h6 class="fw-bold">Menu Modules</h6>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Group</th>
-                                            <th>Actions</th>
+                                            <td colspan="4" class="text-center text-muted">No menu groups found</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if (!empty($modules)): ?>
-                                            <?php foreach ($modules as $module): ?>
-                                                <tr>
-                                                    <td>
-                                                        <i class="<?php echo $module['menu_icon'] ?? 'fas fa-circle'; ?> me-2"></i>
-                                                        <?php echo htmlspecialchars($module['caption']); ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if ($module['parent_id']): ?>
-                                                            <?php 
-                                                            $parentGroup = array_filter($groups, function($g) use ($module) { 
-                                                                return $g['id'] == $module['parent_id']; 
-                                                            });
-                                                            $groupName = !empty($parentGroup) ? array_values($parentGroup)[0]['name'] : 'Unknown';
-                                                            ?>
-                                                            <span class="badge bg-secondary"><?php echo htmlspecialchars($groupName); ?></span>
-                                                        <?php else: ?>
-                                                            <span class="badge bg-light text-dark">Standalone</span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary" onclick="editModule(<?php echo $module['id']; ?>)">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-warning" onclick="toggleVisibility(<?php echo $module['id']; ?>)">
-                                                            <i class="fas fa-eye<?php echo $module['is_menu_item'] ? '' : '-slash'; ?>"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        <?php else: ?>
-                                            <tr>
-                                                <td colspan="3" class="text-center text-muted">No modules found</td>
-                                            </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> -->
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -263,26 +121,42 @@ ob_start();
 <!-- Group Modal -->
 <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content m-0">
+            <div class="modal-header m-0 p-4 bg-secondary">
                 <h5 class="modal-title" id="groupModalLabel">Add Menu Group</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="groupForm">
-                <div class="modal-body">
+                <div class="modal-body m-3">
                     <input type="hidden" id="groupId" name="id">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
-                    <div class="mb-3">
-                        <label for="groupName" class="form-label">Group Name</label>
-                        <input type="text" class="form-control" id="groupName" name="name" required>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="groupName" name="name" placeholder="Group Name" required>
+                        <label for="groupName">Group Name <span class="text-danger">*</span></label>
                     </div>
                     <div class="mb-3">
-                        <label for="groupIcon" class="form-label">Icon</label>
-                        <input type="text" class="form-control" id="groupIcon" name="icon" placeholder="fas fa-folder">
+                        <label for="groupIcon" class="form-label">
+                            <i class="fas fa-palette me-1"></i> Icon
+                        </label>
+                        <div class="icon-input-container">
+                            <div class="selected-icon-display" id="selectedIconDisplay">
+                                <div class="icon-preview">
+                                    <i id="iconPreview" class="fas fa-folder"></i>
+                                </div>
+                                <div class="icon-info">
+                                    <div class="icon-name">Select Icon</div>
+                                    <div class="icon-class" id="iconClassDisplay">fas fa-folder</div>
+                                </div>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="openIconPicker()">
+                                    <i class="fas fa-search me-1"></i> Choose Icon
+                                </button>
+                            </div>
+                            <input type="hidden" id="groupIcon" name="icon" value="fas fa-folder">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="groupDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="groupDescription" name="description" rows="3"></textarea>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="groupDescription" name="description" placeholder="Description" style="height: 100px"></textarea>
+                        <label for="groupDescription">Description</label>
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
@@ -293,7 +167,7 @@ ob_start();
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer m-0 p-3 bg-secondary">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Group</button>
                 </div>
@@ -302,70 +176,48 @@ ob_start();
     </div>
 </div>
 
-<!-- Module Modal -->
-<div class="modal fade" id="moduleModal" tabindex="-1" aria-labelledby="moduleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<!-- Icon Picker Modal -->
+<div class="modal fade" id="iconPickerModal" tabindex="-1" aria-labelledby="iconPickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="moduleModalLabel">Edit Module</h5>
+                <h5 class="modal-title" id="iconPickerModalLabel">
+                    <i class="fas fa-palette me-2"></i> Choose Icon
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="moduleForm">
-                <div class="modal-body">
-                    <input type="hidden" id="moduleId" name="id">
-                    <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="moduleCaption" class="form-label">Module Name</label>
-                                <input type="text" class="form-control" id="moduleCaption" name="caption" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="moduleIcon" class="form-label">Icon</label>
-                                <input type="text" class="form-control" id="moduleIcon" name="menu_icon">
-                            </div>
-                            <div class="mb-3">
-                                <label for="moduleGroup" class="form-label">Group</label>
-                                <select class="form-select" id="moduleGroup" name="parent_id">
-                                    <option value="">Select Group</option>
-                                    <?php foreach ($groups as $group): ?>
-                                        <option value="<?php echo $group['id']; ?>"><?php echo htmlspecialchars($group['name']); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="moduleDescription" class="form-label">Description</label>
-                                <textarea class="form-control" id="moduleDescription" name="menu_description" rows="3"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="isExternal" name="is_external">
-                                    <label class="form-check-label" for="isExternal">
-                                        External Link
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="openInNewTab" name="open_in_new_tab">
-                                    <label class="form-check-label" for="openInNewTab">
-                                        Open in New Tab
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="modal-body">
+                <div id="iconPickerContainer">
+                    <!-- Icon picker will be loaded here -->
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="selectIcon()">Select Icon</button>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteGroupModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this group? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteGroup">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
 // Wait for jQuery to be loaded
@@ -406,9 +258,15 @@ function editGroup(id) {
         if (data.success && data.group) {
             // Populate form fields with group data
             $('#groupName').val(data.group.name);
-            $('#groupIcon').val(data.group.icon);
+            $('#groupIcon').val(data.group.icon || 'fas fa-folder');
             $('#groupDescription').val(data.group.description);
             $('#isCollapsible').prop('checked', data.group.is_collapsible == 1);
+            
+            // Update icon display
+            const iconClass = data.group.icon || 'fas fa-folder';
+            $('#iconPreview').attr('class', iconClass);
+            $('#iconClassDisplay').text(iconClass);
+            $('.icon-name').text('Selected Icon');
         } else {
             console.error('Failed to load group data:', data.error);
             showToast('error', 'Failed to load group data');
@@ -434,6 +292,12 @@ function addGroup() {
     $('#groupModalLabel').text('Add Menu Group');
     $('#groupForm')[0].reset();
     $('#groupId').val(''); // Clear ID field
+    
+    // Reset icon display
+    $('#groupIcon').val('fas fa-folder');
+    $('#iconPreview').attr('class', 'fas fa-folder');
+    $('#iconClassDisplay').text('fas fa-folder');
+    $('.icon-name').text('Select Icon');
     
     $('#groupModal').modal('show');
 }
@@ -575,16 +439,13 @@ function renderMenuItems(container, menuItems) {
         const hasChildren = item.children && item.children.length > 0;
         const parentClass = hasChildren ? 'menu-parent-item' : '';
         const indentClass = level > 0 ? 'menu-child-indent' : '';
-        
-        // Add indentation for child items
-        const indentation = level > 0 ? '<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>' : '';
-        
+                
         html += `
             <div class="menu-module ${indentClass} ${isActive} ${parentClass}" data-menu-item-id="${item.id}">
                 <div class="menu-module-info">
                     <div class="menu-item-content">
                         <div class="menu-item-main">
-                            ${indentation}<i class="${item.icon || 'fas fa-circle'} me-2"></i>
+                            <i class="${item.icon || 'fas fa-circle'} me-2"></i>
                             <span class="menu-item-name">${item.name}</span>
                             ${hasChildren ? '<i class="fas fa-chevron-down ms-2 parent-indicator"></i>' : ''}
                         </div>
@@ -620,63 +481,60 @@ function addMenuItemToGroup(groupId) {
     window.location.href = `<?php echo APP_URL; ?>/menu/builder?group_id=${groupId}`;
 }
 
+let deleteGroupId = null;
+
 function deleteGroup(id) {
-    if (confirm('Are you sure you want to delete this group? This will also delete all modules within this group.')) {
-        // Delete group from database
-        fetch('<?php echo APP_URL; ?>/menu/delete-group', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-Token': '<?php echo $csrf_token; ?>'
-            },
-            body: JSON.stringify({
-                id: id,
-                _token: '<?php echo $csrf_token; ?>'
+    deleteGroupId = id;
+    const modal = new bootstrap.Modal(document.getElementById("deleteGroupModal"));
+    modal.show();
+}
+
+// Delete group confirmation
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("confirmDeleteGroup").addEventListener("click", function() {
+        if (deleteGroupId) {
+            // Delete group from database
+            fetch('<?php echo APP_URL; ?>/menu/delete-group', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': '<?php echo $csrf_token; ?>'
+                },
+                body: JSON.stringify({
+                    id: deleteGroupId,
+                    _token: '<?php echo $csrf_token; ?>'
+                })
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast('success', data.message || 'Group deleted successfully');
-                // Reload page to refresh the list
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            } else {
-                showToast('error', data.error || 'Failed to delete group');
-            }
-        })
-        .catch(error => {
-            console.error('Error deleting group:', error);
-            showToast('error', 'An error occurred while deleting the group');
-        });
-    }
-}
+            .then(response => {
+                if (response.status === 403) {
+                    showToast('error', 'Access denied. Please refresh the page and try again.');
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.success) {
+                    showToast('success', data.message || 'Group deleted successfully');
+                    // Hide modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("deleteGroupModal"));
+                    modal.hide();
+                    // Reload page to refresh the list
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else if (data && data.error) {
+                    showToast('error', data.error || 'Failed to delete group');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting group:', error);
+                showToast('error', 'An error occurred while deleting the group');
+            });
+        }
+    });
+});
 
-// Module management functions
-function editModule(id) {
-    // Check if jQuery is available
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        alert('Error: jQuery is not loaded. Please refresh the page.');
-        return;
-    }
-    
-    $('#moduleModalLabel').text('Edit Module');
-    $('#moduleForm')[0].reset();
-    $('#moduleId').val(id);
-    
-    // Load module data and populate form
-    // This would be implemented with AJAX call
-    
-    $('#moduleModal').modal('show');
-}
-
-function toggleVisibility(id) {
-    // Implementation for toggling module visibility
-    // Toggle visibility for module
-}
 
 // Export configuration
 function exportConfig() {
@@ -698,50 +556,289 @@ function initializejQuery() {
             method: 'POST',
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': '<?php echo $csrf_token; ?>'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 403) {
+                showToast('error', 'Access denied. Please refresh the page and try again.');
+                return;
+            }
+            return response.json();
+        })
         .then(data => {
-            if (data.success) {
+            if (data && data.success) {
                 showToast('success', data.message);
                 $('#groupModal').modal('hide');
                 location.reload();
-            } else {
+            } else if (data && data.error) {
                 showToast('error', data.error);
             }
         })
         .catch(error => {
-            showToast('error', 'An error occurred');
+            console.error('Error:', error);
+            showToast('error', 'An error occurred while saving the group.');
         });
     });
 
-    $('#moduleForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        
-        fetch('<?php echo APP_URL; ?>/menu/update-module', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast('success', data.message);
-                $('#moduleModal').modal('hide');
-                location.reload();
-            } else {
-                showToast('error', data.error);
-            }
-        })
-        .catch(error => {
-            showToast('error', 'An error occurred');
+}
+
+// Icon picker functions
+let selectedIconData = null;
+
+function openIconPicker() {
+    // Load icon picker content
+    const container = document.getElementById('iconPickerContainer');
+    
+    // Use the same icon data structure as icon_picker.php
+    let availableIcons = <?php echo json_encode($available_icons ?? []); ?>;
+    
+    // Ensure we have icons from ModuleController.php
+    if (!availableIcons || Object.keys(availableIcons).length === 0) {
+        console.error('No icons available from ModuleController.php getAvailableIcons()');
+        alert('Error: No icons available. Please check the ModuleController.php configuration.');
+        return;
+    }
+    
+    // Generate icon picker HTML
+    let html = `
+        <div class="icon-picker-container">
+            <!-- Selected Icon Display -->
+            <div class="selected-icon-display mb-4">
+                <div class="selected-icon-card">
+                    <div class="selected-icon-preview">
+                        <div class="icon-preview-section">
+                            <div class="icon-preview-circle">
+                                <i id="modalIconPreview" class="fas fa-home"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Search box and category dropdown positioned to the right -->
+                        <div class="search-section">
+                            <div class="search-box">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" class="form-control search-input" id="modalIconSearch" placeholder="Search icons...">
+                                <button type="button" class="search-clear" id="modalClearSearch" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Category dropdown positioned next to search -->
+                            <div class="category-dropdown">
+                                <select class="form-select category-select" id="modalCategorySelect">
+                                    <option value="all-icons" selected>Semua Icon</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Icon Grid -->
+            <div class="icon-grid-container">
+                <div class="icon-grid">
+    `;
+    
+    // Add all icons to grid
+    Object.entries(availableIcons).forEach(([category, icons]) => {
+        Object.entries(icons).forEach(([iconClass, iconName]) => {
+            html += `
+                <div class="icon-item" 
+                     data-icon="${iconClass}" 
+                     data-label="${iconName}"
+                     data-category="${category}"
+                     title="${iconName} (${category})">
+                    <div class="icon-item-inner">
+                        <div class="icon-wrapper">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <div class="icon-label">${iconName}</div>
+                    </div>
+                    <div class="selection-indicator">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+            `;
         });
     });
+    
+    html += `
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    // Populate category dropdown
+    populateCategoryDropdown();
+    
+    // Initialize icon picker functionality
+    initializeModalIconPicker();
+    
+    // Show modal
+    $('#iconPickerModal').modal('show');
+}
+
+function populateCategoryDropdown() {
+    const categorySelect = document.getElementById('modalCategorySelect');
+    if (!categorySelect) return;
+    
+    // Clear existing options except "Semua Icon"
+    categorySelect.innerHTML = '<option value="all-icons" selected>Semua Icon</option>';
+    
+    // Get available icons from the global variable
+    let availableIcons = <?php echo json_encode($available_icons ?? []); ?>;
+    
+    // Ensure we have icons from ModuleController.php
+    if (!availableIcons || Object.keys(availableIcons).length === 0) {
+        console.error('No icons available from ModuleController.php getAvailableIcons()');
+        return;
+    }
+    
+    // Add category options
+    Object.keys(availableIcons).forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        option.textContent = `${category} (${Object.keys(availableIcons[category]).length} icons)`;
+        categorySelect.appendChild(option);
+    });
+}
+
+function initializeModalIconPicker() {
+    const iconItems = document.querySelectorAll('.icon-item');
+    const modalIconPreview = document.getElementById('modalIconPreview');
+    const modalIconName = document.querySelector('.icon-preview-name');
+    const modalIconClass = document.querySelector('.icon-preview-class');
+    const searchInput = document.getElementById('modalIconSearch');
+    const clearSearchBtn = document.getElementById('modalClearSearch');
+    
+    // Icon selection
+    iconItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Remove selected class from all items
+            iconItems.forEach(i => i.classList.remove('selected'));
+            
+            // Add selected class to clicked item
+            this.classList.add('selected');
+            
+            // Store selected icon data
+            selectedIconData = {
+                icon: this.dataset.icon,
+                label: this.dataset.label,
+                category: this.dataset.category
+            };
+            
+            // Update preview
+            modalIconPreview.className = this.dataset.icon;
+            
+            // Update preview info
+            if (modalIconName) modalIconName.textContent = this.dataset.label;
+            if (modalIconClass) modalIconClass.textContent = this.dataset.icon;
+            
+            // Add selection animation
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+    
+    // Search functionality
+    let searchTimeout;
+    const searchIcon = document.querySelector('.search-icon');
+    
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const searchTerm = this.value.toLowerCase();
+            
+            iconItems.forEach(item => {
+                const iconLabel = item.dataset.label.toLowerCase();
+                const iconClass = item.dataset.icon.toLowerCase();
+                const iconCategory = item.dataset.category.toLowerCase();
+                
+                if (iconLabel.includes(searchTerm) || iconClass.includes(searchTerm) || iconCategory.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Update clear button and search icon visibility
+            if (searchTerm) {
+                clearSearchBtn.style.display = 'block';
+                if (searchIcon) searchIcon.style.display = 'none';
+            } else {
+                clearSearchBtn.style.display = 'none';
+                if (searchIcon) searchIcon.style.display = 'block';
+            }
+        }, 300);
+    });
+    
+    // Clear search
+    clearSearchBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchInput.focus();
+        
+        iconItems.forEach(item => {
+            item.style.display = '';
+        });
+        
+        this.style.display = 'none';
+        if (searchIcon) searchIcon.style.display = 'block';
+    });
+    
+    // Category dropdown functionality
+    const categorySelect = document.getElementById('modalCategorySelect');
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            
+            if (selectedCategory === 'all-icons') {
+                // Show all icons
+                iconItems.forEach(item => {
+                    item.style.display = '';
+                });
+            } else {
+                // Show only icons from selected category
+                iconItems.forEach(item => {
+                    const itemCategory = item.dataset.category;
+                    const normalizedCategory = itemCategory ? itemCategory.toLowerCase().replace(/[^a-z0-9]/g, '-') : '';
+                    
+                    if (normalizedCategory === selectedCategory) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Clear search when switching categories
+            searchInput.value = '';
+            clearSearchBtn.style.display = 'none';
+            if (searchIcon) searchIcon.style.display = 'block';
+        });
+    }
+}
+
+function selectIcon() {
+    if (selectedIconData) {
+        // Update the main form
+        document.getElementById('groupIcon').value = selectedIconData.icon;
+        document.getElementById('iconPreview').className = selectedIconData.icon;
+        document.getElementById('iconClassDisplay').textContent = selectedIconData.icon;
+        document.querySelector('.icon-name').textContent = selectedIconData.label;
+        
+        // Close modal
+        $('#iconPickerModal').modal('hide');
+        
+        // Reset selected data
+        selectedIconData = null;
+    } else {
+        alert('Please select an icon first!');
+    }
 }
 
 // Toast notification function
@@ -922,7 +1019,7 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-left: 30px !important;
     border-left: 3px solid #e9ecef;
     padding-left: 16px !important;
-    background: #f8f9fa;
+    background: white;
     position: relative;
 }
 
@@ -1005,6 +1102,662 @@ document.addEventListener('DOMContentLoaded', function() {
     50% { opacity: 0.5; }
     100% { opacity: 1; }
 }
+
+/* Icon Input Styling */
+.icon-input-container {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.icon-input-container:hover {
+    border-color: #007bff;
+    background: white;
+}
+
+.selected-icon-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 8px;
+}
+
+.icon-preview {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.icon-preview i {
+    font-size: 20px;
+    color: white;
+}
+
+.icon-info {
+    flex: 1;
+}
+
+.icon-name {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 2px;
+}
+
+.icon-class {
+    font-size: 12px;
+    color: #6c757d;
+    font-family: 'Courier New', monospace;
+    background: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Icon Picker Modal Styling */
+#iconPickerModal .modal-dialog {
+    max-width: 95vw;
+    margin: 1rem auto;
+}
+
+#iconPickerModal .modal-content {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+#iconPickerModal .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 20px 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+#iconPickerModal .modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.05"/><circle cx="40" cy="80" r="1" fill="white" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    pointer-events: none;
+}
+
+#iconPickerModal .modal-title {
+    font-weight: 700;
+    font-size: 1.4rem;
+    position: relative;
+    z-index: 1;
+}
+
+#iconPickerModal .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+#iconPickerModal .btn-close:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+#iconPickerModal .modal-body {
+    padding: 0;
+    background: white;
+}
+
+#iconPickerContainer {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 0;
+}
+
+#iconPickerContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+#iconPickerContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#iconPickerContainer::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+}
+
+#iconPickerContainer::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+/* Enhanced Icon Picker Container */
+.icon-picker-container {
+    background: white;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+/* Enhanced Selected Icon Display */
+.icon-picker-container .selected-icon-display {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 25px 30px;
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.icon-picker-container .selected-icon-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 20px 25px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.icon-picker-container .selected-icon-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Updated layout for icon preview and search */
+.icon-picker-container .selected-icon-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.icon-picker-container .icon-preview-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 0 0 auto;
+}
+
+.icon-picker-container .icon-preview-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.icon-picker-container .icon-preview-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+}
+
+.icon-picker-container .icon-preview-class {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Courier New', monospace;
+}
+
+/* Search Container - Side by side layout */
+.icon-picker-container .search-section {
+    position: relative;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex: 1;
+    min-width: 250px;
+    max-width: none;
+}
+
+.icon-picker-container .search-box {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.icon-picker-container .category-dropdown {
+    flex: 0 0 auto;
+    min-width: 200px;
+    max-width: 250px;
+}
+
+.icon-picker-container .category-select {
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: 50px;
+    width: 100%;
+}
+
+.icon-picker-container .category-select:focus {
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    outline: none;
+    background: white;
+}
+
+.icon-picker-container .category-select:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+}
+
+.icon-picker-container .category-select option {
+    background: white;
+    color: #333;
+    padding: 8px;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(30deg); }
+    50% { transform: translateX(100%) translateY(100%) rotate(30deg); }
+}
+
+
+.icon-picker-container .icon-preview-circle {
+    width: 70px;
+    height: 70px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(15px);
+    border: 3px solid rgba(255,255,255,0.3);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.icon-picker-container .icon-preview-circle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+.icon-picker-container .icon-preview-circle i {
+    font-size: 28px;
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.icon-picker-container .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.icon-picker-container .search-icon {
+    position: absolute;
+    right: 15px;
+    color: #666;
+    z-index: 2;
+}
+
+.icon-picker-container .search-input {
+    padding-left: 20px;
+    padding-right: 50px;
+    border: none;
+    border-radius: 30px;
+    height: 50px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+    color: #333;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+.icon-picker-container .search-input:focus {
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    outline: none;
+    background: white;
+}
+
+.icon-picker-container .search-clear {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    z-index: 2;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.icon-picker-container .search-clear:hover {
+    background: rgba(0,0,0,0.1);
+    color: #ff6b6b;
+}
+
+.icon-picker-container .search-input::placeholder {
+    color: #999;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .icon-picker-container .search-section {
+        min-width: 200px;
+    }
+    
+    .icon-picker-container .icon-preview-section {
+        min-width: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .icon-picker-container .selected-icon-display {
+        padding: 20px 15px;
+    }
+    
+    .icon-picker-container .selected-icon-card {
+        padding: 15px 20px;
+    }
+    
+    .icon-picker-container .selected-icon-preview {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .icon-picker-container .icon-preview-section {
+        justify-content: center;
+        min-width: auto;
+    }
+    
+    
+    .icon-picker-container .search-section {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        min-width: auto;
+        max-width: none;
+    }
+    
+    .icon-picker-container .search-box {
+        width: 100%;
+    }
+    
+    .icon-picker-container .category-dropdown {
+        width: 100%;
+        min-width: auto;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .icon-picker-container .selected-icon-display {
+        padding: 15px 10px;
+    }
+    
+    .icon-picker-container .selected-icon-card {
+        padding: 12px 15px;
+    }
+    
+    .icon-picker-container .selected-icon-preview {
+        gap: 10px;
+    }
+    
+    .icon-picker-container .icon-preview-section {
+        gap: 10px;
+    }
+    
+    .icon-picker-container .icon-preview-circle {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .icon-picker-container .icon-preview-circle i {
+        font-size: 20px;
+    }
+    
+    
+    .icon-picker-container .search-input {
+        height: 35px;
+        font-size: 12px;
+    }
+    
+    .icon-picker-container .category-select {
+        height: 35px;
+        font-size: 12px;
+    }
+}
+
+/* Enhanced Icon Grid */
+.icon-picker-container .icon-grid-container {
+    background: white;
+    padding: 30px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.icon-picker-container .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
+    padding: 0;
+}
+
+.icon-picker-container .icon-item {
+    background: white;
+    border: 2px solid #f1f3f4;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: relative;
+}
+
+.icon-picker-container .icon-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+.icon-picker-container .icon-item:hover::before {
+    left: 100%;
+}
+
+.icon-picker-container .icon-item:hover {
+    border-color: #667eea;
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+}
+
+.icon-picker-container .icon-item.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
+}
+
+.icon-picker-container .icon-item-inner {
+    padding: 25px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.icon-picker-container .icon-wrapper {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-picker-container .icon-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.icon-picker-container .icon-item:hover .icon-wrapper::before {
+    opacity: 1;
+}
+
+.icon-picker-container .icon-item.selected .icon-wrapper {
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+}
+
+.icon-picker-container .icon-wrapper i {
+    font-size: 24px;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.icon-picker-container .icon-item:hover .icon-wrapper i {
+    color: #667eea;
+    transform: scale(1.1) rotate(5deg);
+}
+
+.icon-picker-container .icon-item.selected .icon-wrapper i {
+    color: white;
+    transform: scale(1.1);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.icon-picker-container .icon-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #495057;
+    line-height: 1.3;
+}
+
+.icon-picker-container .icon-item.selected .icon-label {
+    color: white;
+}
+
+
+.icon-picker-container .selection-indicator {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    background: #28a745;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0) rotate(180deg);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.icon-picker-container .icon-item.selected .selection-indicator {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.icon-picker-container .selection-indicator i {
+    font-size: 12px;
+    color: white;
+}
+
+/* Modal Footer Styling */
+#iconPickerModal .modal-footer {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: none;
+    padding: 20px 30px;
+    border-top: 1px solid #e9ecef;
+}
+
+#iconPickerModal .modal-footer .btn {
+    border-radius: 25px;
+    padding: 10px 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+
+#iconPickerModal .modal-footer .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+#iconPickerModal .modal-footer .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #iconPickerModal .modal-dialog {
+        max-width: 95vw;
+        margin: 0.5rem;
+    }
+    
+    .icon-picker-container .icon-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 15px;
+    }
+    
+    .icon-picker-container .icon-item-inner {
+        padding: 20px 15px;
+    }
+    
+    .icon-picker-container .icon-wrapper {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .icon-picker-container .icon-wrapper i {
+        font-size: 20px;
+    }
+}
 </style>
 
 <?php
@@ -1014,3 +1767,4 @@ $content = ob_get_clean();
 // Include the main layout with content
 include __DIR__ . '/../layouts/app.php';
 ?>
+

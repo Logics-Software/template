@@ -8,6 +8,7 @@ class MenuController extends BaseController
 {
     private $menuService;
     private $moduleModel;
+    private $moduleController;
     private $menuGroupModel;
     private $menuItemModel;
     private $menuPermissionModel;
@@ -17,6 +18,7 @@ class MenuController extends BaseController
         parent::__construct();
         $this->menuService = new MenuService();
         $this->moduleModel = new Module();
+        $this->moduleController = new ModuleController();
         $this->menuGroupModel = new MenuGroup();
         $this->menuItemModel = new MenuItem();
         $this->menuPermissionModel = new MenuPermission();
@@ -41,6 +43,7 @@ class MenuController extends BaseController
 
         $stats = $this->menuService->getMenuStats();
         $menuData = $this->menuService->getMenuBuilderData();
+        $availableIcons = $this->moduleController->getAvailableIcons();
 
         // Calculate menu items count for each group
         $groups = $menuData['groups'];
@@ -54,7 +57,8 @@ class MenuController extends BaseController
             'modules' => $menuData['modules'],
             'groups' => $groups,
             'menuItems' => $menuData['menuItems'],
-            'permissions' => $menuData['permissions']
+            'permissions' => $menuData['permissions'],
+            'available_icons' => $availableIcons
         ];
 
         $this->view('menu/menu-management', $data);
@@ -77,7 +81,7 @@ class MenuController extends BaseController
         }
 
         $menuData = $this->menuService->getMenuBuilderData();
-        $availableIcons = $this->moduleModel->getAvailableIcons();
+        $availableIcons = $this->moduleController->getAvailableIcons();
         
         // Check if we're adding items to a specific group
         $groupId = $request->input('group_id');
@@ -205,9 +209,6 @@ class MenuController extends BaseController
 
         $groupId = $params['id'] ?? $request->input('id');
         
-        // Debug logging
-        error_log("Update Group Debug - Group ID: " . ($groupId ?: 'NULL'));
-        error_log("Update Group Debug - Request data: " . json_encode($request->input()));
         
         if (!$groupId) {
             $this->json(['error' => 'Group ID is required'], 400);
@@ -237,7 +238,6 @@ class MenuController extends BaseController
                 $this->json(['error' => 'Failed to update menu group'], 500);
             }
         } catch (Exception $e) {
-            error_log("Error updating menu group: " . $e->getMessage());
             $this->json(['error' => 'Failed to update menu group: ' . $e->getMessage()], 500);
         }
     }
@@ -326,30 +326,35 @@ class MenuController extends BaseController
             return;
         }
 
-        $moduleId = $params['id'] ?? $request->input('id');
+        $itemId = $request->input('id');
         
-        if (!$moduleId) {
-            $this->json(['error' => 'Module ID is required'], 400);
+        if (!$itemId) {
+            $this->json(['error' => 'Menu item ID is required'], 400);
             return;
         }
 
-        $data = [
-            'menu_type' => $request->input('menu_type', 'link'),
-            'parent_id' => $request->input('parent_id'),
-            'sort_order' => $request->input('sort_order', 0),
-            'menu_icon' => $request->input('menu_icon', 'fas fa-circle'),
-            'menu_description' => $request->input('menu_description'),
-            'is_external' => $request->input('is_external', false),
-            'open_in_new_tab' => $request->input('open_in_new_tab', false)
-        ];
+        try {
+            $data = [
+                'group_id' => $request->input('group_id'),
+                'parent_id' => $request->input('parent_id') ?: null,
+                'module_id' => $request->input('module_id'),
+                'name' => $request->input('name'),
+                'icon' => $request->input('icon'),
+                'sort_order' => $request->input('sort_order'),
+                'is_active' => $request->input('is_active') ? 1 : 0,
+                'is_parent' => $request->input('is_parent') ? 1 : 0
+            ];
 
-        // Update module properties directly in database
-        $result = $this->moduleModel->update($moduleId, $data);
-        
-        if ($result) {
-            $this->json(['success' => true, 'message' => 'Menu item updated successfully']);
-        } else {
-            $this->json(['error' => 'Failed to update menu item'], 500);
+            // Update menu item using MenuItem model
+            $result = $this->menuItemModel->updateItem($itemId, $data);
+            
+            if ($result) {
+                $this->json(['success' => true, 'message' => 'Menu item updated successfully']);
+            } else {
+                $this->json(['error' => 'Failed to update menu item'], 500);
+            }
+        } catch (Exception $e) {
+            $this->json(['error' => 'Failed to update menu item: ' . $e->getMessage()], 500);
         }
     }
 
@@ -637,7 +642,7 @@ class MenuController extends BaseController
             $item = $this->menuItemModel->getItem($itemId);
             
             if ($item) {
-                $this->json(['success' => true, 'item' => $item]);
+                $this->json(['success' => true, 'menuItem' => $item]);
             } else {
                 $this->json(['error' => 'Menu item not found'], 404);
             }
@@ -768,5 +773,32 @@ class MenuController extends BaseController
 
         $userRole = Session::get('user_role');
         return in_array($userRole, ['admin', 'manajemen']);
+    }
+
+    /**
+     * Get parent menu items for a specific group
+     */
+    public function getParentItems($request = null, $response = null, $params = [])
+    {
+        if (!$this->isAuthorized()) {
+            $this->json(['error' => 'Unauthorized'], 401);
+            return;
+        }
+
+        $groupId = $params[0] ?? $request->input('id');
+        
+        if (!$groupId) {
+            $this->json(['error' => 'Group ID is required'], 400);
+            return;
+        }
+
+        try {
+            $parentItems = $this->menuItemModel->getParentItemsByGroup($groupId);
+            
+            $this->json(['success' => true, 'parentItems' => $parentItems]);
+            
+        } catch (Exception $e) {
+            $this->json(['error' => 'Error loading parent items: ' . $e->getMessage()], 500);
+        }
     }
 }

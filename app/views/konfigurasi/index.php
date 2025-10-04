@@ -33,7 +33,7 @@ if (!$konfigurasi) {
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
                         <a href="<?php echo APP_URL; ?>/dashboard">
-                            Dashboard
+                            Home
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">

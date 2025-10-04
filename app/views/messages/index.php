@@ -12,7 +12,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/dashboard">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Pesan Masuk</li>
                     </ol>
                 </nav>
