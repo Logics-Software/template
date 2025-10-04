@@ -42,11 +42,18 @@ class MenuController extends BaseController
         $stats = $this->menuService->getMenuStats();
         $menuData = $this->menuService->getMenuBuilderData();
 
+        // Calculate menu items count for each group
+        $groups = $menuData['groups'];
+        foreach ($groups as &$group) {
+            $group['menu_items_count'] = $this->menuItemModel->countMenuItemsByGroup($group['id']);
+        }
+        
         $data = [
             'title' => 'Menu Management',
             'stats' => $stats,
             'modules' => $menuData['modules'],
-            'groups' => $menuData['groups'],
+            'groups' => $groups,
+            'menuItems' => $menuData['menuItems'],
             'permissions' => $menuData['permissions']
         ];
 
@@ -71,12 +78,29 @@ class MenuController extends BaseController
 
         $menuData = $this->menuService->getMenuBuilderData();
         $availableIcons = $this->moduleModel->getAvailableIcons();
+        
+        // Check if we're adding items to a specific group
+        $groupId = $request->input('group_id');
+        $selectedGroup = null;
+        
+        if ($groupId) {
+            $selectedGroup = $this->menuGroupModel->getGroup($groupId);
+            if (!$selectedGroup) {
+                $this->redirect('/menu/builder');
+                return;
+            }
+        }
+
+        $menuItems = $menuData['menuItems'] ?? [];
 
         $data = [
             'title' => 'Menu Builder',
-            'modules' => $menuData['modules'],
-            'groups' => $menuData['groups'],
-            'available_icons' => $availableIcons
+            'modules' => $menuData['modules'] ?? [],
+            'groups' => $menuData['groups'] ?? [],
+            'menuItems' => $menuItems,
+            'available_icons' => $availableIcons,
+            'selected_group_id' => $groupId,
+            'selected_group' => $selectedGroup
         ];
 
         $this->view('menu/menu-builder', $data);
@@ -99,12 +123,13 @@ class MenuController extends BaseController
         }
 
         $menuData = $this->menuService->getMenuBuilderData();
-        $roles = ['admin', 'manager', 'staff', 'user', 'marketing', 'customer'];
+        $roles = ['admin', 'manajemen', 'user', 'marketing', 'customer'];
 
         $data = [
             'title' => 'Menu Permissions',
             'modules' => $menuData['modules'],
             'groups' => $menuData['groups'],
+            'menuItems' => $menuData['menuItems'],
             'permissions' => $menuData['permissions'],
             'roles' => $roles
         ];
@@ -139,7 +164,7 @@ class MenuController extends BaseController
             'icon' => $request->input('icon', 'fas fa-folder'),
             'description' => $request->input('description'),
             'sort_order' => $request->input('sort_order', 0),
-            'is_collapsible' => $request->input('is_collapsible', true)
+            'is_collapsible' => $request->input('is_collapsible') ? true : false
         ];
 
         if (empty($data['name'])) {
@@ -177,7 +202,12 @@ class MenuController extends BaseController
             return;
         }
 
+
         $groupId = $params['id'] ?? $request->input('id');
+        
+        // Debug logging
+        error_log("Update Group Debug - Group ID: " . ($groupId ?: 'NULL'));
+        error_log("Update Group Debug - Request data: " . json_encode($request->input()));
         
         if (!$groupId) {
             $this->json(['error' => 'Group ID is required'], 400);
@@ -186,11 +216,11 @@ class MenuController extends BaseController
 
         $data = [
             'name' => $request->input('name'),
-            'slug' => $request->input('slug'),
+            'slug' => $this->menuGroupModel->generateUniqueSlug($request->input('name'), $groupId),
             'icon' => $request->input('icon', 'fas fa-folder'),
             'description' => $request->input('description'),
             'sort_order' => $request->input('sort_order', 0),
-            'is_collapsible' => $request->input('is_collapsible', true)
+            'is_collapsible' => $request->input('is_collapsible') ? true : false
         ];
 
         if (empty($data['name'])) {
@@ -198,12 +228,17 @@ class MenuController extends BaseController
             return;
         }
 
-        $result = $this->menuGroupModel->updateGroup($groupId, $data);
-        
-        if ($result) {
-            $this->json(['success' => true, 'message' => 'Menu group updated successfully']);
-        } else {
-            $this->json(['error' => 'Failed to update menu group'], 500);
+        try {
+            $result = $this->menuGroupModel->updateGroup($groupId, $data);
+            
+            if ($result) {
+                $this->json(['success' => true, 'message' => 'Menu group updated successfully']);
+            } else {
+                $this->json(['error' => 'Failed to update menu group'], 500);
+            }
+        } catch (Exception $e) {
+            error_log("Error updating menu group: " . $e->getMessage());
+            $this->json(['error' => 'Failed to update menu group: ' . $e->getMessage()], 500);
         }
     }
 
@@ -376,7 +411,7 @@ class MenuController extends BaseController
             return;
         }
 
-        $roleId = $request->input('role_id');
+        $roleId = $request->input('role');
         $permissions = $request->input('permissions', []);
 
         if (!$roleId) {
@@ -384,24 +419,23 @@ class MenuController extends BaseController
             return;
         }
 
-        try {
-            // Clear existing permissions for this role
-            $database = Database::getInstance();
-            $sql = "DELETE FROM role_menu_permissions WHERE role_id = ?";
-            $database->query($sql, [$roleId]);
+        // Validate CSRF token
+        if (!$this->validateCSRF($request)) {
+            $this->json(['error' => 'CSRF token mismatch'], 403);
+            return;
+        }
 
-            // Add new permissions
-            if (!empty($permissions)) {
-                $result = $this->menuPermissionModel->bulkGrantPermissions($roleId, $permissions, Session::get('user_id'));
-                
-                if (!$result) {
-                    throw new Exception('Failed to grant permissions');
-                }
+        try {
+            // Update permissions using bulk update
+            $result = $this->menuPermissionModel->bulkGrantPermissions($roleId, $permissions, Session::get('user_id'));
+            
+            if (!$result) {
+                throw new Exception('Failed to update permissions');
             }
 
             $this->json(['success' => true, 'message' => 'Permissions updated successfully']);
         } catch (Exception $e) {
-            $this->json(['error' => 'Failed to update permissions'], 500);
+            $this->json(['error' => 'Failed to update permissions: ' . $e->getMessage()], 500);
         }
     }
 
@@ -562,7 +596,7 @@ class MenuController extends BaseController
             return;
         }
 
-        $groupId = $params['id'] ?? $request->input('id');
+        $groupId = $params[0] ?? $request->input('id');
         
         if (!$groupId) {
             $this->json(['error' => 'Group ID is required'], 400);
@@ -592,7 +626,7 @@ class MenuController extends BaseController
             return;
         }
 
-        $itemId = $params['id'] ?? $request->input('id');
+        $itemId = $params[0] ?? $request->input('id');
         
         if (!$itemId) {
             $this->json(['error' => 'Menu item ID is required'], 400);
@@ -609,6 +643,43 @@ class MenuController extends BaseController
             }
         } catch (Exception $e) {
             $this->json(['error' => 'Failed to get menu item: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get menu items for a specific group
+     */
+    public function getGroupItems($request = null, $response = null, $params = [])
+    {
+        if (!$this->isAuthorized()) {
+            $this->json(['error' => 'Unauthorized'], 401);
+            return;
+        }
+
+        $groupId = $params[0] ?? $request->input('id');
+        
+        if (!$groupId) {
+            $this->json(['error' => 'Group ID is required'], 400);
+            return;
+        }
+
+        try {
+            $menuItems = $this->menuItemModel->getItemsByGroup($groupId);
+            
+            // Simple approach: just return the raw menu items with a simple level calculation
+            foreach ($menuItems as &$item) {
+                // Set level: 0 for root items (parent_id is null), 1 for child items
+                $item['level'] = $item['parent_id'] ? 1 : 0;
+            }
+            
+            // Sort by sort_order
+            usort($menuItems, function($a, $b) {
+                return ($a['sort_order'] ?? 0) - ($b['sort_order'] ?? 0);
+            });
+            
+            $this->json(['success' => true, 'menuItems' => $menuItems]);
+        } catch (Exception $e) {
+            $this->json(['error' => 'Failed to get group items: ' . $e->getMessage()], 500);
         }
     }
 

@@ -27,6 +27,12 @@ class MenuItem extends Model
         'is_parent' => 'boolean'
     ];
     
+    // Instance properties for relationship methods
+    protected $group_id;
+    protected $parent_id;
+    protected $module_id;
+    protected $id;
+    
     /**
      * Get the menu group this item belongs to
      */
@@ -72,12 +78,31 @@ class MenuItem extends Model
     }
     
     /**
+     * Get all menu items
+     */
+    public function getAll()
+    {
+        $sql = "SELECT * FROM menu_items ORDER BY group_id ASC, sort_order ASC";
+        return $this->db->fetchAll($sql);
+    }
+    
+    /**
      * Get all menu items for a group
      */
     public function getItemsByGroup($groupId)
     {
-        $sql = "SELECT * FROM menu_items WHERE group_id = ? AND parent_id IS NULL ORDER BY sort_order ASC";
+        $sql = "SELECT * FROM menu_items WHERE group_id = ? ORDER BY sort_order ASC";
         return $this->db->fetchAll($sql, [$groupId]);
+    }
+    
+    /**
+     * Count menu items for a group
+     */
+    public function countMenuItemsByGroup($groupId)
+    {
+        $sql = "SELECT COUNT(*) as count FROM menu_items WHERE group_id = ?";
+        $result = $this->db->fetch($sql, [$groupId]);
+        return $result['count'] ?? 0;
     }
     
     /**

@@ -155,6 +155,7 @@ class App
         
         // Menu group routes
         $this->router->get('/menu/get-group/{id}', 'MenuController@getGroup');
+        $this->router->get('/menu/get-group-items/{id}', 'MenuController@getGroupItems');
         $this->router->post('/menu/create-group', 'MenuController@createGroup');
         $this->router->post('/menu/update-group', 'MenuController@updateGroup');
         $this->router->post('/menu/delete-group', 'MenuController@deleteGroup');

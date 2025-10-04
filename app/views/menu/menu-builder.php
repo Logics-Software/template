@@ -20,51 +20,88 @@ ob_start();
                         <li class="breadcrumb-item active">Menu Builder</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Menu Builder</h4>
+                <h4 class="page-title">
+                    Menu Builder
+                    <?php if (isset($selected_group) && $selected_group): ?>
+                        <small class="text-muted">- Adding items to "<?php echo htmlspecialchars($selected_group['name']); ?>"</small>
+                    <?php endif; ?>
+                </h4>
             </div>
         </div>
     </div>
 
+    <?php if (isset($selected_group) && $selected_group): ?>
+    <!-- Group Selection Alert -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Group Mode:</strong> You are adding menu items to the group "<strong><?php echo htmlspecialchars($selected_group['name']); ?></strong>". 
+                All new menu items will be automatically assigned to this group.
+                <a href="<?php echo APP_URL; ?>/menu/builder" class="btn btn-sm btn-outline-secondary ms-2">
+                    <i class="fas fa-times"></i> Exit Group Mode
+                </a>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <div class="row">
         <!-- Menu Builder Panel -->
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Menu Structure</h5>
                     <div class="card-actions">
+                        <?php if (!isset($selected_group_id) || !$selected_group_id): ?>
                         <button class="btn btn-sm btn-outline-primary" onclick="addGroup()">
                             <i class="fas fa-plus"></i> Add Group
                         </button>
-                        <button class="btn btn-sm btn-outline-success" onclick="addModule()">
-                            <i class="fas fa-plus"></i> Add Module
+                        <?php endif; ?>
+                        <button class="btn btn-sm btn-outline-success" onclick="addMenuItem()">
+                            <i class="fas fa-plus"></i> Add Menu Item
                         </button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div id="menuBuilder" class="menu-builder">
                         <div class="menu-items" id="sortableMenu">
-                            <?php if (!empty($modules)): ?>
+                            <?php if (!empty($menuItems)): ?>
                                 <?php 
-                                // Group modules by parent_id
-                                $groupedModules = [];
-                                foreach ($modules as $module) {
-                                    $parentId = $module['parent_id'] ?? 'standalone';
-                                    if (!isset($groupedModules[$parentId])) {
-                                        $groupedModules[$parentId] = [];
+                                // Group menu items by group_id and parent_id
+                                $groupedMenuItems = [];
+                                foreach ($menuItems as $item) {
+                                    $groupId = $item['group_id'] ?? 'standalone';
+                                    $parentId = $item['parent_id'] ?? 'standalone';
+                                    if (!isset($groupedMenuItems[$groupId])) {
+                                        $groupedMenuItems[$groupId] = [];
                                     }
-                                    $groupedModules[$parentId][] = $module;
+                                    if (!isset($groupedMenuItems[$groupId][$parentId])) {
+                                        $groupedMenuItems[$groupId][$parentId] = [];
+                                    }
+                                    $groupedMenuItems[$groupId][$parentId][] = $item;
+                                }
+                                
+                                // Filter groups if in group mode
+                                $groupsToShow = $groups;
+                                if (isset($selected_group_id) && $selected_group_id) {
+                                    $groupsToShow = array_filter($groups, function($group) use ($selected_group_id) {
+                                        return $group['id'] == $selected_group_id;
+                                    });
                                 }
                                 
                                 // Render groups first
-                                foreach ($groups as $group): 
-                                    $groupModules = $groupedModules[$group['id']] ?? [];
+                                foreach ($groupsToShow as $group): 
+                                    $groupItems = $groupedMenuItems[$group['id']] ?? [];
+                                    $totalItems = array_sum(array_map('count', $groupItems));
                                 ?>
                                     <div class="menu-group" data-group-id="<?php echo $group['id']; ?>">
                                         <div class="menu-group-header">
                                             <div class="menu-group-info">
                                                 <i class="<?php echo $group['icon']; ?>"></i>
                                                 <span><?php echo htmlspecialchars($group['name']); ?></span>
-                                                <span class="badge bg-primary ms-2"><?php echo count($groupModules); ?></span>
+                                                <span class="badge bg-primary ms-2"><?php echo $totalItems; ?></span>
                                             </div>
                                             <div class="menu-group-actions">
                                                 <button class="btn btn-sm btn-outline-primary" onclick="editGroup(<?php echo $group['id']; ?>)">
@@ -80,92 +117,117 @@ ob_start();
                                         </div>
                                         <div class="menu-group-content">
                                             <div class="menu-modules" data-group-id="<?php echo $group['id']; ?>">
-                                                <?php foreach ($groupModules as $module): ?>
-                                                    <div class="menu-module" data-module-id="<?php echo $module['id']; ?>">
+                                                <?php 
+                                                // Organize menu items into hierarchical structure
+                                                $menuStructure = [];
+                                                $menuMap = [];
+                                                
+                                                // Create map of all menu items
+                                                    foreach ($menuItems as $item) {
+                                                    if ($item['group_id'] == $group['id']) {
+                                                        $menuMap[$item['id']] = $item;
+                                                        $menuStructure[$item['id']] = array_merge($item, ['children' => []]);
+                                                    }
+                                                }
+                                                
+                                                // Build hierarchy
+                                                $rootItems = [];
+                                                foreach ($menuStructure as $id => $item) {
+                                                    if (!empty($item['parent_id']) && isset($menuStructure[$item['parent_id']])) {
+                                                        $menuStructure[$item['parent_id']]['children'][] = &$menuStructure[$id];
+                                                    } else {
+                                                        $rootItems[] = &$menuStructure[$id];
+                                                    }
+                                                }
+                                                
+                                                // Sort by sort_order
+                                                function sortMenuItems(&$items) {
+                                                    usort($items, function($a, $b) {
+                                                        return ($a['sort_order'] ?? 0) - ($b['sort_order'] ?? 0);
+                                                    });
+                                                    foreach ($items as &$item) {
+                                                        if (!empty($item['children'])) {
+                                                            sortMenuItems($item['children']);
+                                                        }
+                                                    }
+                                                }
+                                                sortMenuItems($rootItems);
+                                                
+                                                // Render menu structure
+                                                function renderMenuStructure($items, $level = 0) {
+                                                    if (empty($items)) return '';
+                                                    
+                                                    $html = '';
+                                                    foreach ($items as $item) {
+                                                        $isActive = $item['is_active'] ? '' : 'menu-inactive';
+                                                        $hasChildren = !empty($item['children']);
+                                                        $parentClass = $hasChildren ? 'menu-parent-item' : '';
+                                                        
+                                                        $html .= '
+                                                        <div class="menu-module ' . $isActive . ' ' . $parentClass . '" data-menu-item-id="' . $item['id'] . '">
                                                         <div class="menu-module-info">
-                                                            <i class="<?php echo $module['menu_icon'] ?? 'fas fa-circle'; ?>"></i>
-                                                            <span><?php echo htmlspecialchars($module['caption']); ?></span>
-                                                        </div>
-                                                        <div class="menu-module-actions">
-                                                            <button class="btn btn-sm btn-outline-primary" onclick="editModule(<?php echo $module['id']; ?>)">
-                                                                <i class="fas fa-edit"></i>
-                                                            </button>
-                                                            <button class="btn btn-sm btn-outline-warning" onclick="toggleVisibility(<?php echo $module['id']; ?>)">
-                                                                <i class="fas fa-eye<?php echo $module['is_menu_item'] ? '' : '-slash'; ?>"></i>
-                                                            </button>
-                                                            <button class="btn btn-sm btn-outline-secondary drag-handle">
-                                                                <i class="fas fa-grip-vertical"></i>
-                                                            </button>
+                                                                <div class="menu-item-content">
+                                                                    <div class="menu-item-main">
+
+                                                                        ' . ($level > 0 ? 
+                                                                            '<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="' . ($item['icon'] ?? 'fas fa-circle') . ' me-2"></i><span class="menu-item-name">' . htmlspecialchars($item['name']) . '</span>' : 
+                                                                            '<i class="' . ($item['icon'] ?? 'fas fa-circle') . ' me-2"></i><span class="menu-item-name">' . htmlspecialchars($item['name']) . '</span>') . '
+
+                                                                        ' . ($hasChildren && $level == 0 ? '<i class="fas fa-chevron-down ms-2 parent-indicator"></i>' : '') . '
+                                                                    </div>
+                                                                    <div class="menu-item-meta">
+                                                                        ' . (!$item['is_active'] ? '<span class="badge bg-secondary badge-sm me-1">Inactive</span>' : '') . '
+                                                                        
                                                         </div>
                                                     </div>
-                                                <?php endforeach; ?>
+                                                            </div>
+                                                            <div class="menu-module-actions">
+                                                                <button class="btn btn-sm btn-outline-primary" onclick="editMenuItem(' . $item['id'] . ')" title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteMenuItem(' . $item['id'] . ')" title="Delete">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-secondary drag-handle" title="Drag to reorder">
+                                                                    <i class="fas fa-grip-vertical"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>';
+                                                        
+                                                        // Render children with proper indentation
+                                                        if ($hasChildren) {
+                                                            $html .= renderMenuStructure($item['children'], $level + 1);
+                                                        }
+                                                    }
+                                                    return $html;
+                                                }
+                                                
+                                                echo renderMenuStructure($rootItems);
+                                                ?>
                                             </div>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
-                                
-                                <!-- Standalone modules -->
-                                <?php if (!empty($groupedModules['standalone'])): ?>
-                                    <div class="menu-standalone">
-                                        <h6 class="fw-bold mb-3">Standalone Modules</h6>
-                                        <?php foreach ($groupedModules['standalone'] as $module): ?>
-                                            <div class="menu-module" data-module-id="<?php echo $module['id']; ?>">
-                                                <div class="menu-module-info">
-                                                    <i class="<?php echo $module['menu_icon'] ?? 'fas fa-circle'; ?>"></i>
-                                                    <span><?php echo htmlspecialchars($module['caption']); ?></span>
-                                                </div>
-                                                <div class="menu-module-actions">
-                                                    <button class="btn btn-sm btn-outline-primary" onclick="editModule(<?php echo $module['id']; ?>)">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-outline-warning" onclick="toggleVisibility(<?php echo $module['id']; ?>)">
-                                                        <i class="fas fa-eye<?php echo $module['is_menu_item'] ? '' : '-slash'; ?>"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-outline-secondary drag-handle">
-                                                        <i class="fas fa-grip-vertical"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php endif; ?>
                             <?php else: ?>
                                 <div class="empty-state">
                                     <i class="fas fa-folder-open fa-3x text-muted"></i>
-                                    <h5 class="mt-3">No Menu Items</h5>
-                                    <p class="text-muted">Start by adding menu groups or modules to build your menu structure.</p>
+                                    <h5 class="mt-3">
+                                        <?php if (isset($selected_group) && $selected_group): ?>
+                                            No Menu Items in "<?php echo htmlspecialchars($selected_group['name']); ?>"
+                                        <?php else: ?>
+                                            No Menu Items
+                                        <?php endif; ?>
+                                    </h5>
+                                    <p class="text-muted">
+                                        <?php if (isset($selected_group) && $selected_group): ?>
+                                            Start by adding menu items to this group using the "Add Menu Item" button above.
+                                        <?php else: ?>
+                                            Start by adding menu groups or modules to build your menu structure.
+                                        <?php endif; ?>
+                                    </p>
                                 </div>
                             <?php endif; ?>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Properties Panel -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Properties</h5>
-                </div>
-                <div class="card-body">
-                    <div id="propertiesPanel">
-                        <div class="text-center text-muted">
-                            <i class="fas fa-mouse-pointer fa-2x mb-3"></i>
-                            <p>Select a menu item to edit its properties</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preview Panel -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Menu Preview</h5>
-                </div>
-                <div class="card-body">
-                    <div id="menuPreview" class="menu-preview">
-                        <!-- Preview will be loaded here -->
                     </div>
                 </div>
             </div>
@@ -317,6 +379,96 @@ ob_start();
     </div>
 </div>
 
+<!-- Menu Item Modal -->
+<div class="modal fade" id="menuItemModal" tabindex="-1" aria-labelledby="menuItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="menuItemModalLabel">Add Menu Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="menuItemForm">
+                <div class="modal-body">
+                    <input type="hidden" id="menuItemId" name="id">
+                    <input type="hidden" id="menuItemCsrfToken" name="_token" value="<?php echo $csrf_token; ?>">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="menuItemName" class="form-label">Menu Name</label>
+                                <input type="text" class="form-control" id="menuItemName" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="menuItemGroup" class="form-label">Group</label>
+                                <select class="form-select" id="menuItemGroup" name="group_id" required>
+                                    <option value="">Select Group</option>
+                                    <?php foreach ($groups as $group): ?>
+                                        <option value="<?php echo $group['id']; ?>"><?php echo htmlspecialchars($group['name']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="menuItemModule" class="form-label">Module</label>
+                                <select class="form-select" id="menuItemModule" name="module_id">
+                                    <option value="">Select Module (Optional)</option>
+                                    <?php foreach ($modules as $module): ?>
+                                        <option value="<?php echo $module['id']; ?>"><?php echo htmlspecialchars($module['caption']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="menuItemIcon" class="form-label">Icon</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="menuItemIcon" name="icon" value="fas fa-circle">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="openIconPicker('menuItemIcon')">
+                                        <i class="fas fa-icons"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="menuItemParent" class="form-label">Parent Menu</label>
+                                <select class="form-select" id="menuItemParent" name="parent_id">
+                                    <option value="">No Parent (Single Link)</option>
+                                    <?php foreach ($menuItems as $item): ?>
+                                        <?php if ($item['is_parent']): ?>
+                                            <option value="<?php echo $item['id']; ?>"><?php echo htmlspecialchars($item['name']); ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="menuItemSortOrder" class="form-label">Sort Order</label>
+                                <input type="number" class="form-control" id="menuItemSortOrder" name="sort_order" value="1">
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="menuItemIsParent" name="is_parent">
+                                    <label class="form-check-label" for="menuItemIsParent">
+                                        Is Parent Menu (Dropdown)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="menuItemIsActive" name="is_active" checked>
+                                    <label class="form-check-label" for="menuItemIsActive">
+                                        Active
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Menu Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Icon Picker Modal -->
 <div class="modal fade" id="iconPickerModal" tabindex="-1" aria-labelledby="iconPickerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -433,6 +585,18 @@ ob_start();
 .menu-module-actions {
     display: flex;
     gap: 5px;
+}
+
+.menu-module.parent-item {
+    background-color: #e3f2fd;
+    border-left: 3px solid #2196f3;
+    font-weight: 600;
+}
+
+.menu-module.child-item {
+    background-color: #f8f9fa;
+    border-left: 3px solid #007bff;
+    margin-left: 20px;
 }
 
 .menu-standalone {
@@ -596,6 +760,78 @@ function editModule(id) {
     $('#moduleModal').modal('show');
 }
 
+function editMenuItem(id) {
+    // Check if jQuery is available
+    if (typeof $ === 'undefined') {
+        console.error('jQuery is not loaded. Please refresh the page.');
+        alert('Error: jQuery is not loaded. Please refresh the page.');
+        return;
+    }
+    
+    $('#menuItemModalLabel').text('Edit Menu Item');
+    $('#menuItemForm')[0].reset();
+    $('#menuItemId').val(id);
+    
+    // Load menu item data via AJAX
+    fetch(`<?php echo APP_URL; ?>/menu/get-menu-item/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const item = data.menuItem;
+                $('#menuItemName').val(item.name);
+                $('#menuItemGroup').val(item.group_id);
+                $('#menuItemModule').val(item.module_id || '');
+                $('#menuItemIcon').val(item.icon);
+                $('#menuItemParent').val(item.parent_id || '');
+                $('#menuItemSortOrder').val(item.sort_order);
+                $('#menuItemIsParent').prop('checked', item.is_parent == 1);
+                $('#menuItemIsActive').prop('checked', item.is_active == 1);
+                $('#menuItemModal').modal('show');
+            } else {
+                showToast('error', data.error);
+            }
+        })
+        .catch(error => {
+            showToast('error', 'Error loading menu item data');
+        });
+}
+
+function deleteMenuItem(id) {
+    // Check if jQuery is available
+    if (typeof $ === 'undefined') {
+        console.error('jQuery is not loaded. Please refresh the page.');
+        alert('Error: jQuery is not loaded. Please refresh the page.');
+        return;
+    }
+    
+    if (confirm('Are you sure you want to delete this menu item? This action cannot be undone.')) {
+        fetch('<?php echo APP_URL; ?>/menu/delete-menu-item', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': window.csrfToken || ''
+            },
+            body: JSON.stringify({
+                id: id,
+                _token: window.csrfToken || ''
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', data.message);
+                location.reload();
+            } else {
+                showToast('error', data.error);
+            }
+        })
+        .catch(error => {
+            showToast('error', 'Error deleting menu item');
+        });
+    }
+}
+
 function toggleVisibility(id) {
     // Implementation for toggling module visibility
     // Toggle visibility for module
@@ -709,6 +945,37 @@ $('#moduleForm').on('submit', function(e) {
     });
 });
 
+    // Menu Item Form submission
+    $('#menuItemForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const menuItemId = $('#menuItemId').val();
+        const url = menuItemId ? '<?php echo APP_URL; ?>/menu/update-menu-item' : '<?php echo APP_URL; ?>/menu/create-menu-item';
+        
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': window.csrfToken || ''
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', data.message);
+                $('#menuItemModal').modal('hide');
+                location.reload();
+            } else {
+                showToast('error', data.error);
+            }
+        })
+        .catch(error => {
+            showToast('error', 'An error occurred');
+        });
+    });
+
 // Toast notification function
 } // End of initializejQuery()
 
@@ -727,7 +994,7 @@ function addGroup() {
     $('#groupModal').modal('show');
 }
 
-function addModule() {
+function addMenuItem() {
     // Check if jQuery is available
     if (typeof $ === 'undefined') {
         console.error('jQuery is not loaded. Please refresh the page.');
@@ -735,10 +1002,16 @@ function addModule() {
         return;
     }
     
-    $('#moduleModalLabel').text('Add Module');
-    $('#moduleForm')[0].reset();
-    $('#moduleId').val('');
-    $('#moduleModal').modal('show');
+    $('#menuItemModalLabel').text('Add Menu Item');
+    $('#menuItemForm')[0].reset();
+    $('#menuItemId').val('');
+    
+    // If we're in group mode, pre-select the group
+    <?php if (isset($selected_group_id) && $selected_group_id): ?>
+    $('#menuItemGroup').val('<?php echo $selected_group_id; ?>');
+    <?php endif; ?>
+    
+    $('#menuItemModal').modal('show');
 }
 
 function editGroup(id) {
@@ -873,3 +1146,190 @@ $content = ob_get_clean();
 // Include the main layout with content
 include __DIR__ . '/../layouts/app.php';
 ?>
+<style>
+/* Menu Builder Hierarchical Structure Styling */
+.menu-module {
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.menu-module:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0,123,255,0.1);
+}
+
+.menu-child-indent {
+    margin-left: 30px;
+    border-left: 3px solid #e9ecef;
+    padding-left: 16px;
+    background: #f8f9fa;
+    position: relative;
+}
+
+.menu-inactive {
+    opacity: 0.7;
+    background: #f8f9fa;
+}
+
+.menu-inactive .menu-item-name {
+    color: #6c757d;
+    text-decoration: line-through;
+}
+
+.menu-module-info {
+    padding: 12px;
+}
+
+.menu-item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.menu-item-main {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.menu-item-name {
+    font-weight: 500;
+    color: #495057;
+    font-size: 14px;
+}
+
+.menu-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.badge-sm {
+    font-size: 10px;
+    padding: 2px 6px;
+}
+
+.menu-module-actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.menu-module:hover .menu-module-actions {
+    opacity: 1;
+}
+
+.menu-module-actions .btn {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+/* Visual hierarchy indicators */
+.menu-child-indent .menu-item-main i {
+    margin-left: 0;
+}
+
+/* Parent item styling */
+.menu-parent-item {
+    border-left: 4px solid #007bff;
+}
+
+.menu-parent-item .menu-item-name {
+    font-weight: 600;
+}
+
+.parent-indicator {
+    color: #28a745;
+    font-size: 14px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Enhanced child indentation */
+.menu-child-indent::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, #007bff, #e9ecef);
+    border-radius: 0 2px 2px 0;
+}
+
+/* Empty state styling */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    margin-bottom: 16px;
+}
+
+/* Group header styling */
+.menu-group-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #dee2e6;
+}
+
+.menu-group-info {
+    display: flex;
+    align-items: center;
+}
+
+.menu-group-info i {
+    color: #007bff;
+    margin-right: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .menu-item-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .menu-item-meta {
+        align-self: flex-end;
+    }
+    
+    .menu-child-indent {
+        margin-left: 20px;
+        padding-left: 12px;
+    }
+    
+    .parent-indicator {
+        font-size: 12px;
+    }
+}
+
+/* Additional spacing improvements */
+.menu-module {
+    margin-bottom: 6px;
+}
+
+.menu-child-indent {
+    margin-bottom: 4px;
+}
+
+/* Visual connection between parent and children */
+.menu-parent-item + .menu-child-indent {
+    margin-top: -2px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 6px;
+}
+</style>
+

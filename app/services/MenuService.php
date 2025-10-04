@@ -314,10 +314,15 @@ class MenuService
         $modules = $this->moduleModel->findAll();
         $groups = $this->menuGroupModel->getAllActive();
         $permissions = $this->menuPermissionModel->getPermissionMatrix();
+        
+        // Get all menu items
+        $menuItemModel = new MenuItem();
+        $menuItems = $menuItemModel->getAll();
 
         return [
             'modules' => $modules,
             'groups' => $groups,
+            'menuItems' => $menuItems,
             'permissions' => $permissions
         ];
     }
