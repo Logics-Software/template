@@ -96,7 +96,7 @@
                             
                             <div class="mb-3">
                                 <label for="content" class="form-label">Isi Pesan <span class="text-danger">*</span></label>
-                                <div id="quill-editor" class="quill-editor"></div>
+                                <div id="quill-editor" class="quill-editor" style="height: 300px;"></div>
                                 <textarea id="content" name="content" class="d-none" required></textarea>
                             </div>
                             
@@ -148,8 +148,8 @@
 </div>
 
 <!-- Quill JS Editor -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<link href="<?php echo BASE_URL; ?>assets/css/quill.snow.css" rel="stylesheet">
+<script src="<?php echo BASE_URL; ?>assets/js/quill.js"></script>
 
 <!-- User selection styles moved to complete.css -->
 

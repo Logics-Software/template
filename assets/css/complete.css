@@ -5558,3 +5558,30 @@ button:has(i[class*="fas fa-eye-slash"]) {
     transform: none;
   }
 }
+
+/* Enhanced features from theme-integration.css */
+
+/* slideDown animation */
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-down {
+  animation: slideDown 0.3s ease-in-out;
+}
+
+/* Performance optimizations */
+.btn,
+.form-control,
+.card,
+.modal,
+.dropdown-menu {
+  will-change: auto;
+}

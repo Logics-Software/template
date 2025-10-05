@@ -17,42 +17,37 @@
             
             <div class="card-body">
                 <!-- Search and Action Buttons -->
-                <div class="mb-4">
-                    <form method="GET" action="<?php echo APP_URL; ?>/call-center" class="row g-3">
-                        <div class="col-md-4">
-                            <label for="search" class="form-label">Search</label>
-                            <input type="text" class="form-control" id="search" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search by title, number, or description...">
-                        </div>
-                        <div class="col-md-2">
-                            <label for="per_page" class="form-label">Per Page</label>
-                            <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
-                                <option value="5"<?php echo ($pagination['per_page'] ?? 10) == 5 ? ' selected' : ''; ?>>5</option>
-                                <option value="10"<?php echo ($pagination['per_page'] ?? 10) == 10 ? ' selected' : ''; ?>>10</option>
-                                <option value="15"<?php echo ($pagination['per_page'] ?? 10) == 15 ? ' selected' : ''; ?>>15</option>
-                                <option value="20"<?php echo ($pagination['per_page'] ?? 10) == 20 ? ' selected' : ''; ?>>20</option>
-                                <option value="25"<?php echo ($pagination['per_page'] ?? 10) == 25 ? ' selected' : ''; ?>>25</option>
-                                <option value="50"<?php echo ($pagination['per_page'] ?? 10) == 50 ? ' selected' : ''; ?>>50</option>
-                                <option value="100"<?php echo ($pagination['per_page'] ?? 10) == 100 ? ' selected' : ''; ?>>100</option>
-                                <option value="200"<?php echo ($pagination['per_page'] ?? 10) == 200 ? ' selected' : ''; ?>>200</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-outline-primary flex-fill">
-                                    <i class="fas fa-search me-1"></i>Search
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <form method="GET" action="<?php echo APP_URL; ?>/call-center" class="d-flex" id="searchForm">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Cari call center..." value="<?php echo htmlspecialchars($search); ?>" id="searchInput">
+                                <button type="button" class="btn btn-secondary" id="searchToggleBtn" title="Search">
+                                    <i class="fas fa-search" id="searchIcon"></i>
                                 </button>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="d-flex gap-2">
-                                <a href="<?php echo APP_URL; ?>/call-center/create" class="btn btn-primary flex-fill">
-                                    <i class="fas fa-plus me-1"></i>Add Call Center
-                                </a>
-                            </div>
-                        </div>
+                        </form>
+                    </div>
+                    <form method="GET" action="<?php echo APP_URL; ?>/call-center" class="col-md-2">
+                        <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+                        <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                            <option value="5"<?php echo ($pagination['per_page'] ?? 10) == 5 ? ' selected' : ''; ?>>5</option>
+                            <option value="10"<?php echo ($pagination['per_page'] ?? 10) == 10 ? ' selected' : ''; ?>>10</option>
+                            <option value="15"<?php echo ($pagination['per_page'] ?? 10) == 15 ? ' selected' : ''; ?>>15</option>
+                            <option value="20"<?php echo ($pagination['per_page'] ?? 10) == 20 ? ' selected' : ''; ?>>20</option>
+                            <option value="25"<?php echo ($pagination['per_page'] ?? 10) == 25 ? ' selected' : ''; ?>>25</option>
+                            <option value="50"<?php echo ($pagination['per_page'] ?? 10) == 50 ? ' selected' : ''; ?>>50</option>
+                            <option value="100"<?php echo ($pagination['per_page'] ?? 10) == 100 ? ' selected' : ''; ?>>100</option>
+                            <option value="200"<?php echo ($pagination['per_page'] ?? 10) == 200 ? ' selected' : ''; ?>>200</option>
+                        </select>
                     </form>
+                    <div class="col-md-6">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="<?php echo APP_URL; ?>/call-center/create" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>Add Call Center
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 
                 <?php if (empty($callCenters)): ?>
@@ -252,6 +247,56 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // Drag and Drop functionality is now handled by drag-drop.js utility
+</script>
+
+<script>
+// Search/Reset Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+    const searchToggleBtn = document.getElementById('searchToggleBtn');
+    const searchIcon = document.getElementById('searchIcon');
+    
+    let isSearchMode = true;
+    
+    // Check if there's a search value to determine initial mode
+    if (searchInput.value.trim() !== '') {
+        isSearchMode = false;
+        updateButtonState();
+    }
+    
+    function updateButtonState() {
+        if (isSearchMode) {
+            searchToggleBtn.title = 'Search';
+            searchIcon.className = 'fas fa-search';
+            searchToggleBtn.onclick = function() {
+                searchForm.submit();
+            };
+        } else {
+            searchToggleBtn.title = 'Reset';
+            searchIcon.className = 'fas fa-times';
+            searchToggleBtn.onclick = function() {
+                searchInput.value = '';
+                searchForm.submit();
+            };
+        }
+    }
+    
+    // Toggle mode when input changes
+    searchInput.addEventListener('input', function() {
+        const hasValue = this.value.trim() !== '';
+        if (hasValue && isSearchMode) {
+            isSearchMode = false;
+            updateButtonState();
+        } else if (!hasValue && !isSearchMode) {
+            isSearchMode = true;
+            updateButtonState();
+        }
+    });
+    
+    // Initialize button state
+    updateButtonState();
+});
 </script>
 
 

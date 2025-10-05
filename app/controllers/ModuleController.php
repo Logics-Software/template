@@ -20,44 +20,55 @@ class ModuleController extends BaseController
             return;
         }
 
-        $page = (int) ($request->input('page') ?? 1);
-        $search = $request->input('search') ?? '';
-        $role = $request->input('role') ?? '';
-        $perPage = (int) ($request->input('per_page') ?? DEFAULT_PAGE_SIZE);
-        $sort = $request->input('sort') ?? 'id';
-        $order = $request->input('order') ?? 'asc';
+        try {
+            $page = (int) ($request->input('page') ?? 1);
+            $search = $request->input('search') ?? '';
+            $role = $request->input('role') ?? '';
+            $perPage = (int) ($request->input('per_page') ?? DEFAULT_PAGE_SIZE);
+            $sort = $request->input('sort') ?? 'id';
+            $order = $request->input('order') ?? 'asc';
 
-        $where = '1=1';
-        $whereParams = [];
+            $where = '1=1';
+            $whereParams = [];
 
-        if ($search) {
-            $where .= ' AND (caption LIKE :search OR link LIKE :search)';
-            $whereParams['search'] = "%{$search}%";
+            if ($search) {
+                $where .= ' AND (caption LIKE :search1 OR link LIKE :search2)';
+                $whereParams['search1'] = "%{$search}%";
+                $whereParams['search2'] = "%{$search}%";
+            }
+
+            if ($role) {
+                $where .= ' AND ' . $role . ' = 1';
+            }
+
+            // Validate sort field
+            $allowedSorts = ['id', 'caption', 'link', 'created_at', 'updated_at'];
+            if (!in_array($sort, $allowedSorts)) {
+                $sort = 'id';
+            }
+
+            // Validate order
+            $order = strtolower($order) === 'desc' ? 'desc' : 'asc';
+
+            $modules = $this->moduleModel->paginate($page, $perPage, $where, $whereParams, $sort, $order);
+
+            $this->view('modules/index', [
+                'title' => 'Modules',
+                'current_page' => 'modules',
+                'modules' => $modules,
+                'search' => $search,
+                'role' => $role,
+                'csrf_token' => $this->csrfToken()
+            ]);
+        } catch (Exception $e) {
+            // Log the error for debugging
+            error_log("ModuleController index error: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            
+            // Show a user-friendly error message
+            $this->withError('An error occurred while loading modules. Please try again.');
+            $this->redirect('/modules');
         }
-
-        if ($role) {
-            $where .= ' AND ' . $role . ' = 1';
-        }
-
-        // Validate sort field
-        $allowedSorts = ['id', 'caption', 'link', 'created_at', 'updated_at'];
-        if (!in_array($sort, $allowedSorts)) {
-            $sort = 'id';
-        }
-
-        // Validate order
-        $order = strtolower($order) === 'desc' ? 'desc' : 'asc';
-
-        $modules = $this->moduleModel->paginate($page, $perPage, $where, $whereParams, $sort, $order);
-
-        $this->view('modules/index', [
-            'title' => 'Modules',
-            'current_page' => 'modules',
-            'modules' => $modules,
-            'search' => $search,
-            'role' => $role,
-            'csrf_token' => $this->csrfToken()
-        ]);
     }
     
     public function create($request = null, $response = null, $params = [])

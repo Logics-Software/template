@@ -62,7 +62,7 @@ function getGreetingMessage() {
                     <!-- Notifications -->
                     <!-- =================================================== -->
                     <div class="notification-dropdown">
-                        <button class="btn btn-link position-relative" id="notificationToggle" data-bs-toggle="dropdown">
+                        <button class="btn btn-link position-relative" id="notificationToggle">
                             <i class="fa-regular fa-bell"></i>
                             <span class="position-absolute badge rounded-pill bg-danger">
                                 5
@@ -161,9 +161,9 @@ function getGreetingMessage() {
                     <!-- Messages -->
                     <!-- =================================================== -->
                     <div class="message-dropdown">
-                        <button class="btn btn-link position-relative" data-bs-toggle="dropdown" id="messageToggle" title="Pesan">
+                        <button class="btn btn-link position-relative" id="messageToggle" title="Pesan">
                             <i class="fa-regular fa-envelope"></i>
-                            <span class="position-absolute badge rounded-pill bg-danger d-none" id="messageBadge">
+                            <span class="position-absolute badge rounded-pill bg-danger" id="messageBadge" style="display: none;">
                                 0
                             </span>
                         </button>

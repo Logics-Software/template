@@ -22,11 +22,11 @@
                 <!-- Search Form with Action Buttons -->
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <form method="GET" action="<?php echo APP_URL; ?>/messages/search" class="d-flex">
+                        <form method="GET" action="<?php echo APP_URL; ?>/messages" class="d-flex" id="searchForm">
                             <div class="input-group">
-                                <input type="text" name="q" class="form-control" placeholder="Cari pesan..." value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>">
-                                <button type="submit" class="btn btn-secondary">
-                                    <i class="fas fa-search"></i>
+                                <input type="text" name="search" class="form-control" placeholder="Cari pesan..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" id="searchInput">
+                                <button type="button" class="btn btn-secondary" id="searchToggleBtn" title="Search">
+                                    <i class="fas fa-search" id="searchIcon"></i>
                                 </button>
                             </div>
                         </form>
@@ -241,5 +241,53 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         }
     });
+});
+
+// Search/Reset Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+    const searchToggleBtn = document.getElementById('searchToggleBtn');
+    const searchIcon = document.getElementById('searchIcon');
+    
+    let isSearchMode = true;
+    
+    // Check if there's a search value to determine initial mode
+    if (searchInput.value.trim() !== '') {
+        isSearchMode = false;
+        updateButtonState();
+    }
+    
+    function updateButtonState() {
+        if (isSearchMode) {
+            searchToggleBtn.title = 'Search';
+            searchIcon.className = 'fas fa-search';
+            searchToggleBtn.onclick = function() {
+                searchForm.submit();
+            };
+        } else {
+            searchToggleBtn.title = 'Reset';
+            searchIcon.className = 'fas fa-times';
+            searchToggleBtn.onclick = function() {
+                searchInput.value = '';
+                searchForm.submit();
+            };
+        }
+    }
+    
+    // Toggle mode when input changes
+    searchInput.addEventListener('input', function() {
+        const hasValue = this.value.trim() !== '';
+        if (hasValue && isSearchMode) {
+            isSearchMode = false;
+            updateButtonState();
+        } else if (!hasValue && !isSearchMode) {
+            isSearchMode = true;
+            updateButtonState();
+        }
+    });
+    
+    // Initialize button state
+    updateButtonState();
 });
 </script>

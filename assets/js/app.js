@@ -163,6 +163,83 @@ function initPasswordToggle() {
   }
 }
 
+// Initialize notification dropdown
+function initNotificationDropdown() {
+  const notificationToggle = document.getElementById("notificationToggle");
+  const notificationDropdown = notificationToggle?.nextElementSibling;
+
+  if (notificationToggle && notificationDropdown) {
+    // Toggle dropdown on click
+    notificationToggle.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Close other dropdowns first
+      document.querySelectorAll(".dropdown-menu.show").forEach((menu) => {
+        if (menu !== notificationDropdown) {
+          menu.classList.remove("show");
+        }
+      });
+
+      // Toggle current dropdown
+      notificationDropdown.classList.toggle("show");
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function (e) {
+      if (
+        !notificationToggle.contains(e.target) &&
+        !notificationDropdown.contains(e.target)
+      ) {
+        notificationDropdown.classList.remove("show");
+      }
+    });
+
+    // Handle clear all notifications
+    const clearAllBtn = notificationDropdown.querySelector(
+      ".dropdown-header .btn"
+    );
+    if (clearAllBtn) {
+      clearAllBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Clear all notification items
+        const notificationItems =
+          notificationDropdown.querySelectorAll(".notification-item");
+        notificationItems.forEach((item) => {
+          item.style.opacity = "0";
+          item.style.transform = "translateX(100%)";
+          setTimeout(() => {
+            item.remove();
+          }, 300);
+        });
+
+        // Update badge count
+        const badge = notificationToggle.querySelector(".badge");
+        if (badge) {
+          badge.textContent = "0";
+          badge.style.display = "none";
+        }
+
+        // Show message if no notifications
+        setTimeout(() => {
+          const notificationList =
+            notificationDropdown.querySelector(".notification-list");
+          if (notificationList && notificationList.children.length === 0) {
+            notificationList.innerHTML = `
+              <div class="text-center p-3">
+                <i class="fas fa-bell-slash fa-2x text-muted mb-2"></i>
+                <p class="mb-0 text-muted">Tidak ada notifikasi</p>
+              </div>
+            `;
+          }
+        }, 350);
+      });
+    }
+  }
+}
+
 // Form submission with CSRF protection
 function initFormSubmission() {
   const forms = document.querySelectorAll("form[method='post']");
@@ -362,6 +439,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize password toggle
   initPasswordToggle();
 
+  // Initialize notification dropdown
+  initNotificationDropdown();
+
   // Initialize form submission
   initFormSubmission();
 
@@ -387,6 +467,7 @@ window.Logics.initSidebarToggle = initSidebarToggle;
 window.Logics.initTheme = initTheme;
 window.Logics.toggleTheme = toggleTheme;
 window.Logics.updateThemeIcon = updateThemeIcon;
+window.Logics.initNotificationDropdown = initNotificationDropdown;
 
 // Fallback initialization for theme toggle
 // This ensures theme toggle works even if there are timing issues
@@ -638,6 +719,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Header Message Dropdown functionality
 function initHeaderMessageDropdown() {
+  console.log("Initializing header message dropdown...");
+
   // Check if user is logged in before making API calls
   const isLoggedIn =
     document.querySelector(".user-dropdown") ||
@@ -645,14 +728,24 @@ function initHeaderMessageDropdown() {
     document.querySelector(".main-content");
 
   if (!isLoggedIn) {
+    console.log("User not logged in, skipping message dropdown initialization");
     return; // Exit if user is not logged in
   }
 
   const messageToggle = document.getElementById("messageToggle");
   const messageBadge = document.getElementById("messageBadge");
   const messageList = document.getElementById("messageList");
+  const messageDropdown = messageToggle?.nextElementSibling;
 
-  if (!messageToggle || !messageBadge || !messageList) {
+  console.log("Message elements found:", {
+    messageToggle: !!messageToggle,
+    messageBadge: !!messageBadge,
+    messageList: !!messageList,
+    messageDropdown: !!messageDropdown,
+  });
+
+  if (!messageToggle || !messageBadge || !messageList || !messageDropdown) {
+    console.log("Missing required elements, skipping initialization");
     return;
   }
 
@@ -667,14 +760,18 @@ function initHeaderMessageDropdown() {
         return response.json();
       })
       .then((data) => {
+        console.log("Unread count data:", data);
         if (data.success && data.unread_count > 0) {
           messageBadge.textContent = data.unread_count;
           messageBadge.style.display = "inline";
+          console.log("Badge shown with count:", data.unread_count);
         } else {
           messageBadge.style.display = "none";
+          console.log("Badge hidden");
         }
       })
       .catch((error) => {
+        console.log("Error loading unread count:", error);
         // Silently handle unauthorized errors
         if (error.message !== "Unauthorized") {
           // Error handled silently
@@ -800,9 +897,35 @@ function initHeaderMessageDropdown() {
   // Load data on page load
   loadMessageData();
 
-  // Refresh data when dropdown is opened
-  messageToggle.addEventListener("click", function () {
-    setTimeout(loadMessageData, 100);
+  // Toggle dropdown on click
+  messageToggle.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Close other dropdowns first
+    document.querySelectorAll(".dropdown-menu.show").forEach((menu) => {
+      if (menu !== messageDropdown) {
+        menu.classList.remove("show");
+      }
+    });
+
+    // Toggle current dropdown
+    messageDropdown.classList.toggle("show");
+
+    // Refresh data when dropdown is opened
+    if (messageDropdown.classList.contains("show")) {
+      setTimeout(loadMessageData, 100);
+    }
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", function (e) {
+    if (
+      !messageToggle.contains(e.target) &&
+      !messageDropdown.contains(e.target)
+    ) {
+      messageDropdown.classList.remove("show");
+    }
   });
 
   // Mark all as read button handler

@@ -1084,6 +1084,20 @@ div:hover {
   z-index: 10;
 }
 
+/* Message Badge */
+#messageToggle .badge {
+  font-size: 0.7rem;
+  padding: 0.2em 0.4em;
+  min-width: 1.2em;
+  height: 1.4em;
+  line-height: 1;
+  top: 3px;
+  left: 25px;
+  transform: none;
+  pointer-events: none;
+  z-index: 10;
+}
+
 /* Message Dropdown Styling */
 .message-dropdown .dropdown-menu {
   width: 350px;

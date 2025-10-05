@@ -17,52 +17,49 @@
             
             <div class="card-body">
                 <!-- Search and Filter -->
-                <div class="mb-4">
-                    <form method="GET" action="<?php echo APP_URL; ?>/modules" class="row g-3">
-                        <div class="col-md-4">
-                            <label for="search" class="form-label">Search</label>
-                            <input type="text" class="form-control" id="search" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search by caption or link...">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="role" class="form-label">Role Access</label>
-                            <select class="form-select" id="role" name="role">
-                                <option value="">All Roles</option>
-                                <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
-                                <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
-                                <option value="user"<?php echo $role === 'user' ? ' selected' : ''; ?>>User</option>
-                                <option value="marketing"<?php echo $role === 'marketing' ? ' selected' : ''; ?>>Marketing</option>
-                                <option value="customer"<?php echo $role === 'customer' ? ' selected' : ''; ?>>Customer</option>
-                            </select>
-                        </div>
-                        <div class="col-md-1">
-                            <label for="per_page" class="form-label">Per Page</label>
-                            <select class="form-select" id="per_page" name="per_page">
-                                <option value="5"<?php echo $modules['per_page'] == 5 ? ' selected' : ''; ?>>5</option>
-                                <option value="10"<?php echo $modules['per_page'] == 10 ? ' selected' : ''; ?>>10</option>
-                                <option value="15"<?php echo $modules['per_page'] == 15 ? ' selected' : ''; ?>>15</option>
-                                <option value="20"<?php echo $modules['per_page'] == 20 ? ' selected' : ''; ?>>20</option>
-                                <option value="25"<?php echo $modules['per_page'] == 25 ? ' selected' : ''; ?>>25</option>
-                                <option value="50"<?php echo $modules['per_page'] == 50 ? ' selected' : ''; ?>>50</option>
-                                <option value="100"<?php echo $modules['per_page'] == 100 ? ' selected' : ''; ?>>100</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-outline-primary flex-fill">
-                                    <i class="fas fa-search me-1"></i>Filter
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <form method="GET" action="<?php echo APP_URL; ?>/modules" class="d-flex" id="searchForm">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Cari modul..." value="<?php echo htmlspecialchars($search); ?>" id="searchInput">
+                                <button type="button" class="btn btn-secondary" id="searchToggleBtn" title="Search">
+                                    <i class="fas fa-search" id="searchIcon"></i>
                                 </button>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="d-flex gap-2">
-                                <a href="<?php echo APP_URL; ?>/modules/create" class="btn btn-primary flex-fill" title="Tambah Modul Baru">
-                                    <i class="fas fa-plus-circle me-1"></i>Add Module
-                                </a>
-                            </div>
-                        </div>
+                        </form>
+                    </div>
+                    <form method="GET" action="<?php echo APP_URL; ?>/modules" class="col-md-3">
+                        <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+                        <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($modules['per_page']); ?>">
+                        <select class="form-select" id="role" name="role" onchange="this.form.submit()">
+                            <option value="">All Roles</option>
+                            <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
+                            <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
+                            <option value="user"<?php echo $role === 'user' ? ' selected' : ''; ?>>User</option>
+                            <option value="marketing"<?php echo $role === 'marketing' ? ' selected' : ''; ?>>Marketing</option>
+                            <option value="customer"<?php echo $role === 'customer' ? ' selected' : ''; ?>>Customer</option>
+                        </select>
                     </form>
+                    <form method="GET" action="<?php echo APP_URL; ?>/modules" class="col-md-2">
+                        <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+                        <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
+                        <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                            <option value="5"<?php echo $modules['per_page'] == 5 ? ' selected' : ''; ?>>5</option>
+                            <option value="10"<?php echo $modules['per_page'] == 10 ? ' selected' : ''; ?>>10</option>
+                            <option value="15"<?php echo $modules['per_page'] == 15 ? ' selected' : ''; ?>>15</option>
+                            <option value="20"<?php echo $modules['per_page'] == 20 ? ' selected' : ''; ?>>20</option>
+                            <option value="25"<?php echo $modules['per_page'] == 25 ? ' selected' : ''; ?>>25</option>
+                            <option value="50"<?php echo $modules['per_page'] == 50 ? ' selected' : ''; ?>>50</option>
+                            <option value="100"<?php echo $modules['per_page'] == 100 ? ' selected' : ''; ?>>100</option>
+                        </select>
+                    </form>
+                    <div class="col-md-3">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="<?php echo APP_URL; ?>/modules/create" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>Add Module
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="table-responsive">
@@ -352,5 +349,53 @@ document.getElementById("confirmDelete").addEventListener("click", function() {
             showToast('error', "An error occurred while deleting the module");
         });
     }
+});
+
+// Search/Reset Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+    const searchToggleBtn = document.getElementById('searchToggleBtn');
+    const searchIcon = document.getElementById('searchIcon');
+    
+    let isSearchMode = true;
+    
+    // Check if there's a search value to determine initial mode
+    if (searchInput.value.trim() !== '') {
+        isSearchMode = false;
+        updateButtonState();
+    }
+    
+    function updateButtonState() {
+        if (isSearchMode) {
+            searchToggleBtn.title = 'Search';
+            searchIcon.className = 'fas fa-search';
+            searchToggleBtn.onclick = function() {
+                searchForm.submit();
+            };
+        } else {
+            searchToggleBtn.title = 'Reset';
+            searchIcon.className = 'fas fa-times';
+            searchToggleBtn.onclick = function() {
+                searchInput.value = '';
+                searchForm.submit();
+            };
+        }
+    }
+    
+    // Toggle mode when input changes
+    searchInput.addEventListener('input', function() {
+        const hasValue = this.value.trim() !== '';
+        if (hasValue && isSearchMode) {
+            isSearchMode = false;
+            updateButtonState();
+        } else if (!hasValue && !isSearchMode) {
+            isSearchMode = true;
+            updateButtonState();
+        }
+    });
+    
+    // Initialize button state
+    updateButtonState();
 });
 </script>

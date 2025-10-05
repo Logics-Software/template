@@ -509,7 +509,14 @@ function deselectAll() {
 }
 
 function openBulkPermissionModal() {
-    $('#bulkPermissionModal').modal('show');
+    // Show bulk permission modal using jQuery
+    $('#bulkPermissionModal').show();
+    $('body').addClass('modal-open');
+    
+    // Add backdrop
+    if ($('.modal-backdrop').length === 0) {
+        $('body').append('<div class="modal-backdrop fade show"></div>');
+    }
 }
 
 function applyBulkPermission() {
@@ -554,7 +561,10 @@ function applyBulkPermission() {
         }
     }
     
-    $('#bulkPermissionModal').modal('hide');
+    // Hide bulk permission modal using jQuery
+    $('#bulkPermissionModal').hide();
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
 }
 
 function savePermissions() {

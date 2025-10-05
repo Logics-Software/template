@@ -245,7 +245,6 @@ class MessageController extends BaseController
         $message = $this->messageModel->getMessageWithRecipients($messageId, $userId);
 
         if (!$message) {
-            $this->withError('Pesan tidak ditemukan atau Anda tidak memiliki akses');
             $this->redirect('/messages');
             return;
         }

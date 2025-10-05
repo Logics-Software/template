@@ -172,4 +172,22 @@ class ApiController extends BaseController
             'count' => count($formattedMessages)
         ]);
     }
+
+    /**
+     * Get unread message count for header badge
+     */
+    public function getUnreadCount()
+    {
+        if (!Session::has('user_id')) {
+            $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $messageModel = new Message();
+        $unreadCount = $messageModel->getUnreadCount(Session::get('user_id'));
+        
+        $this->json([
+            'success' => true,
+            'unread_count' => $unreadCount
+        ]);
+    }
 }

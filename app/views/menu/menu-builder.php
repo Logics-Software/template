@@ -607,7 +607,10 @@ if (typeof $ === 'undefined') {
         .then(data => {
             if (data.success) {
                 showToast('success', data.message);
-                $('#menuItemModal').modal('hide');
+                // Hide modal using jQuery
+                $('#menuItemModal').hide();
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
                 location.reload();
                 } else {
                 showToast('error', data.error);
@@ -730,7 +733,14 @@ function editMenuItem(id) {
                     requiredAsterisk.show();
                 }
                 
-                $('#menuItemModal').modal('show');
+                // Show modal using jQuery
+                $('#menuItemModal').show();
+                $('body').addClass('modal-open');
+                
+                // Add backdrop
+                if ($('.modal-backdrop').length === 0) {
+                    $('body').append('<div class="modal-backdrop fade show"></div>');
+                }
             } else {
                 console.error('API error:', data.error);
                 showToast('error', data.error);
@@ -885,7 +895,14 @@ function addMenuItem() {
         }
     }
     
-    $('#menuItemModal').modal('show');
+    // Show modal using jQuery
+    $('#menuItemModal').show();
+    $('body').addClass('modal-open');
+    
+    // Add backdrop
+    if ($('.modal-backdrop').length === 0) {
+        $('body').append('<div class="modal-backdrop fade show"></div>');
+    }
 }
 
 
@@ -1030,7 +1047,14 @@ function openIconPicker(target) {
     initializeModalIconPicker();
     
     // Show modal
-    $('#iconPickerModal').modal('show');
+    // Show icon picker modal using jQuery
+    $('#iconPickerModal').show();
+    $('body').addClass('modal-open');
+    
+    // Add backdrop
+    if ($('.modal-backdrop').length === 0) {
+        $('body').append('<div class="modal-backdrop fade show"></div>');
+    }
 }
 
 function populateCategoryDropdown() {
@@ -1208,7 +1232,10 @@ function selectIcon() {
         }
         
         // Close modal
-        $('#iconPickerModal').modal('hide');
+        // Hide icon picker modal using jQuery
+        $('#iconPickerModal').hide();
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
         
         // Reset selected data
         selectedIconData = null;

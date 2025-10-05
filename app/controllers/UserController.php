@@ -20,54 +20,66 @@ class UserController extends BaseController
             return;
         }
 
-        $page = (int) ($request->input('page') ?? 1);
-        $search = $request->input('search') ?? '';
-        $status = $request->input('status') ?? '';
-        $role = $request->input('role') ?? '';
-        $perPage = (int) ($request->input('per_page') ?? DEFAULT_PAGE_SIZE);
-        $sort = $request->input('sort') ?? 'id';
-        $order = $request->input('order') ?? 'asc';
+        try {
+            $page = (int) ($request->input('page') ?? 1);
+            $search = $request->input('search') ?? '';
+            $status = $request->input('status') ?? '';
+            $role = $request->input('role') ?? '';
+            $perPage = (int) ($request->input('per_page') ?? DEFAULT_PAGE_SIZE);
+            $sort = $request->input('sort') ?? 'id';
+            $order = $request->input('order') ?? 'asc';
 
-        $where = '1=1';
-        $whereParams = [];
+            $where = '1=1';
+            $whereParams = [];
 
-        if ($search) {
-            $where .= ' AND (username LIKE :search OR namalengkap LIKE :search OR email LIKE :search)';
-            $whereParams['search'] = "%{$search}%";
+            if ($search) {
+                $where .= ' AND (username LIKE :search1 OR namalengkap LIKE :search2 OR email LIKE :search3)';
+                $whereParams['search1'] = "%{$search}%";
+                $whereParams['search2'] = "%{$search}%";
+                $whereParams['search3'] = "%{$search}%";
+            }
+
+            if ($status) {
+                $where .= ' AND status = :status';
+                $whereParams['status'] = $status;
+            }
+
+            if ($role) {
+                $where .= ' AND role = :role';
+                $whereParams['role'] = $role;
+            }
+
+            // Validate sort field
+            $allowedSorts = ['id', 'username', 'namalengkap', 'email', 'role', 'status', 'created_at'];
+            if (!in_array($sort, $allowedSorts)) {
+                $sort = 'id';
+            }
+
+            // Validate order
+            if (!in_array(strtolower($order), ['asc', 'desc'])) {
+                $order = 'asc';
+            }
+
+            $users = $this->userModel->paginate($page, $perPage, $where, $whereParams, $sort, $order);
+
+            $this->view('users/index', [
+                'title' => 'Users',
+                'current_page' => 'users',
+                'users' => $users,
+                'search' => $search,
+                'status' => $status,
+                'role' => $role,
+                'csrf_token' => $this->csrfToken()
+            ]);
+        } catch (Exception $e) {
+            // Log the error for debugging
+            error_log("UserController index error: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            
+            // Show a user-friendly error message
+            $this->withError('An error occurred while loading users. Please try again.');
+            $this->redirect('/users');
         }
-
-        if ($status) {
-            $where .= ' AND status = :status';
-            $whereParams['status'] = $status;
-        }
-
-        if ($role) {
-            $where .= ' AND role = :role';
-            $whereParams['role'] = $role;
-        }
-
-        // Validate sort field
-        $allowedSorts = ['id', 'username', 'namalengkap', 'email', 'role', 'status', 'created_at'];
-        if (!in_array($sort, $allowedSorts)) {
-            $sort = 'id';
-        }
-
-        // Validate order
-        if (!in_array(strtolower($order), ['asc', 'desc'])) {
-            $order = 'asc';
-        }
-
-        $users = $this->userModel->paginate($page, $perPage, $where, $whereParams, $sort, $order);
-
-        $this->view('users/index', [
-            'title' => 'Users',
-            'current_page' => 'users',
-            'users' => $users,
-            'search' => $search,
-            'status' => $status,
-            'role' => $role,
-            'csrf_token' => $this->csrfToken()
-        ]);
     }
 
     public function create($request = null, $response = null, $params = [])
