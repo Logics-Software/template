@@ -345,11 +345,11 @@ document.getElementById("confirmDelete").addEventListener("click", function() {
             if (data.success) {
                 location.reload();
             } else {
-                alert("Error: " + (data.error || "Failed to delete module"));
+                showToast('error', data.error || "Failed to delete module");
             }
         })
         .catch(error => {
-            alert("An error occurred while deleting the module");
+            showToast('error', "An error occurred while deleting the module");
         });
     }
 });

@@ -223,11 +223,11 @@ document.getElementById('konfigurasiForm').addEventListener('submit', function(e
                 window.location.reload();
             }
         } else {
-            alert(data.message || 'Terjadi kesalahan');
+            showToast('error', data.message || 'Terjadi kesalahan');
         }
     })
     .catch(error => {
-        alert('Terjadi kesalahan saat menyimpan: ' + error.message);
+        showToast('error', 'Terjadi kesalahan saat menyimpan: ' + error.message);
     })
     .finally(() => {
         // Reset button state

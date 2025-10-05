@@ -224,6 +224,52 @@ echo ' class="' . $bodyClass . '"';
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
+    <!-- Global Toast Function -->
+    <script>
+    // Global Toast notification function
+    function showToast(type, message) {
+        // Create toast container if it doesn't exist
+        let toastContainer = document.getElementById('toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'toast-container';
+            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+            toastContainer.style.zIndex = '9999';
+            document.body.appendChild(toastContainer);
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `toast-notification toast-${type} alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} alert-dismissible fade show`;
+        toast.style.marginBottom = '10px';
+        toast.style.minWidth = '300px';
+        
+        let icon = 'fas fa-info-circle';
+        if (type === 'success') icon = 'fas fa-check-circle';
+        else if (type === 'error') icon = 'fas fa-exclamation-circle';
+        else if (type === 'warning') icon = 'fas fa-exclamation-triangle';
+        
+        toast.innerHTML = `
+            <i class="${icon} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }
+        }, 5000);
+    }
+    </script>
+    
     <!-- Custom JS -->
     <script src="<?php echo APP_URL; ?>/assets/js/app.js"></script>
     

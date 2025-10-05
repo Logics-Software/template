@@ -505,11 +505,11 @@ document.getElementById("confirmDelete").addEventListener("click", function() {
             if (data.success) {
                 location.reload();
             } else {
-                alert("Error: " + (data.error || "Failed to delete user"));
+                showToast('error', data.error || "Failed to delete user");
             }
         })
         .catch(error => {
-            alert("An error occurred while deleting the user");
+            showToast('error', "An error occurred while deleting the user");
         });
     }
 });
@@ -530,11 +530,11 @@ document.getElementById("confirmApprove").addEventListener("click", function() {
             if (data.success) {
                 location.reload();
             } else {
-                alert("Error: " + (data.error || "Failed to approve user"));
+                showToast('error', data.error || "Failed to approve user");
             }
         })
         .catch(error => {
-            alert("An error occurred while approving the user");
+            showToast('error', "An error occurred while approving the user");
         });
     }
 });
@@ -555,11 +555,11 @@ document.getElementById("confirmReject").addEventListener("click", function() {
             if (data.success) {
                 location.reload();
             } else {
-                alert("Error: " + (data.error || "Failed to reject user"));
+                showToast('error', data.error || "Failed to reject user");
             }
         })
         .catch(error => {
-            alert("An error occurred while rejecting the user");
+            showToast('error', "An error occurred while rejecting the user");
         });
     }
 });
@@ -580,11 +580,11 @@ document.getElementById("confirmActivate").addEventListener("click", function() 
             if (data.success) {
                 location.reload();
             } else {
-                alert("Error: " + (data.error || "Failed to activate user"));
+                showToast('error', data.error || "Failed to activate user");
             }
         })
         .catch(error => {
-            alert("An error occurred while activating the user");
+            showToast('error', "An error occurred while activating the user");
         });
     }
 });
@@ -605,11 +605,11 @@ document.getElementById("confirmDeactivate").addEventListener("click", function(
             if (data.success) {
                 location.reload();
             } else {
-                alert("Error: " + (data.error || "Failed to deactivate user"));
+                showToast('error', data.error || "Failed to deactivate user");
             }
         })
         .catch(error => {
-            alert("An error occurred while deactivating the user");
+            showToast('error', "An error occurred while deactivating the user");
         });
     }
 });

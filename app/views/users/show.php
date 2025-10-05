@@ -148,14 +148,16 @@ function deleteUser(id) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
-                window.location.href = "<?php echo APP_URL; ?>/users";
+                showToast('success', data.message);
+                setTimeout(() => {
+                    window.location.href = "<?php echo APP_URL; ?>/users";
+                }, 1500);
             } else {
-                alert(data.error || "An error occurred");
+                showToast('error', data.error || "An error occurred");
             }
         })
         .catch(error => {
-            alert("An error occurred while deleting the user");
+            showToast('error', "An error occurred while deleting the user");
         });
     }
 }

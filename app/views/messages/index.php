@@ -229,13 +229,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 modal.hide();
                 
                 // Show error alert
-                const alertDiv = document.createElement("div");
-                alertDiv.className = "alert alert-danger alert-dismissible fade show";
-                alertDiv.innerHTML = `
-                    <i class="fas fa-exclamation-circle me-1"></i>${data.message || 'Gagal menghapus pesan'}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
-                document.querySelector(".card-body").insertBefore(alertDiv, document.querySelector(".row"));
+                showToast('error', data.message || 'Gagal menghapus pesan');
             }
         })
         .catch(error => {
@@ -244,13 +238,7 @@ document.addEventListener("DOMContentLoaded", function() {
             modal.hide();
             
             // Show error alert
-            const alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-danger alert-dismissible fade show";
-            alertDiv.innerHTML = `
-                <i class="fas fa-exclamation-circle me-1"></i>Terjadi kesalahan saat menghapus pesan
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            document.querySelector(".card-body").insertBefore(alertDiv, document.querySelector(".row"));
+            showToast('error', 'Terjadi kesalahan saat menghapus pesan');
         });
         }
     });

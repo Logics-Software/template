@@ -47,7 +47,6 @@
                             <div class="form-floating mb-3">
                                 <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi" style="height: 120px;"></textarea>
                                 <label for="deskripsi">Deskripsi</label>
-                                <div class="form-text">Optional description for this call center entry</div>
                             </div>
                         </div>
                     </div>
@@ -93,14 +92,7 @@ document.getElementById("createCallCenterForm").addEventListener("submit", funct
     .then(data => {
         if (data.success) {
             // Show success message
-            const alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-success alert-dismissible fade show";
-            alertDiv.innerHTML = `
-                ${data.message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            const form = document.getElementById("createCallCenterForm");
-            form.parentElement.insertBefore(alertDiv, form);
+            showToast('success', data.message);
             
             // Redirect after 2 seconds
             setTimeout(() => {
