@@ -209,10 +209,10 @@ function getGreetingMessage() {
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/profile">
-                                    <i class="fas fa-user me-2"></i>My Account
+                                    <i class="fas fa-user me-2"></i>Akun Saya
                                 </a></li>
                                 <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/change-password">
-                                    <i class="fas fa-key me-2"></i>Change Password
+                                    <i class="fas fa-key me-2"></i>Ganti Password
                                 </a></li>
                                 <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/lock-screen">
                                     <i class="fas fa-lock me-2"></i>Lock Screen
