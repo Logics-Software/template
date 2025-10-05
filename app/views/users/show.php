@@ -27,7 +27,7 @@
                                 <img src="<?php echo APP_URL; ?>/<?php echo htmlspecialchars($user['picture']); ?>" alt="Profile Picture" class="rounded-circle profile-img-lg">
                             <?php else: ?>
                                 <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle text-white profile-img-lg">
-                                    <i class="fas fa-user" style="font-size: 48px;"></i>
+                                    <i class="fas fa-user" class="text-3xl"></i>
                                 </div>
                             <?php endif; ?>
                         </div>

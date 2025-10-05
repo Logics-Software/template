@@ -53,7 +53,7 @@
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="new-password">
                                 <label for="password">Password (leave empty to keep current)</label>
-                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="togglePassword" style="z-index: 10; border: none; background: transparent;" tabindex="-1">
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="togglePassword" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
@@ -62,7 +62,7 @@
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" autocomplete="new-password">
                                 <label for="password_confirmation">Confirm Password</label>
-                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="togglePasswordConfirmation" style="z-index: 10; border: none; background: transparent;" tabindex="-1">
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="togglePasswordConfirmation" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
@@ -108,7 +108,7 @@
                                 </div>
                                 <div id="file-preview" class="file-upload-preview d-none">
                                     <div class="preview-container">
-                                        <img id="preview-image" class="preview-image" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 0.5rem;">
+                                        <img id="preview-image" class="preview-image" alt="Preview" class="img-preview">
                                         <div class="preview-overlay">
                                             <button type="button" class="btn btn-danger remove-preview" onclick="removePreview()">
                                                 <i class="fas fa-times"></i>
@@ -151,7 +151,7 @@ function handleFileSelect(input) {
         // Validate file type
         const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
         if (!allowedTypes.includes(file.type)) {
-            alert("Please select a valid image file (JPG, PNG, GIF, WEBP)");
+            AlertManager.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
             input.value = "";
             return;
         }
@@ -159,7 +159,7 @@ function handleFileSelect(input) {
         // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            alert("File size must be less than 5MB");
+            AlertManager.warning("File size must be less than 5MB");
             input.value = "";
             return;
         }

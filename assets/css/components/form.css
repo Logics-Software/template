@@ -1,0 +1,211 @@
+/* Form Component - BEM Methodology */
+.form {
+  width: 100%;
+}
+
+.form__group {
+  margin-bottom: var(--margin-lg);
+}
+
+.form__label {
+  display: block;
+  margin-bottom: var(--margin-xs);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.form__label--required::after {
+  content: ' *';
+  color: var(--danger-color);
+}
+
+.form__input {
+  display: block;
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form__input:focus {
+  outline: 0;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+}
+
+.form__input--error {
+  border-color: var(--danger-color);
+}
+
+.form__input--error:focus {
+  border-color: var(--danger-color);
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form__input--success {
+  border-color: var(--success-color);
+}
+
+.form__input--success:focus {
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.form__help {
+  margin-top: var(--margin-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.form__error {
+  margin-top: var(--margin-xs);
+  font-size: var(--font-size-sm);
+  color: var(--danger-color);
+}
+
+.form__success {
+  margin-top: var(--margin-xs);
+  font-size: var(--font-size-sm);
+  color: var(--success-color);
+}
+
+/* Form modifiers */
+.form--inline .form__group {
+  display: inline-block;
+  margin-right: var(--margin-md);
+}
+
+.form--horizontal .form__group {
+  display: flex;
+  align-items: center;
+}
+
+.form--horizontal .form__label {
+  flex: 0 0 25%;
+  margin-bottom: 0;
+  margin-right: var(--margin-md);
+}
+
+.form--horizontal .form__input {
+  flex: 1;
+}
+
+/* Input group */
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.input-group__prepend,
+.input-group__append {
+  display: flex;
+  align-items: center;
+  padding: var(--padding-sm) var(--padding-md);
+  margin-bottom: 0;
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.input-group__prepend {
+  border-right: 0;
+  border-top-left-radius: var(--border-radius-sm);
+  border-bottom-left-radius: var(--border-radius-sm);
+}
+
+.input-group__append {
+  border-left: 0;
+  border-top-right-radius: var(--border-radius-sm);
+  border-bottom-right-radius: var(--border-radius-sm);
+}
+
+.input-group .form__input {
+  position: relative;
+  flex: 1 1 auto;
+  width: 1%;
+  margin-bottom: 0;
+}
+
+.input-group .form__input:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.input-group .form__input:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Checkbox and Radio */
+.form__checkbox,
+.form__radio {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: var(--margin-sm);
+}
+
+.form__checkbox input,
+.form__radio input {
+  margin-right: var(--margin-sm);
+}
+
+.form__checkbox label,
+.form__radio label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+/* Select */
+.form__select {
+  display: block;
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form__select:focus {
+  outline: 0;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+}
+
+/* Textarea */
+.form__textarea {
+  display: block;
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form__textarea:focus {
+  outline: 0;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+}

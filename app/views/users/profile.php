@@ -1,8 +1,5 @@
 <?php
-// Get flash messages once to avoid multiple calls
-$errorMessage = Session::getFlash('error');
-$successMessage = Session::getFlash('success');
-$validationErrors = Session::getFlash('errors');
+// Flash messages are now handled globally in app.php layout
 ?>
 
 <div class="row">
@@ -23,34 +20,6 @@ $validationErrors = Session::getFlash('errors');
             </div>
             
             <div class="card-body">
-                <!-- Error Messages -->
-                <?php if ($errorMessage): ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i><?php echo $errorMessage; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
-                
-                <!-- Success Messages -->
-                <?php if ($successMessage): ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="fas fa-check-circle me-2"></i><?php echo $successMessage; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Validation Errors -->
-                <?php if ($validationErrors): ?>
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        <ul class="mb-0">
-                            <?php foreach ($validationErrors as $error): ?>
-                                <li><?php echo $error; ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
 
                 <form method="POST" action="<?php echo APP_URL; ?>/profile" id="profileForm" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
@@ -86,7 +55,7 @@ $validationErrors = Session::getFlash('errors');
                                                      alt="Current Profile Picture" 
                                                      class="rounded-circle me-3" 
                                                      width="60" height="60"
-                                                     style="object-fit: cover;"
+                                                     class="object-cover"
                                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                             <?php else: ?>
                                                 <!-- Avatar fallback (always present, shown when no picture or image fails to load) -->
@@ -95,7 +64,7 @@ $validationErrors = Session::getFlash('errors');
                                                     <?php if (isset($user['namalengkap']) && !empty($user['namalengkap'])): ?>
                                                         <?php echo strtoupper(substr($user['namalengkap'], 0, 1)); ?>
                                                     <?php else: ?>
-                                                        <i class="fas fa-user" style="font-size: 24px;"></i>
+                                                        <i class="fas fa-user" class="text-2xl"></i>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endif; ?>
@@ -131,7 +100,7 @@ $validationErrors = Session::getFlash('errors');
                     <span class="btn-text">
                         <i class="fas fa-save me-1"></i>Update Profile
                     </span>
-                    <div class="btn-loader" style="display: none;">
+                    <div class="btn-loader d-none">
                         <i class="fas fa-spinner fa-spin me-1"></i>Updating...
                     </div>
                 </button>
@@ -166,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Validate file type
                 const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
                 if (!allowedTypes.includes(file.type)) {
-                    alert("Please select a valid image file (JPG, PNG, GIF, WEBP)");
+                    AlertManager.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
                     this.value = "";
                     return;
                 }
@@ -174,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Validate file size (2MB max)
                 const maxSize = 2 * 1024 * 1024; // 2MB
                 if (file.size > maxSize) {
-                    alert("File size must be less than 2MB");
+                    AlertManager.warning("File size must be less than 2MB");
                     this.value = "";
                     return;
                 }
@@ -200,7 +169,7 @@ function showImagePreview(file) {
         
         preview.innerHTML = `
             <div class="d-flex align-items-center">
-                <img src="${e.target.result}" alt="Preview" class="rounded-circle me-3" width="60" height="60" style="object-fit: cover;">
+                <img src="${e.target.result}" alt="Preview" class="rounded-circle me-3" width="60" height="60" class="object-cover">
                 <div>
                     <div class="fw-bold">New Profile Picture Preview</div>
                     <small class="text-muted">${file.name} (${formatFileSize(file.size)})</small>

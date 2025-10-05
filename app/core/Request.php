@@ -42,11 +42,12 @@ class Request
     public function method()
     {
         // Support method spoofing via _method parameter
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method'])) {
+        $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        if ($requestMethod === 'POST' && isset($_POST['_method'])) {
             return strtoupper($_POST['_method']);
         }
         
-        return $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        return $requestMethod;
     }
 
     public function uri()

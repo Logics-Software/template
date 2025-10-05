@@ -80,7 +80,7 @@
                                 <?php foreach ($callCenters as $callCenter): ?>
                                     <tr draggable="true" data-id="<?php echo $callCenter['id']; ?>" class="draggable-row">
                                         <td>
-                                            <i class="fas fa-grip-vertical text-muted drag-handle" style="cursor: grab;"></i>
+                                            <i class="fas fa-grip-vertical text-muted drag-handle" class="cursor-grab"></i>
                                         </td>
                                         <td>
                                             <div class="fw-bold"><?php echo htmlspecialchars($callCenter['judul']); ?></div>
@@ -95,14 +95,14 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="d-flex gap-1" style="min-width: 80px;">
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-primary btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="Lihat Detail">
+                                            <div class="d-flex gap-1" class="min-w-80">
+                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-primary btn-sm" class="btn-action" title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="Edit Data">
+                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm" class="btn-action" title="Edit Data">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" title="Hapus Data">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" class="btn-action" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" title="Hapus Data">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -184,7 +184,7 @@
     </div>
 </div>
 
-<!-- Drag and Drop styles moved to assets/css/style.css for reusability -->
+<!-- Drag and Drop styles moved to assets/css/complete.css for reusability -->
 
 <!-- Include drag and drop utility -->
 <script src="<?php echo APP_URL; ?>/assets/js/drag-drop.js"></script>

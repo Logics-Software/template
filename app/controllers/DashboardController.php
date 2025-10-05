@@ -2,6 +2,8 @@
 /**
  * Dashboard Controller
  */
+require_once 'app/core/Cache.php';
+
 class DashboardController extends BaseController
 {
     private $userModel;
@@ -28,6 +30,9 @@ class DashboardController extends BaseController
         
         // Set current page for sidebar highlighting
         $current_page = 'dashboard';
+        
+        // Get dashboard statistics (cache temporarily disabled)
+        $stats = $this->getDashboardStats($userRole);
 
         // Common data for all roles
         $commonData = [
@@ -306,8 +311,8 @@ class DashboardController extends BaseController
     {
         try {
             $sql = "SELECT COUNT(*) as total FROM modules";
-            $result = $this->moduleModel->db->fetch($sql);
-            return $result['total'] ?? 0;
+            $result = $this->moduleModel->findAll();
+            return count($result);
         } catch (Exception $e) {
             return 0;
         }
@@ -316,9 +321,8 @@ class DashboardController extends BaseController
     private function getTotalMessages()
     {
         try {
-            $sql = "SELECT COUNT(*) as total FROM messages";
-            $result = $this->messageModel->db->fetch($sql);
-            return $result['total'] ?? 0;
+            $result = $this->messageModel->findAll();
+            return count($result);
         } catch (Exception $e) {
             return 0;
         }
@@ -327,9 +331,8 @@ class DashboardController extends BaseController
     private function getPendingApprovals()
     {
         try {
-            $sql = "SELECT COUNT(*) as total FROM users WHERE status = 'register'";
-            $result = $this->userModel->db->fetch($sql);
-            return $result['total'] ?? 0;
+            $result = $this->userModel->findAll('status = :status', ['status' => 'register']);
+            return count($result);
         } catch (Exception $e) {
             return 0;
         }
@@ -353,14 +356,32 @@ class DashboardController extends BaseController
         }
     }
 
+    private function getDashboardStats($userRole)
+    {
+        try {
+            $stats = [];
+            
+            // Get user statistics
+            $stats['total_users'] = $this->userModel->getTotalUsers();
+            $stats['active_users'] = $this->userModel->getActiveUsers();
+            $stats['pending_users'] = $this->userModel->getPendingUsers();
+            
+            // Get message statistics
+            $stats['total_messages'] = $this->getTotalMessages();
+            $stats['unread_messages'] = $this->getUnreadMessages(Session::get('user_id'));
+            
+            return $stats;
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
     private function getUnreadMessages($userId)
     {
         try {
-            $sql = "SELECT COUNT(*) as total FROM message_recipients mr 
-                    JOIN messages m ON mr.message_id = m.id 
-                    WHERE mr.user_id = :userId AND mr.is_read = 0";
-            $result = $this->messageModel->db->fetch($sql, ['userId' => $userId]);
-            return $result['total'] ?? 0;
+            // Simplified unread messages count
+            $messages = $this->messageModel->findAll('recipient_id = :userId AND is_read = 0', ['userId' => $userId]);
+            return count($messages);
         } catch (Exception $e) {
             return 0;
         }

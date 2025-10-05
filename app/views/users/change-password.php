@@ -1,8 +1,5 @@
 <?php
-// Get flash messages once to avoid multiple calls
-$errorMessage = Session::getFlash('error');
-$successMessage = Session::getFlash('success');
-$validationErrors = Session::getFlash('errors');
+// Flash messages are now handled globally in app.php layout
 ?>
 
 <div class="row">
@@ -23,34 +20,6 @@ $validationErrors = Session::getFlash('errors');
             </div>
             
             <div class="card-body">
-                <!-- Error Messages -->
-                <?php if ($errorMessage): ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($errorMessage); ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
-                
-                <!-- Success Messages -->
-                <?php if ($successMessage): ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($successMessage); ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Validation Errors -->
-                <?php if ($validationErrors): ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        <ul class="mb-0">
-                            <?php foreach ($validationErrors as $error): ?>
-                                <li><?php echo htmlspecialchars($error); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
 
                 <form method="POST" action="<?php echo APP_URL; ?>/change-password" id="changePasswordForm">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
@@ -61,7 +30,7 @@ $validationErrors = Session::getFlash('errors');
                                 <input type="password" class="form-control" id="current_password" name="current_password" 
                                        placeholder="" required>
                                 <label for="current_password">Current Password <span class="text-danger">*</span></label>
-                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleCurrentPassword" style="z-index: 10; border: none; background: transparent;" tabindex="-1">
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleCurrentPassword" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
@@ -74,7 +43,7 @@ $validationErrors = Session::getFlash('errors');
                                 <input type="password" class="form-control" id="new_password" name="new_password" 
                                        placeholder="" required>
                                 <label for="new_password">New Password <span class="text-danger">*</span></label>
-                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleNewPassword" style="z-index: 10; border: none; background: transparent;" tabindex="-1">
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleNewPassword" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
                                 <div class="form-text">Password minimal terdiri dari 6 karakter</div>
@@ -85,7 +54,7 @@ $validationErrors = Session::getFlash('errors');
                                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
                                        placeholder="" required>
                                 <label for="confirm_password">Confirm New Password <span class="text-danger">*</span></label>
-                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleConfirmPassword" style="z-index: 10; border: none; background: transparent;" tabindex="-1">
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleConfirmPassword" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
                                 <div class="form-text text-muted" id="password-match-message"></div>
@@ -104,7 +73,7 @@ $validationErrors = Session::getFlash('errors');
                     <span class="btn-text">
                         <i class="fas fa-key me-1"></i>Update Password
                     </span>
-                    <div class="btn-loader" style="display: none;">
+                    <div class="btn-loader d-none">
                         <i class="fas fa-spinner fa-spin me-1"></i>Updating...
                     </div>
                 </button>

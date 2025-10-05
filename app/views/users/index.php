@@ -132,7 +132,7 @@
                                 $pictureHtml = $pictureUrl ? 
                                     '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle profile-img-sm">' :
                                     '<div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="fas fa-user text-white" style="font-size: 14px;"></i>
+                                        <i class="fas fa-user text-white" class="text-sm"></i>
                                     </div>';
                                 
                                 // Last login formatting

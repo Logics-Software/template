@@ -77,7 +77,6 @@ class DragDropManager {
   handleDragStart(e) {
     // Ensure we have valid elements
     if (!e.target || !e.target.parentNode) {
-      console.warn("Drag and drop: Invalid drag target");
       return;
     }
 
@@ -88,7 +87,6 @@ class DragDropManager {
 
     // Only proceed if we have a valid index
     if (this.draggedIndex === -1) {
-      console.warn("Drag and drop: Invalid dragged element index");
       return;
     }
 
@@ -184,7 +182,7 @@ class DragDropManager {
             this.triggerSortOrderUpdate();
           }
         } else {
-          console.warn("Drag and drop: Elements have different parents");
+          // Elements have different parents
         }
       }
     }

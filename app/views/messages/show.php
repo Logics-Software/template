@@ -31,7 +31,7 @@
                                         <img src="<?php echo APP_URL; ?>/<?php echo htmlspecialchars($message['sender_picture']); ?>" 
                                                 alt="<?php echo htmlspecialchars($message['sender_name']); ?>" 
                                                 class="avatar-lg rounded-circle me-3" 
-                                                style="width: 48px; height: 48px; object-fit: cover;">
+                                                class="avatar-48">
                                     <?php else: ?>
                                         <div class="avatar-lg bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
                                             <?php echo strtoupper(substr($message['sender_name'], 0, 1)); ?>
@@ -105,7 +105,7 @@
                                                 <img src="<?php echo APP_URL; ?>/<?php echo htmlspecialchars($recipient['recipient_picture']); ?>" 
                                                         alt="<?php echo htmlspecialchars($recipient['recipient_name']); ?>" 
                                                         class="avatar-sm rounded-circle me-2" 
-                                                        style="width: 32px; height: 32px; object-fit: cover;">
+                                                        class="avatar-32">
                                             <?php else: ?>
                                                 <div class="avatar-sm bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
                                                     <?php echo strtoupper(substr($recipient['recipient_name'], 0, 1)); ?>

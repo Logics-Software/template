@@ -2,6 +2,8 @@
 /**
  * User Model
  */
+require_once 'app/core/Cache.php';
+
 class User extends Model
 {
     protected $table = 'users';

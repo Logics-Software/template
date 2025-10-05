@@ -47,10 +47,10 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Prevent sidebar flash effect -->
-    <!-- Sidebar styles moved to style.css -->
+    <!-- Sidebar styles moved to complete.css -->
     
     <!-- Custom CSS -->
-    <link href="<?php echo BASE_URL; ?>assets/css/style.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL; ?>assets/css/complete.css" rel="stylesheet">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>assets/images/favicon.ico">
@@ -84,25 +84,28 @@ echo ' class="' . $bodyClass . '"';
 
             <div class="page-content">
                 <!-- Flash Messages -->
-                <?php if (Session::has('success')): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i><?php echo Session::getFlash('success'); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+                <?php 
+                $successMessage = Session::getFlash('success');
+                if ($successMessage): 
+                ?>
+                <?php echo AlertHelper::getFlashHtml('success', $successMessage); ?>
                 <?php endif; ?>
 
-                <?php if (Session::has('error')): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i><?php echo Session::getFlash('error'); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+                <?php 
+                $errorMessage = Session::getFlash('error');
+                if ($errorMessage): 
+                ?>
+                <?php echo AlertHelper::getFlashHtml('error', $errorMessage); ?>
                 <?php endif; ?>
 
-                <?php if (Session::has('errors')): ?>
+                <?php 
+                $validationErrors = Session::getFlash('errors');
+                if ($validationErrors): 
+                ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     <ul class="mb-0">
-                        <?php foreach (Session::getFlash('errors') as $field => $errors): ?>
+                        <?php foreach ($validationErrors as $field => $errors): ?>
                             <?php foreach ($errors as $error): ?>
                                 <li><?php echo $error; ?></li>
                             <?php endforeach; ?>
@@ -142,25 +145,28 @@ echo ' class="' . $bodyClass . '"';
 
             <div class="page-content">
                 <!-- Flash Messages -->
-                <?php if (Session::has('success')): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i><?php echo Session::getFlash('success'); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+                <?php 
+                $successMessage = Session::getFlash('success');
+                if ($successMessage): 
+                ?>
+                <?php echo AlertHelper::getFlashHtml('success', $successMessage); ?>
                 <?php endif; ?>
 
-                <?php if (Session::has('error')): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i><?php echo Session::getFlash('error'); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+                <?php 
+                $errorMessage = Session::getFlash('error');
+                if ($errorMessage): 
+                ?>
+                <?php echo AlertHelper::getFlashHtml('error', $errorMessage); ?>
                 <?php endif; ?>
 
-                <?php if (Session::has('errors')): ?>
+                <?php 
+                $validationErrors = Session::getFlash('errors');
+                if ($validationErrors): 
+                ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     <ul class="mb-0">
-                        <?php foreach (Session::getFlash('errors') as $field => $errors): ?>
+                        <?php foreach ($validationErrors as $field => $errors): ?>
                             <?php foreach ($errors as $error): ?>
                                 <li><?php echo $error; ?></li>
                             <?php endforeach; ?>
@@ -225,50 +231,10 @@ echo ' class="' . $bodyClass . '"';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Global Toast Function -->
-    <script>
-    // Global Toast notification function
-    function showToast(type, message) {
-        // Create toast container if it doesn't exist
-        let toastContainer = document.getElementById('toast-container');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'toast-container';
-            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-            toastContainer.style.zIndex = '9999';
-            document.body.appendChild(toastContainer);
-        }
-        
-        const toast = document.createElement('div');
-        toast.className = `toast-notification toast-${type} alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} alert-dismissible fade show`;
-        toast.style.marginBottom = '10px';
-        toast.style.minWidth = '300px';
-        
-        let icon = 'fas fa-info-circle';
-        if (type === 'success') icon = 'fas fa-check-circle';
-        else if (type === 'error') icon = 'fas fa-exclamation-circle';
-        else if (type === 'warning') icon = 'fas fa-exclamation-triangle';
-        
-        toast.innerHTML = `
-            <i class="${icon} me-2"></i>
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        `;
-        
-        toastContainer.appendChild(toast);
-        
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }, 300);
-            }
-        }, 5000);
-    }
-    </script>
+    <!-- Alert Manager will be loaded with other JS modules -->
+    
+    <!-- Alert Manager -->
+    <script src="<?php echo APP_URL; ?>/assets/js/modules/AlertManager.js"></script>
     
     <!-- Custom JS -->
     <script src="<?php echo APP_URL; ?>/assets/js/app.js"></script>

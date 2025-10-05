@@ -101,7 +101,7 @@ ob_start();
                             <div class="col-md-2">
                                 <div class="text-center">
                                     <h4 class="mb-1"><?php echo ucfirst($role); ?></h4>
-                                    <div class="progress mb-2" style="height: 8px;">
+                                    <div class="progress mb-2" class="h-8">
                                         <?php 
                                         $totalModules = count($modules);
                                         $allowedModules = 0;

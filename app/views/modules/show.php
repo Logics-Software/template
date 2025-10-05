@@ -45,7 +45,7 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Logo Icon</label>
                                     <div class="form-control-plaintext bg-light p-3 rounded border">
-                                        <i class="<?php echo htmlspecialchars($module['logo']); ?>" style="font-size: 24px; color: #6c757d;"></i>
+                                        <i class="<?php echo htmlspecialchars($module['logo']); ?>" class="icon-24"></i>
                                         <code class="ms-2"><?php echo htmlspecialchars($module['logo']); ?></code>
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Preview</label>
                                     <div class="border rounded p-3 bg-light">
-                                        <i class="<?php echo htmlspecialchars($module['logo']); ?>" style="font-size: 32px; color: #6c757d;"></i>
+                                        <i class="<?php echo htmlspecialchars($module['logo']); ?>" class="icon-32"></i>
                                         <span class="ms-2 fs-5"><?php echo htmlspecialchars($module['caption']); ?></span>
                                     </div>
                                 </div>

@@ -1,7 +1,5 @@
 <?php
-// Get flash messages once to avoid multiple calls
-$errorMessage = Session::getFlash('error');
-$successMessage = Session::getFlash('success');
+// Flash messages are now handled globally in app.php layout
 ?>
 
 <!-- Lock Screen Modal Overlay -->
@@ -10,27 +8,12 @@ $successMessage = Session::getFlash('success');
         <div class="card">
             <div class="card-header text-center">
                 <div class="mb-3">
-                    <img src="<?php echo $user_picture ?? APP_URL . '/assets/images/users/avatar.svg'; ?>" alt="User Avatar" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover; border: 4px solid #f8f9fa; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                    <img src="<?php echo $user_picture ?? APP_URL . '/assets/images/users/avatar.svg'; ?>" alt="User Avatar" class="rounded-circle profile-img-lg">
                 </div>
                 <h4 class="mb-1">Hello <?php echo $user_name ?? 'User'; ?>!</h4>
                 <p class="text-muted mb-0"><?php echo $user_email ?? 'user@example.com'; ?></p>
             </div>
             <div class="card-body m-3">
-                <!-- Error Messages -->
-                <?php if ($errorMessage): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($errorMessage); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                <?php endif; ?>
-                
-                <!-- Success Messages -->
-                <?php if ($successMessage): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($successMessage); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                <?php endif; ?>
 
                 <!-- Lock Screen Form -->
                 <form method="POST" action="<?php echo APP_URL; ?>/unlock" id="unlockForm">
@@ -38,13 +21,13 @@ $successMessage = Session::getFlash('success');
                     
                     <div class="form-floating mb-3 position-relative">
                         <input type="password" class="form-control" id="password" name="password" 
-                               placeholder="" required style="padding-right: 2.5rem;">
+                               placeholder="" required class="pr-10">
                         <label for="password">
                             <i class="fas fa-lock me-2"></i>Password
                         </label>
-                        <button class="position-absolute top-50 end-0 translate-middle-y password-toggle-btn" 
+                        <button class="position-absolute top-50 end-0 translate-middle-y password-toggle" 
                                 type="button" id="togglePassword" 
-                                style="border: none; background: transparent; z-index: 10; padding: 0; width: 2.5rem; height: calc(3.5rem + 2px); color: #6c757d; margin-right: 0;" tabindex="-1">
+                                tabindex="-1">
                             <i class="fas fa-eye" id="passwordToggleIcon"></i>
                         </button>
                     </div>

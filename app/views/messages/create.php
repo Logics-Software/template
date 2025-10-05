@@ -71,7 +71,7 @@
                                 </div>
                                 
                                 <!-- Users List -->
-                                <div class="border rounded" style="max-height: 300px; overflow-y: auto;">
+                                <div class="border rounded" class="max-h-300 overflow-y-auto">
                                     <div id="usersList">
                                         <div class="p-3 text-center">
                                             <div class="spinner-border spinner-border-sm" role="status">
@@ -96,8 +96,8 @@
                             
                             <div class="mb-3">
                                 <label for="content" class="form-label">Isi Pesan <span class="text-danger">*</span></label>
-                                <div id="quill-editor" style="height: 200px;"></div>
-                                <textarea id="content" name="content" style="display: none;" required></textarea>
+                                <div id="quill-editor" class="quill-editor"></div>
+                                <textarea id="content" name="content" class="d-none" required></textarea>
                             </div>
                             
                             <div class="mb-3">
@@ -151,7 +151,7 @@
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
-<!-- User selection styles moved to style.css -->
+<!-- User selection styles moved to complete.css -->
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -229,13 +229,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function fillForwardContent() {
         const forwardMessage = `
-            <div style="border-left: 3px solid #007bff; padding-left: 15px; margin: 10px 0; background-color: #f8f9fa; padding: 15px; border-radius: 5px;">
-                <div style="font-size: 12px; color: #6c757d; margin-bottom: 10px;">
+            <div class="notice-box">
+                <div class="notice-box-header">
                     <strong>Diteruskan dari:</strong> ${forwardSenderName} (${forwardSenderEmail})<br>
                     <strong>Tanggal:</strong> ${forwardDate}<br>
                     <strong>Subjek:</strong> ${forwardSubject}
                 </div>
-                <div style="border-top: 1px solid #dee2e6; padding-top: 10px;">
+                <div class="notice-box-footer">
                     ${forwardContent}
                 </div>
             </div>
@@ -428,18 +428,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const usersHtml = users.map(user => {
             const isSelected = selectedUsers.some(selected => selected.id == user.id);
             const userPicture = user.picture ? 
-                `<img src="<?php echo APP_URL; ?>/${user.picture}" alt="${user.namalengkap}" class="avatar-sm rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">` :
-                `<div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-size: 12px;">${user.namalengkap.charAt(0).toUpperCase()}</div>`;
+                `<img src="<?php echo APP_URL; ?>/${user.picture}" alt="${user.namalengkap}" class="avatar-sm rounded-circle me-2" class="avatar-32">` :
+                `<div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" class="avatar-fallback">${user.namalengkap.charAt(0).toUpperCase()}</div>`;
             
             return `
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-1">
-                    <div class="card user-selection-item ${isSelected ? 'selected' : ''}" data-user-id="${user.id}" style="cursor: pointer; height: 60px;">
+                    <div class="card user-selection-item ${isSelected ? 'selected' : ''}" data-user-id="${user.id}" class="user-selection-item">
                         <div class="card-body p-1 h-100 d-flex align-items-center">
-                            <input type="checkbox" class="form-check-input me-1" ${isSelected ? 'checked' : ''} onchange="toggleUser(${user.id})" style="transform: scale(0.8);">
+                            <input type="checkbox" class="form-check-input me-1" ${isSelected ? 'checked' : ''} onchange="toggleUser(${user.id})" class="scale-80">
                             ${userPicture}
-                            <div class="flex-grow-1" style="min-width: 0;">
-                                <div class="fw-bold text-truncate" style="font-size: 0.8rem; line-height: 1.2;">${user.namalengkap}</div>
-                                <small class="text-muted d-block text-truncate" style="font-size: 0.7rem;">${user.username} / ${user.email} / ${user.role}</small>
+                            <div class="flex-grow-1" class="flex-grow-1">
+                                <div class="fw-bold text-truncate" class="text-xs-leading-tight">${user.namalengkap}</div>
+                                <small class="text-muted d-block text-truncate" class="text-xxs">${user.username} / ${user.email} / ${user.role}</small>
                             </div>
                         </div>
                     </div>
@@ -511,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedRecipientsInput.value = '';
         } else {
             const recipientsHtml = selectedUsers.map(user => 
-                `<span class="badge bg-primary me-1 mb-1">${user.namalengkap} <i class="fas fa-times ms-1" onclick="removeUser(${user.id})" style="cursor: pointer;"></i></span>`
+                `<span class="badge bg-primary me-1 mb-1">${user.namalengkap} <i class="fas fa-times ms-1" onclick="removeUser(${user.id})" class="cursor-pointer"></i></span>`
             ).join('');
             selectedRecipientsList.innerHTML = recipientsHtml;
             selectedRecipientsInput.value = selectedUsers.map(u => u.id).join(',');
@@ -530,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         
         if (selectedUsers.length === 0) {
-            alert('Pilih minimal satu penerima');
+            AlertManager.warning('Pilih minimal satu penerima');
             return;
         }
         
@@ -584,11 +584,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.removeItem('message_draft');
                 window.location.href = data.redirect || '<?php echo APP_URL; ?>/messages?sent=true';
             } else {
-                alert('Gagal mengirim pesan: ' + data.message);
+                AlertManager.error('Gagal mengirim pesan: ' + data.message);
             }
         })
         .catch(error => {
-            alert('Terjadi kesalahan saat mengirim pesan');
+            AlertManager.error('Terjadi kesalahan saat mengirim pesan');
         })
         .finally(() => {
             if (submitBtn) {

@@ -51,7 +51,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                                     <div class="col-12 mb-3">
                                         <div class="form-floating">
                                             <textarea class="form-control" id="alamatperusahaan" name="alamatperusahaan" 
-                                                      placeholder="Alamat Perusahaan" style="height: 100px" required><?php echo htmlspecialchars($konfigurasi['alamatperusahaan'] ?? ''); ?></textarea>
+                                                      placeholder="Alamat Perusahaan" class="textarea-100" required><?php echo htmlspecialchars($konfigurasi['alamatperusahaan'] ?? ''); ?></textarea>
                                             <label for="alamatperusahaan">Alamat Perusahaan *</label>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                                                         <img src="<?php echo APP_URL; ?>/assets/images/konfigurasi/<?php echo htmlspecialchars($konfigurasi['logo']); ?>" 
                                                              alt="Logo Perusahaan" 
                                                              class="img-fluid mb-2" 
-                                                             style="max-height: 150px;">
+                                                             class="max-h-150">
                                                         <div class="text-muted small"><?php echo htmlspecialchars($konfigurasi['logo']); ?></div>
                                                     </div>
                                                 </div>
@@ -108,7 +108,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                                             <div id="file-preview" class="mt-3 d-none">
                                                 <div class="text-center">
                                                     <label class="form-label text-muted">Preview Logo Baru:</label>
-                                                    <img id="preview-image" src="" alt="Preview" class="img-fluid mb-2" style="max-height: 150px;">
+                                                    <img id="preview-image" src="" alt="Preview" class="img-fluid mb-2" class="max-h-150">
                                                     <div id="preview-filename" class="text-muted small"></div>
                                                     <div id="preview-size" class="text-muted small"></div>
                                                     <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removePreview()">
@@ -149,7 +149,7 @@ function handleFileSelect(input) {
         // Validate file type
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
-            alert('Tipe file tidak didukung. Gunakan JPG, PNG, GIF, atau WebP');
+            AlertManager.warning('Tipe file tidak didukung. Gunakan JPG, PNG, GIF, atau WebP');
             input.value = '';
             return;
         }
@@ -157,7 +157,7 @@ function handleFileSelect(input) {
         // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            alert('Ukuran file terlalu besar. Maksimal 5MB');
+            AlertManager.warning('Ukuran file terlalu besar. Maksimal 5MB');
             input.value = '';
             return;
         }

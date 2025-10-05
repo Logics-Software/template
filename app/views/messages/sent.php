@@ -128,11 +128,11 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <div class="d-flex gap-1" style="min-width: 80px;">
-                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" title="Lihat Pesan">
+                                            <div class="d-flex gap-1" class="min-w-80">
+                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm" class="btn-action" title="Lihat Pesan">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" style="min-width: 32px; padding: 0.25rem 0.5rem;" onclick="deleteMessage(<?php echo $message['id']; ?>)" title="Hapus Pesan">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" class="btn-action" onclick="deleteMessage(<?php echo $message['id']; ?>)" title="Hapus Pesan">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>

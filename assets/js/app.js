@@ -443,7 +443,7 @@ function initMessageSystem() {
       .catch((error) => {
         // Silently handle unauthorized errors
         if (error.message !== "Unauthorized") {
-          console.error("Error fetching unread count:", error);
+          // Error handled silently
         }
       });
   }
@@ -677,7 +677,7 @@ function initHeaderMessageDropdown() {
       .catch((error) => {
         // Silently handle unauthorized errors
         if (error.message !== "Unauthorized") {
-          console.error("Error loading unread count:", error);
+          // Error handled silently
         }
       });
 
@@ -760,7 +760,7 @@ function initHeaderMessageDropdown() {
         }
       })
       .catch((error) => {
-        console.error("Error loading recent messages:", error);
+        // Error handled silently
         messageList.innerHTML = `
           <div class="text-center p-4">
             <i class="fa-solid fa-exclamation-triangle fa-2x text-warning mb-3"></i>
@@ -833,14 +833,14 @@ function initHeaderMessageDropdown() {
               this.disabled = false;
             }, 2000);
           } else {
-            alert("Gagal menandai pesan sebagai sudah dibaca");
+            AlertManager.error("Gagal menandai pesan sebagai sudah dibaca");
             this.textContent = originalText;
             this.disabled = false;
           }
         })
         .catch((error) => {
-          console.error("Error marking all as read:", error);
-          alert("Terjadi kesalahan saat menandai pesan");
+          // Error handled silently
+          AlertManager.error("Terjadi kesalahan saat menandai pesan");
           this.textContent = originalText;
           this.disabled = false;
         });

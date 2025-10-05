@@ -96,7 +96,7 @@ $validationErrors = Session::getFlash('errors');
                     <!-- Registration Reason -->
                     <div class="form-floating mb-3">
                         <textarea class="form-control" id="registration_reason" name="registration_reason" 
-                                  placeholder="" style="height: 60px;" required></textarea>
+                                  placeholder="" class="textarea-60" required></textarea>
                         <label for="registration_reason">
                             <i class="fas fa-comment me-2"></i>Alasan Pendaftaran
                         </label>
@@ -107,13 +107,13 @@ $validationErrors = Session::getFlash('errors');
                         <div class="col-md-6">
                             <div class="form-floating mb-3 position-relative">
                                 <input type="password" class="form-control" id="password" name="password" 
-                                       placeholder="" required style="padding-right: 2.5rem;">
+                                       placeholder="" required class="pr-10">
                                 <label for="password">
                                     <i class="fas fa-lock me-2"></i>Password
                                 </label>
                                 <button class="position-absolute top-50 end-0 translate-middle-y password-toggle-btn" 
                                         type="button" id="togglePassword" 
-                                        style="border: none; background: transparent; z-index: 10; padding: 0; width: 2.5rem; height: calc(3.5rem + 2px); color: #6c757d; margin-right: 0;" tabindex="-1">
+                                        class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye" id="passwordToggleIcon"></i>
                                 </button>
                             </div>
@@ -121,13 +121,13 @@ $validationErrors = Session::getFlash('errors');
                         <div class="col-md-6">
                             <div class="form-floating mb-3 position-relative">
                                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
-                                       placeholder="" required style="padding-right: 2.5rem;">
+                                       placeholder="" required class="pr-10">
                                 <label for="confirm_password">
                                     <i class="fas fa-lock me-2"></i>Konfirmasi Password
                                 </label>
                                 <button class="position-absolute top-50 end-0 translate-middle-y password-toggle-btn" 
                                         type="button" id="toggleConfirmPassword" 
-                                        style="border: none; background: transparent; z-index: 10; padding: 0; width: 2.5rem; height: calc(3.5rem + 2px); color: #6c757d; margin-right: 0;" tabindex="-1">
+                                        class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye" id="confirmPasswordToggleIcon"></i>
                                 </button>
                             </div>

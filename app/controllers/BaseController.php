@@ -74,13 +74,23 @@ abstract class BaseController
         Session::flash('errors', $errors);
     }
 
-    protected function withSuccess($message)
+    protected function withSuccess($message, $redirect = null)
     {
-        Session::flash('success', $message);
+        AlertHelper::success($message, $redirect);
     }
 
-    protected function withError($message)
+    protected function withError($message, $redirect = null)
     {
-        Session::flash('error', $message);
+        AlertHelper::error($message, $redirect);
+    }
+
+    protected function withWarning($message, $redirect = null)
+    {
+        AlertHelper::warning($message, $redirect);
+    }
+
+    protected function withInfo($message, $redirect = null)
+    {
+        AlertHelper::info($message, $redirect);
     }
 }

@@ -54,7 +54,7 @@ if (!$konfigurasi) {
                             <img src="<?php echo APP_URL; ?>/assets/images/konfigurasi/<?php echo htmlspecialchars($konfigurasi['logo']); ?>" 
                                     alt="Logo Perusahaan" 
                                     class="img-fluid" 
-                                    style="max-height: 200px; max-width: 100%;">
+                                    class="max-h-200-max-w-100">
                         <?php else: ?>
                             <div class="text-muted">
                                 <i class="fas fa-image fa-3x mb-2"></i>

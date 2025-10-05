@@ -56,13 +56,13 @@ $validationErrors = Session::getFlash('errors');
 
                     <div class="form-floating mb-3 position-relative">
                         <input type="password" class="form-control" id="password" name="password" 
-                               placeholder="" required style="padding-right: 2.5rem;">
+                               placeholder="" required class="pr-10">
                         <label for="password">
                             <i class="fas fa-lock me-2"></i>Password
                         </label>
                         <button class="position-absolute top-50 end-0 translate-middle-y password-toggle-btn" 
                                 type="button" id="togglePassword" 
-                                style="border: none; background: transparent; z-index: 10; padding: 0; width: 2.5rem; height: calc(3.5rem + 2px); color: #6c757d; margin-right: 0;" tabindex="-1">
+                                class="password-toggle" tabindex="-1">
                             <i class="fas fa-eye" id="passwordToggleIcon"></i>
                         </button>
                     </div>

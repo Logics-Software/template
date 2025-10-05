@@ -359,6 +359,13 @@ class UserController extends BaseController
             }
             
             $this->userModel->commit();
+            
+            // Clear user cache
+            Cache::forget("user_{$id}");
+            Cache::forget("user_email_{$data['email']}");
+            Cache::forget("user_username_{$data['username']}");
+            Cache::forget("users_aktif");
+            Cache::forget("users_role_{$data['role']}");
 
             if ($request->isAjax()) {
                 $this->json(['success' => true, 'message' => 'User updated successfully']);

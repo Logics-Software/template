@@ -33,6 +33,8 @@ class App
                 // Skip CSRF validation for certain API endpoints
                 $uri = $this->request->uri();
                 $skipCSRF = [
+                    '/login',
+                    '/register',
                     '/api/messages/mark-read',
                     '/api/messages/mark-all-read',
                     '/api/messages/unread-count',

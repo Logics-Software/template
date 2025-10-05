@@ -155,7 +155,7 @@ ob_start();
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <textarea class="form-control" id="groupDescription" name="description" placeholder="Description" style="height: 100px"></textarea>
+                        <textarea class="form-control" id="groupDescription" name="description" placeholder="Description" class="textarea-100"></textarea>
                         <label for="groupDescription">Description</label>
                     </div>
                     <div class="mb-3">
@@ -237,7 +237,7 @@ function editGroup(id) {
     // Check if jQuery is available
     if (typeof $ === 'undefined') {
         console.error('jQuery is not loaded. Please refresh the page.');
-        alert('Error: jQuery is not loaded. Please refresh the page.');
+        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
         return;
     }
     
@@ -284,7 +284,7 @@ function addGroup() {
     // Check if jQuery is available
     if (typeof $ === 'undefined') {
         console.error('jQuery is not loaded. Please refresh the page.');
-        alert('Error: jQuery is not loaded. Please refresh the page.');
+        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
         return;
     }
     
@@ -306,7 +306,7 @@ function addDetailMenu(groupId) {
     // Check if jQuery is available
     if (typeof $ === 'undefined') {
         console.error('jQuery is not loaded. Please refresh the page.');
-        alert('Error: jQuery is not loaded. Please refresh the page.');
+        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
         return;
     }
     
@@ -318,7 +318,7 @@ function toggleDetailMenu(groupId) {
     // Check if jQuery is available
     if (typeof $ === 'undefined') {
         console.error('jQuery is not loaded. Please refresh the page.');
-        alert('Error: jQuery is not loaded. Please refresh the page.');
+        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
         return;
     }
     
@@ -597,7 +597,7 @@ function openIconPicker() {
     // Ensure we have icons from ModuleController.php
     if (!availableIcons || Object.keys(availableIcons).length === 0) {
         console.error('No icons available from ModuleController.php getAvailableIcons()');
-        alert('Error: No icons available. Please check the ModuleController.php configuration.');
+        AlertManager.error('Error: No icons available. Please check the ModuleController.php configuration.');
         return;
     }
     
@@ -619,7 +619,7 @@ function openIconPicker() {
                             <div class="search-box">
                                 <i class="fas fa-search search-icon"></i>
                                 <input type="text" class="form-control search-input" id="modalIconSearch" placeholder="Search icons...">
-                                <button type="button" class="search-clear" id="modalClearSearch" style="display: none;">
+                                <button type="button" class="search-clear" id="modalClearSearch" class="d-none">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>
@@ -837,7 +837,7 @@ function selectIcon() {
         // Reset selected data
         selectedIconData = null;
     } else {
-        alert('Please select an icon first!');
+        AlertManager.warning('Please select an icon first!');
     }
 }
 
