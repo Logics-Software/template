@@ -94,8 +94,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                                                     <div class="text-center">
                                                         <img src="<?php echo APP_URL; ?>/assets/images/konfigurasi/<?php echo htmlspecialchars($konfigurasi['logo']); ?>" 
                                                              alt="Logo Perusahaan" 
-                                                             class="img-fluid mb-2" 
-                                                             class="max-h-150">
+                                                             class="img-fluid mb-2 max-h-150">
                                                         <div class="text-muted small"><?php echo htmlspecialchars($konfigurasi['logo']); ?></div>
                                                     </div>
                                                 </div>
@@ -108,7 +107,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                                             <div id="file-preview" class="mt-3 d-none">
                                                 <div class="text-center">
                                                     <label class="form-label text-muted">Preview Logo Baru:</label>
-                                                    <img id="preview-image" src="" alt="Preview" class="img-fluid mb-2" class="max-h-150">
+                                                    <img id="preview-image" src="" alt="Preview" class="img-fluid mb-2 max-h-150">
                                                     <div id="preview-filename" class="text-muted small"></div>
                                                     <div id="preview-size" class="text-muted small"></div>
                                                     <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removePreview()">

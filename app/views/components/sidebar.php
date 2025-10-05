@@ -86,6 +86,7 @@ function buildStaticMenu() {
     $settingsItems = [
         ['page' => 'users', 'url' => '/users', 'icon' => 'fas fa-users', 'title' => 'Manajemen Users', 'label' => 'Manajemen Users'],
         ['page' => 'modules', 'url' => '/modules', 'icon' => 'fas fa-puzzle-piece', 'title' => 'Manajemen Modul', 'label' => 'Modules'],
+        ['page' => 'menu', 'url' => '/menu', 'icon' => 'fas fa-bars', 'title' => 'Manajemen Menu', 'label' => 'Menu'],
         ['page' => 'konfigurasi', 'url' => '/konfigurasi', 'icon' => 'fas fa-cog', 'title' => 'Konfigurasi Aplikasi', 'label' => 'Konfigurasi'],
         ['page' => 'call-center', 'url' => '/call-center', 'icon' => 'fab fa-whatsapp', 'title' => 'Manajemen Call Center', 'label' => 'Call Center']
     ];

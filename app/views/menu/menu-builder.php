@@ -257,7 +257,7 @@ ob_start();
                                         <option value="<?php echo $module['id']; ?>"><?php echo htmlspecialchars($module['caption']); ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <label for="menuItemModule">Module <span class="text-danger module-required-asterisk" class="d-none">*</span></label>
+                                <label for="menuItemModule">Module <span class="text-danger module-required-asterisk d-none">*</span></label>
                             </div>
                             <div class="mb-3">
                                 <div class="icon-preview-container">
@@ -971,7 +971,7 @@ function openIconPicker(target) {
                             <div class="search-box">
                                 <i class="fas fa-search search-icon"></i>
                                 <input type="text" class="form-control search-input" id="modalIconSearch" placeholder="Search icons...">
-                                <button type="button" class="search-clear" id="clearModalSearch" class="d-none">
+                                <button type="button" class="search-clear d-none" id="clearModalSearch">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>

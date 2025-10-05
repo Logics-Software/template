@@ -88,8 +88,7 @@
                                                 <?php if (!empty($message['sender_picture'])): ?>
                                                     <img src="<?php echo APP_URL; ?>/<?php echo htmlspecialchars($message['sender_picture']); ?>" 
                                                             alt="<?php echo htmlspecialchars($message['sender_name']); ?>" 
-                                                            class="avatar-sm rounded-circle me-2" 
-                                                            class="avatar-32">
+                                                            class="avatar-sm rounded-circle me-2 avatar-32">
                                                 <?php else: ?>
                                                     <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
                                                         <?php echo strtoupper(substr($message['sender_name'], 0, 1)); ?>
@@ -114,11 +113,11 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <div class="d-flex gap-1" class="min-w-80">
-                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm" class="btn-action" title="Lihat Pesan">
+                                            <div class="d-flex gap-1 min-w-80">
+                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-primary btn-sm btn-action" title="Lihat Pesan">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" class="btn-action" onclick="deleteMessage(<?php echo $message['id']; ?>)" title="Hapus Pesan">
+                                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deleteMessage(<?php echo $message['id']; ?>)" title="Hapus Pesan">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>

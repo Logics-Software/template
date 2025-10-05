@@ -64,7 +64,7 @@
                                                     <?php if (isset($user['namalengkap']) && !empty($user['namalengkap'])): ?>
                                                         <?php echo strtoupper(substr($user['namalengkap'], 0, 1)); ?>
                                                     <?php else: ?>
-                                                        <i class="fas fa-user" class="text-2xl"></i>
+                                                        <i class="fas fa-user text-2xl"></i>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endif; ?>

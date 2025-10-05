@@ -45,7 +45,7 @@ $title = $data['title'] ?? 'Buat Konfigurasi Sistem';
                                     <!-- File Preview -->
                                     <div id="file-preview" class="mt-3 d-none">
                                         <div class="border rounded p-3 bg-light text-center">
-                                            <img id="preview-image" src="" alt="Preview" class="img-fluid mb-2" class="max-h-150">
+                                            <img id="preview-image" src="" alt="Preview" class="img-fluid mb-2 max-h-150">
                                             <div id="preview-filename" class="text-muted small"></div>
                                             <div id="preview-size" class="text-muted small"></div>
                                             <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removePreview()">

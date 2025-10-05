@@ -619,7 +619,7 @@ function openIconPicker() {
                             <div class="search-box">
                                 <i class="fas fa-search search-icon"></i>
                                 <input type="text" class="form-control search-input" id="modalIconSearch" placeholder="Search icons...">
-                                <button type="button" class="search-clear" id="modalClearSearch" class="d-none">
+                                <button type="button" class="search-clear d-none" id="modalClearSearch">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>

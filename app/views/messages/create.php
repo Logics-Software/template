@@ -71,7 +71,7 @@
                                 </div>
                                 
                                 <!-- Users List -->
-                                <div class="border rounded" class="max-h-300 overflow-y-auto">
+                                <div class="border rounded max-h-300 overflow-y-auto">
                                     <div id="usersList">
                                         <div class="p-3 text-center">
                                             <div class="spinner-border spinner-border-sm" role="status">
@@ -428,8 +428,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const usersHtml = users.map(user => {
             const isSelected = selectedUsers.some(selected => selected.id == user.id);
             const userPicture = user.picture ? 
-                `<img src="<?php echo APP_URL; ?>/${user.picture}" alt="${user.namalengkap}" class="avatar-sm rounded-circle me-2" class="avatar-32">` :
-                `<div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" class="avatar-fallback">${user.namalengkap.charAt(0).toUpperCase()}</div>`;
+                `<img src="<?php echo APP_URL; ?>/${user.picture}" alt="${user.namalengkap}" class="avatar-sm rounded-circle me-2 avatar-32">` :
+                `<div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2 avatar-fallback">${user.namalengkap.charAt(0).toUpperCase()}</div>`;
             
             return `
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-1">
@@ -437,9 +437,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="card-body p-1 h-100 d-flex align-items-center">
                             <input type="checkbox" class="form-check-input me-1" ${isSelected ? 'checked' : ''} onchange="toggleUser(${user.id})" class="scale-80">
                             ${userPicture}
-                            <div class="flex-grow-1" class="flex-grow-1">
-                                <div class="fw-bold text-truncate" class="text-xs-leading-tight">${user.namalengkap}</div>
-                                <small class="text-muted d-block text-truncate" class="text-xxs">${user.username} / ${user.email} / ${user.role}</small>
+                            <div class="flex-grow-1 flex-grow-1">
+                                <div class="fw-bold text-truncate text-xs-leading-tight">${user.namalengkap}</div>
+                                <small class="text-muted d-block text-truncate text-xxs">${user.username} / ${user.email} / ${user.role}</small>
                             </div>
                         </div>
                     </div>

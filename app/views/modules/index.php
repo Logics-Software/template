@@ -113,8 +113,8 @@
                                 ?>
                                 <tr>
                                     <td>
-                                        <div class="d-flex align-items-center justify-content-center" class="avatar-40">
-                                            <i class="<?php echo htmlspecialchars($module['logo']); ?>" class="icon-20"></i>
+                                        <div class="d-flex align-items-center justify-content-center avatar-40">
+                                            <i class="<?php echo htmlspecialchars($module['logo']); ?> icon-20"></i>
                                         </div>
                                     </td>
                                     <td><?php echo htmlspecialchars($module['caption'] ?? 'N/A'); ?></td>

@@ -80,7 +80,7 @@
                                 <?php foreach ($callCenters as $callCenter): ?>
                                     <tr draggable="true" data-id="<?php echo $callCenter['id']; ?>" class="draggable-row">
                                         <td>
-                                            <i class="fas fa-grip-vertical text-muted drag-handle" class="cursor-grab"></i>
+                                            <i class="fas fa-grip-vertical text-muted drag-handle cursor-grab"></i>
                                         </td>
                                         <td>
                                             <div class="fw-bold"><?php echo htmlspecialchars($callCenter['judul']); ?></div>
@@ -95,14 +95,14 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="d-flex gap-1" class="min-w-80">
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-primary btn-sm" class="btn-action" title="Lihat Detail">
+                                            <div class="d-flex gap-1 min-w-80">
+                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-primary btn-sm btn-action" title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm" class="btn-action" title="Edit Data">
+                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm btn-action" title="Edit Data">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" class="btn-action" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" title="Hapus Data">
+                                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" title="Hapus Data">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>

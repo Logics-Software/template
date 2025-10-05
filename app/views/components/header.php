@@ -78,7 +78,7 @@ function getGreetingMessage() {
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="avatar-fallback avatar-md" class="d-none bg-gradient-success">O</div>
+                                            <div class="avatar-fallback avatar-md d-none bg-gradient-success">O</div>
                                         </div>
                                         <div class="notification-content">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
@@ -93,7 +93,7 @@ function getGreetingMessage() {
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="avatar-fallback avatar-md" class="d-none bg-gradient-success">O</div>
+                                            <div class="avatar-fallback avatar-md d-none bg-gradient-success">O</div>
                                         </div>
                                         <div class="notification-content">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
@@ -108,7 +108,7 @@ function getGreetingMessage() {
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="avatar-fallback avatar-md" class="d-none bg-gradient-warning">T</div>
+                                            <div class="avatar-fallback avatar-md d-none bg-gradient-warning">T</div>
                                         </div>
                                         <div class="notification-content">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
@@ -123,7 +123,7 @@ function getGreetingMessage() {
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="avatar-fallback avatar-md" class="d-none bg-gradient-info">V</div>
+                                            <div class="avatar-fallback avatar-md d-none bg-gradient-info">V</div>
                                         </div>
                                         <div class="notification-content">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
@@ -138,7 +138,7 @@ function getGreetingMessage() {
                                     <div class="d-flex">
                                         <div class="notification-avatar">
                                             <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User" class="rounded-circle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="avatar-fallback avatar-md" class="d-none bg-gradient-danger">R</div>
+                                            <div class="avatar-fallback avatar-md d-none bg-gradient-danger">R</div>
                                         </div>
                                         <div class="notification-content">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
@@ -163,7 +163,7 @@ function getGreetingMessage() {
                     <div class="message-dropdown">
                         <button class="btn btn-link position-relative" data-bs-toggle="dropdown" id="messageToggle" title="Pesan">
                             <i class="fa-regular fa-envelope"></i>
-                            <span class="position-absolute badge rounded-pill bg-danger" id="messageBadge" class="d-none">
+                            <span class="position-absolute badge rounded-pill bg-danger d-none" id="messageBadge">
                                 0
                             </span>
                         </button>
@@ -195,7 +195,7 @@ function getGreetingMessage() {
                                     <?php if (Session::get('user_picture')): ?>
                                         <img src="<?php echo APP_URL; ?>/<?php echo Session::get('user_picture'); ?>" alt="User" class="rounded-circle" width="32" height="32">
                                     <?php else: ?>
-                                        <div class="avatar-fallback avatar-sm" class="bg-gradient-primary"><?php echo strtoupper(substr(Session::get('user_name') ?? 'A', 0, 1)); ?></div>
+                                        <div class="avatar-fallback avatar-sm bg-gradient-primary"><?php echo strtoupper(substr(Session::get('user_name') ?? 'A', 0, 1)); ?></div>
                                     <?php endif; ?>
                                 </div>
                                 <div class="user-info text-start">
@@ -205,7 +205,7 @@ function getGreetingMessage() {
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/messages">
                                     <i class="fas fa-envelope me-2"></i>Pesan
-                                    <span class="badge bg-danger ms-auto" id="unread-count-badge" class="d-none">0</span>
+                                    <span class="badge bg-danger ms-auto d-none" id="unread-count-badge">0</span>
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/profile">
