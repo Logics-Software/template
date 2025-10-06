@@ -91,7 +91,7 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1 min-w-80">
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-primary btn-sm btn-action" title="Lihat Detail">
+                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-info btn-sm btn-action" title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm btn-action" title="Edit Data">

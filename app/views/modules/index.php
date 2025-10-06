@@ -137,28 +137,16 @@
                                         <?php echo $updatedAt; ?>
                                     </td>
                                     <td align="center">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle action-menu-toggle action-btn-ellipsis" type="button" id="actionMenu<?php echo $module['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Aksi">
-                                                <i class="fas fa-ellipsis-h"></i>
+                                        <div class="d-flex gap-1 min-w-80">
+                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>" class="btn btn-sm btn-outline-info btn-action" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>/edit" class="btn btn-sm btn-outline-warning btn-action" title="Edit Module">
+                                                <i class="fas fa-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteModule(<?php echo $module['id']; ?>)" title="Delete Module">
+                                                <i class="fas fa-trash"></i>
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-end action-menu-dropdown" aria-labelledby="actionMenu<?php echo $module['id']; ?>">
-                                                <li>
-                                                    <a class="dropdown-item action-menu-item" href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>">
-                                                        <i class="fas fa-eye me-2"></i>View Details
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item action-menu-item" href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>/edit">
-                                                        <i class="fas fa-pencil me-2"></i>Edit Module
-                                                    </a>
-                                                </li>
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li>
-                                                    <a class="dropdown-item action-menu-item text-danger" href="#" onclick="deleteModule(<?php echo $module['id']; ?>)">
-                                                        <i class="fas fa-trash me-2"></i>Delete Module
-                                                    </a>
-                                                </li>
-                                            </ul>
                                         </div>
                                     </td>
                                 </tr>
@@ -262,6 +250,7 @@
 .module-link i {
     font-size: 0.75em;
 }
+
 </style>
 
 <script>

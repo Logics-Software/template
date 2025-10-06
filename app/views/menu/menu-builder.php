@@ -27,7 +27,7 @@ ob_start();
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 class="fw-bold mb-0"><i class="fas fa-server me-2"></i> Struktur Menu Group "<?php echo htmlspecialchars($selected_group['name']); ?>"</h6>
-                    <button class="btn btn-sm btn-outline-primary" onclick="addMenuItem()">
+                    <button class="btn btn-sm btn-primary" onclick="addMenuItem()">
                         <i class="fas fa-plus"></i> Tambah Detail Menu
                     </button>
                 </div>
@@ -607,10 +607,9 @@ if (typeof $ === 'undefined') {
         .then(data => {
             if (data.success) {
                 showToast('success', data.message);
-                // Hide modal using jQuery
-                $('#menuItemModal').hide();
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
+                // Hide modal using Bootstrap Modal API
+                const modal = bootstrap.Modal.getInstance(document.getElementById('menuItemModal'));
+                modal.hide();
                 location.reload();
                 } else {
                 showToast('error', data.error);
@@ -733,14 +732,9 @@ function editMenuItem(id) {
                     requiredAsterisk.show();
                 }
                 
-                // Show modal using jQuery
-                $('#menuItemModal').show();
-                $('body').addClass('modal-open');
-                
-                // Add backdrop
-                if ($('.modal-backdrop').length === 0) {
-                    $('body').append('<div class="modal-backdrop fade show"></div>');
-                }
+                // Show modal using Bootstrap Modal API
+                const modal = new bootstrap.Modal(document.getElementById('menuItemModal'));
+                modal.show();
             } else {
                 console.error('API error:', data.error);
                 showToast('error', data.error);
@@ -895,14 +889,9 @@ function addMenuItem() {
         }
     }
     
-    // Show modal using jQuery
-    $('#menuItemModal').show();
-    $('body').addClass('modal-open');
-    
-    // Add backdrop
-    if ($('.modal-backdrop').length === 0) {
-        $('body').append('<div class="modal-backdrop fade show"></div>');
-    }
+    // Show modal using Bootstrap Modal API
+    const modal = new bootstrap.Modal(document.getElementById('menuItemModal'));
+    modal.show();
 }
 
 
@@ -1047,14 +1036,9 @@ function openIconPicker(target) {
     initializeModalIconPicker();
     
     // Show modal
-    // Show icon picker modal using jQuery
-    $('#iconPickerModal').show();
-    $('body').addClass('modal-open');
-    
-    // Add backdrop
-    if ($('.modal-backdrop').length === 0) {
-        $('body').append('<div class="modal-backdrop fade show"></div>');
-    }
+    // Show icon picker modal using Bootstrap Modal API
+    const modal = new bootstrap.Modal(document.getElementById('iconPickerModal'));
+    modal.show();
 }
 
 function populateCategoryDropdown() {
@@ -1232,10 +1216,9 @@ function selectIcon() {
         }
         
         // Close modal
-        // Hide icon picker modal using jQuery
-        $('#iconPickerModal').hide();
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
+        // Hide icon picker modal using Bootstrap Modal API
+        const modal = bootstrap.Modal.getInstance(document.getElementById('iconPickerModal'));
+        modal.hide();
         
         // Reset selected data
         selectedIconData = null;

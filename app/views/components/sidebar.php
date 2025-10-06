@@ -125,6 +125,13 @@ $dynamicMenu = buildDynamicMenu();
     
     <div class="sidebar-body">
         <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo APP_URL; ?>/dashboard" title="Dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item"><hr class="sidebar-divider"></li>
             <?php echo $dynamicMenu; ?>
         </ul>
     </div>

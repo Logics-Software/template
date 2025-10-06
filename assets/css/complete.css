@@ -1805,7 +1805,7 @@ div:hover {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   color: var(--primary-color);
-  transform: translateX(2px);
+  /* transform: translateX(2px); */
 }
 
 .sidebar .nav-link.active {

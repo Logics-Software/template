@@ -29,7 +29,7 @@ ob_start();
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-bold mb-0"><i class="fas fa-server me-2"></i> Group Menu</h6>
-                            <button class="btn btn-sm btn-outline-primary" onclick="addGroup()">
+                            <button class="btn btn-sm btn-primary" onclick="addGroup()">
                                 <i class="fas fa-plus"></i> Tambah Group Menu
                             </button>
                         </div>
@@ -67,12 +67,12 @@ ob_start();
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-success me-1" onclick="addDetailMenu(<?php echo $group['id']; ?>)" title="Add Detail Menu">
-                                                        <i class="fas fa-plus"></i>
+                                                        <i class="fas fa-sliders-h"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-outline-info me-1" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)" title="View Detail Menu">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editGroup(<?php echo $group['id']; ?>)" title="Edit Group">
+                                                    <button class="btn btn-sm btn-outline-warning me-1" onclick="editGroup(<?php echo $group['id']; ?>)" title="Edit Group">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteGroup(<?php echo $group['id']; ?>)" title="Delete Group">
@@ -86,7 +86,7 @@ ob_start();
                                                     <div class="detail-content p-3 bg-light">
                                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                                             <h6 class="mb-0">Struktur Menu "<?php echo htmlspecialchars($group['name']); ?></h6>
-                                                            <button class="btn btn-sm btn-outline-primary" onclick="addMenuItemToGroup(<?php echo $group['id']; ?>)">
+                                                            <button class="btn btn-sm btn-primary" onclick="addMenuItemToGroup(<?php echo $group['id']; ?>)">
                                                                 <i class="fas fa-plus"></i> Tambah/Edit Item Menu
                                                             </button>
                                                         </div>
@@ -193,19 +193,19 @@ ob_start();
     </div>
 </div>
 <!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteGroupModal" tabindex="-1">
+<div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Confirm Delete</h5>
-                <button type="button" class="btn-close" onclick="closeDeleteModal()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 Are you sure you want to delete this group? This action cannot be undone.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteGroup">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
             </div>
         </div>
     </div>
@@ -224,18 +224,15 @@ function waitForjQuery() {
     initializejQuery();
 }
 // Global functions that can be called from onclick
-function editGroup(id) {
-    // Check if jQuery is available
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
-        return;
-    }
-
+window.editGroup = function(id) {
     // Implementation for editing group
-    $('#groupModalLabel').text('Edit Menu Group');
-    $('#groupForm')[0].reset();
-    $('#groupId').val(id);
+    const modalLabel = document.getElementById('groupModalLabel');
+    const groupForm = document.getElementById('groupForm');
+    const groupIdField = document.getElementById('groupId');
+    
+    if (modalLabel) modalLabel.textContent = 'Edit Menu Group';
+    if (groupForm) groupForm.reset();
+    if (groupIdField) groupIdField.value = id;
 
     // Load group data and populate form
     fetch('<?php echo APP_URL; ?>/menu/get-group/' + id, {
@@ -248,16 +245,25 @@ function editGroup(id) {
     .then(data => {
         if (data.success && data.group) {
             // Populate form fields with group data
-            $('#groupName').val(data.group.name);
-            $('#groupIcon').val(data.group.icon || 'fas fa-folder');
-            $('#groupDescription').val(data.group.description);
-            $('#isCollapsible').prop('checked', data.group.is_collapsible == 1);
+            const groupName = document.getElementById('groupName');
+            const groupIcon = document.getElementById('groupIcon');
+            const groupDescription = document.getElementById('groupDescription');
+            const isCollapsible = document.getElementById('isCollapsible');
+            
+            if (groupName) groupName.value = data.group.name;
+            if (groupIcon) groupIcon.value = data.group.icon || 'fas fa-folder';
+            if (groupDescription) groupDescription.value = data.group.description;
+            if (isCollapsible) isCollapsible.checked = data.group.is_collapsible == 1;
 
             // Update icon display
             const iconClass = data.group.icon || 'fas fa-folder';
-            $('#iconPreview').attr('class', iconClass);
-            $('#iconClassDisplay').text(iconClass);
-            $('.icon-name').text('Selected Icon');
+            const iconPreview = document.getElementById('iconPreview');
+            const iconClassDisplay = document.getElementById('iconClassDisplay');
+            const iconName = document.querySelector('.icon-name');
+            
+            if (iconPreview) iconPreview.className = iconClass;
+            if (iconClassDisplay) iconClassDisplay.textContent = iconClass;
+            if (iconName) iconName.textContent = 'Selected Icon';
         } else {
             console.error('Failed to load group data:', data.error);
             showToast('error', 'Failed to load group data');
@@ -268,194 +274,235 @@ function editGroup(id) {
         showToast('error', 'An error occurred while loading group data');
     });
 
-    // Show modal using jQuery with proper styling
-    $('#groupModal').addClass('show').show().css({
-        'display': 'flex',
-        'align-items': 'center',
-        'justify-content': 'center',
-        'min-height': '100vh',
-        'z-index': '1055',
-        'opacity': '1'
-    });
+    // Show modal using vanilla JavaScript
+    const groupModal = document.getElementById('groupModal');
+    if (groupModal) {
+        groupModal.classList.add('show');
+        groupModal.style.display = 'flex';
+        groupModal.style.alignItems = 'center';
+        groupModal.style.justifyContent = 'center';
+        groupModal.style.minHeight = '100vh';
+        groupModal.style.zIndex = '1055';
+        groupModal.style.opacity = '1';
+        
+        // Ensure modal dialog is visible
+        const modalDialog = groupModal.querySelector('.modal-dialog');
+        if (modalDialog) {
+            modalDialog.style.zIndex = '1056';
+            modalDialog.style.position = 'relative';
+            modalDialog.style.margin = '0';
+            modalDialog.style.maxWidth = '500px';
+            modalDialog.style.width = '90%';
+        }
+    }
 
-    // Ensure modal dialog is visible
-    $('#groupModal .modal-dialog').css({
-        'z-index': '1056',
-        'position': 'relative',
-        'margin': '0',
-        'max-width': '500px',
-        'width': '90%'
-    });
-
-    $('body').addClass('modal-open');
+    document.body.classList.add('modal-open');
 
     // Add backdrop
-    if ($('.modal-backdrop').length === 0) {
-        $('body').append('<div class="modal-backdrop fade show" style="z-index: 1050;"></div>');
+    if (!document.querySelector('.modal-backdrop')) {
+        const backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop fade show';
+        backdrop.style.zIndex = '1050';
+        document.body.appendChild(backdrop);
     }
 }
-function addGroup() {
+window.addGroup = function() {
     console.log('addGroup() called');
     
-    // Check if jQuery is available
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
-        return;
-    }
-    
-    console.log('jQuery is available, proceeding with addGroup...');
-    
     // Reset form and show modal for adding new group
-    $('#groupModalLabel').text('Add Menu Group');
-    $('#groupForm')[0].reset();
-    $('#groupId').val(''); // Clear ID field
+    const modalLabel = document.getElementById('groupModalLabel');
+    const groupForm = document.getElementById('groupForm');
+    const groupIdField = document.getElementById('groupId');
+    
+    if (modalLabel) modalLabel.textContent = 'Add Menu Group';
+    if (groupForm) groupForm.reset();
+    if (groupIdField) groupIdField.value = '';
     
     // Reset icon display
-    $('#groupIcon').val('fas fa-folder');
-    $('#iconPreview').attr('class', 'fas fa-folder');
-    $('#iconClassDisplay').text('fas fa-folder');
-    $('.icon-name').text('Select Icon');
+    const groupIcon = document.getElementById('groupIcon');
+    const iconPreview = document.getElementById('iconPreview');
+    const iconClassDisplay = document.getElementById('iconClassDisplay');
+    const iconName = document.querySelector('.icon-name');
+    
+    if (groupIcon) groupIcon.value = 'fas fa-folder';
+    if (iconPreview) iconPreview.className = 'fas fa-folder';
+    if (iconClassDisplay) iconClassDisplay.textContent = 'fas fa-folder';
+    if (iconName) iconName.textContent = 'Select Icon';
     
     console.log('Form reset completed');
     
-    // Show modal using jQuery with proper styling
-    $('#groupModal').addClass('show').show().css({
-        'display': 'flex',
-        'align-items': 'center',
-        'justify-content': 'center',
-        'min-height': '100vh',
-        'z-index': '1055',
-        'opacity': '1'
-    });
+    // Show modal using vanilla JavaScript
+    const groupModal = document.getElementById('groupModal');
+    if (groupModal) {
+        groupModal.classList.add('show');
+        groupModal.style.display = 'flex';
+        groupModal.style.alignItems = 'center';
+        groupModal.style.justifyContent = 'center';
+        groupModal.style.minHeight = '100vh';
+        groupModal.style.zIndex = '1055';
+        groupModal.style.opacity = '1';
+        
+        // Ensure modal dialog is visible
+        const modalDialog = groupModal.querySelector('.modal-dialog');
+        if (modalDialog) {
+            modalDialog.style.zIndex = '1056';
+            modalDialog.style.position = 'relative';
+            modalDialog.style.margin = '0';
+            modalDialog.style.maxWidth = '500px';
+            modalDialog.style.width = '90%';
+        }
+    }
     
-    // Ensure modal dialog is visible
-    $('#groupModal .modal-dialog').css({
-        'z-index': '1056',
-        'position': 'relative',
-        'margin': '0',
-        'max-width': '500px',
-        'width': '90%'
-    });
-    
-    $('body').addClass('modal-open');
+    document.body.classList.add('modal-open');
     
     // Add backdrop
-    if ($('.modal-backdrop').length === 0) {
-        $('body').append('<div class="modal-backdrop fade show" style="z-index: 1050;"></div>');
+    if (!document.querySelector('.modal-backdrop')) {
+        const backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop fade show';
+        backdrop.style.zIndex = '1050';
+        document.body.appendChild(backdrop);
     }
     
     console.log('Modal displayed successfully');
 }
-function addDetailMenu(groupId) {
-    // Check if jQuery is available
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
-        return;
-    }
-
+window.addDetailMenu = function(groupId) {
     // Redirect to Menu Builder with group parameter
     window.location.href = '<?php echo APP_URL; ?>/menu/builder?group_id=' + groupId;
 }
 // Close Group Modal
-function closeGroupModal() {
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        return;
+window.closeGroupModal = function() {
+    const groupModal = document.getElementById('groupModal');
+    if (groupModal) {
+        groupModal.classList.remove('show');
+        groupModal.style.display = 'none';
     }
-
-    $('#groupModal').removeClass('show').hide();
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    document.body.classList.remove('modal-open');
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(backdrop => backdrop.remove());
 }
 // Close Icon Picker Modal
-function closeIconPickerModal() {
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        return;
+window.closeIconPickerModal = function() {
+    const iconPickerModal = document.getElementById('iconPickerModal');
+    if (iconPickerModal) {
+        iconPickerModal.classList.remove('show');
+        iconPickerModal.style.display = 'none';
     }
-
-    $('#iconPickerModal').removeClass('show').hide();
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
-}
-// Close Delete Modal
-function closeDeleteModal() {
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        return;
-    }
-
-    $('#deleteGroupModal').removeClass('show').hide();
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    document.body.classList.remove('modal-open');
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(backdrop => backdrop.remove());
 }
 // Add backdrop click event listeners
-$(document).ready(function() {
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
     // Clean up any existing modal state on page load
-    $('.modal').removeClass('show').hide();
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+    });
+    document.body.classList.remove('modal-open');
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(backdrop => backdrop.remove());
 
     // Close modal when clicking on backdrop
-    $(document).on('click', '.modal-backdrop', function() {
-        $('.modal:visible').removeClass('show').hide();
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal-backdrop')) {
+            const visibleModals = document.querySelectorAll('.modal:not([style*="display: none"])');
+            visibleModals.forEach(modal => {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+            });
+            document.body.classList.remove('modal-open');
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+        }
     });
 
     // Close modal when pressing Escape key
-    $(document).on('keydown', function(e) {
+    document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            $('.modal:visible').removeClass('show').hide();
-            $('body').removeClass('modal-open');
-            $('.modal-backdrop').remove();
+            const visibleModals = document.querySelectorAll('.modal:not([style*="display: none"])');
+            visibleModals.forEach(modal => {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+            });
+            document.body.classList.remove('modal-open');
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
         }
     });
 });
-function toggleDetailMenu(groupId) {
-    // Check if jQuery is available
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
+
+// Make toggleDetailMenu globally available
+window.toggleDetailMenu = function(groupId) {
+    console.log('toggleDetailMenu called with groupId:', groupId);
+    
+    const detailRow = document.getElementById(`detail-row-${groupId}`);
+    const menuItemsContainer = document.getElementById(`menu-items-${groupId}`);
+    const toggleButton = document.querySelector(`.btn[onclick="toggleDetailMenu(${groupId})"]`);
+
+    if (!detailRow || !menuItemsContainer || !toggleButton) {
+        console.error('Required elements not found');
         return;
     }
 
-    const detailRow = $(`#detail-row-${groupId}`);
-    const menuItemsContainer = $(`#menu-items-${groupId}`);
-    const toggleButton = $(`.btn[onclick="toggleDetailMenu(${groupId})"]`);
-
-    if (detailRow.hasClass('show')) {
-        // Hide the row using jQuery animation
-        detailRow.slideUp(300, function() {
-            detailRow.removeClass('show');
-        });
-        toggleButton.find('i').removeClass('fa-eye-slash').addClass('fa-eye');
-        toggleButton.attr('title', 'View Detail Menu');
+    if (detailRow.classList.contains('show')) {
+        // Hide the row with animation
+        detailRow.style.transition = 'all 0.3s ease';
+        detailRow.style.maxHeight = '0';
+        detailRow.style.overflow = 'hidden';
+        detailRow.style.opacity = '0';
+        
+        setTimeout(() => {
+            detailRow.classList.remove('show');
+            detailRow.style.display = 'none';
+        }, 300);
+        
+        const icon = toggleButton.querySelector('i');
+        if (icon) {
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+        toggleButton.setAttribute('title', 'View Detail Menu');
     } else {
-        // Show the row using jQuery animation
-        detailRow.slideDown(300, function() {
-            detailRow.addClass('show');
-        });
-        toggleButton.find('i').removeClass('fa-eye').addClass('fa-eye-slash');
-        toggleButton.attr('title', 'Hide Detail Menu');
+        // Show the row with animation
+        detailRow.style.display = 'table-row';
+        detailRow.style.transition = 'all 0.3s ease';
+        detailRow.style.maxHeight = 'none';
+        detailRow.style.overflow = 'visible';
+        detailRow.style.opacity = '1';
+        
+        setTimeout(() => {
+            detailRow.classList.add('show');
+        }, 10);
+        
+        const icon = toggleButton.querySelector('i');
+        if (icon) {
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+        toggleButton.setAttribute('title', 'Hide Detail Menu');
 
         // Load menu items if not already loaded
-        if (menuItemsContainer.find('.fa-spinner').length > 0) {
+        if (menuItemsContainer.querySelector('.fa-spinner')) {
             loadMenuItemsForGroup(groupId);
         }
     }
 }
 function loadMenuItemsForGroup(groupId) {
-    const menuItemsContainer = $(`#menu-items-${groupId}`);
+    const menuItemsContainer = document.getElementById(`menu-items-${groupId}`);
+
+    if (!menuItemsContainer) {
+        console.error('Menu items container not found');
+        return;
+    }
 
     // Show loading state
-    menuItemsContainer.html(`
+    menuItemsContainer.innerHTML = `
         <div class="text-center text-muted py-3">
             <i class="fas fa-spinner fa-spin"></i> Loading menu items...
         </div>
-    `);
+    `;
 
     // Fetch menu items for this group
     fetch(`<?php echo APP_URL; ?>/menu/get-group-items/${groupId}`, {
@@ -469,32 +516,32 @@ function loadMenuItemsForGroup(groupId) {
         if (data.success && data.menuItems) {
             renderMenuItems(menuItemsContainer, data.menuItems);
         } else {
-            menuItemsContainer.html(`
+            menuItemsContainer.innerHTML = `
                 <div class="text-center text-muted py-3">
                     <i class="fas fa-folder-open"></i>
                     <p class="mb-0">No menu items found in this group</p>
                 </div>
-            `);
+            `;
         }
     })
     .catch(error => {
         console.error('Error loading menu items:', error);
-        menuItemsContainer.html(`
+        menuItemsContainer.innerHTML = `
             <div class="text-center text-danger py-3">
                 <i class="fas fa-exclamation-triangle"></i>
                 <p class="mb-0">Error loading menu items</p>
             </div>
-        `);
+        `;
     });
 }
 function renderMenuItems(container, menuItems) {
     if (menuItems.length === 0) {
-        container.html(`
+        container.innerHTML = `
             <div class="text-center text-muted py-3">
                 <i class="fas fa-folder-open"></i>
                 <p class="mb-0">No menu items found in this group</p>
             </div>
-        `);
+        `;
         return;
     }
 
@@ -574,52 +621,21 @@ function renderMenuItems(container, menuItems) {
 
     html += `</div>`;
 
-    container.html(html);
+    container.innerHTML = html;
 }
 function addMenuItemToGroup(groupId) {
     // Redirect to menu builder with group parameter
     window.location.href = `<?php echo APP_URL; ?>/menu/builder?group_id=${groupId}`;
 }
 let deleteGroupId = null;
-function deleteGroup(id) {
+window.deleteGroup = function(id) {
     deleteGroupId = id;
-
-    // Check if jQuery is available
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded. Please refresh the page.');
-        AlertManager.error('Error: jQuery is not loaded. Please refresh the page.');
-        return;
-    }
-
-    // Show modal using jQuery with proper styling
-    $('#deleteGroupModal').addClass('show').show().css({
-        'display': 'flex',
-        'align-items': 'center',
-        'justify-content': 'center',
-        'min-height': '100vh',
-        'z-index': '1055',
-        'opacity': '1'
-    });
-
-    // Ensure modal dialog is visible and centered
-    $('#deleteGroupModal .modal-dialog').css({
-        'z-index': '1056',
-        'position': 'relative',
-        'margin': '0',
-        'max-width': '500px',
-        'width': '90%'
-    });
-
-    $('body').addClass('modal-open');
-
-    // Add backdrop
-    if ($('.modal-backdrop').length === 0) {
-        $('body').append('<div class="modal-backdrop fade show" style="z-index: 1050;"></div>');
-    }
+    const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
+    modal.show();
 }
 // Delete group confirmation
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("confirmDeleteGroup").addEventListener("click", function() {
+    document.getElementById("confirmDelete").addEventListener("click", function() {
         if (deleteGroupId) {
             // Delete group from database
             fetch('<?php echo APP_URL; ?>/menu/delete-group', {
@@ -645,7 +661,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (data && data.success) {
                     showToast('success', data.message || 'Group deleted successfully');
                     // Hide modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById("deleteGroupModal"));
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
                     modal.hide();
                     // Reload page to refresh the list
                     setTimeout(() => {
@@ -721,7 +737,7 @@ function initializejQuery() {
 }
 // Icon picker functions
 let selectedIconData = null;
-function openIconPicker() {
+window.openIconPicker = function() {
     console.log('openIconPicker() called');
     
     // Load icon picker content
@@ -932,16 +948,17 @@ function initializeModalIconPicker() {
                     }
                 });
 
-            // Update clear button and search icon visibility
-            if (searchTerm) {
-                clearSearchBtn.style.display = 'block';
-                if (searchIcon) searchIcon.style.display = 'none';
-            } else {
-                clearSearchBtn.style.display = 'none';
-                if (searchIcon) searchIcon.style.display = 'block';
-            }
-        }, 300);
-    });
+                // Update clear button and search icon visibility
+                if (searchTerm) {
+                    clearSearchBtn.style.display = 'block';
+                    if (searchIcon) searchIcon.style.display = 'none';
+                } else {
+                    clearSearchBtn.style.display = 'none';
+                    if (searchIcon) searchIcon.style.display = 'block';
+                }
+            }, 300);
+        });
+    }
 
     // Clear search
     clearSearchBtn.addEventListener('click', function() {
@@ -988,7 +1005,7 @@ function initializeModalIconPicker() {
         });
     }
 }
-function selectIcon() {
+window.selectIcon = function() {
     console.log('selectIcon() called');
     console.log('selectedIconData:', selectedIconData);
 
@@ -1003,9 +1020,23 @@ function selectIcon() {
 
         // Close modal
         // Hide icon picker modal using jQuery
-        $('#iconPickerModal').removeClass('show').hide();
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
+        if (typeof $ !== 'undefined') {
+            $('#iconPickerModal').removeClass('show').hide();
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        } else {
+            // Fallback to vanilla JavaScript
+            const modal = document.getElementById('iconPickerModal');
+            if (modal) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+            }
+            document.body.classList.remove('modal-open');
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+        }
 
         // Reset selected data
         selectedIconData = null;
@@ -1115,6 +1146,9 @@ if (typeof AlertManager === 'undefined') {
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     waitForjQuery();
+    
+    // Log that toggleDetailMenu is available
+    console.log('toggleDetailMenu function loaded:', typeof window.toggleDetailMenu);
 });
 </script>
 
@@ -1739,7 +1773,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .icon-picker-container .icon-preview-circle i {
         font-size: 20px;
     }
-
 
     .icon-picker-container .search-input {
         height: 35px;

@@ -166,62 +166,39 @@
                                     </td>
 
                                     <td align="center">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle action-menu-toggle action-btn-ellipsis" type="button" id="actionMenu<?php echo $user['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Aksi">
-                                                <i class="fas fa-ellipsis-h"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end action-menu-dropdown" aria-labelledby="actionMenu<?php echo $user['id']; ?>">
+                                        <div class="d-flex gap-1 min-w-80">
                                             <?php if ($user['status'] === 'register'): ?>
-                                                    <!-- For pending registration users -->
-                                                    <li>
-                                                        <a class="dropdown-item action-menu-item text-success" href="#" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>">
-                                                            <i class="fas fa-check me-2"></i>Approve User
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item action-menu-item text-danger" href="#" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>">
-                                                            <i class="fas fa-times me-2"></i>Reject User
-                                                        </a>
-                                                    </li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li>
-                                                        <a class="dropdown-item action-menu-item" href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>">
-                                                            <i class="fas fa-eye me-2"></i>View Details
-                                                        </a>
-                                                    </li>
-                                                <?php else: ?>
-                                                    <!-- For active/inactive users -->
-                                                    <li>
-                                                        <a class="dropdown-item action-menu-item" href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>">
-                                                            <i class="fas fa-eye me-2"></i>View Details
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item action-menu-item" href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit">
-                                                            <i class="fas fa-pencil me-2"></i>Edit User
-                                                        </a>
-                                                    </li>
-                                                    <?php if ($user['status'] === 'aktif'): ?>
-                                                        <li>
-                                                            <a class="dropdown-item action-menu-item text-warning" href="#" onclick="deactivateUser(<?php echo $user['id']; ?>)">
-                                                                <i class="fas fa-user-slash me-2"></i>Deactivate
-                                                            </a>
-                                                        </li>
-                                                    <?php elseif ($user['status'] === 'non_aktif'): ?>
-                                                        <li>
-                                                            <a class="dropdown-item action-menu-item text-success" href="#" onclick="activateUser(<?php echo $user['id']; ?>)">
-                                                                <i class="fas fa-user-check me-2"></i>Activate
-                                                            </a>
-                                                        </li>
-                                                    <?php endif; ?>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li>
-                                                        <a class="dropdown-item action-menu-item text-danger" href="#" onclick="deleteUser(<?php echo $user['id']; ?>)">
-                                                            <i class="fas fa-trash me-2"></i>Delete User
-                                                        </a>
-                                                    </li>
+                                                <!-- For pending registration users -->
+                                                <button type="button" class="btn btn-sm btn-outline-success btn-action" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" title="Approve User">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" title="Reject User">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-info btn-action" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            <?php else: ?>
+                                                <!-- For active/inactive users -->
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-info btn-action" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-success btn-action" title="Edit User">
+                                                    <i class="fas fa-pencil"></i>
+                                                </a>
+                                                <?php if ($user['status'] === 'aktif'): ?>
+                                                    <button type="button" class="btn btn-sm btn-outline-warning btn-action" onclick="deactivateUser(<?php echo $user['id']; ?>)" title="Deactivate User">
+                                                        <i class="fas fa-user-slash"></i>
+                                                    </button>
+                                                <?php elseif ($user['status'] === 'non_aktif'): ?>
+                                                    <button type="button" class="btn btn-sm btn-outline-success btn-action" onclick="activateUser(<?php echo $user['id']; ?>)" title="Activate User">
+                                                        <i class="fas fa-user-check"></i>
+                                                    </button>
+                                                <?php endif; ?>
+                                                <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteUser(<?php echo $user['id']; ?>)" title="Delete User">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             <?php endif; ?>
-                                            </ul>
                                         </div>
                                     </td>
                                 </tr>
@@ -434,6 +411,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </div>
+
 
 <script>
 let deleteUserId = null;
