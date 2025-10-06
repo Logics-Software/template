@@ -139,6 +139,24 @@
   --margin-3xl: var(--spacing-8);
   /* Sidebar specific */
   --sidebar-width: 265px;
+  --sidebar-active-bg: rgba(79, 70, 229, 0.2);
+  --sidebar-active-text: var(--primary-color);
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.15);
+  --sidebar-parent-active-bg: var(--bg-primary);
+  --sidebar-parent-active-border: var(--primary-color);
+
+  /* Primary color variations */
+  --primary-color-10: rgba(79, 70, 229, 0.1);
+  --primary-color-15: rgba(79, 70, 229, 0.15);
+  --primary-color-20: rgba(79, 70, 229, 0.2);
+  --primary-color-25: rgba(79, 70, 229, 0.25);
+  --primary-color-30: rgba(79, 70, 229, 0.3);
+
+  /* White variations for hover effects */
+  --white-5: rgba(255, 255, 255, 0.05);
+  --white-10: rgba(255, 255, 255, 0.1);
+  --white-12: rgba(255, 255, 255, 0.12);
+  --white-15: rgba(255, 255, 255, 0.15);
   /* Font sizes - commonly used */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.8125rem;

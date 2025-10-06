@@ -1,5 +1,6 @@
 /* Card Component - BEM Methodology */
 .card {
+  margin: 1rem;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-md);

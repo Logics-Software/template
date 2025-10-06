@@ -1,7 +1,47 @@
-/* Form Component - BEM Methodology */
-.form {
-  width: 100%;
+/* Form untuk setting, master, transaksi dan laporan */
+.form-container {
+  margin: 1rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.15s ease-in-out;
 }
+
+.form-header {
+  padding: var(--padding-lg);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+.form-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.form-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0.25rem 0 0 0;
+}
+
+.form-body {
+  padding: var(--padding-lg);
+}
+
+.form-footer {
+  padding: var(--padding-lg);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+/* Form Component - BEM Methodology */
+/* .form {
+  width: 100%;
+} */
 
 .form__group {
   margin-bottom: var(--margin-lg);
@@ -15,7 +55,7 @@
 }
 
 .form__label--required::after {
-  content: ' *';
+  content: " *";
   color: var(--danger-color);
 }
 

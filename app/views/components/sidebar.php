@@ -1,115 +1,33 @@
 <?php
 // Get logo and company name from konfigurasi table
 if (!function_exists('getSidebarLogo')) {
-function getSidebarLogo() {
-    try {
-        // Include the Konfigurasi model
-        require_once __DIR__ . '/../../models/Konfigurasi.php';
-        
-        $konfigurasiModel = new Konfigurasi();
-        $konfigurasi = $konfigurasiModel->getConfiguration();
-        
-        if ($konfigurasi && !empty($konfigurasi['logo'])) {
-            $logoPath = APP_URL . '/assets/images/konfigurasi/' . htmlspecialchars($konfigurasi['logo']);
-            $logoAlt = htmlspecialchars($konfigurasi['namaperusahaan'] ?? 'Logo');
-            $companyName = htmlspecialchars($konfigurasi['namaperusahaan'] ?? APP_NAME);
-        } else {
-            $logoPath = APP_URL . '/assets/images/logo.png';
-            $logoAlt = APP_NAME;
-            $companyName = APP_NAME;
+    function getSidebarLogo() {
+        try {
+            // Include the Konfigurasi model
+            require_once __DIR__ . '/../../models/Konfigurasi.php';
+            
+            $konfigurasiModel = new Konfigurasi();
+            $konfigurasi = $konfigurasiModel->getConfiguration();
+            
+            if ($konfigurasi && !empty($konfigurasi['logo'])) {
+                $logoPath = APP_URL . '/assets/images/konfigurasi/' . htmlspecialchars($konfigurasi['logo']);
+                $logoAlt = htmlspecialchars($konfigurasi['namaperusahaan'] ?? 'Logo');
+                $companyName = htmlspecialchars($konfigurasi['namaperusahaan'] ?? APP_NAME);
+            } else {
+                $logoPath = APP_URL . '/assets/images/logo.png';
+                $logoAlt = APP_NAME;
+                $companyName = APP_NAME;
+            }
+            
+            return ['path' => $logoPath, 'alt' => $logoAlt, 'company_name' => $companyName];
+        } catch (Exception $e) {
+            // Fallback to default logo if error occurs
+            return ['path' => APP_URL . '/assets/images/logo.png', 'alt' => APP_NAME, 'company_name' => APP_NAME];
         }
-        
-        return ['path' => $logoPath, 'alt' => $logoAlt, 'company_name' => $companyName];
-    } catch (Exception $e) {
-        // Fallback to default logo if error occurs
-        return ['path' => APP_URL . '/assets/images/logo.png', 'alt' => APP_NAME, 'company_name' => APP_NAME];
     }
-}
-}
-
-// Build dynamic menu
-if (!function_exists('buildDynamicMenu')) {
-function buildDynamicMenu() {
-    try {
-        // Include required models and services
-        require_once __DIR__ . '/../../models/Module.php';
-        require_once __DIR__ . '/../../models/MenuGroup.php';
-        require_once __DIR__ . '/../../models/MenuPermission.php';
-        require_once __DIR__ . '/../../services/MenuService.php';
-        
-        $menuService = new MenuService();
-        $userId = Session::has('user_id') ? Session::get('user_id') : null;
-        $currentPage = $current_page ?? '';
-        
-        // Get user's menu items
-        $menuItems = $menuService->buildUserMenu($userId);
-        
-        // Render menu HTML
-        return $menuService->renderMenu($menuItems, $currentPage);
-        
-    } catch (Exception $e) {
-        // Fallback to static menu if dynamic menu fails
-        return buildStaticMenu();
-    }
-}
-}
-
-// Fallback static menu
-if (!function_exists('buildStaticMenu')) {
-function buildStaticMenu() {
-    $currentPage = $current_page ?? '';
-    $html = '';
-    
-    // Dashboard
-    $html .= '<li class="nav-item">';
-    $html .= '<a class="nav-link ' . (($currentPage === 'dashboard') ? 'active' : '') . '" href="' . APP_URL . '/dashboard" title="Dashboard">';
-    $html .= '<i class="fa-regular fa-house"></i>';
-    $html .= '<span>Dashboard</span>';
-    $html .= '</a>';
-    $html .= '</li>';
-    
-    // Separator
-    $html .= '<li class="nav-item"><hr class="sidebar-divider"></li>';
-    
-    // Settings Dropdown
-    $isSettingsActive = in_array($currentPage, ['users', 'konfigurasi', 'call-center', 'modules']);
-    $html .= '<li class="nav-item">';
-    $html .= '<a class="nav-link dropdown-toggle ' . ($isSettingsActive ? 'parent-active' : '') . '" href="#" data-bs-toggle="collapse" data-bs-target="#settingsMenu" aria-expanded="' . ($isSettingsActive ? 'true' : 'false') . '" aria-controls="settingsMenu" title="Pengaturan">';
-    $html .= '<i class="fas fa-cog"></i>';
-    $html .= '<span>Setting</span>';
-    $html .= '<i class="fa-chevron-down fa-chevron-down"></i>';
-    $html .= '</a>';
-    $html .= '<div class="collapse ' . ($isSettingsActive ? 'show' : '') . '" id="settingsMenu">';
-    $html .= '<ul class="nav nav-pills flex-column ms-3">';
-    
-    // Settings menu items
-    $settingsItems = [
-        ['page' => 'users', 'url' => '/users', 'icon' => 'fas fa-users', 'title' => 'Manajemen Users', 'label' => 'Manajemen Users'],
-        ['page' => 'modules', 'url' => '/modules', 'icon' => 'fas fa-puzzle-piece', 'title' => 'Manajemen Modul', 'label' => 'Modules'],
-        ['page' => 'menu', 'url' => '/menu', 'icon' => 'fas fa-bars', 'title' => 'Manajemen Menu', 'label' => 'Menu'],
-        ['page' => 'konfigurasi', 'url' => '/konfigurasi', 'icon' => 'fas fa-cog', 'title' => 'Konfigurasi Aplikasi', 'label' => 'Konfigurasi'],
-        ['page' => 'call-center', 'url' => '/call-center', 'icon' => 'fab fa-whatsapp', 'title' => 'Manajemen Call Center', 'label' => 'Call Center']
-    ];
-    
-    foreach ($settingsItems as $item) {
-        $html .= '<li class="nav-item">';
-        $html .= '<a class="nav-link ' . (($currentPage === $item['page']) ? 'active' : '') . '" href="' . APP_URL . $item['url'] . '" title="' . $item['title'] . '">';
-        $html .= '<i class="' . $item['icon'] . '"></i>';
-        $html .= '<span>' . $item['label'] . '</span>';
-        $html .= '</a>';
-        $html .= '</li>';
-    }
-    
-    $html .= '</ul>';
-    $html .= '</div>';
-    $html .= '</li>';
-    
-    return $html;
-}
 }
 
 $logo = getSidebarLogo();
-$dynamicMenu = buildDynamicMenu();
 ?>
 
 <!-- Sidebar Navigation -->
@@ -118,21 +36,85 @@ $dynamicMenu = buildDynamicMenu();
         <div class="sidebar-brand">
             <a href="<?php echo APP_URL; ?>" class="d-flex align-items-center">
                 <img src="<?php echo $logo['path']; ?>" alt="<?php echo $logo['alt']; ?>" height="32" class="me-2">
-                <span class="sidebar-brand-text"><?php echo htmlspecialchars($logo['company_name'] ?? APP_NAME); ?></span>
+                <span class="brand-text"><?php echo htmlspecialchars($logo['company_name'] ?? APP_NAME); ?></span>
             </a>
         </div>
     </div>
     
     <div class="sidebar-body">
-        <ul class="nav nav-pills flex-column">
+        <ul class="nav nav-pills flex-column sidebar-nav">
+            <!-- Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo APP_URL; ?>/dashboard" title="Dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/dashboard') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="nav-text">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item"><hr class="sidebar-divider"></li>
-            <?php echo $dynamicMenu; ?>
+            
+            <!-- Users Management -->
+            <li class="nav-item">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/users') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users">
+                    <i class="fas fa-users"></i>
+                    <span class="nav-text">Users</span>
+                </a>
+            </li>
+            
+            <!-- Modules Management -->
+            <li class="nav-item">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/modules') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/modules">
+                    <i class="fas fa-cube"></i>
+                    <span class="nav-text">Modules</span>
+                </a>
+            </li>
+            
+            <!-- Menu Management -->
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#menuManagement" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                    <span class="nav-text">Menu Management</span>
+                </a>
+                <div class="collapse" id="menuManagement">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menu') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menu">
+                                <i class="fas fa-list"></i>
+                                <span class="nav-text">Menu List</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menu-builder') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menu-builder">
+                                <i class="fas fa-tools"></i>
+                                <span class="nav-text">Menu Builder</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            
+            <!-- Call Center -->
+            <li class="nav-item">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/call-center') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/call-center">
+                    <i class="fas fa-phone"></i>
+                    <span class="nav-text">Call Center</span>
+                </a>
+            </li>
+            
+            <!-- Messages -->
+            <li class="nav-item">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/messages') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/messages">
+                    <i class="fas fa-envelope"></i>
+                    <span class="nav-text">Messages</span>
+                </a>
+            </li>
+            
+            <!-- Configuration -->
+            <li class="nav-item">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/konfigurasi') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/konfigurasi">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-text">Configuration</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </nav>

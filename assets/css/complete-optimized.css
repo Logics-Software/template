@@ -1,0 +1,200 @@
+/* Complete CSS - Optimized Version */
+
+/* Import base styles */
+@import url("base/variables.css");
+
+/* Import component styles */
+@import url("components/card.css");
+@import url("components/form.css");
+@import url("components/button.css");
+@import url("components/alert.css");
+
+/* Import layout styles */
+@import url("layouts/sidebar.css");
+@import url("layouts/main.css");
+@import url("utilities.css");
+
+/* Global text decoration removal - optimized */
+* {
+  text-decoration: none;
+}
+
+/* Allow underline for specific cases where needed */
+a:hover:not(.no-hover-underline),
+a:focus:not(.no-hover-underline),
+a:visited:not(.no-hover-underline),
+a:active:not(.no-hover-underline) {
+  text-decoration: none;
+}
+
+/* Special cases that need underline */
+.underline,
+.underline:hover,
+.underline:focus,
+.underline:visited,
+.underline:active {
+  text-decoration: underline;
+}
+
+/* Font Awesome fallback */
+.fas,
+.far,
+.fab,
+.fa {
+  font-family: "Font Awesome 7 Free", "Font Awesome 7 Pro",
+    "Font Awesome 7 Brands" !important;
+}
+
+/* Sidebar styles moved to layouts/sidebar.css for better organization */
+
+/* Header Icons - Unified Styling */
+.sidebar-toggle-btn,
+#notificationToggle,
+#whatsappToggle,
+.message-dropdown > .btn,
+#themeToggle,
+#fullscreenToggle {
+  color: var(--text-secondary);
+  transition: color 0.15s ease-in-out;
+  font-weight: 500;
+}
+
+.sidebar-toggle-btn:hover,
+#notificationToggle:hover,
+#whatsappToggle:hover,
+.message-dropdown > .btn:hover,
+#themeToggle:hover,
+#fullscreenToggle:hover {
+  color: var(--primary-color);
+  background-color: var(--bg-secondary);
+  text-decoration: none;
+}
+
+/* Standardize all header icon sizes */
+.sidebar-toggle-btn i,
+#notificationToggle i,
+#whatsappToggle i,
+.message-dropdown > .btn i,
+#themeToggle i,
+#fullscreenToggle i {
+  font-size: var(--icon-md);
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Ensure sidebar toggle icon is visible */
+.sidebar-toggle-btn i.fa-bars {
+  font-family: "Font Awesome 7 Free";
+  font-weight: 900;
+  color: var(--text-secondary);
+}
+
+/* Remove underline from all header icons */
+#notificationToggle i,
+#whatsappToggle i,
+.message-dropdown > .btn i,
+#themeToggle i,
+#fullscreenToggle i,
+.sidebar-toggle-btn i {
+  text-decoration: none;
+  border: none;
+}
+
+/* Ensure hover effects work for all header icons */
+.sidebar-toggle-btn:hover i,
+#notificationToggle:hover i,
+#whatsappToggle:hover i,
+.message-dropdown > .btn:hover i,
+#themeToggle:hover i,
+#fullscreenToggle:hover i {
+  color: var(--primary-color);
+}
+
+/* Data Tables Styling */
+.table {
+  font-size: var(--font-size-base);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  vertical-align: middle;
+}
+
+/* Table Header Background */
+.table > thead > tr > th {
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 1rem 0.75rem;
+}
+
+/* Dark theme table header */
+[data-bs-theme="dark"] .table > thead > tr > th {
+  background-color: var(--bg-secondary);
+  border-bottom-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* Enhanced Sort Icons */
+.table > thead > tr > th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.table > thead > tr > th.sortable:hover {
+  background-color: var(--primary-color-10);
+  color: var(--primary-color);
+}
+
+.table > thead > tr > th.sortable:hover .fas.fa-sort {
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+/* Sort icon styling */
+.table > thead > tr > th.sortable .fas.fa-sort {
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.table > thead > tr > th.sortable:hover .fas.fa-sort {
+  opacity: 1;
+}
+
+/* Active sort states */
+.table > thead > tr > th.sortable.sort-asc .fas.fa-sort,
+.table > thead > tr > th.sortable.sort-desc .fas.fa-sort {
+  color: var(--primary-color);
+  opacity: 1;
+}
+
+/* Sort direction indicators */
+.table > thead > tr > th.sortable.sort-asc .fas.fa-sort::before {
+  content: "\f0de"; /* fa-sort-up */
+}
+
+.table > thead > tr > th.sortable.sort-desc .fas.fa-sort::before {
+  content: "\f0dd"; /* fa-sort-down */
+}
+
+/* Dark theme sort icons */
+[data-bs-theme="dark"] .table > thead > tr > th.sortable:hover {
+  background-color: var(--white-5);
+}
+
+[data-bs-theme="dark"] .table > thead > tr > th.sortable .fas.fa-sort {
+  color: var(--text-tertiary);
+}
+
+[data-bs-theme="dark"] .table > thead > tr > th.sortable:hover .fas.fa-sort {
+  color: var(--primary-color);
+}
+
+/* Responsive adjustments moved to layouts/sidebar.css for better organization */

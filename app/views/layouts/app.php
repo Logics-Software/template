@@ -50,8 +50,8 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <!-- Prevent sidebar flash effect -->
     <!-- Sidebar styles moved to complete.css -->
     
-    <!-- Custom CSS -->
-    <link href="<?php echo BASE_URL; ?>assets/css/complete.css" rel="stylesheet">
+    <!-- Optimized CSS -->
+    <link href="<?php echo BASE_URL; ?>assets/css/complete-optimized.css" rel="stylesheet">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>assets/images/favicon.ico">

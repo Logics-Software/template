@@ -10,34 +10,41 @@
   left: 0;
   z-index: 999;
   overflow-y: auto;
+  overflow-x: hidden;
   transition: all 0.3s ease;
-}
-
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background-color: var(--border-color);
-  border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text-tertiary);
-}
-
-.sidebar {
-  scrollbar-color: var(--border-color) transparent;
+  max-width: var(--sidebar-width);
   -ms-overflow-style: none; /* Internet Explorer 10+ */
+  opacity: 0;
+  visibility: hidden;
+
+  /* Scrollbar styles */
+  scrollbar-color: var(--border-color) transparent;
+  scrollbar-width: 3px;
+  -ms-overflow-style: none;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden;
+}
+
+.sidebar:hover {
+  scrollbar-width: 3px;
+  -ms-overflow-style: auto;
+  overflow-y: scroll; /* Hide vertical scrollbar */
+}
+
+.sidebar:hover::-webkit-scrollbar {
+  width: 3px;
+  background: var(--border-color);
+}
+
+.sidebar .sidebar-body {
+  padding: 0.5rem;
 }
 
 /* Sidebar collapsed state */
 .sidebar.collapsed {
-  width: 70px;
+  width: 0;
+  transform: translateX(-100%);
+  overflow: hidden;
 }
 
 .sidebar.collapsed .sidebar-brand {
@@ -71,12 +78,15 @@
 
 /* Sidebar brand */
 .sidebar-brand {
-  padding: 1.5rem 1rem;
-  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 1.25rem;
   display: flex;
   align-items: center;
   text-decoration: none;
   color: var(--text-primary);
+}
+
+.sidebar-header {
+  height: var(--header-height);
 }
 
 .sidebar-brand .brand-logo {
@@ -89,11 +99,20 @@
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--text-primary);
+  text-decoration: none !important;
+}
+
+.sidebar-brand a {
+  text-decoration: none !important;
+}
+
+.sidebar-brand a:hover {
+  text-decoration: none !important;
 }
 
 /* Sidebar navigation */
 .sidebar-nav {
-  padding: 1rem 0;
+  padding: 0;
 }
 
 .sidebar-nav .nav-item {
@@ -103,23 +122,12 @@
 .sidebar-nav .nav-link {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   color: var(--text-secondary);
   text-decoration: none;
   transition: all 0.3s ease;
   border-radius: 0;
   position: relative;
-}
-
-.sidebar-nav .nav-link:hover {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-}
-
-.sidebar-nav .nav-link.active {
-  background-color: var(--sidebar-active-bg);
-  color: var(--sidebar-active-text);
-  border-right: 3px solid var(--sidebar-active-text);
 }
 
 .sidebar-nav .nav-link i {
@@ -130,6 +138,11 @@
 
 .sidebar-nav .nav-link .nav-text {
   font-weight: 500;
+}
+
+.sidebar-nav .nav-link:hover {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 /* Dropdown toggle */
@@ -169,22 +182,11 @@
   color: var(--text-primary);
 }
 
-.sidebar-nav .collapse .nav-link.active {
-  background-color: var(--sidebar-active-bg);
-  color: var(--sidebar-active-text);
-  border-right: 3px solid var(--sidebar-active-text);
-}
-
 /* Sidebar visibility control */
-.sidebar {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
 .sidebar.js-loaded {
   opacity: 1;
   visibility: visible;
+  animation: none;
 }
 
 /* Fallback: Show sidebar after 1 second if JS hasn't loaded */
@@ -199,9 +201,129 @@
   }
 }
 
-/* Override fallback if JS loaded */
-.sidebar.js-loaded {
-  animation: none;
+/* Sidebar Active State - Optimized with Variables */
+.sidebar .nav-link.active {
+  background: var(--sidebar-active-bg);
+  border-radius: 7.5px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--sidebar-active-text);
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+}
+
+/* Override Bootstrap nav-pills active state for sidebar */
+.sidebar .nav-pills .nav-link.active,
+.sidebar .nav-pills .show > .nav-link {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+}
+
+/* Sidebar collapse nav-link active */
+.sidebar .collapse .nav-link.active {
+  background: var(--primary-color-15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1);
+}
+
+/* Override Bootstrap nav-pills active state for sidebar collapse */
+.sidebar .collapse .nav-pills .nav-link.active,
+.sidebar .collapse .nav-pills .show > .nav-link {
+  background: var(--primary-color-15);
+  color: var(--primary-color);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1);
+}
+
+/* Sidebar hover - Using Variables */
+.sidebar .nav-link:hover {
+  background: var(--sidebar-hover-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  color: var(--primary-color);
+  transform: translateX(2px);
+}
+
+/* Parent menu when sub menu is active */
+.sidebar .nav-link.parent-active {
+  background: var(--sidebar-parent-active-bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  color: var(--text-primary);
+  font-weight: 500;
+  border-left: 3px solid var(--sidebar-parent-active-border);
+}
+
+/* Dark theme - sidebar nav-link active */
+[data-bs-theme="dark"] .sidebar .nav-link.active {
+  background: var(--primary-color-20);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* Dark theme - Override Bootstrap nav-pills active state for sidebar */
+[data-bs-theme="dark"] .sidebar .nav-pills .nav-link.active,
+[data-bs-theme="dark"] .sidebar .nav-pills .show > .nav-link {
+  background: var(--primary-color-20);
+  color: var(--primary-color);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* Dark theme - sidebar collapse nav-link active */
+[data-bs-theme="dark"] .sidebar .collapse .nav-link.active {
+  background: var(--primary-color-15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Dark theme - Override Bootstrap nav-pills active state for sidebar collapse */
+[data-bs-theme="dark"] .sidebar .collapse .nav-pills .nav-link.active,
+[data-bs-theme="dark"] .sidebar .collapse .nav-pills .show > .nav-link {
+  background: var(--primary-color-15);
+  color: var(--primary-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Dark theme - parent menu when sub menu is active */
+[data-bs-theme="dark"] .sidebar .nav-link.parent-active {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Dark theme - sidebar nav-link unselected */
+[data-bs-theme="dark"] .sidebar .nav-link {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Dark theme - sidebar nav-link hover */
+[data-bs-theme="dark"] .sidebar .nav-link:hover {
+  background: var(--white-5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Dark theme - sidebar collapse nav-link unselected */
+[data-bs-theme="dark"] .sidebar .collapse .nav-link {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Dark theme - sidebar collapse nav-link hover */
+[data-bs-theme="dark"] .sidebar .collapse .nav-link:hover {
+  background: var(--white-5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 /* Mobile sidebar */
@@ -216,7 +338,8 @@
   }
 
   .sidebar.collapsed {
-    width: var(--sidebar-width);
+    width: 0;
     transform: translateX(-100%);
+    overflow: hidden;
   }
 }

@@ -6,8 +6,8 @@
 <!-- Admin Dashboard Header -->
 <div class="page-header">
     <div class="page-title">
-        <h4><i class="fas fa-crown me-2"></i>Admin Dashboard</h4>
-        <p class="text-muted">System overview and management tools</p>
+        <h5></i>Admin Dashboard</h5>
+        <h6 class="text-muted">System overview and management tools</h6>
     </div>
 </div>
 

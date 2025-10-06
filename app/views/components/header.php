@@ -39,7 +39,7 @@ function getGreetingMessage() {
                     
                     <!-- Greeting Message -->
                     <div class="greeting-message">
-                        <h6 class="mb-0 ml-2 text-muted" id="greetingText">
+                        <h6 class="mb-0 text-muted" id="greetingText">
                             <?php echo getGreetingMessage(); ?>
                         </h6>
                     </div>
@@ -193,16 +193,16 @@ function getGreetingMessage() {
                             <button class="btn btn-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" title="Profil User">
                                 <div class="user-avatar me-2">
                                     <?php if (Session::get('user_picture')): ?>
-                                        <img src="<?php echo APP_URL; ?>/<?php echo Session::get('user_picture'); ?>" alt="User" class="rounded-circle" width="32" height="32">
+                                        <img src="<?php echo APP_URL; ?>/<?php echo Session::get('user_picture'); ?>" alt="User" class="rounded-circle object-fit-cover" width="32" height="32">
                                     <?php else: ?>
-                                        <div class="avatar-fallback avatar-sm bg-gradient-primary"><?php echo strtoupper(substr(Session::get('user_name') ?? 'A', 0, 1)); ?></div>
+                                        <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User Avatar" class="rounded-circle object-fit-cover" width="32" height="32">
                                     <?php endif; ?>
                                 </div>
                                 <div class="user-info text-start">
-                                    <h6><?php echo Session::get('user_name') ?? 'Admin'; ?></h6>
+                                    <?php echo Session::get('user_name') ?? 'Admin'; ?>
                                 </div>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-profile">
                                 <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/messages">
                                     <i class="fas fa-envelope me-2"></i>Pesan
                                     <span class="badge bg-danger ms-auto d-none" id="unread-count-badge">0</span>

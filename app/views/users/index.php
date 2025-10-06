@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
+            <div class="card__header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Users List</h5>
+                    <h5 class="card__title mb-0">Users List</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             
-            <div class="card-body">
+            <div class="card__body">
                 <!-- Search and Filter -->
                 <div class="row mb-4">
                     <div class="col-md-4">
@@ -128,13 +128,11 @@
                                     default => 'info'
                                 };
                                 
-                                // Picture handling
+                                // Picture handling - using header-section styling
                                 $pictureUrl = $user['picture'] ?? null;
                                 $pictureHtml = $pictureUrl ? 
-                                    '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle profile-img-sm">' :
-                                    '<div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="fas fa-user text-white text-sm"></i>
-                                    </div>';
+                                    '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle object-fit-cover" width="32" height="32">' :
+                                    '<div class="avatar-fallback avatar-sm bg-gradient-primary">' . strtoupper(substr($user['namalengkap'] ?? 'A', 0, 1)) . '</div>';
                                 
                                 // Last login formatting
                                 $lastLogin = $user['lastlogin'] ? 

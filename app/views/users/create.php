@@ -27,7 +27,6 @@
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
                                 <label for="username">Username <span class="text-danger">*</span></label>
-                                <div class="form-text">Username must be unique</div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -107,7 +106,7 @@
                                 </div>
                                 <div id="file-preview" class="file-upload-preview d-none">
                                     <div class="preview-container">
-                                        <img id="preview-image" class="preview-image" alt="Preview" class="img-preview">
+                                        <img id="preview-image" class="preview-image rounded-circle object-fit-cover p-2" width="120" height="120" alt="Preview" class="img-preview">
                                         <div class="preview-overlay">
                                             <button type="button" class="btn btn-danger remove-preview" onclick="removePreview()">
                                                 <i class="fas fa-times"></i>
