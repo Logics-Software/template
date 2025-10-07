@@ -143,28 +143,18 @@
                                         <!-- Default state when no file selected -->
                                         <div id="no-file-preview" class="text-center text-muted py-3">
                                             <?php 
-                                            // Debug: Check user data
-                                            echo "<!-- Debug: User data: " . print_r($user, true) . " -->";
-                                            echo "<!-- Debug: Picture field: " . (isset($user['picture']) ? $user['picture'] : 'NOT SET') . " -->";
-                                            echo "<!-- Debug: APP_PATH: " . APP_PATH . " -->";
-                                            echo "<!-- Debug: Full path: " . APP_PATH . '/assets/images/users/' . $user['picture'] . " -->";
-                                            echo "<!-- Debug: File exists: " . (file_exists(APP_PATH . '/assets/images/users/' . $user['picture']) ? 'YES' : 'NO') . " -->";
-                                            echo "<!-- Debug: APP_URL: " . APP_URL . " -->";
                                             
-                                            // Debug: Show the final image URL
                                             $imageUrl = '';
                                             if (strpos($user['picture'], 'assets/images/users/') === 0) {
                                                 $imageUrl = APP_URL . '/' . $user['picture'];
                                             } else {
                                                 $imageUrl = APP_URL . '/assets/images/users/' . $user['picture'];
                                             }
-                                            echo "<!-- Debug: Final image URL: " . $imageUrl . " -->";
                                             
                                             // Test: Always show photo if picture field exists
                                             if (isset($user['picture']) && $user['picture'] !== ''):
                                             ?>
                                                 <!-- Show existing user photo -->
-                                                <?php echo "<!-- DEBUG: Showing existing photo for: " . $user['picture'] . " -->"; ?>
                                                 <div class="preview-container">
                                                     <img src="<?php 
                                                         // Handle different path formats
@@ -194,7 +184,6 @@
                                                 </div>
                                             <?php else: ?>
                                                 <!-- No existing photo -->
-                                                <?php echo "<!-- DEBUG: No existing photo found -->"; ?>
                                                 <i class="fas fa-image fa-3x mb-2 opacity-50"></i>
                                                 <div class="small">Belum ada foto profil</div>
                                             <?php endif; ?>
@@ -229,7 +218,7 @@ function handleFileSelect(input) {
         // Validate file type
         const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
         if (!allowedTypes.includes(file.type)) {
-            AlertManager.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
+            Notify.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
             input.value = "";
             return;
         }
@@ -237,7 +226,7 @@ function handleFileSelect(input) {
         // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            AlertManager.warning("File size must be less than 5MB");
+            Notify.warning("File size must be less than 5MB");
             input.value = "";
             return;
         }

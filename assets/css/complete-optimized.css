@@ -7,7 +7,7 @@
 @import url("components/card.css");
 @import url("components/form.css");
 @import url("components/button.css");
-@import url("components/alert.css");
+@import url("components/notify.css");
 @import url("components/auth.css");
 
 /* Import layout styles */
@@ -346,17 +346,31 @@ a:active:not(.no-hover-underline) {
 /* Table Header Background */
 .table > thead > tr > th {
   background-color: var(--bg-secondary);
-  border-bottom: 2px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
   font-weight: 600;
   color: var(--text-primary);
   padding: 1rem 0.75rem;
 }
 
+/* Table header border for all table types */
+.table thead th,
+.table thead td {
+  border-top: 2px solid var(--border-color);
+}
+
 /* Dark theme table header */
 [data-bs-theme="dark"] .table > thead > tr > th {
   background-color: var(--bg-secondary);
+  border-top-color: var(--border-color);
   border-bottom-color: var(--border-color);
   color: var(--text-primary);
+}
+
+/* Dark theme table header border for all table types */
+[data-bs-theme="dark"] .table thead th,
+[data-bs-theme="dark"] .table thead td {
+  border-top-color: var(--border-color);
 }
 
 /* Enhanced Sort Icons */

@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Validate file type
                 const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
                 if (!allowedTypes.includes(file.type)) {
-                    AlertManager.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
+                    Notify.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
                     this.value = "";
                     return;
                 }
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Validate file size (2MB max)
                 const maxSize = 2 * 1024 * 1024; // 2MB
                 if (file.size > maxSize) {
-                    AlertManager.warning("File size must be less than 2MB");
+                    Notify.warning("File size must be less than 2MB");
                     this.value = "";
                     return;
                 }

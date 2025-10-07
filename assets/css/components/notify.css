@@ -1,0 +1,251 @@
+/**
+ * Unified Notification System CSS
+ * Simple & Effective - Only 20 classes
+ */
+
+/* Base notification */
+.notify {
+  position: relative;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: notifySlideIn 0.3s ease;
+  pointer-events: auto;
+  border-left: 4px solid transparent;
+}
+
+/* Flash message positioning - will be moved to fixed container */
+.notify-flash {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+/* Notification content */
+.notify__content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.notify__icon {
+  margin-right: 0.75rem;
+  font-size: 1.125rem;
+}
+
+.notify__message {
+  flex: 1;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.notify__close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+  margin-left: 0.75rem;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notify__close:hover {
+  opacity: 1;
+}
+
+/* Notification variants */
+.notify--success {
+  background: #d4edda;
+  color: #155724;
+  border-left-color: #28a745;
+}
+
+.notify--success .notify__icon {
+  color: #28a745;
+}
+
+.notify--error {
+  background: #f8d7da;
+  color: #721c24;
+  border-left-color: #dc3545;
+}
+
+.notify--error .notify__icon {
+  color: #dc3545;
+}
+
+.notify--warning {
+  background: #fff3cd;
+  color: #856404;
+  border-left-color: #ffc107;
+}
+
+.notify--warning .notify__icon {
+  color: #ffc107;
+}
+
+.notify--info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border-left-color: #17a2b8;
+}
+
+.notify--info .notify__icon {
+  color: #17a2b8;
+}
+
+/* Dismissing animation */
+.notify--dismissing {
+  animation: notifySlideOut 0.3s ease forwards;
+}
+
+/* Animations */
+@keyframes notifySlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes notifySlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Confirmation dialog */
+.notify-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.notify-confirm-box {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.notify-confirm-header {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.notify-confirm-message {
+  margin-bottom: 24px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.notify-confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* Unified container positioning */
+.notify-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+  max-width: 400px;
+  pointer-events: none;
+}
+
+/* Flash message initial positioning (before move) */
+.notify-flash {
+  position: relative;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+}
+
+/* Flash message after move to container */
+.notify-container .notify-flash {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .notify-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  .notify {
+    margin: 0 0 1rem 0;
+    max-width: none;
+  }
+
+  .notify-confirm-box {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+}
+
+/* Dark theme support */
+[data-bs-theme="dark"] .notify--success {
+  background: rgba(40, 167, 69, 0.1);
+  color: #d4edda;
+  border-left-color: #28a745;
+}
+
+[data-bs-theme="dark"] .notify--error {
+  background: rgba(220, 53, 69, 0.1);
+  color: #f8d7da;
+  border-left-color: #dc3545;
+}
+
+[data-bs-theme="dark"] .notify--warning {
+  background: rgba(255, 193, 7, 0.1);
+  color: #fff3cd;
+  border-left-color: #ffc107;
+}
+
+[data-bs-theme="dark"] .notify--info {
+  background: rgba(23, 162, 184, 0.1);
+  color: #d1ecf1;
+  border-left-color: #17a2b8;
+}
+
+[data-bs-theme="dark"] .notify-confirm-box {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}

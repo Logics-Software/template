@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         
         if (selectedUsers.length === 0) {
-            AlertManager.warning('Pilih minimal satu penerima');
+            Notify.warning('Pilih minimal satu penerima');
             return;
         }
         
@@ -590,11 +590,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.removeItem('message_draft');
                 window.location.href = data.redirect || '<?php echo APP_URL; ?>/messages?sent=true';
             } else {
-                AlertManager.error('Gagal mengirim pesan: ' + data.message);
+                Notify.error('Gagal mengirim pesan: ' + data.message);
             }
         })
         .catch(error => {
-            AlertManager.error('Terjadi kesalahan saat mengirim pesan');
+            Notify.error('Terjadi kesalahan saat mengirim pesan');
         })
         .finally(() => {
             if (submitBtn) {

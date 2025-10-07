@@ -218,77 +218,33 @@ class DragDropManager {
 }
 
 /**
- * Toast Notification Utility
+ * Toast Notification Utility - Updated to use unified Notify system
  */
 class ToastManager {
   constructor() {
-    this.toastContainer = null;
-    this.init();
-  }
-
-  init() {
-    this.createToastContainer();
-  }
-
-  createToastContainer() {
-    this.toastContainer = document.createElement("div");
-    this.toastContainer.id = "toast-container";
-    this.toastContainer.className =
-      "toast-container position-fixed top-0 end-0 p-3";
-    this.toastContainer.style.zIndex = "9999";
-    document.body.appendChild(this.toastContainer);
+    // Use unified Notify system instead of custom implementation
+    this.notify = window.Notify;
   }
 
   show(message, type = "info", duration = 3000) {
-    const toast = document.createElement("div");
-    toast.className = `toast-notification toast-${type}`;
-
-    const icon = this.getIconForType(type);
-    toast.innerHTML = `
-            <i class="${icon} me-2"></i>
-            ${message}
-        `;
-
-    this.toastContainer.appendChild(toast);
-
-    // Show toast
-    setTimeout(() => toast.classList.add("show"), 100);
-
-    // Remove toast after duration
-    setTimeout(() => {
-      toast.classList.remove("show");
-      setTimeout(() => {
-        if (toast.parentNode) {
-          toast.parentNode.removeChild(toast);
-        }
-      }, 300);
-    }, duration);
-  }
-
-  getIconForType(type) {
-    const icons = {
-      success: "fas fa-check-circle",
-      error: "fas fa-exclamation-circle",
-      warning: "fas fa-exclamation-triangle",
-      info: "fas fa-info-circle",
-    };
-    return icons[type] || icons.info;
+    // Use unified Notify system
+    return this.notify.show(type, message, duration);
   }
 
   success(message, duration = 3000) {
-    this.show(message, "success", duration);
+    return this.notify.success(message, duration);
   }
 
   error(message, duration = 5000) {
-    this.show(message, "error", duration);
+    return this.notify.error(message, duration);
   }
 
   warning(message, duration = 4000) {
-    this.show(message, "warning", duration);
+    return this.notify.warning(message, duration);
   }
 
   info(message, duration = 3000) {
-    this.show(message, "info", duration);
+    return this.notify.info(message, duration);
   }
 }
 

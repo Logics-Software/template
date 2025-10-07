@@ -130,7 +130,6 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    console.log('DOM Content Loaded - Initializing modules form...');
     
     // Check if all required elements exist
     const requiredElements = [
@@ -154,23 +153,18 @@ document.addEventListener("DOMContentLoaded", function() {
     const toggleAllBtn = document.getElementById('toggleAllRoles');
     const roleCheckboxes = document.querySelectorAll('.role-checkbox');
     
-    console.log('Toggle button found:', !!toggleAllBtn);
-    console.log('Role checkboxes found:', roleCheckboxes.length);
     
     // Function to initialize form loading
     function initializeFormLoading() {
-        console.log('Initializing form loading...');
         
         // Simulate data loading with CSS styling first
         setTimeout(() => {
-            console.log('Loading form data...');
             loadFormData();
         }, 1000); // 1 second delay to show loading state
     }
     
     // Function to load form data
     function loadFormData() {
-        console.log('Starting form data loading...');
         
         // Remove loading states
         const formCard = document.getElementById('moduleFormCard');
@@ -179,17 +173,14 @@ document.addEventListener("DOMContentLoaded", function() {
         
         if (formCard) {
             formCard.classList.remove('modules-form-loading');
-            console.log('Removed form loading state');
         }
         
         if (captionField) {
             captionField.classList.remove('loading');
-            console.log('Removed caption loading state');
         }
         
         if (linkField) {
             linkField.classList.remove('loading');
-            console.log('Removed link loading state');
         }
         
         // Enable form fields
@@ -198,24 +189,19 @@ document.addEventListener("DOMContentLoaded", function() {
         
         if (captionInput) {
             captionInput.disabled = false;
-            console.log('Enabled caption input');
         }
         
         if (linkSelect) {
             linkSelect.disabled = false;
-            console.log('Enabled link select');
         }
         
         // Load routes data
-        console.log('Loading routes data...');
         loadRoutesData();
         
         // Load icon picker
-        console.log('Loading icon picker...');
         loadIconPicker();
         
         // Enable role checkboxes
-        console.log('Enabling role checkboxes...');
         enableRoleCheckboxes();
         
         // Enable submit button
@@ -223,19 +209,15 @@ document.addEventListener("DOMContentLoaded", function() {
         if (createBtn) {
             createBtn.disabled = false;
             createBtn.classList.remove('loading');
-            console.log('Enabled submit button');
         }
         
-        console.log('Form data loading completed!');
     }
     
     // Function to load routes data
     function loadRoutesData() {
-        console.log('Loading routes data...');
         const linkSelect = document.getElementById('link');
         
         if (!linkSelect) {
-            console.error('Link select element not found!');
             return;
         }
         
@@ -245,10 +227,8 @@ document.addEventListener("DOMContentLoaded", function() {
         // Check if routes data is available
         try {
             const routes = <?php echo json_encode($available_routes ?? []); ?>;
-            console.log('Routes data:', routes);
             
             if (routes && routes.length > 0) {
-                console.log('Adding routes to select...');
                 // Add routes
                 routes.forEach(route => {
                     const option = document.createElement('option');
@@ -257,9 +237,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     option.textContent = route.label + ' (' + route.value + ')';
                     linkSelect.appendChild(option);
                 });
-                console.log('Routes added successfully');
             } else {
-                console.log('No routes data available, using fallback routes');
                 // Fallback routes if no data available
                 const fallbackRoutes = [
                     { value: '/dashboard', label: 'Dashboard', description: 'Main dashboard page' },
@@ -275,10 +253,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     option.textContent = route.label + ' (' + route.value + ')';
                     linkSelect.appendChild(option);
                 });
-                console.log('Fallback routes added');
             }
         } catch (error) {
-            console.error('Error loading routes:', error);
             // Fallback routes
             const fallbackRoutes = [
                 { value: '/dashboard', label: 'Dashboard', description: 'Main dashboard page' },
@@ -292,44 +268,35 @@ document.addEventListener("DOMContentLoaded", function() {
                 option.textContent = route.label + ' (' + route.value + ')';
                 linkSelect.appendChild(option);
             });
-            console.log('Error fallback routes added');
         }
     }
     
     // Function to load icon picker
     function loadIconPicker() {
-        console.log('Loading icon picker...');
         const loadingDiv = document.getElementById('iconPickerLoading');
         const containerDiv = document.getElementById('iconPickerContainer');
         
         if (!loadingDiv) {
-            console.error('Icon picker loading div not found!');
             return;
         }
         
         if (!containerDiv) {
-            console.error('Icon picker container div not found!');
             return;
         }
         
         // Hide loading, show picker
         loadingDiv.style.display = 'none';
         containerDiv.style.display = 'block';
-        console.log('Icon picker loaded successfully');
     }
     
     // Function to enable role checkboxes
     function enableRoleCheckboxes() {
-        console.log('Enabling role checkboxes...');
         const checkboxes = document.querySelectorAll('.role-checkbox');
-        console.log('Found checkboxes:', checkboxes.length);
         
         checkboxes.forEach((checkbox, index) => {
             checkbox.classList.remove('loading');
             checkbox.disabled = false;
-            console.log(`Enabled checkbox ${index + 1}`);
         });
-        console.log('Role checkboxes enabled successfully');
     }
     
     // Check initial state and update button

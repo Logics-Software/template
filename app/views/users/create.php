@@ -160,7 +160,7 @@ function handleFileSelect(input) {
         // Validate file type
         const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
         if (!allowedTypes.includes(file.type)) {
-            AlertManager.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
+            Notify.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
             input.value = "";
             return;
         }
@@ -168,7 +168,7 @@ function handleFileSelect(input) {
         // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            AlertManager.warning("File size must be less than 5MB");
+            Notify.warning("File size must be less than 5MB");
             input.value = "";
             return;
         }

@@ -710,7 +710,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Header Message Dropdown functionality
 function initHeaderMessageDropdown() {
-  console.log("Initializing header message dropdown...");
+  // console.log("Initializing header message dropdown...");
 
   // Check if user is logged in before making API calls
   const isLoggedIn =
@@ -719,7 +719,7 @@ function initHeaderMessageDropdown() {
     document.querySelector(".main-content");
 
   if (!isLoggedIn) {
-    console.log("User not logged in, skipping message dropdown initialization");
+    // console.log("User not logged in, skipping message dropdown initialization");
     return; // Exit if user is not logged in
   }
 
@@ -728,7 +728,7 @@ function initHeaderMessageDropdown() {
   const messageList = document.getElementById("messageList");
   const messageDropdown = messageToggle?.nextElementSibling;
 
-  console.log("Message elements found:", {
+  // console.log("Message elements found:", {
     messageToggle: !!messageToggle,
     messageBadge: !!messageBadge,
     messageList: !!messageList,
@@ -736,7 +736,7 @@ function initHeaderMessageDropdown() {
   });
 
   if (!messageToggle || !messageBadge || !messageList || !messageDropdown) {
-    console.log("Missing required elements, skipping initialization");
+    // console.log("Missing required elements, skipping initialization");
     return;
   }
 
@@ -751,18 +751,18 @@ function initHeaderMessageDropdown() {
         return response.json();
       })
       .then((data) => {
-        console.log("Unread count data:", data);
+        // console.log("Unread count data:", data);
         if (data.success && data.unread_count > 0) {
           messageBadge.textContent = data.unread_count;
           messageBadge.style.display = "inline";
-          console.log("Badge shown with count:", data.unread_count);
+          // console.log("Badge shown with count:", data.unread_count);
         } else {
           messageBadge.style.display = "none";
-          console.log("Badge hidden");
+          // console.log("Badge hidden");
         }
       })
       .catch((error) => {
-        console.log("Error loading unread count:", error);
+        // console.log("Error loading unread count:", error);
         // Silently handle unauthorized errors
         if (error.message !== "Unauthorized") {
           // Error handled silently
@@ -947,14 +947,14 @@ function initHeaderMessageDropdown() {
               this.disabled = false;
             }, 2000);
           } else {
-            AlertManager.error("Gagal menandai pesan sebagai sudah dibaca");
+            Notify.error("Gagal menandai pesan sebagai sudah dibaca");
             this.textContent = originalText;
             this.disabled = false;
           }
         })
         .catch((error) => {
           // Error handled silently
-          AlertManager.error("Terjadi kesalahan saat menandai pesan");
+          Notify.error("Terjadi kesalahan saat menandai pesan");
           this.textContent = originalText;
           this.disabled = false;
         });
@@ -982,13 +982,9 @@ document.addEventListener("keydown", function (event) {
       window.location.href = window.location.origin + "/lock-screen";
     } else {
       // If not logged in, show alert
-      if (typeof AlertManager !== "undefined") {
-        AlertManager.warning(
-          "Anda harus login terlebih dahulu untuk mengakses lock screen"
-        );
-      } else {
-        alert("Anda harus login terlebih dahulu untuk mengakses lock screen");
-      }
+      Notify.warning(
+        "Anda harus login terlebih dahulu untuk mengakses lock screen"
+      );
     }
   }
 });

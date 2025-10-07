@@ -76,21 +76,21 @@ abstract class BaseController
 
     protected function withSuccess($message, $redirect = null)
     {
-        AlertHelper::success($message, $redirect);
+        Notify::success($message, $redirect);
     }
 
     protected function withError($message, $redirect = null)
     {
-        AlertHelper::error($message, $redirect);
+        Notify::error($message, $redirect);
     }
 
     protected function withWarning($message, $redirect = null)
     {
-        AlertHelper::warning($message, $redirect);
+        Notify::warning($message, $redirect);
     }
 
     protected function withInfo($message, $redirect = null)
     {
-        AlertHelper::info($message, $redirect);
+        Notify::info($message, $redirect);
     }
 }

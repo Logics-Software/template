@@ -91,37 +91,8 @@ echo ' class="' . $bodyClass . '"';
             ?>
 
             <div class="page-content">
-                <!-- Flash Messages -->
-                <?php 
-                $successMessage = Session::getFlash('success');
-                if ($successMessage): 
-                ?>
-                <?php echo AlertHelper::getFlashHtml('success', $successMessage); ?>
-                <?php endif; ?>
-
-                <?php 
-                $errorMessage = Session::getFlash('error');
-                if ($errorMessage): 
-                ?>
-                <?php echo AlertHelper::getFlashHtml('error', $errorMessage); ?>
-                <?php endif; ?>
-
-                <?php 
-                $validationErrors = Session::getFlash('errors');
-                if ($validationErrors): 
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <ul class="mb-0">
-                        <?php foreach ($validationErrors as $field => $errors): ?>
-                            <?php foreach ($errors as $error): ?>
-                                <li><?php echo $error; ?></li>
-                            <?php endforeach; ?>
-                        <?php endforeach; ?>
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                <?php endif; ?>
+                <!-- Unified Notifications -->
+                <?php echo Notify::render(); ?>
 
                 <!-- Page Content -->
                 <?php echo $content; ?>
@@ -152,37 +123,8 @@ echo ' class="' . $bodyClass . '"';
             ?>
 
             <div class="page-content">
-                <!-- Flash Messages -->
-                <?php 
-                $successMessage = Session::getFlash('success');
-                if ($successMessage): 
-                ?>
-                <?php echo AlertHelper::getFlashHtml('success', $successMessage); ?>
-                <?php endif; ?>
-
-                <?php 
-                $errorMessage = Session::getFlash('error');
-                if ($errorMessage): 
-                ?>
-                <?php echo AlertHelper::getFlashHtml('error', $errorMessage); ?>
-                <?php endif; ?>
-
-                <?php 
-                $validationErrors = Session::getFlash('errors');
-                if ($validationErrors): 
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <ul class="mb-0">
-                        <?php foreach ($validationErrors as $field => $errors): ?>
-                            <?php foreach ($errors as $error): ?>
-                                <li><?php echo $error; ?></li>
-                            <?php endforeach; ?>
-                        <?php endforeach; ?>
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                <?php endif; ?>
+                <!-- Unified Notifications -->
+                <?php echo Notify::render(); ?>
 
                 <!-- Page Content -->
                 <?php echo $content; ?>
@@ -237,7 +179,7 @@ echo ' class="' . $bodyClass . '"';
     <script src="<?php echo APP_URL; ?>/assets/js/bootstrap/bootstrap.min.js"></script>
         
     <!-- Alert Manager -->
-    <script src="<?php echo APP_URL; ?>/assets/js/modules/AlertManager.js"></script>
+    <script src="<?php echo APP_URL; ?>/assets/js/modules/Notify.js"></script>
     
     <!-- Custom JS -->
     <script src="<?php echo APP_URL; ?>/assets/js/app.js"></script>
