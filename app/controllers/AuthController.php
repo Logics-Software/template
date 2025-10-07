@@ -132,6 +132,52 @@ class AuthController extends BaseController
         try {
             $this->userModel->beginTransaction();
             $userId = $this->userModel->registerUser($data); // This sets status to 'register'
+            
+            // Handle profile picture upload
+            if (isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['picture'];
+                
+                // Validate file type
+                $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                if (!in_array($file['type'], $allowedTypes)) {
+                    $this->userModel->rollback();
+                    $this->withError('Invalid file type. Please upload JPG, PNG, GIF, or WEBP image.');
+                    $this->redirect('/register');
+                    return;
+                }
+                
+                // Validate file size (5MB max)
+                $maxSize = 5 * 1024 * 1024; // 5MB
+                if ($file['size'] > $maxSize) {
+                    $this->userModel->rollback();
+                    $this->withError('File too large. Please upload an image smaller than 5MB.');
+                    $this->redirect('/register');
+                    return;
+                }
+                
+                // Create upload directory
+                $uploadDir = APP_PATH . '/assets/images/users/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                // Generate unique filename
+                $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $filename = 'user_' . $userId . '_' . time() . '.' . $extension;
+                $filepath = $uploadDir . $filename;
+                
+                // Move uploaded file
+                if (move_uploaded_file($file['tmp_name'], $filepath)) {
+                    // Update user with picture path
+                    $this->userModel->updatePicture($userId, 'assets/images/users/' . $filename);
+                } else {
+                    $this->userModel->rollback();
+                    $this->withError('Failed to upload profile picture.');
+                    $this->redirect('/register');
+                    return;
+                }
+            }
+            
             $this->userModel->commit();
 
             if ($this->isAjax()) {

@@ -1,0 +1,491 @@
+/* Authentication Pages Styling - Login & Lock Screen */
+
+/* Prevent scrollbar on auth pages */
+body.auth-page {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+html.auth-page {
+  overflow-x: hidden;
+}
+
+/* Login Page Styling */
+.login-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-page-content {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.login-wrapper-single {
+  width: 100%;
+  max-width: 400px;
+  animation: slideInUp 0.6s ease-out;
+}
+
+.login-wrapper-single .card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.login-wrapper-single .card-header {
+  background: transparent;
+  border: none;
+  padding: 2rem 2rem 1rem;
+  text-align: center;
+}
+
+.login-wrapper-single .card-header h4 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.login-wrapper-single .card-header p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.login-wrapper-single .card-body {
+  padding: 0 2rem 2rem;
+}
+
+/* Form styling for login - Using Bootstrap default form-floating */
+.login-wrapper-single .form-floating {
+  margin-bottom: 1.5rem;
+}
+
+/* Password toggle button */
+.password-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+/* Login button */
+.login-wrapper-single .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.login-wrapper-single .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.login-wrapper-single .btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Remember me checkbox */
+.login-wrapper-single .form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.login-wrapper-single .form-check-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+/* Register link */
+.login-wrapper-single .text-primary {
+  color: var(--primary-color) !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.login-wrapper-single .text-primary:hover {
+  color: var(--primary-dark) !important;
+  text-decoration: none !important;
+}
+
+/* Register Page Styling */
+.register-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.register-page-content {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.register-wrapper-single {
+  width: 100%;
+  min-width: 800px;
+  animation: slideInUp 0.6s ease-out;
+}
+
+.register-wrapper-single .card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.register-wrapper-single .card-header {
+  background: transparent;
+  border: none;
+  padding: 2rem 2rem 1rem;
+  text-align: center;
+}
+
+.register-wrapper-single .card-header h4 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.register-wrapper-single .card-header p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.register-wrapper-single .card-body {
+  padding: 0 2rem 2rem;
+}
+
+/* Form styling for register - Using Bootstrap default form-floating */
+.register-wrapper-single .form-floating {
+  margin-bottom: 1.5rem;
+}
+
+/* Register button */
+.register-wrapper-single .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.register-wrapper-single .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.register-wrapper-single .btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Login link */
+.register-wrapper-single .text-primary {
+  color: var(--primary-color) !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.register-wrapper-single .text-primary:hover {
+  color: var(--primary-dark) !important;
+  text-decoration: none !important;
+}
+
+/* Lock Screen Styling */
+.lock-screen-page {
+  background: linear-gradient(135deg, #1f2028 0%, #252836 100%);
+  min-height: 100vh;
+}
+
+.lock-screen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.lock-screen-modal {
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem;
+  animation: slideInUp 0.6s ease-out;
+}
+
+.lock-screen-modal .card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.lock-screen-modal .card-header {
+  background: transparent;
+  border: none;
+  padding: 2rem 2rem 1rem;
+  text-align: center;
+}
+
+.lock-screen-modal .card-header h4 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.lock-screen-modal .card-header p {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.lock-screen-modal .card-body {
+  padding: 0 2rem 2rem;
+}
+
+/* Profile image for lock screen */
+.profile-img-lg {
+  width: 80px;
+  height: 80px;
+  border: 3px solid var(--primary-color);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Form styling for lock screen - Using Bootstrap default form-floating */
+.lock-screen-modal .form-floating {
+  margin-bottom: 1.5rem;
+}
+
+/* Password toggle button for lock screen */
+.lock-screen-modal .password-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.lock-screen-modal .password-toggle-btn:hover {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+/* Unlock button */
+.lock-screen-modal .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.lock-screen-modal .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.lock-screen-modal .btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Login again link */
+.lock-screen-modal .text-primary {
+  color: var(--primary-color) !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.lock-screen-modal .text-primary:hover {
+  color: var(--primary-dark) !important;
+  text-decoration: none !important;
+}
+
+/* Link styling for auth forms */
+.login-wrapper-single a,
+.register-wrapper-single a,
+.lock-screen-modal a {
+  text-decoration: none !important;
+}
+
+.login-wrapper-single a:hover,
+.register-wrapper-single a:hover,
+.lock-screen-modal a:hover {
+  text-decoration: none !important;
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Dark theme adjustments */
+[data-bs-theme="dark"] .login-wrapper-single .card,
+[data-bs-theme="dark"] .register-wrapper-single .card,
+[data-bs-theme="dark"] .lock-screen-modal .card {
+  background: rgba(31, 32, 40, 0.95);
+  color: var(--text-primary);
+}
+
+[data-bs-theme="dark"] .login-wrapper-single .card-header h4,
+[data-bs-theme="dark"] .register-wrapper-single .card-header h4,
+[data-bs-theme="dark"] .lock-screen-modal .card-header h4 {
+  color: var(--text-primary);
+}
+
+[data-bs-theme="dark"] .login-wrapper-single .card-header p,
+[data-bs-theme="dark"] .register-wrapper-single .card-header p,
+[data-bs-theme="dark"] .lock-screen-modal .card-header p {
+  color: var(--text-secondary);
+}
+
+/* Dark theme form inputs - Using Bootstrap default */
+[data-bs-theme="dark"] .login-wrapper-single .password-toggle-btn,
+[data-bs-theme="dark"] .lock-screen-modal .password-toggle-btn {
+  color: var(--text-secondary);
+}
+
+[data-bs-theme="dark"] .login-wrapper-single .password-toggle-btn:hover,
+[data-bs-theme="dark"] .lock-screen-modal .password-toggle-btn:hover {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .login-page,
+  .register-page,
+  .lock-screen-page {
+    padding: 0.5rem;
+  }
+
+  .login-container,
+  .register-container,
+  .lock-screen-overlay {
+    padding: 0.5rem;
+  }
+
+  .login-wrapper-single,
+  .register-wrapper-single,
+  .lock-screen-modal {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .register-wrapper-single {
+    max-width: 100% !important;
+  }
+
+  .login-wrapper-single .card-header,
+  .register-wrapper-single .card-header,
+  .lock-screen-modal .card-header {
+    padding: 1.5rem 1.5rem 1rem;
+  }
+
+  .login-wrapper-single .card-body,
+  .register-wrapper-single .card-body,
+  .lock-screen-modal .card-body {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  .profile-img-lg {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-wrapper-single .card-header,
+  .register-wrapper-single .card-header,
+  .lock-screen-modal .card-header {
+    padding: 1rem 1rem 0.5rem;
+  }
+
+  .login-wrapper-single .card-body,
+  .register-wrapper-single .card-body,
+  .lock-screen-modal .card-body {
+    padding: 0 1rem 1rem;
+  }
+
+  .login-wrapper-single .form-floating > .form-control,
+  .register-wrapper-single .form-floating > .form-control,
+  .lock-screen-modal .form-floating > .form-control {
+    padding: 0.875rem 0.75rem;
+  }
+
+  .login-wrapper-single .btn-primary,
+  .register-wrapper-single .btn-primary,
+  .lock-screen-modal .btn-primary {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.75rem;
+  }
+}

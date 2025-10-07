@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card__header">
+        <div class="form-container">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card__title mb-0">Users List</h5>
                     <nav aria-label="breadcrumb">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             
-            <div class="card__body">
+            <div class="form-body">
                 <!-- Search and Filter -->
                 <div class="row mb-4">
                     <div class="col-md-4">
@@ -76,7 +76,7 @@
                 </div>
                 
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover table-sm" id="usersTable">
+                    <table class="table table-striped table-hover table-md" id="usersTable">
                         <thead>
                             <tr>
                                 <th>Foto</th>
@@ -132,7 +132,7 @@
                                 $pictureUrl = $user['picture'] ?? null;
                                 $pictureHtml = $pictureUrl ? 
                                     '<img src="' . htmlspecialchars($pictureUrl) . '" alt="User Picture" class="rounded-circle object-fit-cover" width="32" height="32">' :
-                                    '<div class="avatar-fallback avatar-sm bg-gradient-primary">' . strtoupper(substr($user['namalengkap'] ?? 'A', 0, 1)) . '</div>';
+                                    '<img src="' . APP_URL . '/assets/images/users/avatar.svg" alt="Default Avatar" class="rounded-circle object-fit-cover" width="32" height="32">';
                                 
                                 // Last login formatting
                                 $lastLogin = $user['lastlogin'] ? 

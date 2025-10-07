@@ -294,19 +294,13 @@ ob_start();
 </style>
 
 <script>
-// Wait for jQuery to be loaded
-function waitForjQuery() {
-    if (typeof $ === 'undefined') {
-        // Waiting for jQuery to load...
-        setTimeout(waitForjQuery, 100);
-        return;
-    }
-    
-    // jQuery loaded successfully
-    initializejQuery();
-}
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing menu permissions...');
+    initializeMenuPermissions();
+});
 
-function initializejQuery() {
+function initializeMenuPermissions() {
 
 let currentRole = 'admin';
 let permissions = <?php echo json_encode($permissions); ?>;
@@ -509,13 +503,11 @@ function deselectAll() {
 }
 
 function openBulkPermissionModal() {
-    // Show bulk permission modal using jQuery
-    $('#bulkPermissionModal').show();
-    $('body').addClass('modal-open');
-    
-    // Add backdrop
-    if ($('.modal-backdrop').length === 0) {
-        $('body').append('<div class="modal-backdrop fade show"></div>');
+    // Show bulk permission modal using Bootstrap Modal API
+    const bulkPermissionModal = document.getElementById('bulkPermissionModal');
+    if (bulkPermissionModal) {
+        const modal = new bootstrap.Modal(bulkPermissionModal);
+        modal.show();
     }
 }
 
@@ -561,10 +553,14 @@ function applyBulkPermission() {
         }
     }
     
-    // Hide bulk permission modal using jQuery
-    $('#bulkPermissionModal').hide();
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    // Hide bulk permission modal using Bootstrap Modal API
+    const bulkPermissionModal = document.getElementById('bulkPermissionModal');
+    if (bulkPermissionModal) {
+        const modal = bootstrap.Modal.getInstance(bulkPermissionModal);
+        if (modal) {
+            modal.hide();
+        }
+    }
 }
 
 function savePermissions() {
@@ -635,11 +631,11 @@ function showToast(type, message) {
     // Show toast notification
 }
 
-} // End of initializejQuery()
+} // End of initializeMenuPermissions()
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    waitForjQuery();
+    // Menu permissions already initialized above
 });
 
 </script>

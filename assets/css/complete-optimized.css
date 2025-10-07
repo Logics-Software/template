@@ -8,10 +8,12 @@
 @import url("components/form.css");
 @import url("components/button.css");
 @import url("components/alert.css");
+@import url("components/auth.css");
 
 /* Import layout styles */
 @import url("layouts/sidebar.css");
 @import url("layouts/main.css");
+@import url("layouts/header.css");
 @import url("utilities.css");
 
 /* Global text decoration removal - optimized */
@@ -45,7 +47,226 @@ a:active:not(.no-hover-underline) {
     "Font Awesome 7 Brands" !important;
 }
 
-/* Sidebar styles moved to layouts/sidebar.css for better organization */
+/* Prevent icon flash in modules */
+.avatar-40 {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.icon-20 {
+  font-size: 20px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Icon loading state */
+.avatar-40 .icon-20 {
+  opacity: 0;
+  animation: iconFadeIn 0.3s ease-in-out 0.1s forwards;
+}
+
+@keyframes iconFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fallback for when FontAwesome is not loaded */
+.avatar-40 .icon-20:not([class*="fa-"]):before {
+  content: "📦";
+  font-size: 16px;
+}
+
+/* Icon flash prevention for modules */
+.modules-table .avatar-40 {
+  position: relative;
+  overflow: hidden;
+}
+
+.modules-table .avatar-40 .icon-20 {
+  position: relative;
+  z-index: 2;
+}
+
+/* Loading state for icons */
+.modules-table .avatar-40::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: var(--text-tertiary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  opacity: 0.3;
+  animation: iconPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* Hide loading state when icon is loaded */
+.modules-table .avatar-40 .icon-20.loaded + .avatar-40::before {
+  display: none;
+}
+
+/* Modules Form Loading States */
+.modules-form-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.modules-form-loading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Form skeleton loading */
+.form-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Form field loading states */
+.form-floating.loading {
+  position: relative;
+}
+
+.form-floating.loading .form-control {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.form-floating.loading .form-label {
+  color: #6c757d;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Icon picker loading */
+.icon-picker-loading {
+  position: relative;
+  min-height: 200px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-picker-loading::before {
+  content: "Loading icons...";
+  color: #6c757d;
+  font-size: 14px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Role checkboxes loading */
+.role-checkbox.loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.role-checkbox.loading + label {
+  opacity: 0.5;
+}
+
+/* Form buttons loading */
+.btn.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 /* Header Icons - Unified Styling */
 .sidebar-toggle-btn,
@@ -66,7 +287,7 @@ a:active:not(.no-hover-underline) {
 #themeToggle:hover,
 #fullscreenToggle:hover {
   color: var(--primary-color);
-  background-color: var(--bg-secondary);
+  /* background-color: var(--bg-secondary); */
   text-decoration: none;
 }
 

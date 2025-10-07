@@ -19,27 +19,17 @@
                 <form method="POST" action="<?php echo APP_URL; ?>/unlock" id="unlockForm">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     
-                    <div class="form-floating mb-3 position-relative">
+                    <div class="form-floating mb-5 position-relative">
                         <input type="password" class="form-control" id="password" name="password" 
                                placeholder="" required class="pr-10">
                         <label for="password">
                             <i class="fas fa-lock me-2"></i>Password
                         </label>
-                        <button class="position-absolute top-50 end-0 translate-middle-y password-toggle" 
+                        <button class="position-absolute top-50 end-0 translate-middle-y password-toggle-btn" 
                                 type="button" id="togglePassword" 
                                 tabindex="-1">
                             <i class="fas fa-eye" id="passwordToggleIcon"></i>
                         </button>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="remember" name="remember_me">
-                            <label class="form-check-label" for="remember">
-                                Remember me
-                            </label>
-                        </div>
-                        <a href="<?php echo APP_URL; ?>/logout" class="text-primary text-decoration-none">Login again</a>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mb-3" id="unlockBtn">
@@ -47,9 +37,7 @@
                     </button>
 
                     <div class="text-center">
-                        <p class="text-muted small mb-0">
-                            Try unlock with <span class="text-primary fw-bold">Finger print</span> / <span class="text-primary fw-bold">Face Id</span>
-                        </p>
+                        Masuk ulang lewat <span class="text-primary fw-bold"><a href="<?php echo APP_URL; ?>/logout" class="text-primary text-decoration-none">Login</a></span>
                     </div>
                 </form>
             </div>

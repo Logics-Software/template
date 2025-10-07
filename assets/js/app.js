@@ -47,16 +47,7 @@ function initSidebarState() {
       }, 50);
     }
 
-    // Show sidebar after state is applied
-    sidebar.classList.add("js-loaded");
-  }
-
-  // Also show main content and top header
-  if (mainContent) {
-    mainContent.classList.add("js-loaded");
-  }
-  if (topHeader) {
-    topHeader.classList.add("js-loaded");
+    // Sidebar state applied
   }
 }
 
@@ -973,3 +964,31 @@ function initHeaderMessageDropdown() {
   // Refresh data every 30 seconds
   setInterval(loadMessageData, 30000);
 }
+
+// Keyboard shortcuts
+document.addEventListener("keydown", function (event) {
+  // Ctrl + F12 shortcut for lock-screen
+  if (event.ctrlKey && event.key === "F12") {
+    event.preventDefault(); // Prevent browser default behavior
+
+    // Check if user is logged in
+    const isLoggedIn =
+      document.querySelector(".user-dropdown") ||
+      document.querySelector(".sidebar") ||
+      document.querySelector(".main-content");
+
+    if (isLoggedIn) {
+      // Redirect to lock-screen
+      window.location.href = window.location.origin + "/lock-screen";
+    } else {
+      // If not logged in, show alert
+      if (typeof AlertManager !== "undefined") {
+        AlertManager.warning(
+          "Anda harus login terlebih dahulu untuk mengakses lock screen"
+        );
+      } else {
+        alert("Anda harus login terlebih dahulu untuk mengakses lock screen");
+      }
+    }
+  }
+});

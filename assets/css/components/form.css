@@ -1,5 +1,6 @@
 /* Form untuk setting, master, transaksi dan laporan */
 .form-container {
+  font-size: var(--font-size-sm);
   margin: 1rem;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
@@ -38,6 +39,11 @@
   background-color: var(--bg-secondary);
 }
 
+/* Table Component */
+.table td {
+  line-height: 1.5;
+}
+
 /* Form Component - BEM Methodology */
 /* .form {
   width: 100%;
@@ -63,7 +69,6 @@
   display: block;
   width: 100%;
   padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--font-size-base);
   line-height: 1.5;
   color: var(--text-primary);
   background-color: var(--bg-primary);
@@ -150,7 +155,6 @@
   align-items: center;
   padding: var(--padding-sm) var(--padding-md);
   margin-bottom: 0;
-  font-size: var(--font-size-base);
   font-weight: 400;
   line-height: 1.5;
   color: var(--text-secondary);
@@ -233,7 +237,6 @@
   display: block;
   width: 100%;
   padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--font-size-base);
   line-height: 1.5;
   color: var(--text-primary);
   background-color: var(--bg-primary);
@@ -248,4 +251,133 @@
   outline: 0;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+}
+
+/* File Upload Preview Styles - Simplified */
+.file-upload-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--padding-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.file-upload-preview:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-container {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+.preview-image {
+  border: 3px solid var(--border-color);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-container:hover .preview-image {
+  border-color: var(--primary-color);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preview-container:hover .preview-overlay {
+  opacity: 1;
+}
+
+.preview-overlay .btn {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.preview-overlay .btn:hover {
+  transform: scale(1.1);
+}
+
+/* No file preview state */
+#no-file-preview {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-secondary);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#no-file-preview:hover {
+  border-color: var(--primary-color);
+  background-color: var(--primary-color-10);
+}
+
+/* Existing photo preview in no-file-preview */
+#no-file-preview .preview-container {
+  margin-bottom: 0;
+}
+
+#no-file-preview .d-flex {
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .file-upload-preview {
+    padding: var(--padding-sm);
+  }
+
+  .preview-image {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .preview-overlay .btn {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+    padding: 0.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .preview-image {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .preview-overlay .btn {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.7rem;
+    padding: 0.2rem;
+  }
 }

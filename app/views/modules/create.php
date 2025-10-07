@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card modules-form-loading" id="moduleFormCard">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Create New Module</h5>
@@ -18,26 +18,21 @@
                 </div>
             </div>
             
-            <div class="card-body">
+            <div class="card-body" id="moduleFormBody">
                 <form method="POST" action="<?php echo APP_URL; ?>/modules" id="createModuleForm">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="caption" name="caption" placeholder="Caption" required>
+                            <div class="form-floating mb-3 loading" id="captionField">
+                                <input type="text" class="form-control" id="caption" name="caption" placeholder="Caption" required disabled>
                                 <label for="caption">Caption <span class="text-danger">*</span></label>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <select class="form-select" id="link" name="link" required>
-                                    <option value="">Select a route...</option>
-                                    <?php foreach ($available_routes as $key => $route): ?>
-                                        <option value="<?php echo htmlspecialchars($route['value']); ?>" data-description="<?php echo htmlspecialchars($route['description']); ?>">
-                                            <?php echo htmlspecialchars($route['label']); ?> (<?php echo htmlspecialchars($route['value']); ?>)
-                                        </option>
-                                    <?php endforeach; ?>
+                            <div class="form-floating mb-3 loading" id="linkField">
+                                <select class="form-select" id="link" name="link" required disabled>
+                                    <option value="">Loading routes...</option>
                                 </select>
                                 <label for="link">Link <span class="text-danger">*</span></label>
                             </div>
@@ -48,8 +43,13 @@
                         <div class="col-md-12">
                             <div class="mb-3 pr-5">
                                 <label for="logo" class="form-label">Icon Modul <span class="text-danger">*</span></label>
-                                <?php require_once __DIR__ . '/icon_picker.php'; ?>
-                                <?php renderIconPicker('', 'logo', 'logo', $available_icons); ?>
+                                <div class="icon-picker-loading" id="iconPickerLoading">
+                                    <!-- Icon picker will be loaded here -->
+                                </div>
+                                <div id="iconPickerContainer" style="display: none;">
+                                    <?php require_once __DIR__ . '/icon_picker.php'; ?>
+                                    <?php renderIconPicker('', 'logo', 'logo', $available_icons); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -66,10 +66,10 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row" id="roleCheckboxesContainer">
                                     <div class="col-md-2">
                                         <div class="form-check">
-                                            <input class="form-check-input role-checkbox" type="checkbox" id="admin" name="admin">
+                                            <input class="form-check-input role-checkbox loading" type="checkbox" id="admin" name="admin" disabled>
                                             <label class="form-check-label" for="admin">
                                                 <span class="badge bg-danger">Admin</span>
                                             </label>
@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-check">
-                                            <input class="form-check-input role-checkbox" type="checkbox" id="manajemen" name="manajemen">
+                                            <input class="form-check-input role-checkbox loading" type="checkbox" id="manajemen" name="manajemen" disabled>
                                             <label class="form-check-label" for="manajemen">
                                                 <span class="badge bg-primary">Manajemen</span>
                                             </label>
@@ -85,7 +85,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-check">
-                                            <input class="form-check-input role-checkbox" type="checkbox" id="user" name="user">
+                                            <input class="form-check-input role-checkbox loading" type="checkbox" id="user" name="user" disabled>
                                             <label class="form-check-label" for="user">
                                                 <span class="badge bg-info">User</span>
                                             </label>
@@ -93,7 +93,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-check">
-                                            <input class="form-check-input role-checkbox" type="checkbox" id="marketing" name="marketing">
+                                            <input class="form-check-input role-checkbox loading" type="checkbox" id="marketing" name="marketing" disabled>
                                             <label class="form-check-label" for="marketing">
                                                 <span class="badge bg-warning">Marketing</span>
                                             </label>
@@ -101,7 +101,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-check">
-                                            <input class="form-check-input role-checkbox" type="checkbox" id="customer" name="customer">
+                                            <input class="form-check-input role-checkbox loading" type="checkbox" id="customer" name="customer" disabled>
                                             <label class="form-check-label" for="customer">
                                                 <span class="badge bg-success">Customer</span>
                                             </label>
@@ -120,7 +120,7 @@
                 <a href="<?php echo APP_URL; ?>/modules" class="btn btn-secondary" title="Kembali ke Daftar Modul">
                     <i class="fas fa-arrow-left me-1"></i>Back to Modules
                 </a>
-                <button type="submit" form="createModuleForm" class="btn btn-primary" title="Buat Modul Baru">
+                <button type="submit" form="createModuleForm" class="btn btn-primary loading" id="createBtn" title="Buat Modul Baru" disabled>
                     <i class="fas fa-check-circle me-1"></i>Create Module
                 </button>
             </div>
@@ -130,11 +130,207 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Note: Preview functionality removed as preview elements don't exist in this form
+    console.log('DOM Content Loaded - Initializing modules form...');
+    
+    // Check if all required elements exist
+    const requiredElements = [
+        'moduleFormCard',
+        'captionField', 
+        'linkField',
+        'iconPickerLoading',
+        'iconPickerContainer',
+        'createBtn'
+    ];
+    
+    const missingElements = requiredElements.filter(id => !document.getElementById(id));
+    if (missingElements.length > 0) {
+        console.error('Missing required elements:', missingElements);
+    }
+    
+    // Initialize loading state
+    initializeFormLoading();
     
     // Toggle All Roles functionality
     const toggleAllBtn = document.getElementById('toggleAllRoles');
     const roleCheckboxes = document.querySelectorAll('.role-checkbox');
+    
+    console.log('Toggle button found:', !!toggleAllBtn);
+    console.log('Role checkboxes found:', roleCheckboxes.length);
+    
+    // Function to initialize form loading
+    function initializeFormLoading() {
+        console.log('Initializing form loading...');
+        
+        // Simulate data loading with CSS styling first
+        setTimeout(() => {
+            console.log('Loading form data...');
+            loadFormData();
+        }, 1000); // 1 second delay to show loading state
+    }
+    
+    // Function to load form data
+    function loadFormData() {
+        console.log('Starting form data loading...');
+        
+        // Remove loading states
+        const formCard = document.getElementById('moduleFormCard');
+        const captionField = document.getElementById('captionField');
+        const linkField = document.getElementById('linkField');
+        
+        if (formCard) {
+            formCard.classList.remove('modules-form-loading');
+            console.log('Removed form loading state');
+        }
+        
+        if (captionField) {
+            captionField.classList.remove('loading');
+            console.log('Removed caption loading state');
+        }
+        
+        if (linkField) {
+            linkField.classList.remove('loading');
+            console.log('Removed link loading state');
+        }
+        
+        // Enable form fields
+        const captionInput = document.getElementById('caption');
+        const linkSelect = document.getElementById('link');
+        
+        if (captionInput) {
+            captionInput.disabled = false;
+            console.log('Enabled caption input');
+        }
+        
+        if (linkSelect) {
+            linkSelect.disabled = false;
+            console.log('Enabled link select');
+        }
+        
+        // Load routes data
+        console.log('Loading routes data...');
+        loadRoutesData();
+        
+        // Load icon picker
+        console.log('Loading icon picker...');
+        loadIconPicker();
+        
+        // Enable role checkboxes
+        console.log('Enabling role checkboxes...');
+        enableRoleCheckboxes();
+        
+        // Enable submit button
+        const createBtn = document.getElementById('createBtn');
+        if (createBtn) {
+            createBtn.disabled = false;
+            createBtn.classList.remove('loading');
+            console.log('Enabled submit button');
+        }
+        
+        console.log('Form data loading completed!');
+    }
+    
+    // Function to load routes data
+    function loadRoutesData() {
+        console.log('Loading routes data...');
+        const linkSelect = document.getElementById('link');
+        
+        if (!linkSelect) {
+            console.error('Link select element not found!');
+            return;
+        }
+        
+        // Clear loading option
+        linkSelect.innerHTML = '<option value="">Select a route...</option>';
+        
+        // Check if routes data is available
+        try {
+            const routes = <?php echo json_encode($available_routes ?? []); ?>;
+            console.log('Routes data:', routes);
+            
+            if (routes && routes.length > 0) {
+                console.log('Adding routes to select...');
+                // Add routes
+                routes.forEach(route => {
+                    const option = document.createElement('option');
+                    option.value = route.value;
+                    option.setAttribute('data-description', route.description);
+                    option.textContent = route.label + ' (' + route.value + ')';
+                    linkSelect.appendChild(option);
+                });
+                console.log('Routes added successfully');
+            } else {
+                console.log('No routes data available, using fallback routes');
+                // Fallback routes if no data available
+                const fallbackRoutes = [
+                    { value: '/dashboard', label: 'Dashboard', description: 'Main dashboard page' },
+                    { value: '/users', label: 'Users', description: 'User management page' },
+                    { value: '/modules', label: 'Modules', description: 'Module management page' },
+                    { value: '/menu', label: 'Menu', description: 'Menu management page' }
+                ];
+                
+                fallbackRoutes.forEach(route => {
+                    const option = document.createElement('option');
+                    option.value = route.value;
+                    option.setAttribute('data-description', route.description);
+                    option.textContent = route.label + ' (' + route.value + ')';
+                    linkSelect.appendChild(option);
+                });
+                console.log('Fallback routes added');
+            }
+        } catch (error) {
+            console.error('Error loading routes:', error);
+            // Fallback routes
+            const fallbackRoutes = [
+                { value: '/dashboard', label: 'Dashboard', description: 'Main dashboard page' },
+                { value: '/users', label: 'Users', description: 'User management page' }
+            ];
+            
+            fallbackRoutes.forEach(route => {
+                const option = document.createElement('option');
+                option.value = route.value;
+                option.setAttribute('data-description', route.description);
+                option.textContent = route.label + ' (' + route.value + ')';
+                linkSelect.appendChild(option);
+            });
+            console.log('Error fallback routes added');
+        }
+    }
+    
+    // Function to load icon picker
+    function loadIconPicker() {
+        console.log('Loading icon picker...');
+        const loadingDiv = document.getElementById('iconPickerLoading');
+        const containerDiv = document.getElementById('iconPickerContainer');
+        
+        if (!loadingDiv) {
+            console.error('Icon picker loading div not found!');
+            return;
+        }
+        
+        if (!containerDiv) {
+            console.error('Icon picker container div not found!');
+            return;
+        }
+        
+        // Hide loading, show picker
+        loadingDiv.style.display = 'none';
+        containerDiv.style.display = 'block';
+        console.log('Icon picker loaded successfully');
+    }
+    
+    // Function to enable role checkboxes
+    function enableRoleCheckboxes() {
+        console.log('Enabling role checkboxes...');
+        const checkboxes = document.querySelectorAll('.role-checkbox');
+        console.log('Found checkboxes:', checkboxes.length);
+        
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.classList.remove('loading');
+            checkbox.disabled = false;
+            console.log(`Enabled checkbox ${index + 1}`);
+        });
+        console.log('Role checkboxes enabled successfully');
+    }
     
     // Check initial state and update button
     function updateToggleButton() {

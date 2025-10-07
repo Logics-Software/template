@@ -60,10 +60,10 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="btn-group d-flex justify-content-end" role="group">
-                                            <button type="button" class="btn btn-outline-primary btn-sm" id="selectAllBtn">
+                                            <button type="button" class="btn btn-primary btn-sm" id="selectAllBtn">
                                                 <i class="fas fa-check-double me-1"></i>
                                             </button>
-                                            <button type="button" class="btn btn-outline-danger btn-sm" id="clearAllBtn">
+                                            <button type="button" class="btn btn-danger btn-sm" id="clearAllBtn">
                                                 <i class="fas fa-times me-1"></i>
                                             </button>
                                         </div>
@@ -71,7 +71,7 @@
                                 </div>
                                 
                                 <!-- Users List -->
-                                <div class="border rounded max-h-300 overflow-y-auto">
+                                <div class="border rounded p-2" style="max-height: calc(100vh - 350px); overflow-y: auto;">
                                     <div id="usersList">
                                         <div class="p-3 text-center">
                                             <div class="spinner-border spinner-border-sm" role="status">
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
             clearAllBtn.innerHTML = '<i class="fas fa-times me-1"></i>';
             clearAllBtn.disabled = true;
         } else {
-            clearAllBtn.innerHTML = `<i class="fas fa-times me-1"></i> (${selectedUsers.length})`;
+            clearAllBtn.innerHTML = '<i class="fas fa-times me-1"></i>';
             clearAllBtn.disabled = false;
         }
     }
@@ -429,17 +429,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const isSelected = selectedUsers.some(selected => selected.id == user.id);
             const userPicture = user.picture ? 
                 `<img src="<?php echo APP_URL; ?>/${user.picture}" alt="${user.namalengkap}" class="avatar-sm rounded-circle me-2 avatar-32">` :
-                `<div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2 avatar-fallback">${user.namalengkap.charAt(0).toUpperCase()}</div>`;
+                `<img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="${user.namalengkap}" class="avatar-sm rounded-circle me-2 avatar-32">`;
             
             return `
-                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-1">
-                    <div class="card user-selection-item ${isSelected ? 'selected' : ''}" data-user-id="${user.id}" class="user-selection-item">
-                        <div class="card-body p-1 h-100 d-flex align-items-center">
-                            <input type="checkbox" class="form-check-input me-1" ${isSelected ? 'checked' : ''} onchange="toggleUser(${user.id})" class="scale-80">
+                <div class="col-xxl-2 col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="card user-selection-item position-relative ${isSelected ? 'selected' : ''}" data-user-id="${user.id}">
+                        <div class="position-absolute top-0 start-0 m-2" style="z-index: 10;">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" ${isSelected ? 'checked' : ''} onchange="toggleUser(${user.id})">
+                            </div>
+                        </div>
+                        <div class="card-body d-flex align-items-center" style="padding: 0.75rem; min-height: 60px;">
                             ${userPicture}
-                            <div class="flex-grow-1 flex-grow-1">
-                                <div class="fw-bold text-truncate text-xs-leading-tight">${user.namalengkap}</div>
-                                <small class="text-muted d-block text-truncate text-xxs">${user.username} / ${user.email} / ${user.role}</small>
+                            <div class="flex-grow-1 ms-2">
+                                <div class="fw-bold text-truncate" style="font-size: 0.875rem; line-height: 1.2;">${user.namalengkap}</div>
+                                <div class="text-muted text-truncate" style="font-size: 0.75rem; line-height: 1.1;">${user.username}</div>
+                                <div class="text-muted text-truncate" style="font-size: 0.7rem; line-height: 1.1;">${user.email}</div>
+                                <span class="badge bg-secondary" style="font-size: 0.65rem;">${user.role}</span>
                             </div>
                         </div>
                     </div>
@@ -447,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }).join('');
         
-        usersList.innerHTML = `<div class="row g-1">${usersHtml}</div>`;
+        usersList.innerHTML = `<div class="row g-3">${usersHtml}</div>`;
         
         // Add click handlers to the new cards
         setTimeout(() => {

@@ -26,9 +26,7 @@
                             <?php if (!empty($user['picture']) && file_exists($user['picture'])): ?>
                                 <img src="<?php echo APP_URL; ?>/<?php echo htmlspecialchars($user['picture']); ?>" alt="Profile Picture" class="rounded-circle profile-img-lg">
                             <?php else: ?>
-                                <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle text-white profile-img-lg">
-                                    <i class="fas fa-user text-3xl"></i>
-                                </div>
+                                <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="Default Avatar" class="rounded-circle profile-img-lg">
                             <?php endif; ?>
                         </div>
                     </div>

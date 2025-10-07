@@ -68,7 +68,7 @@
                     </div>
                 <?php else: ?>
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover table-md">
                             <thead>
                                 <tr>
                                     <th width="5%"></th>

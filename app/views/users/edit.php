@@ -98,28 +98,107 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Profile Picture</label>
-                                <div class="file-upload-container">
-                                    <input type="file" class="form-control" id="picture" name="picture" accept="image/*" onchange="handleFileSelect(this)">
-                                    <div class="form-text mt-2">
-                                        <i class="fas fa-info-circle me-1"></i>
-                                        Upload a profile picture (optional) - Supports: JPG, PNG, GIF, WEBP (Max 5MB)
-                                    </div>
-                                </div>
-                                <div id="file-preview" class="file-upload-preview d-none">
-                                    <div class="preview-container">
-                                        <img id="preview-image" class="preview-image rounded-circle object-fit-cover p-2" width="120" height="120" alt="Preview" class="img-preview">
-                                        <div class="preview-overlay">
-                                            <button type="button" class="btn btn-danger remove-preview" onclick="removePreview()">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-primary change-preview" onclick="document.getElementById('picture').click()">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
+                                <div class="row">
+                                    <!-- File Input Section -->
+                                    <div class="col-md-6">
+                                        <div class="file-upload-container">
+                                            <input type="file" class="form-control" id="picture" name="picture" accept="image/*" onchange="handleFileSelect(this)">
+                                            <div class="form-text mt-2">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                File yang didukung: JPG, PNG, GIF, WEBP (Maksimal 5MB)
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="preview-info">
-                                        <div id="preview-filename" class="fw-bold"></div>
-                                        <div id="preview-size" class="text-muted small"></div>
+                                    
+                                    <!-- Preview Section -->
+                                    <div class="col-md-6">
+                                        <div id="file-preview" class="file-upload-preview d-none">
+                                            <div class="d-flex align-items-center">
+                                                <div class="preview-container me-3">
+                                                    <img id="preview-image" class="preview-image rounded-circle object-fit-cover" width="80" height="80" alt="Preview">
+                                                    <div class="preview-overlay">
+                                                        <button type="button" class="btn btn-sm btn-danger remove-preview" onclick="removePreview()" title="Remove">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-primary change-preview" onclick="document.getElementById('picture').click()" title="Change">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="preview-info flex-grow-1">
+                                                    <div id="preview-filename" class="fw-bold text-truncate" title=""></div>
+                                                    <div id="preview-size" class="text-muted small"></div>
+                                                    <div class="mt-2">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger me-2" onclick="removePreview()">
+                                                            <i class="fas fa-trash me-1"></i>Remove
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="document.getElementById('picture').click()">
+                                                            <i class="fas fa-edit me-1"></i>Change
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Default state when no file selected -->
+                                        <div id="no-file-preview" class="text-center text-muted py-3">
+                                            <?php 
+                                            // Debug: Check user data
+                                            echo "<!-- Debug: User data: " . print_r($user, true) . " -->";
+                                            echo "<!-- Debug: Picture field: " . (isset($user['picture']) ? $user['picture'] : 'NOT SET') . " -->";
+                                            echo "<!-- Debug: APP_PATH: " . APP_PATH . " -->";
+                                            echo "<!-- Debug: Full path: " . APP_PATH . '/assets/images/users/' . $user['picture'] . " -->";
+                                            echo "<!-- Debug: File exists: " . (file_exists(APP_PATH . '/assets/images/users/' . $user['picture']) ? 'YES' : 'NO') . " -->";
+                                            echo "<!-- Debug: APP_URL: " . APP_URL . " -->";
+                                            
+                                            // Debug: Show the final image URL
+                                            $imageUrl = '';
+                                            if (strpos($user['picture'], 'assets/images/users/') === 0) {
+                                                $imageUrl = APP_URL . '/' . $user['picture'];
+                                            } else {
+                                                $imageUrl = APP_URL . '/assets/images/users/' . $user['picture'];
+                                            }
+                                            echo "<!-- Debug: Final image URL: " . $imageUrl . " -->";
+                                            
+                                            // Test: Always show photo if picture field exists
+                                            if (isset($user['picture']) && $user['picture'] !== ''):
+                                            ?>
+                                                <!-- Show existing user photo -->
+                                                <?php echo "<!-- DEBUG: Showing existing photo for: " . $user['picture'] . " -->"; ?>
+                                                <div class="preview-container">
+                                                    <img src="<?php 
+                                                        // Handle different path formats
+                                                        $picturePath = $user['picture'];
+                                                        if (strpos($picturePath, 'assets/images/users/') === 0) {
+                                                            // Path already includes assets/images/users/
+                                                            echo APP_URL . '/' . htmlspecialchars($picturePath);
+                                                        } elseif (strpos($picturePath, 'user_') === 0) {
+                                                            // Just filename, add full path
+                                                            echo APP_URL . '/assets/images/users/' . htmlspecialchars($picturePath);
+                                                        } else {
+                                                            // Default: add full path
+                                                            echo APP_URL . '/assets/images/users/' . htmlspecialchars($picturePath);
+                                                        }
+                                                    ?>" 
+                                                         class="preview-image rounded-circle object-fit-cover" 
+                                                         width="120" height="120" alt="Current Profile Picture"
+                                                         onerror="this.onerror=null; this.src='<?php echo APP_URL; ?>/assets/images/users/avatar.svg';">
+                                                    <div class="preview-overlay">
+                                                        <button type="button" class="btn btn-sm btn-danger remove-preview" onclick="removePreview()" title="Remove">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-primary change-preview" onclick="document.getElementById('picture').click()" title="Change">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            <?php else: ?>
+                                                <!-- No existing photo -->
+                                                <?php echo "<!-- DEBUG: No existing photo found -->"; ?>
+                                                <i class="fas fa-image fa-3x mb-2 opacity-50"></i>
+                                                <div class="small">Belum ada foto profil</div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -171,6 +250,7 @@ function showPreview(file) {
     const reader = new FileReader();
     reader.onload = function(e) {
         const preview = document.getElementById("file-preview");
+        const noFilePreview = document.getElementById("no-file-preview");
         const previewImage = document.getElementById("preview-image");
         const previewFilename = document.getElementById("preview-filename");
         const previewSize = document.getElementById("preview-size");
@@ -178,11 +258,17 @@ function showPreview(file) {
         if (previewImage) {
             previewImage.src = e.target.result;
         }
-        if (previewFilename) previewFilename.textContent = file.name;
+        if (previewFilename) {
+            previewFilename.textContent = file.name;
+            previewFilename.setAttribute("title", file.name);
+        }
         if (previewSize) previewSize.textContent = formatFileSize(file.size);
         
         if (preview) {
             preview.classList.remove("d-none");
+        }
+        if (noFilePreview) {
+            noFilePreview.classList.add("d-none");
         }
     };
     reader.readAsDataURL(file);
@@ -193,7 +279,17 @@ function removePreview() {
     if (pictureInput) pictureInput.value = "";
     
     const preview = document.getElementById("file-preview");
+    const noFilePreview = document.getElementById("no-file-preview");
+    
     if (preview) preview.classList.add("d-none");
+    if (noFilePreview) {
+        noFilePreview.classList.remove("d-none");
+        // Show placeholder when removing existing photo
+        noFilePreview.innerHTML = `
+            <i class="fas fa-image fa-3x mb-2 opacity-50"></i>
+            <div class="small">No image selected</div>
+        `;
+    }
 }
 
 function formatFileSize(bytes) {

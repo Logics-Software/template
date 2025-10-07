@@ -34,7 +34,7 @@ ob_start();
                             </button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-md">
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -58,7 +58,7 @@ ob_start();
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-primary" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)">
-                                                        <i class="fas fa-eye"></i>View Detail Menu
+                                                        <i class="fas fa-eye"></i> View Detail Menu
                                                     </button>
                                                 </td>
                                                 <td>
@@ -837,22 +837,6 @@ function createToastContainer() {
     return container;
 }
 </script>
-
-<style>
-.menu-modules .menu-module {
-    border: 0px;
-    border-radius: 0px;
-    margin-bottom: 4px;
-    color: black;
-    transition: all 0.2s ease;
-}
-
-.menu-modules .menu-child-indent {
-    margin-left: 20px;
-    padding-left: 16px;
-    position: relative;
-}
-</style>
 
 <?php
 // End output buffering and get content

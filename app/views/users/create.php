@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="form-container">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Create New User</h5>
                     <nav aria-label="breadcrumb">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
                 <form method="POST" action="<?php echo APP_URL; ?>/users" id="createUserForm" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     
@@ -97,28 +97,39 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Profile Picture</label>
-                                <div class="file-upload-container">
-                                    <input type="file" class="form-control" id="picture" name="picture" accept="image/*" onchange="handleFileSelect(this)">
-                                    <div class="form-text mt-2">
-                                        <i class="fas fa-info-circle me-1"></i>
-                                        Upload a profile picture (optional) - Supports: JPG, PNG, GIF, WEBP (Max 5MB)
-                                    </div>
-                                </div>
-                                <div id="file-preview" class="file-upload-preview d-none">
-                                    <div class="preview-container">
-                                        <img id="preview-image" class="preview-image rounded-circle object-fit-cover p-2" width="120" height="120" alt="Preview" class="img-preview">
-                                        <div class="preview-overlay">
-                                            <button type="button" class="btn btn-danger remove-preview" onclick="removePreview()">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-primary change-preview" onclick="document.getElementById('picture').click()">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
+                                <div class="row">
+                                    <!-- File Input Section -->
+                                    <div class="col-md-6">
+                                        <div class="file-upload-container">
+                                            <input type="file" class="form-control" id="picture" name="picture" accept="image/*" onchange="handleFileSelect(this)">
+                                            <div class="form-text mt-2">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                File yang didukung: JPG, PNG, GIF, WEBP (Maksimal 5MB)
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="preview-info">
-                                        <div id="preview-filename" class="fw-bold"></div>
-                                        <div id="preview-size" class="text-muted small"></div>
+                                    
+                                    <!-- Preview Section -->
+                                    <div class="col-md-6">
+                                        <div id="file-preview" class="file-upload-preview d-none">
+                                            <div class="preview-container">
+                                                <img id="preview-image" class="preview-image rounded-circle object-fit-cover" width="120" height="120" alt="Preview">
+                                                <div class="preview-overlay">
+                                                    <button type="button" class="btn btn-sm btn-danger remove-preview" onclick="removePreview()" title="Remove">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-primary change-preview" onclick="document.getElementById('picture').click()" title="Change">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Default state when no file selected -->
+                                        <div id="no-file-preview" class="text-center text-muted py-3">
+                                            <i class="fas fa-image fa-3x mb-2 opacity-50"></i>
+                                            <div class="small">Belum ada foto profil</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +139,7 @@
             </div>
             
             <!-- Form Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/users" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-1"></i>Back to Users
                 </a>
@@ -170,6 +181,7 @@ function showPreview(file) {
     const reader = new FileReader();
     reader.onload = function(e) {
         const preview = document.getElementById("file-preview");
+        const noFilePreview = document.getElementById("no-file-preview");
         const previewImage = document.getElementById("preview-image");
         const previewFilename = document.getElementById("preview-filename");
         const previewSize = document.getElementById("preview-size");
@@ -177,11 +189,17 @@ function showPreview(file) {
         if (previewImage) {
             previewImage.src = e.target.result;
         }
-        if (previewFilename) previewFilename.textContent = file.name;
+        if (previewFilename) {
+            previewFilename.textContent = file.name;
+            previewFilename.setAttribute("title", file.name);
+        }
         if (previewSize) previewSize.textContent = formatFileSize(file.size);
         
         if (preview) {
             preview.classList.remove("d-none");
+        }
+        if (noFilePreview) {
+            noFilePreview.classList.add("d-none");
         }
     };
     reader.readAsDataURL(file);
@@ -192,7 +210,10 @@ function removePreview() {
     if (pictureInput) pictureInput.value = "";
     
     const preview = document.getElementById("file-preview");
+    const noFilePreview = document.getElementById("no-file-preview");
+    
     if (preview) preview.classList.add("d-none");
+    if (noFilePreview) noFilePreview.classList.remove("d-none");
 }
 
 function formatFileSize(bytes) {

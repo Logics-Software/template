@@ -63,7 +63,7 @@
                 </div>
                 
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover table-sm" id="modulesTable">
+                    <table class="table table-striped table-hover table-md modules-table" id="modulesTable">
                         <thead>
                             <tr>
                                 <th>Logo</th>

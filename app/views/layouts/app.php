@@ -39,7 +39,14 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <link href="<?php echo BASE_URL; ?>assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome 7 - Latest Version -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" /></noscript>
+    
+    <!-- Font Preloading for Chrome/Edge -->
+    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-medium.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-semibold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-bold.ttf" as="font" type="font/ttf" crossorigin>
     
     <!-- Local Fonts - Inter -->
     <link href="<?php echo BASE_URL; ?>assets/css/fonts.css" rel="stylesheet">
@@ -59,11 +66,11 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
 <body<?php 
 $bodyClass = 'bg-light';
 if ($isLoginPage) {
-    $bodyClass = 'login-page';
+    $bodyClass = 'login-page auth-page';
 } elseif ($isRegisterPage) {
-    $bodyClass = 'register-page';
+    $bodyClass = 'register-page auth-page';
 } elseif ($isLockScreenPage) {
-    $bodyClass = 'lock-screen-page';
+    $bodyClass = 'lock-screen-page auth-page';
 }
 echo ' class="' . $bodyClass . '"';
 ?>>
@@ -225,16 +232,10 @@ echo ' class="' . $bodyClass . '"';
     </div>
     <?php endif; ?>
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    
     <!-- Bootstrap JS -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
     <script src="<?php echo APP_URL; ?>/assets/js/bootstrap/bootstrap.min.js"></script>
-    
-    <!-- Global Toast Function -->
-    <!-- Alert Manager will be loaded with other JS modules -->
-    
+        
     <!-- Alert Manager -->
     <script src="<?php echo APP_URL; ?>/assets/js/modules/AlertManager.js"></script>
     

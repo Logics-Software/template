@@ -190,7 +190,7 @@ function getGreetingMessage() {
                     <!-- User Profile -->
                     <div class="user-dropdown">
                         <div class="dropdown">
-                            <button class="btn btn-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" title="Profil User">
+                            <button class="btn btn-link dropdown-toggle d-flex align-items-center" id="messageToggle" data-bs-toggle="dropdown" title="Profil User">
                                 <div class="user-avatar me-2">
                                     <?php if (Session::get('user_picture')): ?>
                                         <img src="<?php echo APP_URL; ?>/<?php echo Session::get('user_picture'); ?>" alt="User" class="rounded-circle object-fit-cover" width="32" height="32">
@@ -276,36 +276,6 @@ function getGreetingMessage() {
         </div>
     </div>
 </div>
-
-<style>
-.whatsapp-contact-card {
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.whatsapp-contact-card:hover {
-    border-color: #25d366;
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
-    transform: translateY(-2px);
-}
-
-.whatsapp-contact-card:hover .fab {
-    transform: scale(1.1);
-    transition: transform 0.3s ease;
-}
-
-/* Dark theme support for WhatsApp modal */
-[data-bs-theme="dark"] .whatsapp-contact-card {
-    background: var(--bg-primary);
-    border-color: var(--border-dark);
-}
-
-[data-bs-theme="dark"] .whatsapp-contact-card:hover {
-    border-color: #25d366;
-    background: var(--bg-secondary);
-}
-</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

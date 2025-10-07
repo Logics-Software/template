@@ -7,10 +7,10 @@ $validationErrors = Session::getFlash('errors');
 
 <!-- Register Page with Modern Card Structure -->
 <div class="register-container">
-    <div class="register-wrapper">
+    <div class="register-wrapper-single">
         <div class="card">
             <div class="card-header text-center">
-                <h4 class="mb-1">Pendaftaran Akun</h4>
+                <h4 class="mb-1">Buat Akun Baru</h4>
             </div>
             <div class="card-body m-3">
                 <!-- Error Messages -->
@@ -42,7 +42,7 @@ $validationErrors = Session::getFlash('errors');
                 </div>
                 <?php endif; ?>
 
-                <form method="POST" action="<?php echo APP_URL; ?>/register" id="registerForm">
+                <form method="POST" action="<?php echo APP_URL; ?>/register" id="registerForm" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     
                     <!-- Row 1: Username & Full Name -->
@@ -134,15 +134,59 @@ $validationErrors = Session::getFlash('errors');
                         </div>
                     </div>
 
+                    <!-- Profile Picture Upload -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Profile Picture</label>
+                                <div class="row">
+                                    <!-- File Input Section -->
+                                    <div class="col-md-8">
+                                        <div class="file-upload-container">
+                                            <input type="file" class="form-control" id="picture" name="picture" accept="image/*" onchange="handleFileSelect(this)">
+                                            <div class="form-text mt-2">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                JPG, PNG, GIF, WEBP (Maksimal 5MB)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Preview Section -->
+                                    <div class="col-md-4">
+                                        <div id="file-preview" class="file-upload-preview d-none">
+                                            <div class="preview-container">
+                                                <img id="preview-image" class="preview-image rounded-circle object-fit-cover" width="120" height="120" alt="Preview">
+                                                <div class="preview-overlay">
+                                                    <button type="button" class="btn btn-sm btn-danger remove-preview" onclick="removePreview()" title="Remove">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-primary change-preview" onclick="document.getElementById('picture').click()" title="Change">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Default state when no file selected -->
+                                        <div id="no-file-preview" class="text-center text-muted py-3">
+                                            <i class="fas fa-image fa-3x mb-2 opacity-50"></i>
+                                            <div class="small">Belum ada foto profil</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-check mb-3">
                         <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
                         <label class="form-check-label" for="terms">
-                            Saya setuju dengan <a href="#" class="text-primary">Syarta & Ketentuan</a>
+                            Saya setuju dengan <a href="#registrationNotice" class="text-primary">Syarta & Ketentuan</a>
                         </label>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mb-3" id="registerBtn">
-                        <i class="fas fa-user-plus me-2"></i>Daftar Akun Saya
+                        <i class="fas fa-user-plus me-2"></i>Daftar Sekarang
                     </button>
                 </form>
 
@@ -152,7 +196,7 @@ $validationErrors = Session::getFlash('errors');
                 </div>
 
                 <!-- Registration Notice -->
-                <div class="alert alert-info mt-3 text-secondary" role="alert">
+                <div class="alert alert-info mt-3 text-secondary" role="alert" id="registrationNotice">
                     <i class="fas fa-info-circle me-2"></i>
                     <strong>Pemberitahuan Pendaftaran :</strong> Akun Anda akan ditinjau oleh administrator sebelum akun Anda diaktifkan untuk digunakan. 
                     Anda akan mendapatkan pemberitahuan melalui email setelah akun Anda disetujui.
@@ -219,4 +263,52 @@ document.addEventListener("DOMContentLoaded", function() {
         confirmPasswordField.addEventListener("input", validatePasswordMatch);
     }
 });
+
+// File upload functions for profile picture
+function handleFileSelect(input) {
+    const file = input.files[0];
+    if (file) {
+        // Validate file type
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('File type not supported. Please select JPG, PNG, GIF, or WEBP image.');
+            input.value = '';
+            return;
+        }
+        
+        // Validate file size (5MB max)
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        if (file.size > maxSize) {
+            alert('File size too large. Please select an image smaller than 5MB.');
+            input.value = '';
+            return;
+        }
+        
+        showPreview(file);
+    }
+}
+
+function showPreview(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const previewImage = document.getElementById('preview-image');
+        const filePreview = document.getElementById('file-preview');
+        const noFilePreview = document.getElementById('no-file-preview');
+        
+        previewImage.src = e.target.result;
+        filePreview.classList.remove('d-none');
+        noFilePreview.classList.add('d-none');
+    };
+    reader.readAsDataURL(file);
+}
+
+function removePreview() {
+    const fileInput = document.getElementById('picture');
+    const filePreview = document.getElementById('file-preview');
+    const noFilePreview = document.getElementById('no-file-preview');
+    
+    fileInput.value = '';
+    filePreview.classList.add('d-none');
+    noFilePreview.classList.remove('d-none');
+}
 </script>

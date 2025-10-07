@@ -59,14 +59,12 @@
                                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                             <?php else: ?>
                                                 <!-- Avatar fallback (always present, shown when no picture or image fails to load) -->
-                                                <div class="avatar-fallback bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                                    style="width: 60px; height: 60px; <?php echo (isset($user['picture']) && !empty($user['picture'])) ? 'display: none;' : ''; ?>">
-                                                    <?php if (isset($user['namalengkap']) && !empty($user['namalengkap'])): ?>
-                                                        <?php echo strtoupper(substr($user['namalengkap'], 0, 1)); ?>
-                                                    <?php else: ?>
-                                                        <i class="fas fa-user text-2xl"></i>
-                                                    <?php endif; ?>
-                                                </div>
+                                                <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" 
+                                                     alt="Default Avatar" 
+                                                     class="rounded-circle me-3" 
+                                                     width="60" height="60"
+                                                     class="object-cover"
+                                                     style="<?php echo (isset($user['picture']) && !empty($user['picture'])) ? 'display: none;' : ''; ?>">
                                             <?php endif; ?>
 
                                             <div>

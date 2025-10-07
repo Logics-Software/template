@@ -89,6 +89,79 @@
   font-size: 12px;
 }
 
+/* Enhanced user selection card styling */
+.user-selection-item .avatar-32 {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.user-selection-item:hover .avatar-32 {
+  border-color: var(--primary-color);
+}
+
+.user-selection-item.selected .avatar-32 {
+  border-color: white;
+}
+
+.user-selection-item .badge {
+  font-size: 0.65rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+}
+
+.user-selection-item.selected .badge {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+}
+
+/* Compact text styling for 5 cards per row */
+.user-selection-item .fw-bold {
+  font-size: 0.8rem !important;
+  line-height: 1.1 !important;
+}
+
+.user-selection-item .text-muted {
+  font-size: 0.7rem !important;
+  line-height: 1.1 !important;
+}
+
+.user-selection-item .badge {
+  font-size: 0.6rem !important;
+  padding: 0.2rem 0.4rem !important;
+}
+
+/* Responsive text adjustments */
+@media (max-width: 1199px) {
+  .user-selection-item .fw-bold {
+    font-size: 0.75rem !important;
+  }
+
+  .user-selection-item .text-muted {
+    font-size: 0.65rem !important;
+  }
+
+  .user-selection-item .badge {
+    font-size: 0.55rem !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .user-selection-item .fw-bold {
+    font-size: 0.7rem !important;
+  }
+
+  .user-selection-item .text-muted {
+    font-size: 0.6rem !important;
+  }
+
+  .user-selection-item .badge {
+    font-size: 0.5rem !important;
+  }
+}
+
 .avatar-fallback-lg {
   width: 48px;
   height: 48px;
@@ -314,16 +387,163 @@
 /* Specific component utilities */
 .user-selection-item {
   cursor: pointer;
-  height: 60px;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  height: auto;
+  min-height: 60px;
+  margin: 0;
+}
+
+/* Floating checkbox styling - Hidden completely */
+.user-selection-item .position-absolute {
+  display: none !important;
+}
+
+.user-selection-item:hover .position-absolute,
+.user-selection-item.selected .position-absolute {
+  display: none !important;
+}
+
+.user-selection-item .form-check-input {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--primary-color);
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-image: none !important;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.user-selection-item .form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-image: none;
+}
+
+.user-selection-item.selected .form-check-input {
+  background-color: white;
+  border-color: white;
+  background-image: none;
+}
+
+.user-selection-item.selected .form-check-input:checked {
+  background-color: white;
+  border-color: white;
+  background-image: none;
+}
+
+/* Consistent button sizing for bulk select buttons */
+#selectAllBtn,
+#clearAllBtn {
+  min-width: 40px;
+  width: 40px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#selectAllBtn i,
+#clearAllBtn i {
+  font-size: 0.875rem;
 }
 
 .user-selection-item:hover {
   background-color: var(--bg-secondary);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .user-selection-item.selected {
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
   color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.user-selection-item.selected:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(var(--primary-color-rgb), 0.4);
+}
+
+/* Consistent spacing for user selection cards - Using row gap instead of margin */
+.user-selection-item {
+  margin: 0;
+}
+
+/* Responsive adjustments for user selection cards */
+@media (min-width: 1400px) {
+  .user-selection-item {
+    min-height: 55px;
+    margin: 0;
+  }
+
+  .user-selection-item .card-body {
+    padding: 0.6rem !important;
+  }
+}
+
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .user-selection-item {
+    min-height: 50px;
+    margin: 0;
+  }
+
+  .user-selection-item .card-body {
+    padding: 0.5rem !important;
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 992px) {
+  .user-selection-item {
+    min-height: 50px;
+    margin: 0;
+  }
+
+  .user-selection-item .card-body {
+    padding: 0.5rem !important;
+  }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+  .user-selection-item {
+    min-height: 50px;
+    margin: 0;
+  }
+
+  .user-selection-item .card-body {
+    padding: 0.4rem !important;
+  }
+}
+
+@media (max-width: 767px) and (min-width: 576px) {
+  .user-selection-item {
+    min-height: 45px;
+    margin: 0;
+  }
+
+  .user-selection-item .card-body {
+    padding: 0.4rem !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .user-selection-item {
+    min-height: 40px;
+    margin: 0;
+  }
+
+  .user-selection-item .card-body {
+    padding: 0.3rem !important;
+  }
 }
 
 .notice-box {
