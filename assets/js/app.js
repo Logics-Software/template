@@ -160,20 +160,53 @@ function initNotificationDropdown() {
   const notificationDropdown = notificationToggle?.nextElementSibling;
 
   if (notificationToggle && notificationDropdown) {
+    // Add smooth animation classes
+    notificationDropdown.style.transition =
+      "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+
     // Toggle dropdown on click
     notificationToggle.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
 
       // Close other dropdowns first
-      document.querySelectorAll(".dropdown-menu.show").forEach((menu) => {
-        if (menu !== notificationDropdown) {
-          menu.classList.remove("show");
-        }
-      });
+      document
+        .querySelectorAll(
+          ".dropdown-menu.show, .notification-menu.show, .message-menu.show"
+        )
+        .forEach((menu) => {
+          if (menu !== notificationDropdown) {
+            menu.classList.remove("show");
+          }
+        });
 
-      // Toggle current dropdown
-      notificationDropdown.classList.toggle("show");
+      // Toggle current dropdown with smooth animation
+      const isOpen = notificationDropdown.classList.contains("show");
+
+      if (isOpen) {
+        // Close dropdown
+        notificationDropdown.classList.remove("show");
+        notificationToggle.setAttribute("aria-expanded", "false");
+      } else {
+        // Open dropdown
+        notificationDropdown.classList.add("show");
+        notificationToggle.setAttribute("aria-expanded", "true");
+
+        // Add entrance animation to notification items
+        setTimeout(() => {
+          const notificationItems =
+            notificationDropdown.querySelectorAll(".notification-item");
+          notificationItems.forEach((item, index) => {
+            item.style.opacity = "0";
+            item.style.transform = "translateY(-10px)";
+            setTimeout(() => {
+              item.style.transition = "all 0.3s ease";
+              item.style.opacity = "1";
+              item.style.transform = "translateY(0)";
+            }, index * 50);
+          });
+        }, 50);
+      }
     });
 
     // Close dropdown when clicking outside
@@ -183,6 +216,7 @@ function initNotificationDropdown() {
         !notificationDropdown.contains(e.target)
       ) {
         notificationDropdown.classList.remove("show");
+        notificationToggle.setAttribute("aria-expanded", "false");
       }
     });
 
@@ -195,39 +229,94 @@ function initNotificationDropdown() {
         e.preventDefault();
         e.stopPropagation();
 
-        // Clear all notification items
+        // Add loading state to button
+        const originalText = clearAllBtn.innerHTML;
+        clearAllBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-1"></i>Clearing...';
+        clearAllBtn.disabled = true;
+
+        // Clear all notification items with animation
         const notificationItems =
           notificationDropdown.querySelectorAll(".notification-item");
-        notificationItems.forEach((item) => {
-          item.style.opacity = "0";
-          item.style.transform = "translateX(100%)";
+        notificationItems.forEach((item, index) => {
           setTimeout(() => {
-            item.remove();
-          }, 300);
+            item.style.transition = "all 0.3s ease";
+            item.style.opacity = "0";
+            item.style.transform = "translateX(100%) scale(0.8)";
+            setTimeout(() => {
+              item.remove();
+            }, 300);
+          }, index * 100);
         });
 
-        // Update badge count
+        // Update badge count with animation
         const badge = notificationToggle.querySelector(".badge");
         if (badge) {
-          badge.textContent = "0";
-          badge.style.display = "none";
+          badge.style.transition = "all 0.3s ease";
+          badge.style.transform = "scale(1.2)";
+          setTimeout(() => {
+            badge.textContent = "0";
+            badge.style.transform = "scale(1)";
+            setTimeout(() => {
+              badge.style.display = "none";
+            }, 300);
+          }, 200);
         }
 
-        // Show message if no notifications
+        // Reset button and show empty state
         setTimeout(() => {
+          clearAllBtn.innerHTML = originalText;
+          clearAllBtn.disabled = false;
+
           const notificationList =
             notificationDropdown.querySelector(".notification-list");
           if (notificationList && notificationList.children.length === 0) {
             notificationList.innerHTML = `
-              <div class="text-center p-3">
-                <i class="fas fa-bell-slash fa-2x text-muted mb-2"></i>
-                <p class="mb-0 text-muted">Tidak ada notifikasi</p>
+              <div class="notification-empty">
+                <i class="fas fa-bell-slash"></i>
+                <h6>No notifications</h6>
+                <p>All caught up! You're all set.</p>
               </div>
             `;
           }
-        }, 350);
+        }, notificationItems.length * 100 + 500);
       });
     }
+
+    // Handle individual notification item clicks
+    notificationDropdown.addEventListener("click", function (e) {
+      const notificationItem = e.target.closest(".notification-item");
+      if (notificationItem) {
+        // Add read state styling
+        notificationItem.style.opacity = "0.7";
+        notificationItem.style.transform = "translateX(-4px)";
+
+        // Remove after animation
+        setTimeout(() => {
+          notificationItem.remove();
+
+          // Update badge count
+          const badge = notificationToggle.querySelector(".badge");
+          if (badge) {
+            const currentCount = parseInt(badge.textContent) || 0;
+            const newCount = Math.max(0, currentCount - 1);
+            badge.textContent = newCount;
+
+            if (newCount === 0) {
+              badge.style.display = "none";
+            }
+          }
+        }, 300);
+      }
+    });
+
+    // Add keyboard navigation support
+    notificationToggle.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        notificationToggle.click();
+      }
+    });
   }
 }
 
@@ -879,11 +968,15 @@ function initHeaderMessageDropdown() {
     e.stopPropagation();
 
     // Close other dropdowns first
-    document.querySelectorAll(".dropdown-menu.show").forEach((menu) => {
-      if (menu !== messageDropdown) {
-        menu.classList.remove("show");
-      }
-    });
+    document
+      .querySelectorAll(
+        ".dropdown-menu.show, .notification-menu.show, .message-menu.show"
+      )
+      .forEach((menu) => {
+        if (menu !== messageDropdown) {
+          menu.classList.remove("show");
+        }
+      });
 
     // Toggle current dropdown
     messageDropdown.classList.toggle("show");

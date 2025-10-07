@@ -93,6 +93,12 @@ $validationErrors = Session::getFlash('errors');
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Auto focus on username input
+    const usernameInput = document.getElementById("username_email");
+    if (usernameInput) {
+        usernameInput.focus();
+    }
+    
     // Password toggle functionality
     const togglePassword = document.getElementById("togglePassword");
     const passwordInput = document.getElementById("password");

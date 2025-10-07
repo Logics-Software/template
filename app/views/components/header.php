@@ -62,16 +62,17 @@ function getGreetingMessage() {
                     <!-- Notifications -->
                     <!-- =================================================== -->
                     <div class="notification-dropdown">
-                        <button class="btn btn-link position-relative" id="notificationToggle">
+                        <button class="btn btn-link position-relative" id="notificationToggle" 
+                                aria-label="Notifications" aria-expanded="false" aria-haspopup="true">
                             <i class="fa-regular fa-bell"></i>
-                            <span class="position-absolute badge rounded-pill bg-danger">
+                            <span class="position-absolute badge rounded-pill bg-danger" id="notificationBadge">
                                 5
                             </span>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-end notification-menu">
+                        <div class="notification-menu">
                             <div class="dropdown-header d-flex justify-content-between align-items-center">
                                 <h6 class="mb-0">Notifications</h6>
-                                <button class="btn btn-sm btn-outline-primary">Clear All</button>
+                                <button class="btn btn-primary">Clear All</button>
                             </div>
                             <div class="notification-list">
                                 <div class="notification-item">
@@ -151,7 +152,7 @@ function getGreetingMessage() {
                                 </div>
                             </div>
                             <div class="dropdown-footer">
-                                <a href="#" class="btn btn-outline-primary btn-sm w-100">View all</a>
+                                <a href="#" class="btn btn-primary w-100">View all</a>
                             </div>
                         </div>
                     </div>
@@ -167,10 +168,10 @@ function getGreetingMessage() {
                                 0
                             </span>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-end message-menu">
+                        <div class="message-menu">
                             <div class="dropdown-header d-flex justify-content-between align-items-center">
                                 <h6 class="mb-0">Pesan</h6>
-                                <button class="btn btn-sm btn-outline-primary" id="markAllAsReadBtn">Tandai Sudah Dibaca</button>
+                                <button class="btn btn-secondary" id="markAllAsReadBtn">Tandai Sudah Dibaca</button>
                             </div>
                             <div class="message-list" id="messageList">
                                 <div class="text-center p-3">
@@ -181,7 +182,7 @@ function getGreetingMessage() {
                                 </div>
                             </div>
                             <div class="dropdown-footer">
-                                <a href="<?php echo APP_URL; ?>/messages" class="btn btn-outline-primary btn-sm w-100">Buka Semua Pesan</a>
+                                <a href="<?php echo APP_URL; ?>/messages" class="btn btn-primary w-100">Buka Semua Pesan</a>
                             </div>
                         </div>
                     </div>

@@ -210,6 +210,12 @@ $validationErrors = Session::getFlash('errors');
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Auto focus on username input
+    const usernameInput = document.getElementById("username");
+    if (usernameInput) {
+        usernameInput.focus();
+    }
+    
     const registerForm = document.getElementById("registerForm");
     const registerBtn = document.getElementById("registerBtn");
 
