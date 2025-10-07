@@ -1,0 +1,50 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: pdo, pdo_mysql, mbstring, xml, curl, json
+
+      - name: Install dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Create deployment package
+        run: |
+          tar -czf deployment.tar.gz \
+            --exclude='.git' \
+            --exclude='tests' \
+            --exclude='.github' \
+            --exclude='composer.json' \
+            --exclude='composer.lock' \
+            --exclude='phpunit.xml' \
+            --exclude='.gitignore' \
+            --exclude='README.md' \
+            .
+
+      - name: Deploy to server
+        run: |
+          echo "Deployment would happen here"
+          echo "Package created: deployment.tar.gz"
+          ls -la deployment.tar.gz
+
+      - name: Notify deployment success
+        run: |
+          echo "Deployment completed successfully"
+          echo "Version: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"

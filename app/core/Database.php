@@ -13,7 +13,7 @@ class Database
         $this->connect();
     }
 
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$instance === null) {
             self::$instance = new self();
@@ -51,12 +51,12 @@ class Database
         }
     }
 
-    public function getConnection()
+    public function getConnection(): PDO
     {
         return $this->connection;
     }
 
-    public function query($sql, $params = [])
+    public function query(string $sql, array $params = []): PDOStatement
     {
         try {
             $stmt = $this->connection->prepare($sql);
@@ -67,19 +67,20 @@ class Database
         }
     }
 
-    public function fetch($sql, $params = [])
+    public function fetch(string $sql, array $params = []): ?array
     {
         $stmt = $this->query($sql, $params);
-        return $stmt->fetch();
+        $result = $stmt->fetch();
+        return $result ?: null;
     }
 
-    public function fetchAll($sql, $params = [])
+    public function fetchAll(string $sql, array $params = []): array
     {
         $stmt = $this->query($sql, $params);
         return $stmt->fetchAll();
     }
 
-    public function insert($table, $data)
+    public function insert(string $table, array $data): int
     {
         $columns = implode(',', array_keys($data));
         $placeholders = ':' . implode(', :', array_keys($data));
@@ -87,10 +88,10 @@ class Database
         $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders})";
         $this->query($sql, $data);
         
-        return $this->connection->lastInsertId();
+        return (int) $this->connection->lastInsertId();
     }
 
-    public function update($table, $data, $where, $whereParams = [])
+    public function update(string $table, array $data, string $where, array $whereParams = []): int
     {
         $setClause = [];
         foreach (array_keys($data) as $column) {
@@ -105,14 +106,14 @@ class Database
         return $stmt->rowCount();
     }
 
-    public function delete($table, $where, $params = [])
+    public function delete(string $table, string $where, array $params = []): int
     {
         $sql = "DELETE FROM {$table} WHERE {$where}";
         $stmt = $this->query($sql, $params);
         return $stmt->rowCount();
     }
 
-    public function beginTransaction()
+    public function beginTransaction(): void
     {
         if (!$this->transactionStarted) {
             $this->connection->beginTransaction();
@@ -120,7 +121,7 @@ class Database
         }
     }
 
-    public function commit()
+    public function commit(): void
     {
         if ($this->transactionStarted) {
             $this->connection->commit();
@@ -128,7 +129,7 @@ class Database
         }
     }
 
-    public function rollback()
+    public function rollback(): void
     {
         if ($this->transactionStarted) {
             $this->connection->rollback();
@@ -136,12 +137,12 @@ class Database
         }
     }
 
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->transactionStarted;
     }
 
-    public function count($table, $where = '', $params = [])
+    public function count(string $table, string $where = '', array $params = []): int
     {
         $sql = "SELECT COUNT(*) as count FROM {$table}";
         if ($where) {
@@ -149,16 +150,16 @@ class Database
         }
         
         $result = $this->fetch($sql, $params);
-        return (int) $result['count'];
+        return (int) ($result['count'] ?? 0);
     }
 
-    public function paginate($sql, $params = [], $page = 1, $perPage = DEFAULT_PAGE_SIZE)
+    public function paginate(string $sql, array $params = [], int $page = 1, int $perPage = DEFAULT_PAGE_SIZE): array
     {
         $offset = ($page - 1) * $perPage;
         
         // Get total count
         $countSql = "SELECT COUNT(*) as total FROM ({$sql}) as count_table";
-        $total = $this->fetch($countSql, $params)['total'];
+        $total = $this->fetch($countSql, $params)['total'] ?? 0;
         
         // Add pagination to main query
         $sql .= " LIMIT {$perPage} OFFSET {$offset}";
@@ -178,7 +179,7 @@ class Database
     /**
      * Get database version information
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         try {
             if (!$this->connection) {
@@ -188,13 +189,13 @@ class Database
             switch (DB_TYPE) {
                 case 'mysql':
                     $result = $this->query("SELECT VERSION() as version")->fetch();
-                    return 'MySQL ' . $result['version'];
+                    return 'MySQL ' . ($result['version'] ?? 'Unknown');
                 case 'sqlsrv':
                     $result = $this->query("SELECT @@VERSION as version")->fetch();
-                    return 'SQL Server ' . $result['version'];
+                    return 'SQL Server ' . ($result['version'] ?? 'Unknown');
                 case 'pgsql':
                     $result = $this->query("SELECT version() as version")->fetch();
-                    return 'PostgreSQL ' . $result['version'];
+                    return 'PostgreSQL ' . ($result['version'] ?? 'Unknown');
                 default:
                     return DB_TYPE . ' (Unknown version)';
             }

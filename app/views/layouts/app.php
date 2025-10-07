@@ -191,7 +191,8 @@ echo ' class="' . $bodyClass . '"';
         
         // Prevent sidebar flash - apply state immediately
         document.addEventListener('DOMContentLoaded', function() {
-            const isCollapsed = document.cookie.split('; ').find(row => row.startsWith('sidebar_collapsed='))?.split('=')[1] === 'true';
+            const cookieRow = document.cookie.split('; ').find(row => row.startsWith('sidebar_collapsed='));
+            const isCollapsed = cookieRow ? cookieRow.split('=')[1] === 'true' : false;
             
             if (isCollapsed) {
                 const sidebar = document.querySelector('.sidebar');

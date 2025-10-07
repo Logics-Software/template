@@ -710,8 +710,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Header Message Dropdown functionality
 function initHeaderMessageDropdown() {
-  // console.log("Initializing header message dropdown...");
-
   // Check if user is logged in before making API calls
   const isLoggedIn =
     document.querySelector(".user-dropdown") ||
@@ -719,7 +717,6 @@ function initHeaderMessageDropdown() {
     document.querySelector(".main-content");
 
   if (!isLoggedIn) {
-    // console.log("User not logged in, skipping message dropdown initialization");
     return; // Exit if user is not logged in
   }
 
@@ -728,15 +725,7 @@ function initHeaderMessageDropdown() {
   const messageList = document.getElementById("messageList");
   const messageDropdown = messageToggle?.nextElementSibling;
 
-  // console.log("Message elements found:", {
-    messageToggle: !!messageToggle,
-    messageBadge: !!messageBadge,
-    messageList: !!messageList,
-    messageDropdown: !!messageDropdown,
-  });
-
   if (!messageToggle || !messageBadge || !messageList || !messageDropdown) {
-    // console.log("Missing required elements, skipping initialization");
     return;
   }
 
@@ -751,18 +740,14 @@ function initHeaderMessageDropdown() {
         return response.json();
       })
       .then((data) => {
-        // console.log("Unread count data:", data);
         if (data.success && data.unread_count > 0) {
           messageBadge.textContent = data.unread_count;
           messageBadge.style.display = "inline";
-          // console.log("Badge shown with count:", data.unread_count);
         } else {
           messageBadge.style.display = "none";
-          // console.log("Badge hidden");
         }
       })
       .catch((error) => {
-        // console.log("Error loading unread count:", error);
         // Silently handle unauthorized errors
         if (error.message !== "Unauthorized") {
           // Error handled silently

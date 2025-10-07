@@ -1,0 +1,12 @@
+parameters:
+    level: 8
+    paths:
+        - app
+    ignoreErrors:
+        - '#Call to an undefined method#'
+        - '#Access to an undefined property#'
+    excludePaths:
+        - app/views
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: false

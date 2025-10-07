@@ -308,8 +308,47 @@
   background: rgba(37, 211, 102, 0.2);
 }
 
+/* WhatsApp Modal Height Control */
+#whatsappModal .modal-dialog {
+  max-height: 90vh;
+  margin: 1rem auto;
+}
+
+#whatsappModal .modal-content {
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#whatsappModal .modal-body {
+  max-height: calc(90vh - 120px); /* Subtract header and footer height */
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+#whatsappModal .modal-body::-webkit-scrollbar {
+  display: none; /* WebKit browsers */
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
+  /* Modal height adjustments for mobile */
+  #whatsappModal .modal-dialog {
+    max-height: 95vh;
+    margin: 0.5rem;
+  }
+
+  #whatsappModal .modal-content {
+    max-height: 95vh;
+  }
+
+  #whatsappModal .modal-body {
+    max-height: calc(95vh - 100px);
+  }
+
   .whatsapp-contact-card {
     margin-bottom: 1.25rem; /* Slightly reduced spacing for tablet */
   }
@@ -326,9 +365,18 @@
   .whatsapp-contact-card .card-title {
     font-size: 1rem;
   }
+}
 
-  .whatsapp-contact-card .card-text {
-    font-size: 0.85rem;
+/* Tablet and Desktop adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  #whatsappModal .modal-dialog {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1025px) {
+  #whatsappModal .modal-dialog {
+    max-width: 700px;
   }
 }
 

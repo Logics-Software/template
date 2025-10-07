@@ -39,7 +39,7 @@ class Request
         }
     }
 
-    public function method()
+    public function method(): string
     {
         // Support method spoofing via _method parameter
         $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -50,7 +50,7 @@ class Request
         return $requestMethod;
     }
 
-    public function uri()
+    public function uri(): string
     {
         $uri = $_SERVER['REQUEST_URI'] ?? '/';
         $uri = parse_url($uri, PHP_URL_PATH);
@@ -79,33 +79,33 @@ class Request
         return $uri;
     }
 
-    public function isGet()
+    public function isGet(): bool
     {
         return $this->method() === 'GET';
     }
 
-    public function isPost()
+    public function isPost(): bool
     {
         return $this->method() === 'POST';
     }
 
-    public function isPut()
+    public function isPut(): bool
     {
         return $this->method() === 'PUT' || ($this->isPost() && $this->input('_method') === 'PUT');
     }
 
-    public function isDelete()
+    public function isDelete(): bool
     {
         return $this->method() === 'DELETE' || ($this->isPost() && $this->input('_method') === 'DELETE');
     }
 
-    public function isAjax()
+    public function isAjax(): bool
     {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
                strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
     }
 
-    public function input($key = null, $default = null)
+    public function input(?string $key = null, mixed $default = null): mixed
     {
         if ($key === null) {
             return $this->data;
@@ -114,7 +114,7 @@ class Request
         return $this->data[$key] ?? $default;
     }
 
-    public function get($key = null, $default = null)
+    public function get(?string $key = null, mixed $default = null): mixed
     {
         if ($key === null) {
             return $_GET;
@@ -123,7 +123,7 @@ class Request
         return $_GET[$key] ?? $default;
     }
 
-    public function post($key = null, $default = null)
+    public function post(?string $key = null, mixed $default = null): mixed
     {
         if ($key === null) {
             return $_POST;
@@ -132,7 +132,7 @@ class Request
         return $_POST[$key] ?? $default;
     }
 
-    public function file($key = null)
+    public function file(?string $key = null): ?array
     {
         if ($key === null) {
             return $_FILES;
@@ -141,12 +141,12 @@ class Request
         return $_FILES[$key] ?? null;
     }
 
-    public function has($key)
+    public function has(string $key): bool
     {
         return isset($this->data[$key]);
     }
 
-    public function only($keys)
+    public function only(array $keys): array
     {
         $result = [];
         foreach ($keys as $key) {
@@ -157,7 +157,7 @@ class Request
         return $result;
     }
 
-    public function except($keys)
+    public function except(array $keys): array
     {
         $result = $this->data;
         foreach ($keys as $key) {
@@ -166,13 +166,13 @@ class Request
         return $result;
     }
 
-    public function validate($rules)
+    public function validate(array $rules): Validator
     {
         $validator = new Validator($this->data, $rules);
         return $validator;
     }
 
-    public function header($name)
+    public function header(string $name): ?string
     {
         // Normalize header name
         $name = strtoupper(str_replace('-', '_', $name));
@@ -193,7 +193,7 @@ class Request
         return null;
     }
 
-    public function getAllHeaders()
+    public function getAllHeaders(): array
     {
         $headers = [];
         foreach ($_SERVER as $key => $value) {
@@ -205,7 +205,7 @@ class Request
         return $headers;
     }
 
-    public function all()
+    public function all(): array
     {
         return $this->data;
     }
@@ -213,7 +213,7 @@ class Request
     /**
      * Get JSON data from request body
      */
-    public function json($key = null, $default = null)
+    public function json(?string $key = null, mixed $default = null): mixed
     {
         // Use pre-parsed JSON data if available
         if ($this->parsedJsonData !== null) {
@@ -235,7 +235,7 @@ class Request
     /**
      * Check if request contains JSON data
      */
-    public function isJson()
+    public function isJson(): bool
     {
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
         return strpos($contentType, 'application/json') !== false;

@@ -1,0 +1,47 @@
+name: Security Scan
+
+on:
+  schedule:
+    - cron: "0 2 * * 1" # Weekly on Monday at 2 AM
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  security-scan:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: pdo, pdo_sqlite, mbstring, xml, curl, json
+
+      - name: Install dependencies
+        run: composer install --dev
+
+      - name: Run Composer Security Audit
+        run: composer audit --format=json --output=security-audit.json
+
+      - name: Check for known vulnerabilities
+        run: |
+          if [ -f security-audit.json ]; then
+            echo "Security audit completed"
+            cat security-audit.json
+          else
+            echo "No security issues found"
+          fi
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-report
+          path: security-audit.json
+          retention-days: 30

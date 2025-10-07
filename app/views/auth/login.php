@@ -62,6 +62,7 @@ $validationErrors = Session::getFlash('errors');
                         </label>
                         <button class="position-absolute top-50 end-0 translate-middle-y password-toggle-btn" 
                                 type="button" id="togglePassword" 
+                                data-handled="true"
                                 tabindex="-1">
                             <i class="fas fa-eye" id="passwordToggleIcon"></i>
                         </button>

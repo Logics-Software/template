@@ -78,18 +78,29 @@ html.auth-page {
 
 /* Password toggle button */
 .password-toggle-btn {
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
   color: var(--text-secondary);
   font-size: 0.85rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 .password-toggle-btn:hover {
-  background-color: transparent;
+  background-color: transparent !important;
   color: var(--text-primary);
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.password-toggle-btn:focus {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Login button */
@@ -307,18 +318,29 @@ html.auth-page {
 
 /* Password toggle button for lock screen */
 .lock-screen-modal .password-toggle-btn {
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
   color: var(--text-secondary);
   font-size: 0.85rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 .lock-screen-modal .password-toggle-btn:hover {
-  background-color: transparent;
+  background-color: transparent !important;
   color: var(--text-primary);
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.lock-screen-modal .password-toggle-btn:focus {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Unlock button */

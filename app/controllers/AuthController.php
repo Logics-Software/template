@@ -27,23 +27,38 @@ class AuthController extends BaseController
 
     public function authenticate($request = null, $response = null, $params = [])
     {
-        $validator = $this->validate([
-            'username_email' => 'required',
-            'password' => 'required|min:6'
-        ]);
+        try {
+            $validator = $this->validate([
+                'username_email' => 'required',
+                'password' => 'required|min:6'
+            ]);
 
-        if (!$validator->validate()) {
-            $this->withErrors($validator->errors());
+            if (!$validator->validate()) {
+                $this->withErrors($validator->errors());
+                $this->redirect('/login');
+                return;
+            }
+        } catch (Exception $e) {
+            error_log("Auth validation error: " . $e->getMessage());
+            $this->withError("Validation error occurred");
             $this->redirect('/login');
+            return;
         }
 
         $usernameEmail = $this->input('username_email');
         $password = $this->input('password');
 
-        // Try to find user by email first, then by username
-        $user = $this->userModel->findByEmail($usernameEmail);
-        if (!$user) {
-            $user = $this->userModel->findByUsername($usernameEmail);
+        try {
+            // Try to find user by email first, then by username
+            $user = $this->userModel->findByEmail($usernameEmail);
+            if (!$user) {
+                $user = $this->userModel->findByUsername($usernameEmail);
+            }
+        } catch (Exception $e) {
+            error_log("Database query error: " . $e->getMessage());
+            $this->withError("Database error occurred");
+            $this->redirect('/login');
+            return;
         }
 
         if ($user && password_verify($password, $user['password'])) {

@@ -130,14 +130,14 @@ class CallCenterController extends BaseController
         $id = $params[0] ?? null;
         
         if (!$id) {
-            Session::flash('error', 'Invalid call center ID');
+            $this->withError('Invalid call center ID');
             $this->redirect('/call-center');
             return;
         }
         
         $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
-            Session::flash('error', 'Call center entry not found');
+            $this->withError('Call center entry not found');
             $this->redirect('/call-center');
             return;
         }
@@ -158,7 +158,7 @@ class CallCenterController extends BaseController
         $id = $params[0] ?? null;
         
         if (!$id) {
-            Session::flash('error', 'Invalid call center ID');
+            $this->withError('Invalid call center ID');
             $this->redirect('/call-center');
             return;
         }
@@ -170,14 +170,14 @@ class CallCenterController extends BaseController
         
         // Validate CSRF token
         if (!Session::validateCSRF($_POST['_token'] ?? '')) {
-            Session::flash('error', 'Invalid CSRF token');
+            $this->withError('Invalid CSRF token');
             $this->redirect('/call-center');
             return;
         }
         
         $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
-            Session::flash('error', 'Call center entry not found');
+            $this->withError('Call center entry not found');
             $this->redirect('/call-center');
             return;
         }
@@ -201,7 +201,7 @@ class CallCenterController extends BaseController
         }
         
         if (!empty($errors)) {
-            Session::flash('error', implode(', ', $errors));
+            $this->withError(implode(', ', $errors));
             $this->redirect('/call-center/' . $id . '/edit');
             return;
         }
@@ -211,14 +211,14 @@ class CallCenterController extends BaseController
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'message' => 'Call center entry updated successfully']);
             } else {
-                Session::flash('success', 'Call center entry updated successfully');
+                $this->withSuccess('Call center entry updated successfully');
                 $this->redirect('/call-center');
             }
         } else {
             if ($this->isAjax()) {
                 $this->json(['success' => false, 'error' => 'Failed to update call center entry'], 500);
             } else {
-                Session::flash('error', 'Failed to update call center entry');
+                $this->withError('Failed to update call center entry');
                 $this->redirect('/call-center/' . $id . '/edit');
             }
         }
@@ -296,7 +296,7 @@ class CallCenterController extends BaseController
         $id = $params[0] ?? null;
         
         if (!$id) {
-            Session::flash('error', 'Invalid call center ID');
+            $this->withError('Invalid call center ID');
             $this->redirect('/call-center');
             return;
         }
@@ -308,14 +308,14 @@ class CallCenterController extends BaseController
         
         // Validate CSRF token
         if (!Session::validateCSRF($_POST['_token'] ?? '')) {
-            Session::flash('error', 'Invalid CSRF token');
+            $this->withError('Invalid CSRF token');
             $this->redirect('/call-center');
             return;
         }
         
         $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
-            Session::flash('error', 'Call center entry not found');
+            $this->withError('Call center entry not found');
             $this->redirect('/call-center');
             return;
         }
@@ -324,14 +324,14 @@ class CallCenterController extends BaseController
             if ($this->isAjax()) {
                 $this->json(['success' => true, 'message' => 'Call center entry deleted successfully']);
             } else {
-                Session::flash('success', 'Call center entry deleted successfully');
+                $this->withSuccess('Call center entry deleted successfully');
                 $this->redirect('/call-center');
             }
         } else {
             if ($this->isAjax()) {
                 $this->json(['success' => false, 'error' => 'Failed to delete call center entry'], 500);
             } else {
-                Session::flash('error', 'Failed to delete call center entry');
+                $this->withError('Failed to delete call center entry');
                 $this->redirect('/call-center');
             }
         }
@@ -350,14 +350,14 @@ class CallCenterController extends BaseController
         $id = $params[0] ?? null;
         
         if (!$id) {
-            Session::flash('error', 'Invalid call center ID');
+            $this->withError('Invalid call center ID');
             $this->redirect('/call-center');
             return;
         }
         
         $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
-            Session::flash('error', 'Call center entry not found');
+            $this->withError('Call center entry not found');
             $this->redirect('/call-center');
             return;
         }

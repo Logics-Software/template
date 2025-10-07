@@ -29,7 +29,7 @@
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="current_password" name="current_password" 
                                        placeholder="" required>
-                                <label for="current_password">Current Password <span class="text-danger">*</span></label>
+                                <label for="current_password">Password Lama <span class="text-danger">*</span></label>
                                 <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleCurrentPassword" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -42,8 +42,8 @@
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="new_password" name="new_password" 
                                        placeholder="" required>
-                                <label for="new_password">New Password <span class="text-danger">*</span></label>
-                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleNewPassword" class="password-toggle" tabindex="-1">
+                                <label for="new_password">Password Baru <span class="text-danger">*</span></label>
+                                <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" style="top: -10px !important;" type="button" id="toggleNewPassword" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
                                 <div class="form-text">Password minimal terdiri dari 6 karakter</div>
@@ -53,7 +53,7 @@
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
                                        placeholder="" required>
-                                <label for="confirm_password">Confirm New Password <span class="text-danger">*</span></label>
+                                <label for="confirm_password">Konfirmasi Password Baru <span class="text-danger">*</span></label>
                                 <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="toggleConfirmPassword" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
