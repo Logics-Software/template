@@ -39,7 +39,8 @@ ob_start();
                                     <tr>
                                         <th>Name</th>
                                         <th>Description</th>
-                                        <th>Item Menu</th>
+                                        <th>Item</th>
+                                        <th>Default Role</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -60,15 +61,43 @@ ob_start();
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <div class="d-flex align-items-center">
                                                             <span class="badge bg-primary me-2"><?php echo $group['menu_items_count'] ?? 0; ?></span>
-                                                            <span class="small text-muted">items</span>
                                                         </div>
-                                                        <button class="btn btn-sm btn-outline-info" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)">
-                                                            <i class="fas fa-eye"></i>&nbsp;View Struktur Menu
-                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-wrap gap-1">
+                                                        <?php if (isset($group['default_admin']) && $group['default_admin'] == 1): ?>
+                                                            <span class="badge bg-danger">Admin</span>
+                                                        <?php endif; ?>
+                                                        <?php if (isset($group['default_manajemen']) && $group['default_manajemen'] == 1): ?>
+                                                            <span class="badge bg-primary">Manajemen</span>
+                                                        <?php endif; ?>
+                                                        <?php if (isset($group['default_user']) && $group['default_user'] == 1): ?>
+                                                            <span class="badge bg-info">User</span>
+                                                        <?php endif; ?>
+                                                        <?php if (isset($group['default_marketing']) && $group['default_marketing'] == 1): ?>
+                                                            <span class="badge bg-warning">Marketing</span>
+                                                        <?php endif; ?>
+                                                        <?php if (isset($group['default_customer']) && $group['default_customer'] == 1): ?>
+                                                            <span class="badge bg-success">Customer</span>
+                                                        <?php endif; ?>
+                                                        <?php 
+                                                        $hasDefault = (isset($group['default_admin']) && $group['default_admin'] == 1) ||
+                                                                      (isset($group['default_manajemen']) && $group['default_manajemen'] == 1) ||
+                                                                      (isset($group['default_user']) && $group['default_user'] == 1) ||
+                                                                      (isset($group['default_marketing']) && $group['default_marketing'] == 1) ||
+                                                                      (isset($group['default_customer']) && $group['default_customer'] == 1);
+                                                        if (!$hasDefault):
+                                                        ?>
+                                                            <span class="text-muted small">-</span>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-sm btn-outline-info" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)">
+                                                            <i class="fas fa-eye"></i>&nbsp;Struktur
+                                                        </button>
                                                         <button class="btn btn-outline-primary" onclick="editGroup(<?php echo $group['id']; ?>)">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
@@ -82,7 +111,7 @@ ob_start();
                                                 </td>
                                             </tr>
                                             <tr id="detail-row-<?php echo $group['id']; ?>" class="detail-row" style="display: none;">
-                                                <td colspan="4">
+                                                <td colspan="5">
                                                     <div class="p-3 bg-light">
                                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                                             <h6 class="mb-0">Struktur Menu Detail</h6>
@@ -101,7 +130,7 @@ ob_start();
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="4" class="text-center text-muted py-4">
+                                            <td colspan="5" class="text-center text-muted py-4">
                                                 <i class="fas fa-folder-open"></i>
                                                 <p class="mb-0">No menu groups found</p>
                                             </td>
@@ -160,6 +189,8 @@ ob_start();
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Collapsible Option -->
                     <div class="mb-3">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="isCollapsible" name="is_collapsible" value="1">
@@ -168,6 +199,56 @@ ob_start();
                             </label>
                         </div>
                     </div>
+
+                    <!-- Default Role Access -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            Group Menu (System) ini adalah default untuk role:
+                        </label>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="defaultAdmin" name="default_admin" value="1">
+                                    <label class="form-check-label" for="defaultAdmin">
+                                        <span class="badge bg-danger">Admin</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="defaultManajemen" name="default_manajemen" value="1">
+                                    <label class="form-check-label" for="defaultManajemen">
+                                        <span class="badge bg-primary">Manajemen</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="defaultUser" name="default_user" value="1">
+                                    <label class="form-check-label" for="defaultUser">
+                                        <span class="badge bg-info">User</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="defaultMarketing" name="default_marketing" value="1">
+                                    <label class="form-check-label" for="defaultMarketing">
+                                        <span class="badge bg-warning">Marketing</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="defaultCustomer" name="default_customer" value="1">
+                                    <label class="form-check-label" for="defaultCustomer">
+                                        <span class="badge bg-success">Customer</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeGroupModal()">Cancel</button>
@@ -287,6 +368,19 @@ window.editGroup = function(id) {
             if (groupDescription) groupDescription.value = data.group.description;
             if (isCollapsible) isCollapsible.checked = data.group.is_collapsible == 1;
 
+            // Populate default role checkboxes
+            const defaultAdmin = document.getElementById('defaultAdmin');
+            const defaultManajemen = document.getElementById('defaultManajemen');
+            const defaultUser = document.getElementById('defaultUser');
+            const defaultMarketing = document.getElementById('defaultMarketing');
+            const defaultCustomer = document.getElementById('defaultCustomer');
+            
+            if (defaultAdmin) defaultAdmin.checked = data.group.default_admin == 1;
+            if (defaultManajemen) defaultManajemen.checked = data.group.default_manajemen == 1;
+            if (defaultUser) defaultUser.checked = data.group.default_user == 1;
+            if (defaultMarketing) defaultMarketing.checked = data.group.default_marketing == 1;
+            if (defaultCustomer) defaultCustomer.checked = data.group.default_customer == 1;
+
             // Update icon display
             const iconClass = data.group.icon || 'fas fa-folder';
             const iconPreview = document.getElementById('iconPreview');
@@ -332,6 +426,18 @@ window.addGroup = function() {
     if (iconPreview) iconPreview.className = 'fas fa-folder';
     if (iconClassDisplay) iconClassDisplay.textContent = 'fas fa-folder';
     
+    // Reset default role checkboxes
+    const defaultAdmin = document.getElementById('defaultAdmin');
+    const defaultManajemen = document.getElementById('defaultManajemen');
+    const defaultUser = document.getElementById('defaultUser');
+    const defaultMarketing = document.getElementById('defaultMarketing');
+    const defaultCustomer = document.getElementById('defaultCustomer');
+    
+    if (defaultAdmin) defaultAdmin.checked = false;
+    if (defaultManajemen) defaultManajemen.checked = false;
+    if (defaultUser) defaultUser.checked = false;
+    if (defaultMarketing) defaultMarketing.checked = false;
+    if (defaultCustomer) defaultCustomer.checked = false;
     
     // Show modal using Bootstrap Modal API
     const groupModal = document.getElementById('groupModal');

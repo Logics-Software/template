@@ -10,7 +10,9 @@ class MenuGroup extends Model
     
     protected $fillable = [
         'name', 'slug', 'icon', 'description', 
-        'sort_order', 'is_active', 'is_collapsible'
+        'sort_order', 'is_active', 'is_collapsible',
+        'default_admin', 'default_manajemen', 'default_user', 
+        'default_marketing', 'default_customer'
     ];
     
     protected $casts = [
@@ -67,8 +69,17 @@ class MenuGroup extends Model
             $isActive = isset($data['is_active']) ? ($data['is_active'] ? 1 : 0) : 1;
             $isCollapsible = isset($data['is_collapsible']) ? ($data['is_collapsible'] ? 1 : 0) : 1;
             
-            $sql = "INSERT INTO {$this->table} (name, slug, icon, description, sort_order, is_active, is_collapsible) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?)";
+            // Convert default role values
+            $defaultAdmin = isset($data['default_admin']) ? ($data['default_admin'] ? 1 : 0) : 0;
+            $defaultManajemen = isset($data['default_manajemen']) ? ($data['default_manajemen'] ? 1 : 0) : 0;
+            $defaultUser = isset($data['default_user']) ? ($data['default_user'] ? 1 : 0) : 0;
+            $defaultMarketing = isset($data['default_marketing']) ? ($data['default_marketing'] ? 1 : 0) : 0;
+            $defaultCustomer = isset($data['default_customer']) ? ($data['default_customer'] ? 1 : 0) : 0;
+            
+            $sql = "INSERT INTO {$this->table} 
+                    (name, slug, icon, description, sort_order, is_active, is_collapsible, 
+                     default_admin, default_manajemen, default_user, default_marketing, default_customer) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             $params = [
                 $data['name'],
@@ -77,7 +88,12 @@ class MenuGroup extends Model
                 $data['description'] ?? null,
                 $data['sort_order'] ?? 0,
                 $isActive,
-                $isCollapsible
+                $isCollapsible,
+                $defaultAdmin,
+                $defaultManajemen,
+                $defaultUser,
+                $defaultMarketing,
+                $defaultCustomer
             ];
             
             $this->db->query($sql, $params);
@@ -98,8 +114,19 @@ class MenuGroup extends Model
             $isActive = isset($data['is_active']) ? ($data['is_active'] ? 1 : 0) : 1;
             $isCollapsible = isset($data['is_collapsible']) ? ($data['is_collapsible'] ? 1 : 0) : 1;
             
-            $sql = "UPDATE {$this->table} SET name = ?, slug = ?, icon = ?, description = ?, 
-                    sort_order = ?, is_active = ?, is_collapsible = ?, updated_at = CURRENT_TIMESTAMP 
+            // Convert default role values
+            $defaultAdmin = isset($data['default_admin']) ? ($data['default_admin'] ? 1 : 0) : 0;
+            $defaultManajemen = isset($data['default_manajemen']) ? ($data['default_manajemen'] ? 1 : 0) : 0;
+            $defaultUser = isset($data['default_user']) ? ($data['default_user'] ? 1 : 0) : 0;
+            $defaultMarketing = isset($data['default_marketing']) ? ($data['default_marketing'] ? 1 : 0) : 0;
+            $defaultCustomer = isset($data['default_customer']) ? ($data['default_customer'] ? 1 : 0) : 0;
+            
+            $sql = "UPDATE {$this->table} SET 
+                    name = ?, slug = ?, icon = ?, description = ?, 
+                    sort_order = ?, is_active = ?, is_collapsible = ?,
+                    default_admin = ?, default_manajemen = ?, default_user = ?, 
+                    default_marketing = ?, default_customer = ?,
+                    updated_at = CURRENT_TIMESTAMP 
                     WHERE id = ?";
             
             $params = [
@@ -110,6 +137,11 @@ class MenuGroup extends Model
                 $data['sort_order'] ?? 0,
                 $isActive,
                 $isCollapsible,
+                $defaultAdmin,
+                $defaultManajemen,
+                $defaultUser,
+                $defaultMarketing,
+                $defaultCustomer,
                 $id
             ];
             

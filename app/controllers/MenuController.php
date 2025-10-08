@@ -156,7 +156,12 @@ class MenuController extends BaseController
                 'icon' => $request->input('icon', 'fas fa-folder'),
                 'description' => $request->input('description'),
                 'sort_order' => $request->input('sort_order', 0),
-                'is_collapsible' => $request->input('is_collapsible') ? true : false
+                'is_collapsible' => $request->input('is_collapsible') ? true : false,
+                'default_admin' => $request->input('default_admin') ? true : false,
+                'default_manajemen' => $request->input('default_manajemen') ? true : false,
+                'default_user' => $request->input('default_user') ? true : false,
+                'default_marketing' => $request->input('default_marketing') ? true : false,
+                'default_customer' => $request->input('default_customer') ? true : false
             ];
 
             if (empty($data['name'])) {
@@ -216,7 +221,12 @@ class MenuController extends BaseController
                 'icon' => $request->input('icon', 'fas fa-folder'),
                 'description' => $request->input('description'),
                 'sort_order' => $request->input('sort_order', 0),
-                'is_collapsible' => $request->input('is_collapsible') ? true : false
+                'is_collapsible' => $request->input('is_collapsible') ? true : false,
+                'default_admin' => $request->input('default_admin') ? true : false,
+                'default_manajemen' => $request->input('default_manajemen') ? true : false,
+                'default_user' => $request->input('default_user') ? true : false,
+                'default_marketing' => $request->input('default_marketing') ? true : false,
+                'default_customer' => $request->input('default_customer') ? true : false
             ];
 
             if (empty($data['name'])) {

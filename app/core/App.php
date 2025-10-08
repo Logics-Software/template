@@ -116,6 +116,13 @@ class App
         $this->router->post('/users/{id}/deactivate', 'UserController@deactivateUser');
         $this->router->post('/users/{id}/reject', 'UserController@rejectUser');
         
+        // Users Menu Access routes
+        $this->router->get('/users-menu', 'UsersMenuController@index');
+        $this->router->get('/users-menu/{id}/edit', 'UsersMenuController@edit');
+        $this->router->post('/users-menu/{id}', 'UsersMenuController@update');
+        $this->router->get('/users-menu/{id}/menu-groups', 'UsersMenuController@getUserMenuGroups');
+        $this->router->post('/users-menu/add-menu-access', 'UsersMenuController@addMenuAccess');
+        $this->router->post('/users-menu/remove-menu-access', 'UsersMenuController@removeMenuAccess');
         
         // Profile routes
         $this->router->get('/profile', 'UserController@profile');
