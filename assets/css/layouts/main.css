@@ -5,19 +5,30 @@
 
 html,
 body {
-  overflow-x: hidden;
+  overflow: hidden;
   max-width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main wrapper */
+.main-wrapper {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Main Content Layout Styles */
 .main-content {
   margin-left: var(--sidebar-width);
-  min-height: 100vh;
+  height: 100vh;
   background-color: var(--bg-content);
   transition: margin-left 0.3s ease;
   width: calc(100% - var(--sidebar-width));
   max-width: calc(100% - var(--sidebar-width));
   overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
@@ -26,6 +37,13 @@ body {
   margin-left: 0;
   width: 100%;
   max-width: 100%;
+}
+
+/* Page content wrapper */
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Content area */
@@ -185,6 +203,7 @@ body {
     margin-left: 0;
     width: 100%;
     max-width: 100%;
+    height: 100vh;
   }
 
   .main-content.sidebar-collapsed {

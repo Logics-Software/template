@@ -21,7 +21,8 @@
   scrollbar-color: var(--border-color) transparent;
   scrollbar-width: 3px;
   -ms-overflow-style: none;
-  overflow-y: hidden; /* Hide vertical scrollbar */
+  /* Hide vertical scrollbar */
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 

@@ -149,14 +149,14 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showToast('success', data.message || 'Menu access updated successfully');
+                window.Notify.success(data.message || 'Menu access updated successfully');
                 
-                // Redirect to list page after short delay
+                // Redirect to list page after delay to allow notification to be visible
                 setTimeout(() => {
                     window.location.href = '<?php echo APP_URL; ?>/users-menu';
-                }, 1500);
+                }, 2000);
             } else {
-                showToast('error', data.error || 'Failed to update menu access');
+                window.Notify.error(data.error || 'Failed to update menu access');
                 
                 // Re-enable submit button
                 submitBtn.disabled = false;
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error:', error);
-            showToast('error', 'An error occurred while updating menu access');
+            window.Notify.error('An error occurred while updating menu access');
             
             // Re-enable submit button
             submitBtn.disabled = false;

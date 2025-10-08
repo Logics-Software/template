@@ -129,7 +129,7 @@ function handleFileSelect(input) {
         // Validate file type
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
-            Notify.warning('Tipe file tidak didukung. Gunakan JPG, PNG, GIF, atau WebP');
+            window.Notify.warning('Tipe file tidak didukung. Gunakan JPG, PNG, GIF, atau WebP');
             input.value = '';
             return;
         }
@@ -137,7 +137,7 @@ function handleFileSelect(input) {
         // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            Notify.warning('Ukuran file terlalu besar. Maksimal 5MB');
+            window.Notify.warning('Ukuran file terlalu besar. Maksimal 5MB');
             input.value = '';
             return;
         }

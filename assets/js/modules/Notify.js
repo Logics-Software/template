@@ -255,9 +255,16 @@ class Notify {
 // Create global instance
 window.Notify = new Notify();
 
-// Legacy support
+// Legacy support - Use proper durations matching main Notify system
 window.showToast = function (type, message, options = {}) {
-  return window.Notify.show(type, message, options.duration || 3000);
+  const defaultDurations = {
+    success: 5000,
+    error: 7000,
+    warning: 6000,
+    info: 5000,
+  };
+  const duration = options.duration || defaultDurations[type] || 5000;
+  return window.Notify.show(type, message, duration);
 };
 
 // Override native functions

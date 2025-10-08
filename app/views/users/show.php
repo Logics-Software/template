@@ -134,8 +134,10 @@
 </div>
 
 <script>
-function deleteUser(id) {
-    if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
+async function deleteUser(id) {
+    const confirmed = await window.Notify.confirm("Are you sure you want to delete this user? This action cannot be undone.");
+    
+    if (confirmed) {
         fetch("<?php echo APP_URL; ?>/users/" + id, {
             method: "DELETE",
             headers: {
@@ -146,16 +148,17 @@ function deleteUser(id) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showToast('success', data.message);
+                window.Notify.success(data.message || 'User deleted successfully');
                 setTimeout(() => {
                     window.location.href = "<?php echo APP_URL; ?>/users";
-                }, 1500);
+                }, 2000);
             } else {
-                showToast('error', data.error || "An error occurred");
+                window.Notify.error(data.error || "An error occurred");
             }
         })
         .catch(error => {
-            showToast('error', "An error occurred while deleting the user");
+            console.error('Error:', error);
+            window.Notify.error("An error occurred while deleting the user");
         });
     }
 }

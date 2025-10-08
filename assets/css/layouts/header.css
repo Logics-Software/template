@@ -12,6 +12,9 @@
   top: 0;
   z-index: 998;
   transition: margin-left 0.3s ease;
+  /* Ensure sticky works in flex container */
+  align-self: flex-start;
+  width: 100%;
 }
 
 .top-header.sidebar-collapsed {

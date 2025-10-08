@@ -390,12 +390,12 @@ window.editGroup = function(id) {
             if (iconClassDisplay) iconClassDisplay.textContent = iconClass;
         } else {
             console.error('Failed to load group data:', data.error);
-            showToast('error', 'Failed to load group data');
+            window.Notify.error('Failed to load group data');
         }
     })
     .catch(error => {
         console.error('Error loading group data:', error);
-        showToast('error', 'An error occurred while loading group data');
+        window.Notify.error('An error occurred while loading group data');
     });
 
     // Show modal using Bootstrap Modal API
@@ -698,28 +698,28 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => {
                 if (response.status === 403) {
-                    showToast('error', 'Access denied. Please refresh the page and try again.');
+                    window.Notify.error('Access denied. Please refresh the page and try again.');
                     return;
                 }
                 return response.json();
             })
             .then(data => {
                 if (data && data.success) {
-                    showToast('success', data.message || 'Group deleted successfully');
+                    window.Notify.success(data.message || 'Group deleted successfully');
                     // Hide modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
                     modal.hide();
-                    // Reload page to refresh the list
+                    // Delay reload to allow notification to be visible
                     setTimeout(() => {
                         location.reload();
-                    }, 1000);
+                    }, 2000);
                 } else if (data && data.error) {
-                    showToast('error', data.error || 'Failed to delete group');
+                    window.Notify.error(data.error || 'Failed to delete group');
                 }
             })
             .catch(error => {
                 console.error('Error deleting group:', error);
-                showToast('error', 'An error occurred while deleting the group');
+                window.Notify.error('An error occurred while deleting the group');
             });
         }
     });
@@ -756,7 +756,7 @@ function initializeMenuManagement() {
             .then(response => {
                 console.log('Response status:', response.status);
                 if (response.status === 403) {
-                    showToast('error', 'Access denied. Please refresh the page and try again.');
+                    window.Notify.error('Access denied. Please refresh the page and try again.');
                     return;
                 }
                 return response.json();
@@ -764,20 +764,23 @@ function initializeMenuManagement() {
             .then(data => {
                 console.log('Response data:', data);
                 if (data && data.success) {
-                    showToast('success', data.message);
+                    window.Notify.success(data.message);
                     // Hide modal using Bootstrap Modal API
                     const modal = bootstrap.Modal.getInstance(document.getElementById('groupModal'));
                     if (modal) {
                         modal.hide();
                     }
-                    location.reload();
+                    // Delay reload to allow notification to be visible
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
                 } else if (data && data.error) {
-                    showToast('error', data.error);
+                    window.Notify.error(data.error);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('error', 'An error occurred while saving the group.');
+                window.Notify.error('An error occurred while saving the group.');
             });
         });
     }
@@ -1095,7 +1098,7 @@ function initializeIconSearch() {
 
 window.selectIcon = function() {
     if (!window.selectedIcon) {
-        showToast('warning', 'Please select an icon first');
+        window.Notify.warning('Please select an icon first');
         return;
     }
 
@@ -1117,61 +1120,10 @@ window.selectIcon = function() {
         }
     }
 
-    showToast('success', 'Icon selected successfully');
+    window.Notify.success('Icon selected successfully');
 };
 
-// Toast notification functions
-function showToast(type, message) {
-    const toastContainer = document.getElementById('toast-container') || createToastContainer();
-    
-    const iconClass = {
-        'success': 'fas fa-check-circle text-success',
-        'error': 'fas fa-exclamation-circle text-danger',
-        'warning': 'fas fa-exclamation-triangle text-warning',
-        'info': 'fas fa-info-circle text-info'
-    }[type] || 'fas fa-info-circle text-info';
-
-    const toast = document.createElement('div');
-    toast.className = `toast align-items-center text-white bg-${type === 'error' ? 'danger' : type} border-0`;
-    toast.setAttribute('role', 'alert');
-    toast.setAttribute('aria-live', 'assertive');
-    toast.setAttribute('aria-atomic', 'true');
-    
-    toast.innerHTML = `
-        <div class="d-flex">
-            <div class="toast-body">
-                <i class="fas fa-${iconClass.split(' ')[1].replace('fa-', '')} me-2"></i>
-                ${message}
-                <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.parentElement.parentElement.parentElement.remove()"></button>
-            </div>
-        </div>
-    `;
-    
-    toastContainer.appendChild(toast);
-    
-    // Show toast
-    const bsToast = new bootstrap.Toast(toast, {
-        autohide: true,
-        delay: 5000
-    });
-    bsToast.show();
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        if (toast.parentNode) {
-            toast.remove();
-        }
-    }, 5000);
-}
-
-function createToastContainer() {
-    const container = document.createElement('div');
-    container.id = 'toast-container';
-    container.className = 'toast-container position-fixed top-0 end-0 p-3';
-    container.style.zIndex = '9999';
-    document.body.appendChild(container);
-    return container;
-}
+// Legacy showToast functions removed - now using window.Notify system
 </script>
 
 <style>

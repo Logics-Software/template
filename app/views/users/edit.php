@@ -218,7 +218,7 @@ function handleFileSelect(input) {
         // Validate file type
         const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
         if (!allowedTypes.includes(file.type)) {
-            Notify.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
+            window.Notify.warning("Please select a valid image file (JPG, PNG, GIF, WEBP)");
             input.value = "";
             return;
         }
@@ -226,7 +226,7 @@ function handleFileSelect(input) {
         // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            Notify.warning("File size must be less than 5MB");
+            window.Notify.warning("File size must be less than 5MB");
             input.value = "";
             return;
         }
@@ -350,41 +350,21 @@ document.getElementById("editUserForm").addEventListener("submit", function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Show success message
-            const alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-success alert-dismissible fade show";
-            alertDiv.innerHTML = `
-                ${data.message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            const form = document.getElementById("editUserForm");
-            form.parentElement.insertBefore(alertDiv, form);
+            // Show success notification
+            window.Notify.success(data.message || 'User updated successfully');
             
-            // Redirect after 2 seconds
+            // Redirect after 2 seconds to allow notification to be visible
             setTimeout(() => {
                 window.location.href = "<?php echo APP_URL; ?>/users";
             }, 2000);
         } else {
-            // Show error message
-            const alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-danger alert-dismissible fade show";
-            alertDiv.innerHTML = `
-                ${data.error || "An error occurred"}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            const form = document.getElementById("editUserForm");
-            form.parentElement.insertBefore(alertDiv, form);
+            // Show error notification
+            window.Notify.error(data.error || "An error occurred while updating the user");
         }
     })
     .catch(error => {
-        const alertDiv = document.createElement("div");
-        alertDiv.className = "alert alert-danger alert-dismissible fade show";
-        alertDiv.innerHTML = `
-            An error occurred while updating the user
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        const form = document.getElementById("editUserForm");
-        form.parentElement.insertBefore(alertDiv, form);
+        console.error('Error:', error);
+        window.Notify.error('An error occurred while updating the user');
     })
     .finally(() => {
         if (submitBtn) {

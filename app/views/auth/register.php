@@ -279,7 +279,7 @@ function handleFileSelect(input) {
         // Validate file type
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
-            alert('File type not supported. Please select JPG, PNG, GIF, or WEBP image.');
+            window.Notify.warning('File type not supported. Please select JPG, PNG, GIF, or WEBP image.');
             input.value = '';
             return;
         }
@@ -287,7 +287,7 @@ function handleFileSelect(input) {
         // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024; // 5MB in bytes
         if (file.size > maxSize) {
-            alert('File size too large. Please select an image smaller than 5MB.');
+            window.Notify.warning('File size too large. Please select an image smaller than 5MB.');
             input.value = '';
             return;
         }
