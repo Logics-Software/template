@@ -29,6 +29,24 @@ class MenuGroup extends Model
         $sql = "SELECT * FROM {$this->table} WHERE is_active = 1 ORDER BY sort_order ASC";
         return $this->db->fetchAll($sql);
     }
+
+    /**
+     * Get all active menu groups with menu items count
+     * Optimized: Single query with LEFT JOIN (No N+1 problem)
+     */
+    public function getAllActiveWithItemCount()
+    {
+        $sql = "SELECT 
+                    g.*,
+                    COUNT(mi.id) as menu_items_count
+                FROM {$this->table} g
+                LEFT JOIN menu_items mi ON g.id = mi.group_id
+                WHERE g.is_active = 1
+                GROUP BY g.id
+                ORDER BY g.sort_order ASC";
+        
+        return $this->db->fetchAll($sql);
+    }
     
     /**
      * Get menu group by slug

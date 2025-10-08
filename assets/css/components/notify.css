@@ -177,8 +177,8 @@
 /* Unified container positioning */
 .notify-container {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 5px;
+  left: 15px;
   z-index: 1050;
   max-width: 400px;
   pointer-events: none;
@@ -189,8 +189,8 @@
   position: relative;
   margin-bottom: 1rem;
   opacity: 0;
-  transform: translateX(100%);
-  transition: all 0.3s ease;
+  transform: translateX(-110%);
+  transition: 0.3s ease;
 }
 
 /* Flash message after move to container */

@@ -28,7 +28,7 @@ $autoloader->register();
 // Start the application
 try {
     
-    $app = new App();
+    $app = App::getInstance();
     $app->run();
 } catch (Exception $e) {
     error_log($e->getMessage());

@@ -4,16 +4,28 @@
  */
 class App
 {
+    private static $instance = null;
     private $router;
     private $request;
     private $response;
 
-    public function __construct()
+    private function __construct()
     {
         $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router();
         $this->setupRoutes();
+    }
+
+    /**
+     * Get singleton instance of App
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
     /**

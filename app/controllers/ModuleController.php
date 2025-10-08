@@ -310,8 +310,8 @@ class ModuleController extends BaseController
      */
     private function getAvailableRoutes()
     {
-        // Get routes from App
-        $app = new App();
+        // Get routes from App singleton (Fix memory leak)
+        $app = App::getInstance();
         $router = $app->getRouter();
         $allRoutes = $router->getRoutes();
         

@@ -31,8 +31,13 @@ class DashboardController extends BaseController
         // Set current page for sidebar highlighting
         $current_page = 'dashboard';
         
-        // Get dashboard statistics (cache temporarily disabled)
-        $stats = $this->getDashboardStats($userRole);
+        // Get dashboard statistics with caching (5 minutes)
+        $userId = Session::get('user_id');
+        $cacheKey = "dashboard_stats_{$userRole}_{$userId}";
+        
+        $stats = Cache::remember($cacheKey, function() use ($userRole) {
+            return $this->getDashboardStats($userRole);
+        }, 300);
 
         // Common data for all roles
         $commonData = [

@@ -37,25 +37,31 @@ class MenuController extends BaseController
             return;
         }
 
-        // Get stats directly
-        $database = Database::getInstance();
-        $stats = [
-            'total_modules' => $database->fetch("SELECT COUNT(*) as count FROM modules")['count'],
-            'total_groups' => $database->fetch("SELECT COUNT(*) as count FROM menu_groups WHERE is_active = 1")['count'],
-            'total_menu_items' => $database->fetch("SELECT COUNT(*) as count FROM menu_items")['count']
-        ];
+        // Get stats with caching (5 minutes TTL)
+        $stats = Cache::remember('menu_stats', function() {
+            $database = Database::getInstance();
+            return [
+                'total_modules' => $database->fetch("SELECT COUNT(*) as count FROM modules")['count'],
+                'total_groups' => $database->fetch("SELECT COUNT(*) as count FROM menu_groups WHERE is_active = 1")['count'],
+                'total_menu_items' => $database->fetch("SELECT COUNT(*) as count FROM menu_items")['count']
+            ];
+        }, 300);
 
-        // Get menu builder data directly
-        $modules = $this->moduleModel->findAll();
-        $groups = $this->menuGroupModel->getAllActive();
-        $menuItems = $this->menuItemModel->getAll();
+        // Get menu builder data with caching
+        $modules = Cache::remember('menu_modules', function() {
+            return $this->moduleModel->findAll();
+        }, 600);
         
-        // Calculate menu items count for each group
-        foreach ($groups as &$group) {
-            $group['menu_items_count'] = $this->menuItemModel->countMenuItemsByGroup($group['id']);
-        }
+        $menuItems = Cache::remember('menu_all_items', function() {
+            return $this->menuItemModel->getAll();
+        }, 600);
         
         $availableIcons = $this->moduleController->getAvailableIcons();
+        
+        // Get groups with menu items count in single query (Fix N+1)
+        $groups = Cache::remember('menu_groups_with_count', function() {
+            return $this->menuGroupModel->getAllActiveWithItemCount();
+        }, 600);
         
         $data = [
             'title' => 'Menu Management',
@@ -161,6 +167,10 @@ class MenuController extends BaseController
             $result = $this->menuGroupModel->createGroup($data);
             
             if ($result) {
+                // Clear menu cache after create
+                Cache::forget('menu_stats');
+                Cache::forget('menu_groups_with_count');
+                
                 $this->json(['success' => true, 'message' => 'Menu group created successfully']);
             } else {
                 $this->json(['error' => 'Failed to create menu group'], 500);
@@ -217,6 +227,10 @@ class MenuController extends BaseController
             $result = $this->menuGroupModel->updateGroup($groupId, $data);
             
             if ($result) {
+                // Clear menu cache after update
+                Cache::forget('menu_stats');
+                Cache::forget('menu_groups_with_count');
+                
                 $this->json(['success' => true, 'message' => 'Menu group updated successfully']);
             } else {
                 $this->json(['error' => 'Failed to update menu group'], 500);
@@ -275,6 +289,12 @@ class MenuController extends BaseController
             
             if ($result) {
                 $database->commit();
+                
+                // Clear menu cache after delete
+                Cache::forget('menu_stats');
+                Cache::forget('menu_groups_with_count');
+                Cache::forget('menu_all_items');
+                
                 $this->json(['success' => true, 'message' => 'Menu group and its modules deleted successfully']);
             } else {
                 $database->rollback();
@@ -353,6 +373,10 @@ class MenuController extends BaseController
             $result = $this->menuItemModel->updateItem($itemId, $data);
             
             if ($result) {
+                // Clear menu cache after update
+                Cache::forget('menu_all_items');
+                Cache::forget('menu_groups_with_count');
+                
                 $this->json(['success' => true, 'message' => 'Menu item updated successfully']);
             } else {
                 $this->json(['error' => 'Failed to update menu item'], 500);
@@ -736,6 +760,11 @@ class MenuController extends BaseController
             $result = $this->menuItemModel->createItem($data);
             
             if ($result) {
+                // Clear menu cache after create
+                Cache::forget('menu_all_items');
+                Cache::forget('menu_groups_with_count');
+                Cache::forget('menu_stats');
+                
                 $this->json(['success' => true, 'message' => 'Menu item created successfully']);
             } else {
                 $this->json(['error' => 'Failed to create menu item'], 500);
@@ -769,6 +798,11 @@ class MenuController extends BaseController
             $result = $this->menuItemModel->deleteItem($itemId);
             
             if ($result) {
+                // Clear menu cache after delete
+                Cache::forget('menu_all_items');
+                Cache::forget('menu_groups_with_count');
+                Cache::forget('menu_stats');
+                
                 $this->json(['success' => true, 'message' => 'Menu item deleted successfully']);
             } else {
                 $this->json(['error' => 'Failed to delete menu item'], 500);

@@ -153,17 +153,23 @@ class Database
         return (int) ($result['count'] ?? 0);
     }
 
-    public function paginate(string $sql, array $params = [], int $page = 1, int $perPage = DEFAULT_PAGE_SIZE): array
+    public function paginate(string $sql, array $params = [], mixed $page = 1, mixed $perPage = DEFAULT_PAGE_SIZE): array
     {
+        // Sanitize pagination parameters to prevent SQL injection (accepts string or int)
+        $page = max(1, (int) $page);
+        $perPage = max(1, min((int) $perPage, MAX_PAGE_SIZE));
         $offset = ($page - 1) * $perPage;
         
         // Get total count
         $countSql = "SELECT COUNT(*) as total FROM ({$sql}) as count_table";
         $total = $this->fetch($countSql, $params)['total'] ?? 0;
         
-        // Add pagination to main query
-        $sql .= " LIMIT {$perPage} OFFSET {$offset}";
-        $data = $this->fetchAll($sql, $params);
+        // Add pagination using placeholders (Fix SQL Injection)
+        $sql .= " LIMIT ? OFFSET ?";
+        
+        // Merge pagination params
+        $paginationParams = array_merge($params, [$perPage, $offset]);
+        $data = $this->fetchAll($sql, $paginationParams);
         
         return [
             'data' => $data,
