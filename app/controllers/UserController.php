@@ -550,27 +550,15 @@ class UserController extends BaseController
                 Session::set('user_picture', $updateData['picture']);
             }
             
-            // Redirect to a page that will use JavaScript to go back
-            $this->redirect('/profile/updated');
+            // Show success message and redirect to dashboard
+            $this->withSuccess('Profile berhasil diperbarui');
+            $this->redirect('/dashboard');
         } else {
             $this->withError('Failed to update profile');
-        $this->redirect('/profile');
+            $this->redirect('/profile');
         }
     }
 
-    public function profileUpdated($request = null, $response = null, $params = [])
-    {
-        if (!Session::has('user_id')) {
-            $this->redirect('/login');
-            return;
-        }
-
-        // This page will use JavaScript to go back to previous page
-        $this->view('users/profile-updated', [
-            'title' => 'Profile Updated',
-            'current_page' => 'profile'
-        ]);
-    }
 
     public function changePassword($request = null, $response = null, $params = [])
     {
@@ -654,26 +642,15 @@ class UserController extends BaseController
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         
         if ($this->userModel->update($userId, ['password' => $hashedPassword])) {
-            $this->redirect('/change-password/updated');
+            // Show success message and redirect to dashboard
+            $this->withSuccess('Password berhasil diperbarui');
+            $this->redirect('/dashboard');
         } else {
             $this->withError('Failed to update password');
             $this->redirect('/change-password');
         }
     }
 
-    public function passwordUpdated($request = null, $response = null, $params = [])
-    {
-        if (!Session::has('user_id')) {
-            $this->redirect('/login');
-            return;
-        }
-
-        // This page will use JavaScript to go back to previous page
-        $this->view('users/password-updated', [
-            'title' => 'Password Updated',
-            'current_page' => 'change-password'
-        ]);
-    }
 
     public function uploadPicture($request = null, $response = null, $params = [])
     {

@@ -3,7 +3,7 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card__title mb-0">Users List</h5>
+                    <h5 class="card__title mb-0">Daftar User</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
@@ -194,7 +194,7 @@
                                                     </button>
                                                 <?php endif; ?>
                                                 <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteUser(<?php echo $user['id']; ?>)" title="Delete User">
-                                                    <i class="fas fa-trash"></i>
+                                                    <i class="fas fa-trash-can"></i>
                                                 </button>
                                             <?php endif; ?>
                                         </div>

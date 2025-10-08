@@ -95,7 +95,12 @@ class MenuController extends BaseController
             }
         }
 
-        $menuItems = $menuData['menuItems'] ?? [];
+        // Get menu items based on selected group
+        if ($groupId) {
+            $menuItems = $this->menuItemModel->getItemsByGroup($groupId);
+        } else {
+            $menuItems = [];
+        }
 
         $data = [
             'title' => 'Menu Builder',
@@ -162,26 +167,30 @@ class MenuController extends BaseController
             return;
         }
 
-        $data = [
-            'name' => $request->input('name'),
-            'slug' => $this->menuGroupModel->generateUniqueSlug($request->input('name')),
-            'icon' => $request->input('icon', 'fas fa-folder'),
-            'description' => $request->input('description'),
-            'sort_order' => $request->input('sort_order', 0),
-            'is_collapsible' => $request->input('is_collapsible') ? true : false
-        ];
+        try {
+            $data = [
+                'name' => $request->input('name'),
+                'slug' => $this->menuGroupModel->generateUniqueSlug($request->input('name')),
+                'icon' => $request->input('icon', 'fas fa-folder'),
+                'description' => $request->input('description'),
+                'sort_order' => $request->input('sort_order', 0),
+                'is_collapsible' => $request->input('is_collapsible') ? true : false
+            ];
 
-        if (empty($data['name'])) {
-            $this->json(['error' => 'Group name is required'], 400);
-            return;
-        }
+            if (empty($data['name'])) {
+                $this->json(['error' => 'Group name is required'], 400);
+                return;
+            }
 
-        $result = $this->menuGroupModel->createGroup($data);
-        
-        if ($result) {
-            $this->json(['success' => true, 'message' => 'Menu group created successfully']);
-        } else {
-            $this->json(['error' => 'Failed to create menu group'], 500);
+            $result = $this->menuGroupModel->createGroup($data);
+            
+            if ($result) {
+                $this->json(['success' => true, 'message' => 'Menu group created successfully']);
+            } else {
+                $this->json(['error' => 'Failed to create menu group'], 500);
+            }
+        } catch (Exception $e) {
+            $this->json(['error' => 'Failed to create menu group: ' . $e->getMessage()], 500);
         }
     }
 
@@ -207,29 +216,28 @@ class MenuController extends BaseController
         }
 
 
-        $groupId = $params['id'] ?? $request->input('id');
-        
-        
-        if (!$groupId) {
-            $this->json(['error' => 'Group ID is required'], 400);
-            return;
-        }
-
-        $data = [
-            'name' => $request->input('name'),
-            'slug' => $this->menuGroupModel->generateUniqueSlug($request->input('name'), $groupId),
-            'icon' => $request->input('icon', 'fas fa-folder'),
-            'description' => $request->input('description'),
-            'sort_order' => $request->input('sort_order', 0),
-            'is_collapsible' => $request->input('is_collapsible') ? true : false
-        ];
-
-        if (empty($data['name'])) {
-            $this->json(['error' => 'Group name is required'], 400);
-            return;
-        }
-
         try {
+            $groupId = $params['id'] ?? $request->input('id');
+            
+            if (!$groupId) {
+                $this->json(['error' => 'Group ID is required'], 400);
+                return;
+            }
+
+            $data = [
+                'name' => $request->input('name'),
+                'slug' => $this->menuGroupModel->generateUniqueSlug($request->input('name'), $groupId),
+                'icon' => $request->input('icon', 'fas fa-folder'),
+                'description' => $request->input('description'),
+                'sort_order' => $request->input('sort_order', 0),
+                'is_collapsible' => $request->input('is_collapsible') ? true : false
+            ];
+
+            if (empty($data['name'])) {
+                $this->json(['error' => 'Group name is required'], 400);
+                return;
+            }
+
             $result = $this->menuGroupModel->updateGroup($groupId, $data);
             
             if ($result) {
@@ -263,31 +271,32 @@ class MenuController extends BaseController
             return;
         }
 
-        $groupId = $params['id'] ?? $request->input('id');
-        
-        if (!$groupId) {
-            $this->json(['error' => 'Group ID is required'], 400);
-            return;
-        }
-
-        // Get database instance for transaction
-        $database = Database::getInstance();
-        $database->beginTransaction();
-        
         try {
-        // If group has menu items, delete them first (cascade delete)
-        if ($this->menuGroupModel->hasMenuItems($groupId)) {
-            $menuItems = $this->menuGroupModel->getMenuItems($groupId);
-            foreach ($menuItems as $item) {
-                // Delete menu item from database
-                $sql = "DELETE FROM menu_items WHERE id = ?";
-                $database->query($sql, [$item['id']]);
-                
-                // Delete menu item permissions
-                $sql = "DELETE FROM role_menu_permissions WHERE menu_item_id = ?";
-                $database->query($sql, [$item['id']]);
+            $groupId = $params['id'] ?? $request->input('id');
+            
+            if (!$groupId) {
+                $this->json(['error' => 'Group ID is required'], 400);
+                return;
             }
-        }
+
+            // Get database instance for transaction
+            $database = Database::getInstance();
+            $database->beginTransaction();
+            
+            // If group has menu items, delete them first (cascade delete)
+            if ($this->menuGroupModel->hasMenuItems($groupId)) {
+                $menuItems = $this->menuGroupModel->getMenuItems($groupId);
+                
+                foreach ($menuItems as $item) {
+                    // Delete menu item from database
+                    $sql = "DELETE FROM menu_items WHERE id = ?";
+                    $database->query($sql, [$item['id']]);
+                
+                    // Delete menu item permissions
+                    $sql = "DELETE FROM role_menu_permissions WHERE menu_item_id = ?";
+                    $database->query($sql, [$item['id']]);
+                }
+            }
             
             // Now delete the group
             $result = $this->menuGroupModel->deleteGroup($groupId);
@@ -300,7 +309,9 @@ class MenuController extends BaseController
                 $this->json(['error' => 'Failed to delete menu group'], 500);
             }
         } catch (Exception $e) {
-            $database->rollback();
+            if (isset($database) && $database->inTransaction()) {
+                $database->rollback();
+            }
             $this->json(['error' => 'An error occurred while deleting the group: ' . $e->getMessage()], 500);
         }
     }
@@ -334,13 +345,34 @@ class MenuController extends BaseController
         }
 
         try {
+            // Get module_id directly (no conversion needed)
+            $moduleId = $request->input('module_id');
+            // Convert empty string to null
+            if ($moduleId === '' || $moduleId === null) {
+                $moduleId = null;
+            } else {
+                $moduleId = (int)$moduleId; // Ensure it's an integer
+            }
+            
+            // Handle parent_id - convert empty string to null
+            $parentId = $request->input('parent_id');
+            if ($parentId === '' || $parentId === null) {
+                $parentId = null;
+            }
+            
+            // Handle sort_order - convert empty string to 0
+            $sortOrder = $request->input('sort_order');
+            if ($sortOrder === '' || $sortOrder === null) {
+                $sortOrder = 0;
+            }
+            
             $data = [
                 'group_id' => $request->input('group_id'),
-                'parent_id' => $request->input('parent_id') ?: null,
-                'module_id' => $request->input('module_id'),
+                'parent_id' => $parentId,
+                'module_id' => $moduleId,
                 'name' => $request->input('name'),
                 'icon' => $request->input('icon'),
-                'sort_order' => $request->input('sort_order'),
+                'sort_order' => (int)$sortOrder,
                 'is_active' => $request->input('is_active') ? 1 : 0,
                 'is_parent' => $request->input('is_parent') ? 1 : 0
             ];
@@ -642,6 +674,7 @@ class MenuController extends BaseController
             $item = $this->menuItemModel->getItem($itemId);
             
             if ($item) {
+                // module_id is already an integer, no conversion needed
                 $this->json(['success' => true, 'menuItem' => $item]);
             } else {
                 $this->json(['error' => 'Menu item not found'], 404);
@@ -649,6 +682,46 @@ class MenuController extends BaseController
         } catch (Exception $e) {
             $this->json(['error' => 'Failed to get menu item: ' . $e->getMessage()], 500);
         }
+    }
+    
+    /**
+     * Get module path by module ID
+     */
+    private function getModulePathById($moduleId)
+    {
+        // Define mapping from module ID to path (based on your main routes)
+        $moduleMapping = [
+            1 => '/dashboard',
+            2 => '/users', 
+            3 => '/konfigurasi',
+            4 => '/call-center',
+            5 => '/messages',
+            6 => '/modules',
+            7 => '/menu',
+            8 => '/analytics'
+        ];
+        
+        return $moduleMapping[$moduleId] ?? null;
+    }
+    
+    /**
+     * Get module ID by module path
+     */
+    private function getModuleIdByPath($modulePath)
+    {
+        // Define mapping from path to module ID (reverse of getModulePathById)
+        $pathMapping = [
+            '/dashboard' => 1,
+            '/users' => 2,
+            '/konfigurasi' => 3,
+            '/call-center' => 4,
+            '/messages' => 5,
+            '/modules' => 6,
+            '/menu' => 7,
+            '/analytics' => 8
+        ];
+        
+        return $pathMapping[$modulePath] ?? null;
     }
 
     /**
@@ -700,23 +773,44 @@ class MenuController extends BaseController
 
         $this->validateCSRF($request);
 
-        $data = [
-            'group_id' => $request->input('group_id'),
-            'parent_id' => $request->input('parent_id') ?: null,
-            'module_id' => $request->input('module_id') ?: null,
-            'name' => $request->input('name'),
-            'icon' => $request->input('icon') ?: 'fas fa-circle',
-            'sort_order' => $request->input('sort_order') ?: 0,
-            'is_active' => $request->input('is_active') ? 1 : 0,
-            'is_parent' => $request->input('is_parent') ? 1 : 0
-        ];
-
-        if (!$data['group_id'] || !$data['name']) {
-            $this->json(['error' => 'Group ID and name are required'], 400);
-            return;
-        }
-
         try {
+            // Get module_id directly (no conversion needed)
+            $moduleId = $request->input('module_id');
+            // Convert empty string to null
+            if ($moduleId === '' || $moduleId === null) {
+                $moduleId = null;
+            } else {
+                $moduleId = (int)$moduleId; // Ensure it's an integer
+            }
+            
+            // Handle parent_id - convert empty string to null
+            $parentId = $request->input('parent_id');
+            if ($parentId === '' || $parentId === null) {
+                $parentId = null;
+            }
+            
+            // Handle sort_order - convert empty string to 0
+            $sortOrder = $request->input('sort_order');
+            if ($sortOrder === '' || $sortOrder === null) {
+                $sortOrder = 0;
+            }
+            
+            $data = [
+                'group_id' => $request->input('group_id'),
+                'parent_id' => $parentId,
+                'module_id' => $moduleId,
+                'name' => $request->input('name'),
+                'icon' => $request->input('icon') ?: 'fas fa-circle',
+                'sort_order' => (int)$sortOrder,
+                'is_active' => $request->input('is_active') ? 1 : 0,
+                'is_parent' => $request->input('is_parent') ? 1 : 0
+            ];
+
+            if (!$data['group_id'] || !$data['name']) {
+                $this->json(['error' => 'Group ID and name are required'], 400);
+                return;
+            }
+
             $result = $this->menuItemModel->createItem($data);
             
             if ($result) {
@@ -799,6 +893,66 @@ class MenuController extends BaseController
             
         } catch (Exception $e) {
             $this->json(['error' => 'Error loading parent items: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get available Font Awesome icons for icon picker
+     * Uses the comprehensive icon list from ModuleController
+     */
+    public function getIcons($request = null, $response = null, $params = [])
+    {
+        // Create ModuleController instance to access getAvailableIcons method
+        $moduleController = new ModuleController();
+        $availableIcons = $moduleController->getAvailableIcons();
+        
+        // Convert the categorized icons to the format expected by the frontend
+        $icons = [];
+        foreach ($availableIcons as $category => $iconList) {
+            foreach ($iconList as $iconClass => $iconName) {
+                $icons[] = [
+                    'class' => $iconClass,
+                    'label' => $iconName,
+                    'category' => $category
+                ];
+            }
+        }
+
+        $this->json([
+            'success' => true,
+            'icons' => $icons
+        ]);
+    }
+
+    /**
+     * Get main routes from modules table for module dropdown
+     */
+    public function getMainRoutes($request = null, $response = null, $params = [])
+    {
+        try {
+            // Get all modules from database using direct query
+            $database = Database::getInstance();
+            $sql = "SELECT id, link, caption, logo FROM modules ORDER BY caption ASC";
+            $modules = $database->fetchAll($sql);
+            
+            // Format modules for frontend dropdown
+            $mainRoutes = [];
+            foreach ($modules as $module) {
+                $mainRoutes[] = [
+                    'id' => $module['id'],
+                    'path' => $module['link'] ?? '',
+                    'name' => $module['caption'] ?? 'Unnamed Module',
+                    'icon' => $module['logo'] ?? 'fas fa-circle'
+                ];
+            }
+
+            $this->json([
+                'success' => true,
+                'routes' => $mainRoutes
+            ]);
+            
+        } catch (Exception $e) {
+            $this->json(['error' => 'Error loading main routes: ' . $e->getMessage()], 500);
         }
     }
 }

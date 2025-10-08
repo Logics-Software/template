@@ -4,6 +4,7 @@ $isLoggedIn = Session::has('user_id');
 $currentUrl = $_SERVER['REQUEST_URI'] ?? '';
 $isLoginPage = (strpos($currentUrl, '/login') !== false) || 
                (strpos($currentUrl, '/auth/login') !== false) ||
+               (strpos($currentUrl, '/forgot-password') !== false) ||
                (basename($_SERVER['PHP_SELF']) === 'login.php');
 $isLockScreenPage = (strpos($currentUrl, '/lock-screen') !== false) ||
                    (strpos($currentUrl, '/unlock') !== false) ||

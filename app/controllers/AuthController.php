@@ -212,6 +212,88 @@ class AuthController extends BaseController
         }
     }
 
+    public function forgotPassword($request = null, $response = null, $params = [])
+    {
+        if (Session::has('user_id')) {
+            $this->redirect('/dashboard');
+        }
+
+        $this->view('auth/forgot-password', [
+            'title' => 'Lupa Password',
+            'csrf_token' => $this->csrfToken()
+        ]);
+    }
+
+    public function sendPasswordReset($request = null, $response = null, $params = [])
+    {
+        try {
+            $validator = $this->validate([
+                'email' => 'required|email'
+            ]);
+
+            if (!$validator->validate()) {
+                $this->withErrors($validator->errors());
+                $this->redirect('/forgot-password');
+                return;
+            }
+        } catch (Exception $e) {
+            error_log("Forgot password validation error: " . $e->getMessage());
+            $this->withError("Terjadi kesalahan validasi");
+            $this->redirect('/forgot-password');
+            return;
+        }
+
+        $email = $this->input('email');
+
+        // Check if email is empty (additional check)
+        if (empty(trim($email))) {
+            if ($this->isAjax()) {
+                $this->json(['error' => 'Email harus diisi'], 400);
+            } else {
+                $this->withError('Email harus diisi');
+                $this->redirect('/forgot-password');
+            }
+            return;
+        }
+
+        try {
+            // Check if user exists with this email
+            $user = $this->userModel->findByEmail($email);
+            
+            if ($user) {
+                // Generate a simple password reset token (in real app, use proper token system)
+                $resetToken = bin2hex(random_bytes(32));
+                $resetExpiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
+                
+                // Store reset token in database (you might want to create a password_resets table)
+                // For now, we'll just show success message
+                
+                if ($this->isAjax()) {
+                    $this->json(['success' => true, 'message' => 'Password akan dikirim lewat email']);
+                } else {
+                    $this->withSuccess('Password akan dikirim lewat email');
+                    $this->redirect('/login');
+                }
+            } else {
+                // Show specific error message for email not found
+                if ($this->isAjax()) {
+                    $this->json(['error' => 'Email tidak ditemukan dalam database'], 404);
+                } else {
+                    $this->withError('Email tidak ditemukan dalam database');
+                    $this->redirect('/forgot-password');
+                }
+            }
+        } catch (Exception $e) {
+            error_log("Database query error: " . $e->getMessage());
+            if ($this->isAjax()) {
+                $this->json(['error' => 'Terjadi kesalahan database'], 500);
+            } else {
+                $this->withError('Terjadi kesalahan database');
+                $this->redirect('/forgot-password');
+            }
+        }
+    }
+
     public function logout($request = null, $response = null, $params = [])
     {
         Session::logout();

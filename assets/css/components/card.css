@@ -20,7 +20,7 @@
 }
 
 .card__title {
-  font-size: var(--font-size-lg);
+  /* font-size: var(--font-size-lg) !important; */
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;

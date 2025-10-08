@@ -57,9 +57,15 @@ ob_start();
                                                     <span class="text-muted"><?php echo htmlspecialchars($group['description'] ?? ''); ?></span>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-outline-primary" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)">
-                                                        <i class="fas fa-eye"></i>View Detail Menu
-                                                    </button>
+                                                    <div class="d-flex align-items-center justify-content-between">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="badge bg-primary me-2"><?php echo $group['menu_items_count'] ?? 0; ?></span>
+                                                            <span class="small text-muted">items</span>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-outline-info" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)">
+                                                            <i class="fas fa-eye"></i>&nbsp;View Struktur Menu
+                                                        </button>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm">
@@ -67,7 +73,7 @@ ob_start();
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                         <button class="btn btn-outline-success" onclick="addDetailMenu(<?php echo $group['id']; ?>)">
-                                                            <i class="fas fa-plus"></i>
+                                                            <i class="fa-solid fa-bars-staggered"></i>
                                                         </button>
                                                         <button class="btn btn-outline-danger" onclick="deleteGroup(<?php echo $group['id']; ?>)">
                                                             <i class="fas fa-trash"></i>
@@ -79,9 +85,9 @@ ob_start();
                                                 <td colspan="4">
                                                     <div class="p-3 bg-light">
                                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                                            <h6 class="mb-0">Menu Items in this Group</h6>
+                                                            <h6 class="mb-0">Struktur Menu Detail</h6>
                                                             <button class="btn btn-sm btn-primary" onclick="addDetailMenu(<?php echo $group['id']; ?>)">
-                                                                <i class="fas fa-plus"></i> Add Menu Item
+                                                                <i class="fas fa-plus"></i> Edit/Tambah Detail Menu
                                                             </button>
                                                         </div>
                                                         <div id="menu-items-<?php echo $group['id']; ?>" class="menu-items-container">
@@ -120,28 +126,37 @@ ob_start();
                 <button type="button" class="btn-close" onclick="closeGroupModal()"></button>
             </div>
             <form id="groupForm">
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <input type="hidden" id="groupId" name="id">
-                    <div class="mb-3">
-                        <label for="groupName" class="form-label">Group Name</label>
-                        <input type="text" class="form-control" id="groupName" name="name" required>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="groupName" name="name" placeholder="" required>
+                        <label for="groupName">
+                            <i class="fas fa-tag me-2"></i>Group Name
+                        </label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="groupDescription" name="description" placeholder="" style="height: 100px"></textarea>
+                        <label for="groupDescription">
+                            <i class="fas fa-align-left me-2"></i>Description
+                        </label>
                     </div>
                     <div class="mb-3">
-                        <label for="groupDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="groupDescription" name="description" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="groupIcon" class="form-label">Icon</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="groupIcon" name="icon" value="fas fa-folder" readonly>
-                            <button type="button" class="btn btn-outline-secondary" onclick="openIconPicker()">
-                                <i class="fas fa-search"></i> Choose Icon
-                            </button>
-                        </div>
-                        <div class="mt-2">
-                            <div class="d-flex align-items-center">
-                                <i id="iconPreview" class="fas fa-folder me-2"></i>
-                                <span id="iconClassDisplay" class="text-muted">fas fa-folder</span>
+                        <div class="row g-2">
+                            <!-- Icon Preview -->
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center justify-content-center bg-light border rounded" style="width: 50px; height: 38px;">
+                                    <i id="iconPreview" class="fas fa-folder text-primary"></i>
+                                </div>
+                            </div>
+                            <!-- Input Field -->
+                            <div class="col">
+                                <input type="text" class="form-control p-2" id="groupIcon" name="icon" value="fas fa-folder" readonly>
+                            </div>
+                            <!-- Choose Icon Button -->
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-warning" onclick="openIconPicker()">
+                                    <i class="fas fa-search me-1"></i>Choose Icon
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -149,7 +164,7 @@ ob_start();
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="isCollapsible" name="is_collapsible" value="1">
                             <label class="form-check-label" for="isCollapsible">
-                                Collapsible Group
+                                Dropdown Menu Tertutup (Collapsed)
                             </label>
                         </div>
                     </div>
@@ -166,27 +181,51 @@ ob_start();
 <!-- Icon Picker Modal -->
 <div class="modal fade" id="iconPickerModal" tabindex="-1" aria-labelledby="iconPickerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content d-flex flex-column" style="height: 80vh;">
+            <!-- Sticky Header -->
+            <div class="modal-header sticky-top bg-white border-bottom">
                 <h5 class="modal-title" id="iconPickerModalLabel">Choose Icon</h5>
                 <button type="button" class="btn-close" onclick="closeIconPickerModal()"></button>
             </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="iconSearch" placeholder="Search icons...">
-                        <button class="btn btn-outline-secondary" type="button" id="clearSearch">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
+            
+            <!-- Sticky Search -->
+            <div class="px-3 py-2 sticky-top bg-white border-bottom mt-2" style="top: 60px; z-index: 1040;">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="iconSearch" placeholder="Search icons by name or category...">
+                    <span class="input-group-text" id="searchIcon" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: #f8f9fa; border-color: #ced4da;">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <button class="btn btn-outline-secondary" type="button" id="clearSearch" style="display: none; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: #f8f9fa; border-color: #ced4da;">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
+                <div class="mt-2">
+                    <small class="text-muted">
+                        <span id="iconCount">0</span> icons available
+                    </small>
+                </div>
+            </div>
+            
+            <!-- Scrollable Content -->
+            <div class="modal-body flex-grow-1 overflow-auto" style="max-height: calc(80vh - 200px);">
                 <div id="iconPickerContainer" class="icon-picker-container">
                     <!-- Icons will be loaded here -->
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeIconPickerModal()">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="selectIcon()">Select Icon</button>
+            
+            <!-- Sticky Footer -->
+            <div class="modal-footer sticky-bottom bg-white border-top">
+                <div class="d-flex justify-content-between w-100">
+                    <div>
+                        <small class="text-muted">
+                            <span class="fw-bold" id="selectedIconName">None</span>
+                        </small>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary me-2" onclick="closeIconPickerModal()">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="selectIcon()" id="selectIconBtn" disabled>Select Icon</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -214,7 +253,6 @@ ob_start();
 <script>
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing menu management...');
     initializeMenuManagement();
 });
 
@@ -275,7 +313,6 @@ window.editGroup = function(id) {
 };
 
 window.addGroup = function() {
-    console.log('addGroup() called');
     
     // Reset form and show modal for adding new group
     const modalLabel = document.getElementById('groupModalLabel');
@@ -295,7 +332,6 @@ window.addGroup = function() {
     if (iconPreview) iconPreview.className = 'fas fa-folder';
     if (iconClassDisplay) iconClassDisplay.textContent = 'fas fa-folder';
     
-    console.log('Form reset completed');
     
     // Show modal using Bootstrap Modal API
     const groupModal = document.getElementById('groupModal');
@@ -304,7 +340,6 @@ window.addGroup = function() {
         modal.show();
     }
     
-    console.log('Modal displayed successfully');
 };
 
 window.addDetailMenu = function(groupId) {
@@ -336,7 +371,6 @@ window.closeIconPickerModal = function() {
 
 // Make toggleDetailMenu globally available
 window.toggleDetailMenu = function(groupId) {
-    console.log('toggleDetailMenu called with groupId:', groupId);
     
     const detailRow = document.getElementById(`detail-row-${groupId}`);
     const menuItemsContainer = document.getElementById(`menu-items-${groupId}`);
@@ -591,14 +625,12 @@ function exportConfig() {
 }
 
 function initializeMenuManagement() {
-    console.log('Initializing menu management functions...');
     
     // Form submissions
     const groupForm = document.getElementById('groupForm');
     if (groupForm) {
         groupForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            console.log('Group form submitted');
             
             const formData = new FormData(this);
             const groupId = document.getElementById('groupId').value;
@@ -606,7 +638,6 @@ function initializeMenuManagement() {
                 '<?php echo APP_URL; ?>/menu/update-group' : 
                 '<?php echo APP_URL; ?>/menu/create-group';
             
-            console.log('Submitting to:', url);
             
             fetch(url, {
                 method: 'POST',
@@ -645,14 +676,28 @@ function initializeMenuManagement() {
         });
     }
     
-    console.log('Menu management initialization completed');
 }
 
 // Icon picker functions
 let selectedIconData = null;
 
 window.openIconPicker = function() {
-    console.log('openIconPicker() called');
+    
+    // Clear any previous selection
+    window.selectedIcon = null;
+    updateSelectedIconInfo();
+    
+    // Clear search input
+    const searchInput = document.getElementById('iconSearch');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    
+    // Hide clear button
+    const clearBtn = document.getElementById('clearSearch');
+    if (clearBtn) {
+        clearBtn.style.display = 'none';
+    }
     
     // Load icon picker content
     const container = document.getElementById('iconPickerContainer');
@@ -714,51 +759,236 @@ function renderIconPicker(icons) {
     const container = document.getElementById('iconPickerContainer');
     if (!container) return;
 
+
+    if (!icons || icons.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-warning py-4">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p class="mb-0 mt-2">No icons available</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Store icons globally for search functionality
+    window.allIcons = icons;
+    
     let html = '<div class="row">';
     
-    icons.forEach(icon => {
+    icons.forEach((icon, index) => {
+        // Handle both old format (string) and new format (object)
+        const iconClass = typeof icon === 'string' ? icon : icon.class;
+        const iconLabel = typeof icon === 'string' ? icon : icon.label;
+        const iconCategory = typeof icon === 'string' ? 'General' : icon.category;
+        
         html += `
             <div class="col-md-3 col-sm-4 col-6 mb-3">
                 <div class="icon-item d-flex align-items-center p-2 border rounded cursor-pointer" 
-                     data-icon="${icon.class}" 
-                     data-label="${icon.label}"
-                     data-category="${icon.category}">
-                    <i class="${icon.class} me-2"></i>
-                    <span class="small">${icon.label}</span>
+                     data-icon="${iconClass}" 
+                     data-label="${iconLabel}"
+                     data-category="${iconCategory}"
+                     data-search-text="${iconLabel.toLowerCase()} ${iconCategory.toLowerCase()} ${iconClass.toLowerCase()}"
+                     style="cursor: pointer; transition: all 0.2s;">
+                    <div class="form-check me-2">
+                        <input class="form-check-input" type="checkbox" value="${iconClass}" id="icon_${index}">
+                    </div>
+                    <i class="${iconClass} me-2" style="font-size: 1.2em;"></i>
+                    <div class="flex-grow-1">
+                        <div class="small fw-bold">${iconLabel}</div>
+                        <div class="small text-muted">${iconCategory}</div>
+                    </div>
                 </div>
             </div>
         `;
     });
     
     html += '</div>';
+    
+    // Update icon count
+    document.getElementById('iconCount').textContent = icons.length;
     container.innerHTML = html;
 
-    // Icon selection using event delegation
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.icon-item')) {
-            const iconItem = e.target.closest('.icon-item');
-            const allIconItems = document.querySelectorAll('.icon-item');
+    // Add hover effects and selection logic
+    const iconItems = container.querySelectorAll('.icon-item');
+    iconItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('selected')) {
+                this.style.backgroundColor = '#f8f9fa';
+                this.style.borderColor = '#007bff';
+            }
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('selected')) {
+                this.style.backgroundColor = '';
+                this.style.borderColor = '';
+            }
+        });
+        
+        // Click to select/deselect
+        item.addEventListener('click', function(e) {
+            // Don't trigger if clicking on checkbox
+            if (e.target.type === 'checkbox') return;
+            
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            
+            // If this icon is already selected, deselect it
+            if (checkbox.checked) {
+                checkbox.checked = false;
+                this.classList.remove('selected');
+                this.style.backgroundColor = '';
+                this.style.borderColor = '';
+                
+                window.selectedIcon = null;
+                updateSelectedIconInfo();
+            } else {
+                // First, uncheck all other icons (single selection)
+                const allCheckboxes = document.querySelectorAll('#iconPickerContainer input[type="checkbox"]');
+                const allIconItems = document.querySelectorAll('#iconPickerContainer .icon-item');
+                
+                allCheckboxes.forEach(cb => {
+                    cb.checked = false;
+                });
+                
+                allIconItems.forEach(item => {
+                    item.classList.remove('selected');
+                    item.style.backgroundColor = '';
+                    item.style.borderColor = '';
+                });
+                
+                // Now select this icon
+                checkbox.checked = true;
+                this.classList.add('selected');
+                this.style.backgroundColor = '#e3f2fd';
+                this.style.borderColor = '#2196f3';
+                
+                // Update selected icon info
+                window.selectedIcon = {
+                    class: this.dataset.icon,
+                    label: this.dataset.label,
+                    category: this.dataset.category
+                };
+                
+                updateSelectedIconInfo();
+            }
+        });
+        
+        // Checkbox change handler
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', function() {
+            const iconItem = this.closest('.icon-item');
+            
+            if (this.checked) {
+                // First, uncheck all other checkboxes (single selection)
+                const allCheckboxes = document.querySelectorAll('#iconPickerContainer input[type="checkbox"]');
+                const allIconItems = document.querySelectorAll('#iconPickerContainer .icon-item');
+                
+                allCheckboxes.forEach(cb => {
+                    if (cb !== this) {
+                        cb.checked = false;
+                    }
+                });
+                
+                allIconItems.forEach(item => {
+                    if (item !== iconItem) {
+                        item.classList.remove('selected');
+                        item.style.backgroundColor = '';
+                        item.style.borderColor = '';
+                    }
+                });
+                
+                // Now select this icon
+                iconItem.classList.add('selected');
+                iconItem.style.backgroundColor = '#e3f2fd';
+                iconItem.style.borderColor = '#2196f3';
+                
+                window.selectedIcon = {
+                    class: iconItem.dataset.icon,
+                    label: iconItem.dataset.label,
+                    category: iconItem.dataset.category
+                };
+                updateSelectedIconInfo();
+            } else {
+                iconItem.classList.remove('selected');
+                iconItem.style.backgroundColor = '';
+                iconItem.style.borderColor = '';
+                
+                window.selectedIcon = null;
+                updateSelectedIconInfo();
+            }
+        });
+    });
+    
+    // Initialize search functionality
+    initializeIconSearch();
+}
 
-            // Remove selected class from all items
-            allIconItems.forEach(i => i.classList.remove('selected'));
+// Helper function to update selected icon info in footer
+function updateSelectedIconInfo() {
+    const selectedIconName = document.getElementById('selectedIconName');
+    const selectIconBtn = document.getElementById('selectIconBtn');
+    
+    if (window.selectedIcon) {
+        selectedIconName.textContent = window.selectedIcon.label;
+        selectIconBtn.disabled = false;
+    } else {
+        selectedIconName.textContent = 'None';
+        selectIconBtn.disabled = true;
+    }
+}
 
-            // Add selected class to clicked item
-            iconItem.classList.add('selected');
-
-            // Store selected icon data
-            selectedIconData = {
-                class: iconItem.dataset.icon,
-                label: iconItem.dataset.label,
-                category: iconItem.dataset.category
-            };
-
-            console.log('Icon selected:', selectedIconData);
+// Initialize search functionality
+function initializeIconSearch() {
+    const searchInput = document.getElementById('iconSearch');
+    const clearBtn = document.getElementById('clearSearch');
+    const searchIcon = document.getElementById('searchIcon');
+    
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        const iconItems = document.querySelectorAll('.icon-item');
+        let visibleCount = 0;
+        
+        iconItems.forEach(item => {
+            const searchText = item.dataset.searchText || '';
+            const isVisible = searchText.includes(searchTerm);
+            
+            if (isVisible) {
+                item.closest('.col-md-3').style.display = '';
+                visibleCount++;
+            } else {
+                item.closest('.col-md-3').style.display = 'none';
+            }
+        });
+        
+        // Update icon count
+        document.getElementById('iconCount').textContent = visibleCount;
+        
+        // Switching logic: Show search icon when empty, show clear button when has text
+        if (searchTerm) {
+            searchIcon.style.display = 'none';
+            clearBtn.style.display = '';
+        } else {
+            searchIcon.style.display = '';
+            clearBtn.style.display = 'none';
         }
     });
+    
+    // Clear search functionality
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+        searchInput.focus();
+    });
+    
+    // Initialize: Show search icon, hide clear button
+    searchIcon.style.display = '';
+    clearBtn.style.display = 'none';
 }
 
 window.selectIcon = function() {
-    if (!selectedIconData) {
+    if (!window.selectedIcon) {
         showToast('warning', 'Please select an icon first');
         return;
     }
@@ -768,9 +998,9 @@ window.selectIcon = function() {
     const iconPreview = document.getElementById('iconPreview');
     const iconClassDisplay = document.getElementById('iconClassDisplay');
 
-    if (groupIcon) groupIcon.value = selectedIconData.class;
-    if (iconPreview) iconPreview.className = selectedIconData.class;
-    if (iconClassDisplay) iconClassDisplay.textContent = selectedIconData.class;
+    if (groupIcon) groupIcon.value = window.selectedIcon.class;
+    if (iconPreview) iconPreview.className = window.selectedIcon.class;
+    if (iconClassDisplay) iconClassDisplay.textContent = window.selectedIcon.class;
 
     // Close modal
     const iconPickerModal = document.getElementById('iconPickerModal');
@@ -851,6 +1081,48 @@ function createToastContainer() {
     margin-left: 20px;
     padding-left: 16px;
     position: relative;
+}
+
+/* Icon Picker Styles */
+.icon-picker-container .icon-item {
+    transition: all 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.icon-picker-container .icon-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.icon-picker-container .icon-item.selected {
+    background-color: #e3f2fd !important;
+    border-color: #2196f3 !important;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.icon-picker-container .icon-item.selected .form-check-input {
+    border-color: #2196f3;
+    background-color: #2196f3;
+}
+
+.icon-picker-container .icon-item .form-check-input {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.icon-picker-container .icon-item .form-check-input:checked {
+    background-color: #2196f3;
+    border-color: #2196f3;
+}
+
+/* Disable text selection on icon items */
+.icon-picker-container .icon-item * {
+    pointer-events: none;
+}
+
+.icon-picker-container .icon-item .form-check-input {
+    pointer-events: auto;
 }
 </style>
 

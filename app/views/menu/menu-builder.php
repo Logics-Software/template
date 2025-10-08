@@ -36,123 +36,77 @@ ob_start();
                     <div class="menu-items" id="sortableMenu">
                         <?php if (!empty($menuItems)): ?>
                             <?php 
-                            // Group menu items by group_id and parent_id
-                            $groupedMenuItems = [];
+                            // DEBUG: Tampilkan data yang diambil
+                            echo '<!-- DEBUG: Total items: ' . count($menuItems) . ' -->';
+                            if (!empty($menuItems)) {
+                                echo '<!-- DEBUG: First item: ' . print_r($menuItems[0], true) . ' -->';
+                            }
+                            
+                            // TAMPILKAN URUT DARI ATAS KE BAWAH
+                            echo '<table class="table table-hover table-borderless">';
+                            echo '<thead class="table-light">';
+                            echo '<tr>';
+                            echo '<th width="40%">Caption Menu</th>';
+                            echo '<th width="20%">URL</th>';
+                            echo '<th width="10%">Order</th>';
+                            echo '<th width="10%">Status</th>';
+                            echo '<th width="15%">Actions</th>';
+                            echo '</tr>';
+                            echo '</thead>';
+                            echo '<tbody table-borderless>';
+                            
+                            $counter = 1;
                             foreach ($menuItems as $item) {
-                                $groupId = $item['group_id'] ?? 'standalone';
-                                $parentId = $item['parent_id'] ?? 'standalone';
-                                if (!isset($groupedMenuItems[$groupId])) {
-                                    $groupedMenuItems[$groupId] = [];
+                                $isActive = $item['is_active'] ? '' : 'table-secondary';
+                                
+                                // JIKA ADA PARENT_ID = INDENTASI
+                                $indentStyle = !empty($item['parent_id']) ? 'padding-left: 30px;' : '';
+                                
+                                echo '<tr class="' . $isActive . '" data-menu-item-id="' . $item['id'] . '">';
+                                echo '<td class="text-secondary" style="' . $indentStyle . '">';
+                                echo '<i class="' . ($item['icon'] ?? 'fas fa-circle') . '"></i>&nbsp;';
+                                echo ' <strong>' . htmlspecialchars($item['name']) . '</strong></div>';
+                                echo '</td>';
+                                echo '<td>';
+                                // Cek apakah ada module_url dari join atau url dari menu_items
+                                $url = $item['module_url'] ?? $item['url'] ?? null;
+                                if (!empty($url)) {
+                                    echo '<small><a href="' . htmlspecialchars($url) . '" target="_blank" class="text-decoration-none">';
+                                    echo '<i class="fas fa-link me-1"></i>' . htmlspecialchars($url);
+                                    echo '</a></small>';
+                                } else {
+                                    echo '<small class="text-muted">-</small>';
                                 }
-                                if (!isset($groupedMenuItems[$groupId][$parentId])) {
-                                    $groupedMenuItems[$groupId][$parentId] = [];
+                                echo '</td>';
+                                echo '<td>' . $item['sort_order'] . '</td>';
+                                echo '<td>';
+                                if ($item['is_active']) {
+                                    echo '<span class="badge bg-success">Active</span>';
+                                } else {
+                                    echo '<span class="badge bg-secondary">Inactive</span>';
                                 }
-                                $groupedMenuItems[$groupId][$parentId][] = $item;
-                            }
-                            
-                            // Filter groups if in group mode
-                            $groupsToShow = $groups;
-                            if (isset($selected_group_id) && $selected_group_id) {
-                                $groupsToShow = array_filter($groups, function($group) use ($selected_group_id) {
-                                    return $group['id'] == $selected_group_id;
-                                });
-                            }
-                            
-                            // Render groups first
-                            foreach ($groupsToShow as $group): 
-                                $groupItems = $groupedMenuItems[$group['id']] ?? [];
-                                $totalItems = array_sum(array_map('count', $groupItems));
-                            ?>
-                                <div class="menu-group" data-group-id="<?php echo $group['id']; ?>">
-                                    <div class="menu-group-content">
-                                        <div class="menu-modules" data-group-id="<?php echo $group['id']; ?>">
-                                            <?php 
-                                            // Organize menu items into hierarchical structure
-                                            $menuStructure = [];
-                                            $menuMap = [];
-                                            
-                                            // Create map of all menu items
-                                            foreach ($menuItems as $item) {
-                                                if ($item['group_id'] == $group['id']) {
-                                                    $menuMap[$item['id']] = $item;
-                                                    $menuStructure[$item['id']] = array_merge($item, ['children' => []]);
-                                                }
-                                            }
-                                            
-                                            // Build hierarchy
-                                            $rootItems = [];
-                                            foreach ($menuStructure as $id => $item) {
-                                                if (!empty($item['parent_id']) && isset($menuStructure[$item['parent_id']])) {
-                                                    $menuStructure[$item['parent_id']]['children'][] = &$menuStructure[$id];
-                                                } else {
-                                                    $rootItems[] = &$menuStructure[$id];
-                                                }
-                                            }
-                                            
-                                            // Sort by sort_order
-                                            function sortMenuItems(&$items) {
-                                                usort($items, function($a, $b) {
-                                                    return ($a['sort_order'] ?? 0) - ($b['sort_order'] ?? 0);
-                                                });
-                                                foreach ($items as &$item) {
-                                                    if (!empty($item['children'])) {
-                                                        sortMenuItems($item['children']);
-                                                    }
-                                                }
-                                            }
-                                            sortMenuItems($rootItems);
-                                            
-                                            // Render menu items
-                                            function renderMenuItem($item, $level = 0) {
-                                                $indentClass = $level > 0 ? 'menu-child-indent' : '';
-                                                $isActive = $item['is_active'] ? '' : 'menu-inactive';
-                                                $hasChildren = !empty($item['children']);
-                                                $parentClass = $hasChildren ? 'menu-parent-item' : '';
-                                                
-                                                echo '<div class="menu-module ' . $indentClass . ' ' . $isActive . ' ' . $parentClass . '" data-menu-item-id="' . $item['id'] . '">';
-                                                echo '<div class="menu-module-info">';
-                                                echo '<div class="menu-item-content">';
-                                                echo '<div class="menu-item-main">';
-                                                echo '<i class="' . ($item['icon'] ?? 'fas fa-circle') . ' me-2"></i>';
-                                                echo '<span class="menu-item-name">' . htmlspecialchars($item['name']) . '</span>';
-                                                if ($hasChildren) {
-                                                    echo '<i class="fas fa-chevron-down ms-2 parent-indicator"></i>';
-                                                }
-                                                echo '</div>';
-                                                echo '<div class="menu-item-meta">';
-                                                if (!$item['is_active']) {
-                                                    echo '<span class="badge bg-secondary badge-sm me-1">Inactive</span>';
-                                                }
-                                                echo '</div>';
-                                                echo '</div>';
-                                                echo '</div>';
-                                                echo '<div class="menu-item-actions">';
-                                                echo '<button class="btn btn-sm btn-outline-primary" onclick="editMenuItem(' . $item['id'] . ')">';
+                                echo '</td>';
+                                echo '<td>';
+                                echo '<div class="btn-group btn-group-sm">';
+                                echo '<button class="btn btn-outline-primary btn-sm" onclick="editMenuItem(' . $item['id'] . ')" title="Edit Menu Item">';
                                                 echo '<i class="fas fa-edit"></i>';
                                                 echo '</button>';
-                                                echo '<button class="btn btn-sm btn-outline-danger" onclick="deleteMenuItem(' . $item['id'] . ')">';
+                                echo '<button class="btn btn-outline-success btn-sm" onclick="addSubMenuItem(' . $item['id'] . ')" title="Add Sub Menu">';
+                                echo '<i class="fas fa-plus"></i>';
+                                echo '</button>';
+                                echo '<button class="btn btn-outline-danger btn-sm" onclick="deleteMenuItem(' . $item['id'] . ')" title="Delete Menu Item">';
                                                 echo '<i class="fas fa-trash"></i>';
                                                 echo '</button>';
                                                 echo '</div>';
-                                                echo '</div>';
-                                                
-                                                // Render children
-                                                if ($hasChildren) {
-                                                    foreach ($item['children'] as $child) {
-                                                        renderMenuItem($child, $level + 1);
-                                                    }
-                                                }
-                                            }
-                                            
-                                            // Render all root items
-                                            foreach ($rootItems as $item) {
-                                                renderMenuItem($item);
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+                                echo '</td>';
+                                echo '</tr>';
+                                
+                                $counter++;
+                            }
+                            
+                            echo '</tbody>';
+                            echo '</table>';
+                            ?>
                         <?php else: ?>
                             <div class="text-center text-muted py-4">
                                 <i class="fas fa-folder-open"></i>
@@ -175,94 +129,86 @@ ob_start();
                 <button type="button" class="btn-close" onclick="closeMenuItemModal()"></button>
             </div>
             <form id="menuItemForm">
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <input type="hidden" id="menuItemId" name="id">
                     <input type="hidden" id="menuItemGroupId" name="group_id" value="<?php echo $selected_group['id']; ?>">
                     
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="menuItemName" class="form-label">Menu Name</label>
-                                <input type="text" class="form-control" id="menuItemName" name="name" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="menuItemUrl" class="form-label">URL</label>
-                                <input type="text" class="form-control" id="menuItemUrl" name="url" placeholder="/dashboard">
-                            </div>
-                        </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="menuItemName" name="name" placeholder="" required>
+                        <label for="menuItemName">
+                            <i class="fas fa-tag me-2"></i>Caption Menu
+                        </label>
                     </div>
                     
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="menuItemIcon" class="form-label">Icon</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="menuItemIcon" name="icon" value="fas fa-circle" readonly>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="openIconPicker('menuItemIcon')">
-                                        <i class="fas fa-search"></i> Choose Icon
-                                    </button>
-                                </div>
-                                <div class="mt-2">
-                                    <div class="d-flex align-items-center">
-                                        <i id="menuItemIconPreview" class="fas fa-circle me-2"></i>
-                                        <span id="menuItemIconClassDisplay" class="text-muted">fas fa-circle</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="menuItemSortOrder" class="form-label">Sort Order</label>
-                                <input type="number" class="form-control" id="menuItemSortOrder" name="sort_order" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="menuItemParent" class="form-label">Parent Menu</label>
+                        <div class="col-md-8">
+                            <div class="form-floating mb-3">
                                 <select class="form-control" id="menuItemParent" name="parent_id">
-                                    <option value="">No Parent (Root Menu)</option>
+                                    <option value="">Root Menu / Dropdown Menu</option>
                                 </select>
+                                <label for="menuItemParent">
+                                    <i class="fas fa-sitemap me-2"></i>Tipe Menu
+                                </label>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="menuItemModule" class="form-label">Module</label>
-                                <select class="form-control" id="menuItemModule" name="module_id">
-                                    <option value="">No Module</option>
-                                    <?php if (!empty($modules)): ?>
-                                        <?php foreach ($modules as $module): ?>
-                                            <option value="<?php echo $module['id']; ?>"><?php echo htmlspecialchars($module['name']); ?></option>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </select>
+
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="menuItemIsParent" name="is_parent" value="1">
+                                <label class="form-check-label" for="menuItemIsParent">
+                                    Is Parent Menu
+                                </label>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-control" id="menuItemModule" name="module_id">
+                            <option value="">No Module</option>
+                            <!-- Routes will be loaded dynamically -->
+                        </select>
+                        <label for="menuItemModule">
+                            <i class="fas fa-cube me-2"></i>Module
+                        </label>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="menuItemDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="menuItemDescription" name="description" rows="3"></textarea>
+                        <div class="row g-2">
+                            <!-- Icon Preview -->
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center justify-content-center bg-light border rounded" style="width: 50px; height: 38px;">
+                                    <i id="menuItemIconPreview" class="fas fa-circle text-primary"></i>
+                                </div>
+                            </div>
+
+                            <!-- Input Field -->
+                            <div class="col">
+                                <input type="text" class="form-control p-2" id="menuItemIcon" name="icon" value="fas fa-circle" readonly>
+                            </div>
+                            <!-- Choose Icon Button -->
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-warning" onclick="openIconPicker('menuItemIcon')">
+                                    <i class="fas fa-search me-1"></i>Choose Icon
+                                    </button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control no-spinners" id="menuItemSortOrder" name="sort_order" value="0" placeholder="">
+                                <label for="menuItemSortOrder">
+                                    <i class="fas fa-sort me-2"></i>Nomor Urut
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="col-md-6">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="menuItemIsActive" name="is_active" value="1" checked>
                                 <label class="form-check-label" for="menuItemIsActive">
                                     Active
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="menuItemIsParent" name="is_parent" value="1">
-                                <label class="form-check-label" for="menuItemIsParent">
-                                    Is Parent Menu
                                 </label>
                             </div>
                         </div>
@@ -280,27 +226,51 @@ ob_start();
 <!-- Icon Picker Modal -->
 <div class="modal fade" id="iconPickerModal" tabindex="-1" aria-labelledby="iconPickerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content d-flex flex-column" style="height: 80vh;">
+            <!-- Sticky Header -->
+            <div class="modal-header sticky-top bg-white border-bottom">
                 <h5 class="modal-title" id="iconPickerModalLabel">Choose Icon</h5>
                 <button type="button" class="btn-close" onclick="closeIconPickerModal()"></button>
             </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="iconSearch" placeholder="Search icons...">
-                        <button class="btn btn-outline-secondary" type="button" id="clearSearch">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
+            
+            <!-- Sticky Search -->
+            <div class="px-3 py-2 sticky-top bg-white border-bottom mt-2" style="top: 60px; z-index: 1040;">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="iconSearch" placeholder="Search icons by name or category...">
+                    <span class="input-group-text" id="searchIcon" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: #f8f9fa; border-color: #ced4da;">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <button class="btn btn-outline-secondary" type="button" id="clearSearch" style="display: none; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: #f8f9fa; border-color: #ced4da;">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
+                <div class="mt-2">
+                    <small class="text-muted">
+                        <span id="iconCount">0</span> icons available
+                    </small>
+                </div>
+            </div>
+            
+            <!-- Scrollable Content -->
+            <div class="modal-body flex-grow-1 overflow-auto" style="max-height: calc(80vh - 200px);">
                 <div id="iconPickerContainer" class="icon-picker-container">
                     <!-- Icons will be loaded here -->
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeIconPickerModal()">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="selectIcon()">Select Icon</button>
+            
+            <!-- Sticky Footer -->
+            <div class="modal-footer sticky-bottom bg-white border-top">
+                <div class="d-flex justify-content-between w-100">
+                    <div>
+                        <small class="text-muted">
+                            <span class="fw-bold" id="selectedIconName">None</span>
+                        </small>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary me-2" onclick="closeIconPickerModal()">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="selectIcon()" id="selectIconBtn" disabled>Select Icon</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -328,7 +298,6 @@ ob_start();
 <script>
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing menu builder...');
     initializeMenuBuilder();
 });
 
@@ -337,16 +306,74 @@ let selectedIconData = null;
 let currentIconTarget = null;
 let deleteMenuItemId = null;
 
+// Load main routes for module dropdown
+function loadMainRoutes() {
+    return fetch('<?php echo APP_URL; ?>/menu/get-main-routes', {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.routes) {
+            const moduleSelect = document.getElementById('menuItemModule');
+            if (moduleSelect) {
+                // Clear existing options except "No Module"
+                moduleSelect.innerHTML = '<option value="">No Module</option>';
+                
+                // Add main routes as options (using module ID as value)
+                data.routes.forEach(route => {
+                    const option = document.createElement('option');
+                    option.value = route.id; // Use module ID instead of path
+                    option.textContent = route.name;
+                    option.setAttribute('data-path', route.path);
+                    moduleSelect.appendChild(option);
+                });
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error loading main routes:', error);
+    });
+}
+
 // Menu builder functions
 function initializeMenuBuilder() {
-    console.log('Initializing menu builder functions...');
+    
+    // Load main routes for module dropdown
+    loadMainRoutes();
+    
+    // Prevent body scroll when modal is open
+    const menuItemModal = document.getElementById('menuItemModal');
+    if (menuItemModal) {
+        menuItemModal.addEventListener('show.bs.modal', function() {
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '100vh';
+        });
+        
+        menuItemModal.addEventListener('hide.bs.modal', function() {
+            document.body.style.overflow = '';
+            document.body.style.height = '';
+        });
+    }
     
     // Form submissions
     const menuItemForm = document.getElementById('menuItemForm');
     if (menuItemForm) {
         menuItemForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            console.log('Menu item form submitted');
+            
+            // Validation Rule 3: If "Is Parent Menu" is unchecked, Module must be selected
+            const isParentChecked = document.getElementById('menuItemIsParent').checked;
+            const moduleValue = document.getElementById('menuItemModule').value;
+            const parentValue = document.getElementById('menuItemParent').value;
+            
+            // If not a parent menu and not a child menu (no parent selected), module is required
+            if (!isParentChecked && !parentValue && !moduleValue) {
+                showToast('error', 'Module harus dipilih jika bukan Parent Menu dan bukan Child Menu!');
+                return;
+            }
             
             const formData = new FormData(this);
             const menuItemId = document.getElementById('menuItemId').value;
@@ -354,7 +381,6 @@ function initializeMenuBuilder() {
                 '<?php echo APP_URL; ?>/menu/update-menu-item' : 
                 '<?php echo APP_URL; ?>/menu/create-menu-item';
             
-            console.log('Submitting to:', url);
             
             fetch(url, {
                 method: 'POST',
@@ -365,7 +391,6 @@ function initializeMenuBuilder() {
                 }
             })
             .then(response => {
-                console.log('Response status:', response.status);
                 if (response.status === 403) {
                     showToast('error', 'Access denied. Please refresh the page and try again.');
                     return;
@@ -373,7 +398,6 @@ function initializeMenuBuilder() {
                 return response.json();
             })
             .then(data => {
-                console.log('Response data:', data);
                 if (data && data.success) {
                     showToast('success', data.message);
                     // Hide modal using Bootstrap Modal API
@@ -397,34 +421,59 @@ function initializeMenuBuilder() {
     const confirmDeleteBtn = document.getElementById('confirmDelete');
     if (confirmDeleteBtn) {
         confirmDeleteBtn.addEventListener('click', function() {
-            if (deleteMenuItemId) {
-                deleteMenuItem(deleteMenuItemId);
-            }
+            confirmDeleteMenuItem();
         });
     }
     
-    // Is Parent Menu checkbox control
+    // Validation logic for Parent Menu, Module, and Tipe Menu
     const isParentCheckbox = document.getElementById('menuItemIsParent');
     const moduleSelect = document.getElementById('menuItemModule');
+    const parentSelect = document.getElementById('menuItemParent');
     
-    if (isParentCheckbox && moduleSelect) {
+    // Event listeners
+    if (isParentCheckbox && moduleSelect && parentSelect) {
+        // When "Is Parent Menu" checkbox changes
         isParentCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                moduleSelect.value = '';
-                moduleSelect.disabled = true;
-            } else {
-                moduleSelect.disabled = false;
-            }
+            updateMenuFormState();
+        });
+        
+        // When "Tipe Menu" (parent) dropdown changes
+        parentSelect.addEventListener('change', function() {
+            updateMenuFormState();
         });
     }
+}
+
+// Global function to update form state based on selections
+window.updateMenuFormState = function() {
+    const isParentCheckbox = document.getElementById('menuItemIsParent');
+    const moduleSelect = document.getElementById('menuItemModule');
+    const parentSelect = document.getElementById('menuItemParent');
     
-    console.log('Menu builder initialization completed');
+    if (!isParentCheckbox || !moduleSelect || !parentSelect) return;
+    
+    const isParentChecked = isParentCheckbox.checked;
+    const hasParent = parentSelect.value !== '';
+    
+    // Rule 1: If Tipe Menu is selected (not Root/Dropdown), disable and uncheck "Is Parent Menu"
+    if (hasParent) {
+        isParentCheckbox.checked = false;
+        isParentCheckbox.disabled = true;
+    } else {
+        isParentCheckbox.disabled = false;
+    }
+    
+    // Rule 2: If "Is Parent Menu" is checked, disable Module and set to "No Module"
+    if (isParentChecked) {
+        moduleSelect.value = '';
+        moduleSelect.disabled = true;
+    } else {
+        moduleSelect.disabled = false;
+    }
 }
 
 // Global functions that can be called from onclick
 window.addMenuItem = function() {
-    console.log('addMenuItem() called');
-    
     // Reset form and show modal for adding new menu item
     const modalLabel = document.getElementById('menuItemModalLabel');
     const menuItemForm = document.getElementById('menuItemForm');
@@ -446,21 +495,24 @@ window.addMenuItem = function() {
     // Load parent items
     loadParentItems();
     
-    console.log('Form reset completed');
+    // Update form state for validation
+    setTimeout(() => {
+        updateMenuFormState();
+    }, 100);
     
     // Show modal using Bootstrap Modal API
     const menuItemModal = document.getElementById('menuItemModal');
     if (menuItemModal) {
-        const modal = new bootstrap.Modal(menuItemModal);
+        // Get existing instance or create new one
+        let modal = bootstrap.Modal.getInstance(menuItemModal);
+        if (!modal) {
+            modal = new bootstrap.Modal(menuItemModal);
+        }
         modal.show();
     }
-    
-    console.log('Modal displayed successfully');
 };
 
 window.editMenuItem = function(id) {
-    console.log('editMenuItem() called with id:', id);
-    
     // Load menu item data and populate form
     fetch('<?php echo APP_URL; ?>/menu/get-menu-item/' + id, {
         method: 'GET',
@@ -471,24 +523,21 @@ window.editMenuItem = function(id) {
     .then(response => response.json())
     .then(data => {
         if (data.success && data.menuItem) {
+            
             // Populate form fields with menu item data
             const menuItemId = document.getElementById('menuItemId');
             const menuItemName = document.getElementById('menuItemName');
-            const menuItemUrl = document.getElementById('menuItemUrl');
             const menuItemIcon = document.getElementById('menuItemIcon');
             const menuItemSortOrder = document.getElementById('menuItemSortOrder');
             const menuItemParent = document.getElementById('menuItemParent');
             const menuItemModule = document.getElementById('menuItemModule');
-            const menuItemDescription = document.getElementById('menuItemDescription');
             const menuItemIsActive = document.getElementById('menuItemIsActive');
             const menuItemIsParent = document.getElementById('menuItemIsParent');
             
             if (menuItemId) menuItemId.value = data.menuItem.id;
             if (menuItemName) menuItemName.value = data.menuItem.name;
-            if (menuItemUrl) menuItemUrl.value = data.menuItem.url || '';
             if (menuItemIcon) menuItemIcon.value = data.menuItem.icon || 'fas fa-circle';
             if (menuItemSortOrder) menuItemSortOrder.value = data.menuItem.sort_order || 0;
-            if (menuItemDescription) menuItemDescription.value = data.menuItem.description || '';
             if (menuItemIsActive) menuItemIsActive.checked = data.menuItem.is_active == 1;
             if (menuItemIsParent) menuItemIsParent.checked = data.menuItem.is_parent == 1;
 
@@ -500,18 +549,29 @@ window.editMenuItem = function(id) {
             if (iconPreview) iconPreview.className = iconClass;
             if (iconClassDisplay) iconClassDisplay.textContent = iconClass;
             
-            // Load parent items
-            loadParentItems(data.menuItem.id);
-            
-            // Set module value
-            if (menuItemModule && data.menuItem.module_id) {
-                menuItemModule.value = data.menuItem.module_id;
-            }
-            
-            // Set parent value
-            if (menuItemParent && data.menuItem.parent_id) {
-                menuItemParent.value = data.menuItem.parent_id;
-            }
+            // Load both parent items and main routes, then set values
+            Promise.all([
+                loadParentItems(data.menuItem.id),
+                loadMainRoutes()
+            ]).then(() => {
+                // Set parent value
+                if (menuItemParent && data.menuItem.parent_id) {
+                    menuItemParent.value = data.menuItem.parent_id;
+                }
+                
+                // Set module value (now using ID directly)
+                if (menuItemModule && data.menuItem.module_id) {
+                    // module_id is already an integer ID from database
+                    menuItemModule.value = data.menuItem.module_id;
+                }
+                
+                // Update form state for validation after all data is loaded
+                setTimeout(() => {
+                    updateMenuFormState();
+                }, 100);
+            }).catch(error => {
+                console.error('Error loading data:', error);
+            });
             
             // Update modal label
             const modalLabel = document.getElementById('menuItemModalLabel');
@@ -520,7 +580,11 @@ window.editMenuItem = function(id) {
             // Show modal using Bootstrap Modal API
             const menuItemModal = document.getElementById('menuItemModal');
             if (menuItemModal) {
-                const modal = new bootstrap.Modal(menuItemModal);
+                // Get existing instance or create new one
+                let modal = bootstrap.Modal.getInstance(menuItemModal);
+                if (!modal) {
+                    modal = new bootstrap.Modal(menuItemModal);
+                }
                 modal.show();
             }
         } else {
@@ -534,16 +598,72 @@ window.editMenuItem = function(id) {
     });
 };
 
+window.addSubMenuItem = function(parentId) {
+    // Clear form fields
+    const menuItemId = document.getElementById('menuItemId');
+    const menuItemName = document.getElementById('menuItemName');
+    const menuItemIcon = document.getElementById('menuItemIcon');
+    const menuItemSortOrder = document.getElementById('menuItemSortOrder');
+    const menuItemParent = document.getElementById('menuItemParent');
+    const menuItemIsActive = document.getElementById('menuItemIsActive');
+    const menuItemModule = document.getElementById('menuItemModule');
+    
+    if (menuItemId) menuItemId.value = '';
+    if (menuItemName) menuItemName.value = '';
+    if (menuItemIcon) menuItemIcon.value = 'fas fa-circle';
+    if (menuItemSortOrder) menuItemSortOrder.value = '';
+    if (menuItemIsActive) menuItemIsActive.checked = true;
+    if (menuItemModule) menuItemModule.value = '';
+    
+    // Set parent value
+    if (menuItemParent && parentId) {
+        menuItemParent.value = parentId;
+    }
+    
+    // Update icon preview
+    const iconPreview = document.getElementById('iconPreview');
+    if (iconPreview) {
+        iconPreview.className = 'fas fa-circle';
+    }
+    
+    // Load parent items
+    loadParentItems();
+    
+    // Update form state for validation
+    setTimeout(() => {
+        updateMenuFormState();
+    }, 100);
+    
+    // Update modal label
+    const modalLabel = document.getElementById('menuItemModalLabel');
+    if (modalLabel) modalLabel.textContent = 'Add Sub Menu Item';
+    
+    // Show modal using Bootstrap Modal API
+    const menuItemModal = document.getElementById('menuItemModal');
+    if (menuItemModal) {
+        // Get existing instance or create new one
+        let modal = bootstrap.Modal.getInstance(menuItemModal);
+        if (!modal) {
+            modal = new bootstrap.Modal(menuItemModal);
+        }
+        modal.show();
+    }
+};
+
 window.deleteMenuItem = function(id) {
     deleteMenuItemId = id;
-    const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
+    const deleteModal = document.getElementById("deleteModal");
+    // Get existing instance or create new one
+    let modal = bootstrap.Modal.getInstance(deleteModal);
+    if (!modal) {
+        modal = new bootstrap.Modal(deleteModal);
+    }
     modal.show();
 };
 
-function deleteMenuItem(id) {
+function confirmDeleteMenuItem() {
+    const id = deleteMenuItemId;
     if (!id) return;
-    
-    console.log('Deleting menu item with id:', id);
     
     fetch('<?php echo APP_URL; ?>/menu/delete-menu-item', {
         method: 'POST',
@@ -611,15 +731,15 @@ window.closeIconPickerModal = function() {
 // Load parent items for dropdown
 function loadParentItems(excludeId = null) {
     const parentSelect = document.getElementById('menuItemParent');
-    if (!parentSelect) return;
+    if (!parentSelect) return Promise.resolve();
     
     const groupId = document.getElementById('menuItemGroupId').value;
-    if (!groupId) return;
+    if (!groupId) return Promise.resolve();
     
     // Clear existing options except the first one
-    parentSelect.innerHTML = '<option value="">No Parent (Root Menu)</option>';
+    parentSelect.innerHTML = '<option value="">Root Menu / Dropdown Menu</option>';
     
-    fetch(`<?php echo APP_URL; ?>/menu/get-parent-items/${groupId}`, {
+    return fetch(`<?php echo APP_URL; ?>/menu/get-parent-items/${groupId}`, {
         method: 'GET',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -647,12 +767,10 @@ function loadParentItems(excludeId = null) {
 // Icon picker functions
 window.openIconPicker = function(target) {
     currentIconTarget = target;
-    console.log('openIconPicker() called for target:', target);
     
     // Load icon picker content
     const container = document.getElementById('iconPickerContainer');
     if (!container) {
-        console.error('Icon picker container not found');
         return;
     }
 
@@ -675,6 +793,8 @@ window.openIconPicker = function(target) {
     .then(data => {
         if (data.success && data.icons) {
             renderIconPicker(data.icons);
+            // Initialize search functionality after icons are loaded
+            initializeIconSearch();
         } else {
             container.innerHTML = `
                 <div class="text-center text-danger py-4">
@@ -711,15 +831,24 @@ function renderIconPicker(icons) {
 
     let html = '<div class="row">';
     
-    icons.forEach(icon => {
+    icons.forEach((icon, index) => {
+        const iconClass = icon.class;
+        const iconLabel = icon.label;
+        const iconCategory = icon.category;
+        
         html += `
             <div class="col-md-3 col-sm-4 col-6 mb-3">
                 <div class="icon-item d-flex align-items-center p-2 border rounded cursor-pointer" 
-                     data-icon="${icon.class}" 
-                     data-label="${icon.label}"
-                     data-category="${icon.category}">
-                    <i class="${icon.class} me-2"></i>
-                    <span class="small">${icon.label}</span>
+                     data-icon="${iconClass}" 
+                     data-label="${iconLabel}"
+                     data-category="${iconCategory}"
+                     data-search-text="${iconLabel.toLowerCase()} ${iconCategory.toLowerCase()} ${iconClass.toLowerCase()}"
+                     style="cursor: pointer; transition: all 0.2s;">
+                    <div class="form-check me-2">
+                        <input class="form-check-input" type="checkbox" value="${iconClass}" id="icon_${index}">
+                    </div>
+                    <i class="${iconClass} me-2"></i>
+                    <span class="small">${iconLabel}</span>
                 </div>
             </div>
         `;
@@ -728,16 +857,81 @@ function renderIconPicker(icons) {
     html += '</div>';
     container.innerHTML = html;
 
-    // Icon selection using event delegation
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.icon-item')) {
-            const iconItem = e.target.closest('.icon-item');
-            const allIconItems = document.querySelectorAll('.icon-item');
-
-            // Remove selected class from all items
-            allIconItems.forEach(i => i.classList.remove('selected'));
-
-            // Add selected class to clicked item
+    // Add hover effects and selection logic
+    const iconItems = container.querySelectorAll('.icon-item');
+    iconItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('selected')) {
+                this.style.backgroundColor = '#f8f9fa';
+            }
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('selected')) {
+                this.style.backgroundColor = '';
+            }
+        });
+        
+        item.addEventListener('click', function() {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                
+                if (checkbox.checked) {
+                    // First, uncheck all other icons (single selection)
+                    const allCheckboxes = document.querySelectorAll('#iconPickerContainer input[type="checkbox"]');
+                    const allIconItems = document.querySelectorAll('#iconPickerContainer .icon-item');
+                    
+                    allCheckboxes.forEach(cb => {
+                        cb.checked = false;
+                    });
+                    
+                    allIconItems.forEach(i => {
+                        i.classList.remove('selected');
+                    });
+                    
+                    // Check current checkbox and select current item
+                    checkbox.checked = true;
+                    this.classList.add('selected');
+                    
+                    // Store selected icon data
+                    selectedIconData = {
+                        class: this.dataset.icon,
+                        label: this.dataset.label,
+                        category: this.dataset.category
+                    };
+                    
+                    // Update selected icon info
+                    updateSelectedIconInfo();
+                } else {
+                    this.classList.remove('selected');
+                    selectedIconData = null;
+                    updateSelectedIconInfo();
+                }
+            }
+        });
+        
+        // Checkbox change handler
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', function() {
+            const iconItem = this.closest('.icon-item');
+            
+            if (this.checked) {
+                // First, uncheck all other checkboxes (single selection)
+                const allCheckboxes = document.querySelectorAll('#iconPickerContainer input[type="checkbox"]');
+                const allIconItems = document.querySelectorAll('#iconPickerContainer .icon-item');
+                
+                allCheckboxes.forEach(cb => {
+                    if (cb !== this) {
+                        cb.checked = false;
+                    }
+                });
+                
+                allIconItems.forEach(i => {
+                    i.classList.remove('selected');
+                });
+                
+                // Select current item
             iconItem.classList.add('selected');
 
             // Store selected icon data
@@ -747,9 +941,78 @@ function renderIconPicker(icons) {
                 category: iconItem.dataset.category
             };
 
-            console.log('Icon selected:', selectedIconData);
+                // Update selected icon info
+                updateSelectedIconInfo();
+            } else {
+                iconItem.classList.remove('selected');
+                selectedIconData = null;
+                updateSelectedIconInfo();
+            }
+        });
+    });
+}
+
+function updateSelectedIconInfo() {
+    const selectedIconName = document.getElementById('selectedIconName');
+    const selectIconBtn = document.getElementById('selectIconBtn');
+    
+    if (selectedIconData) {
+        selectedIconName.textContent = selectedIconData.label;
+        selectIconBtn.disabled = false;
+    } else {
+        selectedIconName.textContent = 'None';
+        selectIconBtn.disabled = true;
+    }
+}
+
+// Initialize search functionality
+function initializeIconSearch() {
+    const searchInput = document.getElementById('iconSearch');
+    const clearBtn = document.getElementById('clearSearch');
+    const searchIcon = document.getElementById('searchIcon');
+    
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        const iconItems = document.querySelectorAll('.icon-item');
+        let visibleCount = 0;
+        
+        iconItems.forEach(item => {
+            const searchText = item.dataset.searchText || '';
+            const isVisible = searchText.includes(searchTerm);
+            
+            if (isVisible) {
+                item.closest('.col-md-3').style.display = '';
+                visibleCount++;
+            } else {
+                item.closest('.col-md-3').style.display = 'none';
+            }
+        });
+        
+        // Update icon count
+        document.getElementById('iconCount').textContent = visibleCount;
+        
+        // Switching logic: Show search icon when empty, show clear button when has text
+        if (searchTerm) {
+            searchIcon.style.display = 'none';
+            clearBtn.style.display = '';
+        } else {
+            searchIcon.style.display = '';
+            clearBtn.style.display = 'none';
         }
     });
+    
+    // Clear search functionality
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+        searchInput.focus();
+    });
+    
+    // Initialize: Show search icon, hide clear button
+    searchIcon.style.display = '';
+    clearBtn.style.display = 'none';
 }
 
 window.selectIcon = function() {
@@ -834,6 +1097,114 @@ function createToastContainer() {
     return container;
 }
 </script>
+
+        <style>
+        .menu-modules .menu-module {
+            border: 0px;
+            border-radius: 0px;
+            margin-bottom: 4px;
+            color: black;
+            transition: all 0.2s ease;
+        }
+
+        .menu-modules .menu-child-indent {
+            margin-left: 20px !important;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        /* Fix dropdown select visibility */
+        .form-floating select.form-control {
+            color: #212529 !important;
+            background-color: #fff !important;
+        }
+
+        .form-floating select.form-control option {
+            color: #212529 !important;
+            background-color: #fff !important;
+        }
+
+        .form-floating select.form-control:focus {
+            color: #212529 !important;
+            background-color: #fff !important;
+            border-color: #86b7fe !important;
+        }
+
+        /* Prevent body scroll when modal is open */
+        body.modal-open {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+
+        /* Ensure modal backdrop covers full screen */
+        .modal-backdrop {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 1040 !important;
+        }
+
+        /* Modal content positioning */
+        .modal {
+            z-index: 1050 !important;
+        }
+
+        /* Icon Picker Styles */
+        .icon-picker-container .icon-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .icon-picker-container .icon-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .icon-picker-container .icon-item.selected {
+            background-color: #e3f2fd !important;
+            border-color: #2196f3 !important;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+        }
+
+        .icon-picker-container .icon-item.selected .form-check-input {
+            border-color: #2196f3;
+            background-color: #2196f3;
+        }
+
+        .icon-picker-container .icon-item .form-check-input {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .icon-picker-container .icon-item .form-check-input:checked {
+            background-color: #2196f3;
+            border-color: #2196f3;
+        }
+
+        /* Disable text selection on icon items */
+        .icon-picker-container .icon-item * {
+            pointer-events: none;
+        }
+
+        .icon-picker-container .icon-item .form-check-input {
+            pointer-events: auto;
+        }
+
+        /* Remove spinners from number input */
+        .no-spinners::-webkit-outer-spin-button,
+        .no-spinners::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .no-spinners {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        </style>
 
 <?php
 // End output buffering and get content

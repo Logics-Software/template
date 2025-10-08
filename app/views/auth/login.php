@@ -75,6 +75,9 @@ $validationErrors = Session::getFlash('errors');
                                 Ingat saya
                             </label>
                         </div>
+                        <a href="<?php echo APP_URL; ?>/forgot-password" class="text-primary text-decoration-none small">
+                            Lupa password?
+                        </a>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mb-3" id="loginBtn">

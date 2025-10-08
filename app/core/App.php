@@ -35,6 +35,7 @@ class App
                 $skipCSRF = [
                     '/login',
                     '/register',
+                    '/forgot-password',
                     '/api/messages/mark-read',
                     '/api/messages/mark-all-read',
                     '/api/messages/unread-count',
@@ -65,6 +66,8 @@ class App
         $this->router->get('/logout', 'AuthController@logout');
         $this->router->get('/register', 'AuthController@register');
         $this->router->post('/register', 'AuthController@store');
+        $this->router->get('/forgot-password', 'AuthController@forgotPassword');
+        $this->router->post('/forgot-password', 'AuthController@sendPasswordReset');
         
         // Lock Screen routes
         $this->router->get('/lock-screen', 'LockScreenController@index');
@@ -97,12 +100,10 @@ class App
         // Profile routes
         $this->router->get('/profile', 'UserController@profile');
         $this->router->post('/profile', 'UserController@updateProfile');
-        $this->router->get('/profile/updated', 'UserController@profileUpdated');
         
         // Change Password routes
         $this->router->get('/change-password', 'UserController@changePassword');
         $this->router->post('/change-password', 'UserController@updatePassword');
-        $this->router->get('/change-password/updated', 'UserController@passwordUpdated');
         
         // Konfigurasi routes
         $this->router->get('/konfigurasi', 'KonfigurasiController@index');
@@ -180,6 +181,12 @@ class App
         // Configuration routes
         $this->router->get('/menu/export-config', 'MenuController@exportConfig');
         $this->router->post('/menu/import-config', 'MenuController@importConfig');
+        
+        // Icon picker route
+        $this->router->get('/menu/get-icons', 'MenuController@getIcons');
+        
+        // Main routes for module dropdown
+        $this->router->get('/menu/get-main-routes', 'MenuController@getMainRoutes');
     }
 
     private function validateCSRF()

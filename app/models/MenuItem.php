@@ -21,7 +21,7 @@ class MenuItem extends Model
     protected $casts = [
         'group_id' => 'integer',
         'parent_id' => 'integer',
-        'module_id' => 'integer',
+        'module_id' => 'string',
         'sort_order' => 'integer',
         'is_active' => 'boolean',
         'is_parent' => 'boolean'
@@ -82,7 +82,7 @@ class MenuItem extends Model
      */
     public function getAll()
     {
-        $sql = "SELECT * FROM menu_items ORDER BY group_id ASC, sort_order ASC";
+        $sql = "SELECT * FROM menu_items ORDER BY sort_order ASC";
         return $this->db->fetchAll($sql);
     }
     
@@ -91,8 +91,19 @@ class MenuItem extends Model
      */
     public function getItemsByGroup($groupId)
     {
-        $sql = "SELECT * FROM menu_items WHERE group_id = ? ORDER BY sort_order ASC";
-        return $this->db->fetchAll($sql, [$groupId]);
+        // Cek dulu apakah ada field module_id, jika tidak gunakan query sederhana
+        try {
+            $sql = "SELECT mi.*, m.link as module_url, m.caption as module_name 
+                    FROM menu_items mi 
+                    LEFT JOIN modules m ON mi.module_id = m.id 
+                    WHERE mi.group_id = ? 
+                    ORDER BY mi.sort_order ASC";
+            return $this->db->fetchAll($sql, [$groupId]);
+        } catch (Exception $e) {
+            // Fallback ke query sederhana jika join gagal
+            $sql = "SELECT * FROM menu_items WHERE group_id = ? ORDER BY sort_order ASC";
+            return $this->db->fetchAll($sql, [$groupId]);
+        }
     }
     
     /**
@@ -144,19 +155,31 @@ class MenuItem extends Model
      */
     public function createItem($data)
     {
-        $sql = "INSERT INTO menu_items (group_id, parent_id, module_id, name, icon, sort_order, is_active, is_parent) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        return $this->db->query($sql, [
-            $data['group_id'],
-            $data['parent_id'] ?? null,
-            $data['module_id'] ?? null,
-            $data['name'],
-            $data['icon'] ?? 'fas fa-circle',
-            $data['sort_order'] ?? 0,
-            $data['is_active'] ?? true,
-            $data['is_parent'] ?? false
-        ]);
+        try {
+            // Convert boolean values properly
+            $isActive = isset($data['is_active']) ? ($data['is_active'] ? 1 : 0) : 1;
+            $isParent = isset($data['is_parent']) ? ($data['is_parent'] ? 1 : 0) : 0;
+            
+            $sql = "INSERT INTO menu_items (group_id, parent_id, module_id, name, icon, sort_order, is_active, is_parent) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            $params = [
+                $data['group_id'],
+                $data['parent_id'] ?? null,
+                $data['module_id'] ?? null,
+                $data['name'],
+                $data['icon'] ?? 'fas fa-circle',
+                $data['sort_order'] ?? 0,
+                $isActive,
+                $isParent
+            ];
+            
+            $this->db->query($sql, $params);
+            
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
     
     /**
@@ -167,6 +190,14 @@ class MenuItem extends Model
         try {
             $fields = [];
             $values = [];
+            
+            // Convert boolean values properly before processing
+            if (isset($data['is_active'])) {
+                $data['is_active'] = $data['is_active'] ? 1 : 0;
+            }
+            if (isset($data['is_parent'])) {
+                $data['is_parent'] = $data['is_parent'] ? 1 : 0;
+            }
             
             foreach ($data as $key => $value) {
                 if (in_array($key, $this->fillable)) {
@@ -182,8 +213,9 @@ class MenuItem extends Model
             $values[] = $id;
             $sql = "UPDATE menu_items SET " . implode(', ', $fields) . " WHERE id = ?";
             
-            $result = $this->db->query($sql, $values);
-            return $result;
+            $this->db->query($sql, $values);
+            
+            return true;
         } catch (Exception $e) {
             return false;
         }

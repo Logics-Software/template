@@ -45,17 +45,25 @@ class MenuGroup extends Model
     public function createGroup($data)
     {
         try {
+            // Convert boolean values properly
+            $isActive = isset($data['is_active']) ? ($data['is_active'] ? 1 : 0) : 1;
+            $isCollapsible = isset($data['is_collapsible']) ? ($data['is_collapsible'] ? 1 : 0) : 1;
+            
             $sql = "INSERT INTO {$this->table} (name, slug, icon, description, sort_order, is_active, is_collapsible) 
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $this->db->query($sql, [
+            
+            $params = [
                 $data['name'],
                 $data['slug'],
                 $data['icon'] ?? 'fas fa-folder',
                 $data['description'] ?? null,
                 $data['sort_order'] ?? 0,
-                $data['is_active'] ?? true,
-                $data['is_collapsible'] ?? true
-            ]);
+                $isActive,
+                $isCollapsible
+            ];
+            
+            $this->db->query($sql, $params);
+            
             return true;
         } catch (Exception $e) {
             return false;
@@ -68,19 +76,27 @@ class MenuGroup extends Model
     public function updateGroup($id, $data)
     {
         try {
+            // Convert boolean values properly
+            $isActive = isset($data['is_active']) ? ($data['is_active'] ? 1 : 0) : 1;
+            $isCollapsible = isset($data['is_collapsible']) ? ($data['is_collapsible'] ? 1 : 0) : 1;
+            
             $sql = "UPDATE {$this->table} SET name = ?, slug = ?, icon = ?, description = ?, 
                     sort_order = ?, is_active = ?, is_collapsible = ?, updated_at = CURRENT_TIMESTAMP 
                     WHERE id = ?";
-            $this->db->query($sql, [
+            
+            $params = [
                 $data['name'],
                 $data['slug'],
                 $data['icon'] ?? 'fas fa-folder',
                 $data['description'] ?? null,
                 $data['sort_order'] ?? 0,
-                $data['is_active'] ?? true,
-                $data['is_collapsible'] ?? true,
+                $isActive,
+                $isCollapsible,
                 $id
-            ]);
+            ];
+            
+            $this->db->query($sql, $params);
+            
             return true;
         } catch (Exception $e) {
             return false;
