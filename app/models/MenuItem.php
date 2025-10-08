@@ -238,10 +238,6 @@ class MenuItem extends Model
             $sql = "DELETE FROM menu_items WHERE id = ?";
             $database->query($sql, [$id]);
             
-            // Delete permissions
-            $sql = "DELETE FROM role_menu_permissions WHERE menu_item_id = ?";
-            $database->query($sql, [$id]);
-            
             $database->commit();
             return true;
         } catch (Exception $e) {
@@ -281,16 +277,6 @@ class MenuItem extends Model
         return $this->db->fetchAll($sql);
     }
     
-    /**
-     * Check if user has permission for this menu item
-     */
-    public function hasPermission($roleId, $menuItemId)
-    {
-        $sql = "SELECT COUNT(*) as count FROM role_menu_permissions 
-                WHERE role_id = ? AND menu_item_id = ?";
-        $result = $this->db->fetch($sql, [$roleId, $menuItemId]);
-        return $result['count'] > 0;
-    }
 
     /**
      * Get parent menu items for a specific group

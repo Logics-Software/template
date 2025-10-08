@@ -16,6 +16,14 @@ class App
         $this->setupRoutes();
     }
 
+    /**
+     * Get router instance
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
     public function run()
     {
         try {
@@ -153,8 +161,6 @@ class App
         // Menu management routes
         $this->router->get('/menu', 'MenuController@index');
         $this->router->get('/menu/builder', 'MenuController@builder');
-        $this->router->get('/menu/permissions', 'MenuController@permissions');
-        $this->router->get('/menu/preview', 'MenuController@preview');
         
         // Menu group routes
         $this->router->get('/menu/get-group/{id}', 'MenuController@getGroup');
@@ -174,9 +180,6 @@ class App
         $this->router->post('/menu/update-module', 'MenuController@updateMenuItem');
         $this->router->post('/menu/toggle-visibility', 'MenuController@toggleVisibility');
         $this->router->post('/menu/update-sort', 'MenuController@updateSortOrder');
-        
-        // Permission routes
-        $this->router->post('/menu/update-permissions', 'MenuController@updatePermissions');
         
         // Configuration routes
         $this->router->get('/menu/export-config', 'MenuController@exportConfig');

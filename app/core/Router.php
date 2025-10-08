@@ -135,4 +135,12 @@ class Router
         $this->middleware[$routeKey][] = $middleware;
         return $this;
     }
+
+    /**
+     * Get all registered routes
+     */
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
 }

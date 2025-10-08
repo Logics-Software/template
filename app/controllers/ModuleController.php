@@ -306,56 +306,60 @@ class ModuleController extends BaseController
 
     /**
      * Get available routes for module link selection
+     * Auto-generated from App routes with @index handler
      */
     private function getAvailableRoutes()
     {
-        return [
-            'dashboard' => [
-                'value' => '/dashboard',
-                'label' => 'Dashboard',
-                'description' => 'Main Dashboard'
-            ],
-            'konfigurasi' => [
-                'value' => '/konfigurasi',
-                'label' => 'Konfigurasi App',
-                'description' => 'App Configuration'
-            ],
-            'modules' => [
-                'value' => '/modules',
-                'label' => 'Manajemen Module App',
-                'description' => 'App Modules Management'
-            ],
-            'menu' => [
-                'value' => '/menu',
-                'label' => 'Manajemen Menu',
-                'description' => 'App Menu Management'
-            ],
-            'users' => [
-                'value' => '/users',
-                'label' => 'Manajemen User',
-                'description' => 'User Management'
-            ],
-            'messages' => [
-                'value' => '/messages',
-                'label' => 'Pesan',
-                'description' => 'Messages'
-            ],
-            'call-center' => [
-                'value' => '/call-center',
-                'label' => 'Call Center',
-                'description' => 'Call Center Setting'
-            ],
-            'profile' => [
-                'value' => '/profile',
-                'label' => 'Profile User',
-                'description' => 'User Profile View'
-            ],
-            'change-password' => [
-                'value' => '/change-password',
-                'label' => 'Ganti Password',
-                'description' => 'Change User Password'
-            ]
-        ];
+        // Get routes from App
+        $app = new App();
+        $router = $app->getRouter();
+        $allRoutes = $router->getRoutes();
+        
+        $availableRoutes = [];
+        
+        foreach ($allRoutes as $route) {
+            // Filter: GET method and handler with @index
+            if ($route['method'] === 'GET' && strpos($route['handler'], '@index') !== false) {
+                $path = $route['path'];
+                
+                // Skip root path and paths with parameters
+                if ($path === '/' || strpos($path, '{') !== false) {
+                    continue;
+                }
+                
+                // Generate label from path: remove slashes, replace hyphens with spaces, capitalize
+                $label = $this->generateLabelFromPath($path);
+                
+                // Use same label for description
+                $description = $label;
+                
+                $availableRoutes[] = [
+                    'value' => $path,
+                    'label' => $label,
+                    'description' => $description
+                ];
+            }
+        }
+        
+        return $availableRoutes;
+    }
+
+    /**
+     * Generate capitalized label from path
+     * Example: /call-center -> Call Center
+     */
+    private function generateLabelFromPath($path)
+    {
+        // Remove leading/trailing slashes
+        $clean = trim($path, '/');
+        
+        // Replace hyphens with spaces
+        $clean = str_replace('-', ' ', $clean);
+        
+        // Capitalize each word
+        $label = ucwords($clean);
+        
+        return $label;
     }
 
     /**
