@@ -4,7 +4,9 @@
 @import url("base/variables.css");
 
 /* Import component styles */
+@import url("components/card.css");
 @import url("components/form.css");
+@import url("components/button.css");
 @import url("components/notify.css");
 @import url("components/auth.css");
 
@@ -43,6 +45,93 @@ a:active:not(.no-hover-underline) {
 .fa {
   font-family: "Font Awesome 7 Free", "Font Awesome 7 Pro",
     "Font Awesome 7 Brands" !important;
+}
+
+/* Prevent icon flash in modules */
+.avatar-40 {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.icon-20 {
+  font-size: 20px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Icon loading state */
+.avatar-40 .icon-20 {
+  opacity: 0;
+  animation: iconFadeIn 0.3s ease-in-out 0.1s forwards;
+}
+
+@keyframes iconFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fallback for when FontAwesome is not loaded */
+.avatar-40 .icon-20:not([class*="fa-"]):before {
+  content: "📦";
+  font-size: 16px;
+}
+
+/* Icon flash prevention for modules */
+.modules-table .avatar-40 {
+  position: relative;
+  overflow: hidden;
+}
+
+.modules-table .avatar-40 .icon-20 {
+  position: relative;
+  z-index: 2;
+}
+
+/* Loading state for icons */
+.modules-table .avatar-40::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: var(--text-tertiary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  opacity: 0.3;
+  animation: iconPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* Hide loading state when icon is loaded */
+.modules-table .avatar-40 .icon-20.loaded + .avatar-40::before {
+  display: none;
 }
 
 /* Modules Form Loading States */

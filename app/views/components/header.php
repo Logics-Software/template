@@ -151,8 +151,8 @@ function getGreetingMessage() {
                                     </div>
                                 </div>
                             </div>
-                            <div class="dropdown-footer">
-                                <a href="#" class="text-sm text-secondary text-center">Tampilkan semua notifikasi</a>
+                            <div class="dropdown-footer text-center">
+                                <a href="#" class="text-secondary">Tampilkan semua notifikasi</a>
                             </div>
                         </div>
                     </div>
@@ -171,7 +171,7 @@ function getGreetingMessage() {
                         <div class="message-menu">
                             <div class="dropdown-header d-flex justify-content-between align-items-center">
                                 <h6 class="mb-0">Pesan</h6>
-                                <a href="#" class="btn btn-secondary" id="markAllAsReadBtn">Tandai Sudah Dibaca</a>
+                                <a href="#" class="text-secondary" id="markAllAsReadBtn">Tandai Sudah Dibaca</a>
                             </div>
                             <div class="message-list" id="messageList">
                                 <div class="text-center p-3">
@@ -181,8 +181,8 @@ function getGreetingMessage() {
                                     <p class="mt-2 mb-0 text-muted">Memuat pesan...</p>
                                 </div>
                             </div>
-                            <div class="dropdown-footer">
-                                <a href="<?php echo APP_URL; ?>/messages" class="btn btn-primary w-100">Buka Semua Pesan</a>
+                            <div class="dropdown-footer text-center">
+                                <a href="<?php echo APP_URL; ?>/messages" class="text-secondary">Buka Semua Pesan</a>
                             </div>
                         </div>
                     </div>

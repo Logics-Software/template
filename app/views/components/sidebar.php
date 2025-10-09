@@ -53,7 +53,7 @@ $logo = getSidebarLogo();
             
             <!-- Users Management -->
             <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/users') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/users') !== false && strpos($_SERVER['REQUEST_URI'], '/users-menu') === false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users">
                     <i class="fas fa-users"></i>
                     <span class="nav-text">Users</span>
                 </a>
@@ -112,6 +112,14 @@ $logo = getSidebarLogo();
                 <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/konfigurasi') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/konfigurasi">
                     <i class="fas fa-cog"></i>
                     <span class="nav-text">Configuration</span>
+                </a>
+            </li>
+
+            <!-- Menu Akses -->
+            <li class="nav-item">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/users-menu') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users-menu">
+                    <i class="fa-solid fa-bars"></i>                    
+                    <span class="nav-text">Akses Menu</span>
                 </a>
             </li>
 

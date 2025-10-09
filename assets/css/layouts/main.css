@@ -56,9 +56,15 @@ body {
 
 /* Page header */
 .page-header {
-  margin: 1rem;
+  padding: 1rem;
 }
 
+.dashboard-row {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Page header */
 .page-title {
   font-size: 1.25rem;
   font-weight: 600;
