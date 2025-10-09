@@ -3,7 +3,7 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card__title mb-0">Edit User Menu Access</h5>
+                    <h5 class="mb-0">Edit User Menu Access</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
@@ -21,7 +21,7 @@
             <div class="form-body">
                 <!-- User Info Card -->
                 <div class="card mb-4">
-                    <div class="card-body">
+                    <div class="form-body">
                         <div class="row">
                             <div class="col-md-3">
                                 <p class="mb-1 text-muted small">Username</p>
@@ -56,8 +56,8 @@
                 <form id="menuAccessForm">
                     <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                     
-                    <div class="card">
-                        <div class="card-header">
+                    <div class="form-container">
+                        <div class="form-header">
                             <h6 class="mb-0"><i class="fas fa-bars me-2"></i>Select Menu Groups</h6>
                         </div>
                         <div class="card-body">

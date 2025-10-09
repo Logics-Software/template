@@ -6,8 +6,8 @@ $konfigurasi = $data['konfigurasi'] ?? [];
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">
+            <div class="form-container">
+                <div class="form-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
                             Edit Konfigurasi Sistem
@@ -31,7 +31,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                         </nav>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="form-body">
                     <form id="konfigurasiForm" action="<?php echo APP_URL; ?>/konfigurasi/update" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="csrf_token" value="<?php echo Session::generateCSRF(); ?>">
                         
@@ -122,7 +122,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                         </div>
                     </form>
                 </div>
-                <div class="card-footer">
+                <div class="form-footer">
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="<?php echo APP_URL; ?>/konfigurasi" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-1"></i>Batal

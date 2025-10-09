@@ -78,7 +78,6 @@ body {
 /* Breadcrumb */
 .breadcrumb {
   background: none;
-  padding: 0;
   margin-bottom: var(--margin-lg);
   font-size: 0.875rem;
   font-weight: 400;

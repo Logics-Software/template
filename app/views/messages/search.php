@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="form-container">
+            <div class="form-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
                     Hasil Pencarian
                     <small class="text-muted">untuk: "<?php echo htmlspecialchars($search_term); ?>"</small>
@@ -11,7 +11,7 @@
                 </a>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
                 <!-- Search Form -->
                 <div class="row mb-4">
                     <div class="col-md-6">

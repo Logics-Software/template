@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card modules-form-loading" id="moduleFormCard">
-            <div class="card-header">
+        <div class="form-container modules-form-loading" id="moduleFormCard">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Edit Module</h5>
                     <nav aria-label="breadcrumb">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             
-            <div class="card-body" id="moduleFormBody">
+            <div class="form-body" id="moduleFormBody">
                 <form method="POST" action="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>" id="editModuleForm">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     <input type="hidden" name="_method" value="PUT">
@@ -117,7 +117,7 @@
             </div>
             
             <!-- Form Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/modules" class="btn btn-secondary" title="Kembali ke Daftar Modul">
                     <i class="fas fa-arrow-left me-1"></i>Back to Modules
                 </a>

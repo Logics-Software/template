@@ -4,8 +4,8 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="form-container">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">My Account</h5>
                     <nav aria-label="breadcrumb">
@@ -19,7 +19,7 @@
                 </div>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
 
                 <form method="POST" action="<?php echo APP_URL; ?>/profile" id="profileForm" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
@@ -90,7 +90,7 @@
             </div>
             
             <!-- Form Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="form-footer d-flex justify-content-between align-items-center">
                 <button type="button" class="btn btn-secondary" onclick="goBack()">
                     <i class="fas fa-times me-1"></i>Cancel
                 </button>

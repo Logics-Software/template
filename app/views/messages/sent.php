@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="form-container">
+            <div class="form-header d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                     <h5 class="mb-0">Pesan Terkirim</h5>
                 </div>
@@ -14,7 +14,7 @@
                 </nav>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
                 <!-- Search Form with Action Buttons -->
                 <div class="row mb-4">
                     <div class="col-md-6">

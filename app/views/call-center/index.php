@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="form-container">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Call Center</h5>
                     <nav aria-label="breadcrumb">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
                 <!-- Search and Action Buttons -->
                 <div class="row mb-4">
                     <div class="col-md-4">

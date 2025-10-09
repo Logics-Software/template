@@ -997,14 +997,17 @@ function initHeaderMessageDropdown() {
     }
   });
 
-  // Mark all as read button handler
+  // Mark all as read link handler
   const markAllAsReadBtn = document.getElementById("markAllAsReadBtn");
   if (markAllAsReadBtn) {
-    markAllAsReadBtn.addEventListener("click", function () {
+    markAllAsReadBtn.addEventListener("click", function (e) {
+      e.preventDefault(); // Prevent default link navigation
+
       // Show loading state
       const originalText = this.textContent;
       this.textContent = "Memproses...";
-      this.disabled = true;
+      this.style.pointerEvents = "none"; // Disable clicks
+      this.classList.add("disabled");
 
       fetch(`${window.appUrl}/api/messages/mark-all-read`, {
         method: "POST",
@@ -1022,20 +1025,54 @@ function initHeaderMessageDropdown() {
             this.textContent = "Berhasil!";
             setTimeout(() => {
               this.textContent = originalText;
-              this.disabled = false;
+              this.style.pointerEvents = "auto";
+              this.classList.remove("disabled");
             }, 2000);
           } else {
-            Notify.error("Gagal menandai pesan sebagai sudah dibaca");
+            window.Notify.error("Gagal menandai pesan sebagai sudah dibaca");
             this.textContent = originalText;
-            this.disabled = false;
+            this.style.pointerEvents = "auto";
+            this.classList.remove("disabled");
           }
         })
         .catch((error) => {
           // Error handled silently
-          Notify.error("Terjadi kesalahan saat menandai pesan");
+          window.Notify.error("Terjadi kesalahan saat menandai pesan");
           this.textContent = originalText;
-          this.disabled = false;
+          this.style.pointerEvents = "auto";
+          this.classList.remove("disabled");
         });
+    });
+  }
+
+  // Clear all notifications link handler
+  const clearAllNotificationsBtn = document.getElementById(
+    "clearAllNotificationsBtn"
+  );
+  if (clearAllNotificationsBtn) {
+    clearAllNotificationsBtn.addEventListener("click", function (e) {
+      e.preventDefault(); // Prevent default link navigation
+
+      // Show loading state
+      const originalText = this.textContent;
+      this.textContent = "Clearing...";
+      this.style.pointerEvents = "none"; // Disable clicks
+      this.classList.add("disabled");
+
+      // Simulate clearing notifications (replace with actual API call when available)
+      setTimeout(() => {
+        window.Notify.success("All notifications cleared");
+        this.textContent = originalText;
+        this.style.pointerEvents = "auto";
+        this.classList.remove("disabled");
+
+        // Clear notification badge
+        const badge = document.getElementById("notificationBadge");
+        if (badge) {
+          badge.textContent = "0";
+          badge.style.display = "none";
+        }
+      }, 1000);
     });
   }
 

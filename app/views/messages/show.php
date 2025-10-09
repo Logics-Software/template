@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="form-container">
+            <div class="form-header d-flex justify-content-between align-items-center">
                 <div>
                     <h5 class="mb-0">
                         <?php echo htmlspecialchars($message['subject'] ?? '(No Subject)'); ?>
@@ -20,7 +20,7 @@
                 </nav>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
                 <div class="row">
                     <div class="col-md-8">
                         <!-- Message Content -->
@@ -131,7 +131,7 @@
             </div>
             
             <!-- Card Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="form-footer d-flex justify-content-between align-items-center">
                 <div class="d-flex gap-2">
                     <a href="<?php echo APP_URL; ?>/messages" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-1"></i>Kembali

@@ -1,23 +1,25 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                    <h5 class="mb-0">
-                        Pesan Masuk
-                        <?php if ($unread_count > 0): ?>
-                            <span class="badge bg-danger ms-2"><?php echo $unread_count; ?></span>
-                        <?php endif; ?>
-                    </h5>
+        <div class="form-container">
+            <div class="form-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <h5 class="mb-0">
+                            Pesan Masuk
+                            <?php if ($unread_count > 0): ?>
+                                <span class="badge bg-danger ms-2"><?php echo $unread_count; ?></span>
+                            <?php endif; ?>
+                        </h5>
+                    </div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Pesan Masuk</li>
+                        </ol>
+                    </nav>
                 </div>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/dashboard">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Pesan Masuk</li>
-                    </ol>
-                </nav>
             </div>
-            
+
             <div class="card-body">
                 <!-- Search Form with Action Buttons -->
                 <div class="row mb-4">

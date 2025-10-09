@@ -72,7 +72,7 @@ function getGreetingMessage() {
                         <div class="notification-menu">
                             <div class="dropdown-header d-flex justify-content-between align-items-center">
                                 <h6 class="mb-0">Notifications</h6>
-                                <button class="btn btn-primary">Clear All</button>
+                                <a href="#" class="text-secondary" id="clearAllNotificationsBtn">Clear All</a>
                             </div>
                             <div class="notification-list">
                                 <div class="notification-item">
@@ -152,7 +152,7 @@ function getGreetingMessage() {
                                 </div>
                             </div>
                             <div class="dropdown-footer">
-                                <a href="#" class="btn btn-primary w-100">View all</a>
+                                <a href="#" class="text-sm text-secondary text-center">Tampilkan semua notifikasi</a>
                             </div>
                         </div>
                     </div>
@@ -171,7 +171,7 @@ function getGreetingMessage() {
                         <div class="message-menu">
                             <div class="dropdown-header d-flex justify-content-between align-items-center">
                                 <h6 class="mb-0">Pesan</h6>
-                                <button class="btn btn-secondary" id="markAllAsReadBtn">Tandai Sudah Dibaca</button>
+                                <a href="#" class="btn btn-secondary" id="markAllAsReadBtn">Tandai Sudah Dibaca</a>
                             </div>
                             <div class="message-list" id="messageList">
                                 <div class="text-center p-3">

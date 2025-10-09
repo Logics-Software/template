@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="form-container">
+            <div class="form-header d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                     <h5 class="mb-0">
                         Tulis Pesan Baru
@@ -16,7 +16,7 @@
                 </nav>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
                 <form id="messageForm" method="POST" action="<?php echo APP_URL; ?>/messages">
                     <input type="hidden" name="_token" value="<?php echo Session::generateCSRF(); ?>">
                     <div class="row">
@@ -133,7 +133,7 @@
             </div>
             
             <!-- Form Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/messages" class="btn btn-secondary">
                     <i class="fas fa-times me-1"></i>Batal
                 </a>

@@ -9,21 +9,21 @@ ob_start();
 <!-- Action Buttons -->
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="form-container">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Menu Management</h5>
+                    <h5 class="mb-0">Setting Menu</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Menu Management</li>
+                            <li class="breadcrumb-item active" aria-current="page">Setting Menu</li>
                         </ol>
                     </nav>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="form-body">
                 <!-- Menu Groups -->
                 <div class="row">
                     <div class="col-md-12">

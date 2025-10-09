@@ -12,19 +12,19 @@ ob_start();
 <div class="row">
     <!-- Menu Builder Panel -->
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="form-container">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Detail Menu</h5>
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/dashboard">Home</a></li>
                         <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/menu">Menu Management</a></li>
-                        <li class="breadcrumb-item active">Menu Builder</li>
+                        <li class="breadcrumb-item active">Detail Menu</li>
                     </ol>
                 </div>
             </div>
 
-            <div class="card-body">
+            <div class="form-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 class="fw-bold mb-0"><i class="fas fa-server me-2"></i> Struktur Menu Group "<?php echo htmlspecialchars($selected_group['name']); ?>"</h6>
                     <button class="btn btn-sm btn-primary" onclick="addMenuItem()">

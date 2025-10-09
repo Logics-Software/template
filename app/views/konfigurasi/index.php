@@ -23,8 +23,8 @@ if (!$konfigurasi) {
 }
 ?>
 
-<div class="card">
-    <div class="card-header">
+<div class="form-container">
+    <div class="form-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">
                 Konfigurasi Sistem
@@ -43,7 +43,7 @@ if (!$konfigurasi) {
             </nav>
         </div>
     </div>
-    <div class="card-body">
+    <div class="form-body">
         <div class="row">
             <!-- Logo Section -->
             <div class="col-md-4 mb-4">
@@ -106,7 +106,7 @@ if (!$konfigurasi) {
             </div>
         </div>
     </div>
-    <div class="card-footer">
+    <div class="form-footer">
         <div class="d-flex justify-content-between align-items-center">
             <a href="<?php echo APP_URL; ?>/dashboard" class="btn btn-secondary">
                 <i class="fas fa-arrow-left me-1"></i>Kembali ke Dashboard

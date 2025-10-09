@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="form-container">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Call Center Details</h5>
                     <nav aria-label="breadcrumb">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="mb-4">
@@ -71,7 +71,7 @@
             </div>
             
             <!-- Card Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/call-center" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-1"></i>Back to Call Center
                 </a>

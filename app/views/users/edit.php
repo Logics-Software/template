@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="form-container">
+            <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Edit User</h5>
                     <nav aria-label="breadcrumb">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             
-            <div class="card-body">
+            <div class="form-body">
                 <form method="POST" action="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" id="editUserForm" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     <input type="hidden" name="_method" value="PUT">
@@ -197,7 +197,7 @@
             </div>
             
             <!-- Form Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/users" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-1"></i>Back to Users
                 </a>

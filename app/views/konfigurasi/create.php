@@ -5,8 +5,8 @@ $title = $data['title'] ?? 'Buat Konfigurasi Sistem';
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">
+            <div class="form-container">
+                <div class="form-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
                             Buat Konfigurasi Sistem
@@ -30,7 +30,7 @@ $title = $data['title'] ?? 'Buat Konfigurasi Sistem';
                         </nav>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="form-body">
                     <form id="konfigurasiForm" action="<?php echo APP_URL; ?>/konfigurasi" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="csrf_token" value="<?php echo Session::generateCSRF(); ?>">
                         
@@ -103,7 +103,7 @@ $title = $data['title'] ?? 'Buat Konfigurasi Sistem';
                         </div>
                     </form>
                 </div>
-                <div class="card-footer">
+                <div class="form-footer">
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="<?php echo APP_URL; ?>/dashboard" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-1"></i>Batal
