@@ -1,14 +1,4 @@
-<?php
-$title = $title ?? 'Menu Builder';
-$current_page = 'menu-builder';
-
-// Generate CSRF token early for forms
-$csrf_token = Session::generateCSRF();
-
-// Start output buffering to capture content
-ob_start();
-?>
-
+<!-- Menu Builder -->
 <div class="row">
     <!-- Menu Builder Panel -->
     <div class="col-md-12">
@@ -384,7 +374,7 @@ function initializeMenuBuilder() {
                 body: formData,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': '<?php echo $csrf_token; ?>'
+                    'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
                 }
             })
             .then(response => {
@@ -670,11 +660,11 @@ function confirmDeleteMenuItem() {
         headers: {
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-Token': '<?php echo $csrf_token; ?>'
+            'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
         },
         body: JSON.stringify({
             id: id,
-            _token: '<?php echo $csrf_token; ?>'
+            _token: '<?php echo Session::generateCSRF(); ?>'
         })
     })
     .then(response => {
@@ -1153,9 +1143,4 @@ window.selectIcon = function() {
             -moz-appearance: textfield;
             appearance: textfield;
         }
-        </style>
-
-<?php
-// End output buffering and get content
-$content = ob_get_clean();
-?>
+</style>

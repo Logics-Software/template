@@ -5,6 +5,8 @@
   box-shadow: var(--shadow-sm);
   padding: 0 0;
   height: var(--header-height);
+  min-height: var(--header-height);
+  max-height: var(--header-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -15,6 +17,28 @@
   /* Ensure sticky works in flex container */
   align-self: flex-start;
   width: 100%;
+  overflow: hidden;
+}
+
+/* Fix Bootstrap row negative margin issue inside header */
+.top-header .container-fluid {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.top-header .row {
+  flex: 1;
+  height: 100%;
+  margin: 0 !important;
+  align-items: center !important;
+}
+
+.top-header [class*="col-"] {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .top-header.sidebar-collapsed {

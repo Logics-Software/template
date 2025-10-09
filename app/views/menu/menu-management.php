@@ -1,12 +1,4 @@
-<?php
-$title = $title ?? 'Menu Management';
-$current_page = 'menu-management';
-// Generate CSRF token for forms and AJAX requests
-$csrf_token = Session::generateCSRF();
-// Start output buffering to capture content
-ob_start();
-?>
-<!-- Action Buttons -->
+<!-- Setting Menu -->
 <div class="row">
     <div class="col-12">
         <div class="form-container">
@@ -689,11 +681,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': '<?php echo $csrf_token; ?>'
+                    'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
                 },
                 body: JSON.stringify({
                     id: deleteGroupId,
-                    _token: '<?php echo $csrf_token; ?>'
+                    _token: '<?php echo Session::generateCSRF(); ?>'
                 })
             })
             .then(response => {
@@ -750,7 +742,7 @@ function initializeMenuManagement() {
                 body: formData,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': '<?php echo $csrf_token; ?>'
+                    'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
                 }
             })
             .then(response => {
@@ -1183,8 +1175,3 @@ window.selectIcon = function() {
     pointer-events: auto;
 }
 </style>
-
-<?php
-// End output buffering and get content
-$content = ob_get_clean();
-?>

@@ -1,7 +1,3 @@
-<?php
-// Flash messages are now handled globally in app.php layout
-?>
-
 <!-- Lock Screen Modal Overlay -->
 <div class="lock-screen-overlay" id="lockScreenOverlay">
     <div class="lock-screen-modal">
