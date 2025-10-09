@@ -65,7 +65,7 @@
                                     <th width="25%">Pengirim</th>
                                     <th width="40%">Subjek</th>
                                     <th width="15%">Tanggal</th>
-                                    <th width="15%">Aksi</th>
+                                    <th width="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

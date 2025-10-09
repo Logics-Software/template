@@ -56,6 +56,7 @@ class App
                     '/login',
                     '/register',
                     '/forgot-password',
+                    '/select-menu-group',
                     '/api/messages/mark-read',
                     '/api/messages/mark-all-read',
                     '/api/messages/unread-count',
@@ -88,6 +89,7 @@ class App
         $this->router->post('/register', 'AuthController@store');
         $this->router->get('/forgot-password', 'AuthController@forgotPassword');
         $this->router->post('/forgot-password', 'AuthController@sendPasswordReset');
+        $this->router->post('/select-menu-group', 'AuthController@setMenuGroup');
         
         // Lock Screen routes
         $this->router->get('/lock-screen', 'LockScreenController@index');
@@ -117,12 +119,12 @@ class App
         $this->router->post('/users/{id}/reject', 'UserController@rejectUser');
         
         // Users Menu Access routes
-        $this->router->get('/users-menu', 'UsersMenuController@index');
-        $this->router->get('/users-menu/{id}/edit', 'UsersMenuController@edit');
-        $this->router->post('/users-menu/{id}', 'UsersMenuController@update');
-        $this->router->get('/users-menu/{id}/menu-groups', 'UsersMenuController@getUserMenuGroups');
-        $this->router->post('/users-menu/add-menu-access', 'UsersMenuController@addMenuAccess');
-        $this->router->post('/users-menu/remove-menu-access', 'UsersMenuController@removeMenuAccess');
+        $this->router->get('/menuakses', 'UsersMenuController@index');
+        $this->router->get('/menuakses/{id}/edit', 'UsersMenuController@edit');
+        $this->router->post('/menuakses/{id}', 'UsersMenuController@update');
+        $this->router->get('/menuakses/{id}/menu-groups', 'UsersMenuController@getUserMenuGroups');
+        $this->router->post('/menuakses/add-menu-access', 'UsersMenuController@addMenuAccess');
+        $this->router->post('/menuakses/remove-menu-access', 'UsersMenuController@removeMenuAccess');
         
         // Profile routes
         $this->router->get('/profile', 'UserController@profile');
@@ -141,14 +143,14 @@ class App
         $this->router->put('/konfigurasi/update', 'KonfigurasiController@update');
         
         // Call Center routes
-        $this->router->get('/call-center', 'CallCenterController@index');
-        $this->router->get('/call-center/create', 'CallCenterController@create');
-        $this->router->post('/call-center', 'CallCenterController@store');
-        $this->router->get('/call-center/{id}', 'CallCenterController@show');
-        $this->router->get('/call-center/{id}/edit', 'CallCenterController@edit');
-        $this->router->put('/call-center/{id}', 'CallCenterController@update');
-        $this->router->post('/call-center/{id}/delete', 'CallCenterController@delete');
-        $this->router->post('/call-center/update-sort', 'CallCenterController@updateSortOrder');
+        $this->router->get('/callcenter', 'CallCenterController@index');
+        $this->router->get('/callcenter/create', 'CallCenterController@create');
+        $this->router->post('/callcenter', 'CallCenterController@store');
+        $this->router->get('/callcenter/{id}', 'CallCenterController@show');
+        $this->router->get('/callcenter/{id}/edit', 'CallCenterController@edit');
+        $this->router->put('/callcenter/{id}', 'CallCenterController@update');
+        $this->router->post('/callcenter/{id}/delete', 'CallCenterController@delete');
+        $this->router->post('/callcenter/update-sort', 'CallCenterController@updateSortOrder');
         
         // Analytics routes
         $this->router->get('/analytics', 'DashboardController@analytics');

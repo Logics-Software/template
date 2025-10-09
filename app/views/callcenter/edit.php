@@ -10,7 +10,7 @@
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/call-center" class="text-decoration-none">Call Center</a>
+                                <a href="<?php echo APP_URL; ?>/callcenter" class="text-decoration-none">Call Center</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -19,7 +19,7 @@
             </div>
             
             <div class="form-body">
-                <form method="POST" action="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" id="editCallCenterForm">
+                <form method="POST" action="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>" id="editCallCenterForm">
                     <input type="hidden" name="_token" value="<?php echo Session::generateCSRF(); ?>">
                     <input type="hidden" name="_method" value="PUT">
                     
@@ -28,7 +28,6 @@
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="judul" name="judul" placeholder="Judul" value="<?php echo htmlspecialchars($callCenter['judul']); ?>" required>
                                 <label for="judul">Judul <span class="text-danger">*</span></label>
-                                <div class="form-text">Enter a descriptive title for this call center entry</div>
                             </div>
                         </div>
                     </div>
@@ -38,7 +37,7 @@
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="nomorwa" name="nomorwa" placeholder="Nomor WhatsApp" value="<?php echo htmlspecialchars($callCenter['nomorwa']); ?>" required>
                                 <label for="nomorwa">Nomor WhatsApp <span class="text-danger">*</span></label>
-                                <div class="form-text">Enter WhatsApp number (e.g., +6281234567890)</div>
+                                <div class="form-text">Masukkan nomor WhatsApp (contoh, +6281234567890)</div>
                             </div>
                         </div>
                     </div>
@@ -56,8 +55,8 @@
             
             <!-- Form Footer -->
             <div class="form-footer d-flex justify-content-between align-items-center">
-                <a href="<?php echo APP_URL; ?>/call-center" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Back to Call Center
+                <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Call Center
                 </a>
                 <button type="submit" form="editCallCenterForm" class="btn btn-primary">
                     <i class="fas fa-save me-1"></i>Update Call Center
@@ -81,7 +80,7 @@ document.getElementById("editCallCenterForm").addEventListener("submit", functio
         submitBtn.disabled = true;
     }
     
-    fetch("<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>", {
+    fetch("<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>", {
         method: "POST",
         body: formData,
         headers: {
@@ -97,7 +96,7 @@ document.getElementById("editCallCenterForm").addEventListener("submit", functio
             
             // Redirect after 2 seconds
             setTimeout(() => {
-                window.location.href = "<?php echo APP_URL; ?>/call-center";
+                window.location.href = "<?php echo APP_URL; ?>/callcenter";
             }, 2000);
         } else {
             // Show error message

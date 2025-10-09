@@ -74,6 +74,7 @@ class AuthController extends BaseController
                 return;
             }
 
+            // Set basic user session
             Session::set('user_id', $user['id']);
             Session::set('user_name', $user['namalengkap']);
             Session::set('user_email', $user['email']);
@@ -91,10 +92,42 @@ class AuthController extends BaseController
             // Update last login
             $updateResult = $this->userModel->updateLastLogin($user['id']);
 
-            if ($this->isAjax()) {
-                $this->json(['success' => true, 'redirect' => '/dashboard']);
+            // Get user's menu groups
+            $usersMenuModel = new UsersMenu();
+            $userMenuGroups = $usersMenuModel->getUserMenuGroups($user['id']);
+            
+            if (empty($userMenuGroups)) {
+                // No menu groups assigned, proceed to dashboard
+                if ($this->isAjax()) {
+                    $this->json(['success' => true, 'redirect' => '/dashboard']);
+                } else {
+                    $this->redirect('/dashboard');
+                }
+            } elseif (count($userMenuGroups) === 1) {
+                // Only one menu group, set it directly to session
+                Session::set('active_menu_group_id', $userMenuGroups[0]['id']);
+                Session::set('active_menu_group_name', $userMenuGroups[0]['name']);
+                
+                if ($this->isAjax()) {
+                    $this->json(['success' => true, 'redirect' => '/dashboard']);
+                } else {
+                    $this->redirect('/dashboard');
+                }
             } else {
-                $this->redirect('/dashboard');
+                // Multiple menu groups, show modal selection
+                Session::set('pending_menu_selection', true);
+                Session::set('available_menu_groups', $userMenuGroups);
+                
+                if ($this->isAjax()) {
+                    $this->json([
+                        'success' => true, 
+                        'show_menu_selection' => true,
+                        'groups' => $userMenuGroups,
+                        'redirect' => '/dashboard'
+                    ]);
+                } else {
+                    $this->redirect('/dashboard');
+                }
             }
         } else {
             if ($this->isAjax()) {
@@ -192,6 +225,10 @@ class AuthController extends BaseController
                     return;
                 }
             }
+            
+            // Assign default menu group based on user role
+            $usersMenuModel = new UsersMenu();
+            $usersMenuModel->assignDefaultMenuByRole($userId, $data['role']);
             
             $this->userModel->commit();
 
@@ -292,6 +329,57 @@ class AuthController extends BaseController
                 $this->redirect('/forgot-password');
             }
         }
+    }
+
+    public function setMenuGroup($request = null, $response = null, $params = [])
+    {
+        // Check if user is logged in
+        if (!Session::has('user_id')) {
+            $this->json(['error' => 'Unauthorized'], 401);
+            return;
+        }
+
+        $groupId = $this->input('group_id');
+
+        if (!$groupId) {
+            $this->json(['error' => 'Menu group harus dipilih'], 400);
+            return;
+        }
+
+        // Verify that the group is in available groups
+        $availableGroups = Session::get('available_menu_groups');
+        
+        if (!$availableGroups) {
+            $this->json(['error' => 'Session expired, please login again'], 401);
+            return;
+        }
+
+        $selectedGroup = null;
+        foreach ($availableGroups as $group) {
+            if ($group['id'] == $groupId) {
+                $selectedGroup = $group;
+                break;
+            }
+        }
+
+        if (!$selectedGroup) {
+            $this->json(['error' => 'Menu group tidak valid'], 400);
+            return;
+        }
+
+        // Set the selected group to session
+        Session::set('active_menu_group_id', $selectedGroup['id']);
+        Session::set('active_menu_group_name', $selectedGroup['name']);
+
+        // Clear pending selection flags
+        Session::remove('pending_menu_selection');
+        Session::remove('available_menu_groups');
+
+        $this->json([
+            'success' => true, 
+            'message' => 'Menu group berhasil dipilih',
+            'redirect' => '/dashboard'
+        ]);
     }
 
     public function logout($request = null, $response = null, $params = [])

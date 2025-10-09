@@ -30,6 +30,8 @@
 
 .top-header .user-dropdown .btn-link {
   text-decoration: none !important;
+  color: var(--text-secondary);
+  cursor: pointer;
 }
 
 .top-header .user-dropdown .btn-link:hover,

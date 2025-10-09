@@ -188,6 +188,10 @@ class UserController extends BaseController
                 }
             }
             
+            // Assign default menu group based on user role
+            $usersMenuModel = new UsersMenu();
+            $usersMenuModel->assignDefaultMenuByRole($userId, $data['role']);
+            
             $this->userModel->commit();
 
             if ($request->isAjax()) {
@@ -416,7 +420,14 @@ class UserController extends BaseController
 
         try {
             $this->userModel->beginTransaction();
+            
+            // Delete user menu access first (cascade delete)
+            $usersMenuModel = new UsersMenu();
+            $usersMenuModel->deleteUserMenuAccess($id);
+            
+            // Then delete the user
             $this->userModel->delete($id);
+            
             $this->userModel->commit();
 
             if ($request->isAjax()) {
@@ -890,7 +901,14 @@ class UserController extends BaseController
             }
 
             $this->userModel->beginTransaction();
+            
+            // Delete user menu access first (cascade delete)
+            $usersMenuModel = new UsersMenu();
+            $usersMenuModel->deleteUserMenuAccess($id);
+            
+            // Then delete the user
             $this->userModel->delete($id);
+            
             $this->userModel->commit();
 
             if ($request->isAjax()) {

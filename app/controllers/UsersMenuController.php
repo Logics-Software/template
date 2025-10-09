@@ -55,9 +55,9 @@ class UsersMenuController extends BaseController
             // Get users with their menu groups
             $users = $this->usersMenuModel->getAllWithDetails($filters);
 
-            $this->view('users-menu/index', [
-                'title' => 'User Menu Access',
-                'current_page' => 'users-menu',
+            $this->view('menuakses/index', [
+                'title' => 'Setting Akses Menu',
+                'current_page' => 'menuakses',
                 'users' => $users,
                 'search' => $search,
                 'status' => $status,
@@ -71,7 +71,7 @@ class UsersMenuController extends BaseController
             
             // Show a user-friendly error message
             $this->withError('An error occurred while loading user menu access. Please try again.');
-            $this->redirect('/users-menu');
+            $this->redirect('/menuakses');
         }
     }
 
@@ -95,7 +95,7 @@ class UsersMenuController extends BaseController
         
         if (!$userId) {
             $this->withError('User ID is required');
-            $this->redirect('/users-menu');
+            $this->redirect('/menuakses');
             return;
         }
 
@@ -106,7 +106,7 @@ class UsersMenuController extends BaseController
             
             if (!$user) {
                 $this->withError('User not found');
-                $this->redirect('/users-menu');
+                $this->redirect('/menuakses');
                 return;
             }
 
@@ -117,9 +117,9 @@ class UsersMenuController extends BaseController
             $userMenuGroups = $this->usersMenuModel->getUserMenuGroups($userId);
             $userGroupIds = array_column($userMenuGroups, 'id');
 
-            $this->view('users-menu/edit', [
-                'title' => 'Edit User Menu Access',
-                'current_page' => 'users-menu',
+            $this->view('menuakses/edit', [
+                'title' => 'Setting Akses Menu',
+                'current_page' => 'menuakses',
                 'user' => $user,
                 'allMenuGroups' => $allMenuGroups,
                 'userGroupIds' => $userGroupIds,
@@ -128,7 +128,7 @@ class UsersMenuController extends BaseController
         } catch (Exception $e) {
             error_log("UsersMenuController edit error: " . $e->getMessage());
             $this->withError('An error occurred while loading user menu access.');
-            $this->redirect('/users-menu');
+            $this->redirect('/menuakses');
         }
     }
 

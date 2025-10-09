@@ -72,7 +72,7 @@
                                     <th width="25%">Pengirim</th>
                                     <th width="40%">Subjek</th>
                                     <th width="15%">Tanggal</th>
-                                    <th width="15%">Aksi</th>
+                                    <th width="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,7 +90,8 @@
                                                 <?php if (!empty($message['sender_picture'])): ?>
                                                     <img src="<?php echo APP_URL; ?>/<?php echo htmlspecialchars($message['sender_picture']); ?>" 
                                                             alt="<?php echo htmlspecialchars($message['sender_name']); ?>" 
-                                                            class="avatar-sm rounded-circle me-2 avatar-32">
+                                                            class="avatar-sm rounded-circle me-2 avatar-32"
+                                                            style="width: 32px; height: 32px;">
                                                 <?php else: ?>
                                                     <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
                                                         <?php echo strtoupper(substr($message['sender_name'], 0, 1)); ?>

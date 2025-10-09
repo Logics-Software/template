@@ -3,14 +3,14 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Edit User Menu Access</h5>
+                    <h5 class="mb-0">Setting Akses Menu</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/users-menu" class="text-decoration-none">User Menu Access</a>
+                                <a href="<?php echo APP_URL; ?>/menuakses" class="text-decoration-none">Setting Akses Menu</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -24,19 +24,19 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <p class="mb-1 text-muted small">Username</p>
-                                <p class="fw-bold"><?php echo htmlspecialchars($user['username']); ?></p>
+                                <p class="mb-1 text-muted">Username</p>
+                                <p class="text-muted fw-bold text-lg"><?php echo htmlspecialchars($user['username']); ?></p>
                             </div>
                             <div class="col-md-3">
-                                <p class="mb-1 text-muted small">Nama Lengkap</p>
-                                <p class="fw-bold"><?php echo htmlspecialchars($user['namalengkap']); ?></p>
+                                <p class="mb-1 text-muted">Nama Lengkap</p>
+                                <p class="text-muted fw-bold text-lg"><?php echo htmlspecialchars($user['namalengkap']); ?></p>
                             </div>
                             <div class="col-md-3">
-                                <p class="mb-1 text-muted small">Email</p>
-                                <p class="fw-bold"><?php echo htmlspecialchars($user['email']); ?></p>
+                                <p class="mb-1 text-muted">Email</p>
+                                <p class="text-muted fw-bold text-lg"><?php echo htmlspecialchars($user['email']); ?></p>
                             </div>
                             <div class="col-md-3">
-                                <p class="mb-1 text-muted small">Role</p>
+                                <p class="mb-1 text-muted">Role</p>
                                 <?php
                                 $roleClass = match($user['role'] ?? '') {
                                     'admin' => 'danger',
@@ -46,7 +46,7 @@
                                     default => 'info'
                                 };
                                 ?>
-                                <p><span class="badge bg-<?php echo $roleClass; ?>"><?php echo ucfirst($user['role']); ?></span></p>
+                                <p><span class="badge text-lg bg-<?php echo $roleClass; ?>"><?php echo ucfirst($user['role']); ?></span></p>
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                     
                     <div class="form-container">
                         <div class="form-header">
-                            <h6 class="mb-0"><i class="fas fa-bars me-2"></i>Select Menu Groups</h6>
+                            <h6 class="mb-0"><i class="fas fa-bars me-2"></i>Pilih Group Menu</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -103,11 +103,11 @@
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
-                        <a href="<?php echo APP_URL; ?>/users-menu" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-2"></i>Back
+                        <a href="<?php echo APP_URL; ?>/menuakses" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Batal
                         </a>
                         <button type="submit" class="btn btn-primary" id="submitBtn">
-                            <i class="fas fa-save me-2"></i>Save Changes
+                            <i class="fas fa-save me-2"></i>Simpan
                         </button>
                     </div>
                 </form>
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const groupIds = Array.from(checkboxes).map(cb => cb.value);
         
         // Send AJAX request
-        fetch('<?php echo APP_URL; ?>/users-menu/<?php echo $user['id']; ?>', {
+        fetch('<?php echo APP_URL; ?>/menuakses/<?php echo $user['id']; ?>', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Redirect to list page after delay to allow notification to be visible
                 setTimeout(() => {
-                    window.location.href = '<?php echo APP_URL; ?>/users-menu';
+                    window.location.href = '<?php echo APP_URL; ?>/menuakses';
                 }, 2000);
             } else {
                 window.Notify.error(data.error || 'Failed to update menu access');

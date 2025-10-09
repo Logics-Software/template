@@ -26,7 +26,7 @@ class CallCenterController extends BaseController
         
         $result = $this->callCenterModel->getPaginated($page, $perPage, $search);
         
-        $this->view('call-center/index', [
+        $this->view('callcenter/index', [
             'title' => 'Call Center',
             'callCenters' => $result['data'],
             'search' => $search,
@@ -51,7 +51,7 @@ class CallCenterController extends BaseController
             return;
         }
 
-        $this->view('call-center/create');
+        $this->view('callcenter/create');
     }
     
     /**
@@ -75,7 +75,7 @@ class CallCenterController extends BaseController
                 $this->json(['errors' => $validator->errors()], 422);
             } else {
                 $this->withErrors($validator->errors());
-                $this->redirect('/call-center/create');
+                $this->redirect('/callcenter/create');
             }
         }
 
@@ -95,7 +95,7 @@ class CallCenterController extends BaseController
                     $this->json(['success' => true, 'message' => 'Call center entry created successfully']);
                 } else {
                     $this->withSuccess('Call center entry created successfully');
-                    $this->redirect('/call-center');
+                    $this->redirect('/callcenter');
                 }
             } else {
                 $this->callCenterModel->rollback();
@@ -103,7 +103,7 @@ class CallCenterController extends BaseController
                     $this->json(['error' => 'Failed to create call center entry'], 500);
                 } else {
                     $this->withError('Failed to create call center entry');
-                    $this->redirect('/call-center/create');
+                    $this->redirect('/callcenter/create');
                 }
             }
         } catch (Exception $e) {
@@ -112,7 +112,7 @@ class CallCenterController extends BaseController
                 $this->json(['error' => 'An error occurred while creating call center entry'], 500);
             } else {
                 $this->withError('An error occurred while creating call center entry');
-                $this->redirect('/call-center/create');
+                $this->redirect('/callcenter/create');
             }
         }
     }
@@ -131,18 +131,18 @@ class CallCenterController extends BaseController
         
         if (!$id) {
             $this->withError('Invalid call center ID');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
         $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
             $this->withError('Call center entry not found');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
-        $this->view('call-center/edit', ['callCenter' => $callCenter]);
+        $this->view('callcenter/edit', ['callCenter' => $callCenter]);
     }
     
     /**
@@ -159,26 +159,26 @@ class CallCenterController extends BaseController
         
         if (!$id) {
             $this->withError('Invalid call center ID');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
         // Validate CSRF token
         if (!Session::validateCSRF($_POST['_token'] ?? '')) {
             $this->withError('Invalid CSRF token');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
         $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
             $this->withError('Call center entry not found');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
@@ -202,7 +202,7 @@ class CallCenterController extends BaseController
         
         if (!empty($errors)) {
             $this->withError(implode(', ', $errors));
-            $this->redirect('/call-center/' . $id . '/edit');
+            $this->redirect('/callcenter/' . $id . '/edit');
             return;
         }
         
@@ -212,14 +212,14 @@ class CallCenterController extends BaseController
                 $this->json(['success' => true, 'message' => 'Call center entry updated successfully']);
             } else {
                 $this->withSuccess('Call center entry updated successfully');
-                $this->redirect('/call-center');
+                $this->redirect('/callcenter');
             }
         } else {
             if ($this->isAjax()) {
                 $this->json(['success' => false, 'error' => 'Failed to update call center entry'], 500);
             } else {
                 $this->withError('Failed to update call center entry');
-                $this->redirect('/call-center/' . $id . '/edit');
+                $this->redirect('/callcenter/' . $id . '/edit');
             }
         }
     }
@@ -297,26 +297,26 @@ class CallCenterController extends BaseController
         
         if (!$id) {
             $this->withError('Invalid call center ID');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
         // Validate CSRF token
         if (!Session::validateCSRF($_POST['_token'] ?? '')) {
             $this->withError('Invalid CSRF token');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
         $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
             $this->withError('Call center entry not found');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
@@ -325,14 +325,14 @@ class CallCenterController extends BaseController
                 $this->json(['success' => true, 'message' => 'Call center entry deleted successfully']);
             } else {
                 $this->withSuccess('Call center entry deleted successfully');
-                $this->redirect('/call-center');
+                $this->redirect('/callcenter');
             }
         } else {
             if ($this->isAjax()) {
                 $this->json(['success' => false, 'error' => 'Failed to delete call center entry'], 500);
             } else {
                 $this->withError('Failed to delete call center entry');
-                $this->redirect('/call-center');
+                $this->redirect('/callcenter');
             }
         }
     }
@@ -351,17 +351,17 @@ class CallCenterController extends BaseController
         
         if (!$id) {
             $this->withError('Invalid call center ID');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
         $callCenter = $this->callCenterModel->getById($id);
         if (!$callCenter) {
             $this->withError('Call center entry not found');
-            $this->redirect('/call-center');
+            $this->redirect('/callcenter');
             return;
         }
         
-        $this->view('call-center/show', ['callCenter' => $callCenter]);
+        $this->view('callcenter/show', ['callCenter' => $callCenter]);
     }
 }

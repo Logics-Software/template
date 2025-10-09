@@ -3,13 +3,13 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">User Menu Access</h5>
+                    <h5 class="mb-0">Setting Akses Menu</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">User Menu Access</li>
+                            <li class="breadcrumb-item active" aria-current="page">Setting Akses Menu</li>
                         </ol>
                     </nav>
                 </div>
@@ -19,7 +19,7 @@
                 <!-- Search and Filter -->
                 <div class="row mb-4">
                     <div class="col-md-4">
-                        <form method="GET" action="<?php echo APP_URL; ?>/users-menu" class="d-flex" id="searchForm">
+                        <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="d-flex" id="searchForm">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Cari user..." value="<?php echo htmlspecialchars($search); ?>" id="searchInput">
                                 <button type="button" class="btn btn-secondary" id="searchToggleBtn" title="Search">
@@ -28,23 +28,23 @@
                             </div>
                         </form>
                     </div>
-                    <form method="GET" action="<?php echo APP_URL; ?>/users-menu" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($users['per_page']); ?>">
                         <select class="form-select" id="status" name="status" onchange="this.form.submit()">
-                            <option value="">All Status</option>
+                            <option value="">Semua Status</option>
                             <option value="aktif"<?php echo $status === 'aktif' ? ' selected' : ''; ?>>Aktif</option>
                             <option value="non_aktif"<?php echo $status === 'non_aktif' ? ' selected' : ''; ?>>Non Aktif</option>
                             <option value="register"<?php echo $status === 'register' ? ' selected' : ''; ?>>Register</option>
                         </select>
                     </form>
-                    <form method="GET" action="<?php echo APP_URL; ?>/users-menu" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($users['per_page']); ?>">
                         <select class="form-select" id="role" name="role" onchange="this.form.submit()">
-                            <option value="">All Roles</option>
+                            <option value="">Semua Role</option>
                             <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
                             <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
                             <option value="user"<?php echo $role === 'user' ? ' selected' : ''; ?>>User</option>
@@ -52,7 +52,7 @@
                             <option value="customer"<?php echo $role === 'customer' ? ' selected' : ''; ?>>Customer</option>
                         </select>
                     </form>
-                    <form method="GET" action="<?php echo APP_URL; ?>/users-menu" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
@@ -88,7 +88,7 @@
                                     <i class="fas fa-sort text-muted ms-1"></i>
                                 </th>
                                 <th>Group Menu</th>
-                                <th>Actions</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -129,7 +129,7 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1">
-                                                <a href="<?php echo APP_URL; ?>/users-menu/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-primary btn-action" title="Edit Menu Access">
+                                                <a href="<?php echo APP_URL; ?>/menuakses/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-primary btn-action" title="Edit Menu Access">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                             </div>
@@ -169,20 +169,20 @@
                         
                         <?php if ($users['current_page'] > 1): ?>
                             <li class="page-item">
-                                <a class="page-link" href="<?php echo APP_URL; ?>/users-menu?page=<?php echo $users['current_page'] - 1; ?>&<?php echo $queryString; ?>">Previous</a>
+                                <a class="page-link" href="<?php echo APP_URL; ?>/menuakses?page=<?php echo $users['current_page'] - 1; ?>&<?php echo $queryString; ?>">Previous</a>
                             </li>
                         <?php endif; ?>
 
                         <?php for ($i = 1; $i <= $users['last_page']; $i++): ?>
                             <?php $activeClass = $i == $users['current_page'] ? ' active' : ''; ?>
                             <li class="page-item<?php echo $activeClass; ?>">
-                                <a class="page-link" href="<?php echo APP_URL; ?>/users-menu?page=<?php echo $i; ?>&<?php echo $queryString; ?>"><?php echo $i; ?></a>
+                                <a class="page-link" href="<?php echo APP_URL; ?>/menuakses?page=<?php echo $i; ?>&<?php echo $queryString; ?>"><?php echo $i; ?></a>
                             </li>
                         <?php endfor; ?>
 
                         <?php if ($users['current_page'] < $users['last_page']): ?>
                             <li class="page-item">
-                                <a class="page-link" href="<?php echo APP_URL; ?>/users-menu?page=<?php echo $users['current_page'] + 1; ?>&<?php echo $queryString; ?>">Next</a>
+                                <a class="page-link" href="<?php echo APP_URL; ?>/menuakses?page=<?php echo $users['current_page'] + 1; ?>&<?php echo $queryString; ?>">Next</a>
                             </li>
                         <?php endif; ?>
                     </ul>

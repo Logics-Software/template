@@ -19,7 +19,7 @@
                 <!-- Search and Action Buttons -->
                 <div class="row mb-4">
                     <div class="col-md-4">
-                        <form method="GET" action="<?php echo APP_URL; ?>/call-center" class="d-flex" id="searchForm">
+                        <form method="GET" action="<?php echo APP_URL; ?>/callcenter" class="d-flex" id="searchForm">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Cari call center..." value="<?php echo htmlspecialchars($search); ?>" id="searchInput">
                                 <button type="button" class="btn btn-secondary" id="searchToggleBtn" title="Search">
@@ -28,7 +28,7 @@
                             </div>
                         </form>
                     </div>
-                    <form method="GET" action="<?php echo APP_URL; ?>/call-center" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/callcenter" class="col-md-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
                             <option value="5"<?php echo ($pagination['per_page'] ?? 10) == 5 ? ' selected' : ''; ?>>5</option>
@@ -43,8 +43,8 @@
                     </form>
                     <div class="col-md-6">
                         <div class="d-flex gap-2 justify-content-end">
-                            <a href="<?php echo APP_URL; ?>/call-center/create" class="btn btn-primary">
-                                <i class="fas fa-plus me-1"></i>Add Call Center
+                            <a href="<?php echo APP_URL; ?>/callcenter/create" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>Tambah Call Center
                             </a>
                         </div>
                     </div>
@@ -53,10 +53,10 @@
                 <?php if (empty($callCenters)): ?>
                     <div class="text-center py-5">
                         <i class="fab fa-whatsapp fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">No call center entries found</h5>
-                        <p class="text-muted">Start by adding your first call center entry.</p>
-                        <a href="<?php echo APP_URL; ?>/call-center/create" class="btn btn-primary">
-                            <i class="fas fa-plus me-1"></i>Add First Entry
+                        <h5 class="text-muted">Tidak ada data call center</h5>
+                        <p class="text-muted">Mulai memasukkan data Call Center.</p>
+                        <a href="<?php echo APP_URL; ?>/callcenter/create" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i>Tambah Data Call Center
                         </a>
                     </div>
                 <?php else: ?>
@@ -68,7 +68,7 @@
                                     <th width="25%">Judul</th>
                                     <th width="20%">Nomor WhatsApp</th>
                                     <th width="35%">Deskripsi</th>
-                                    <th width="15%">Aksi</th>
+                                    <th width="15%"></th>
                                 </tr>
                             </thead>
                             <tbody id="sortable-call-center">
@@ -91,10 +91,10 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1 min-w-80">
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>" class="btn btn-outline-info btn-sm btn-action" title="Lihat Detail">
+                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>" class="btn btn-outline-info btn-sm btn-action" title="Lihat Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm btn-action" title="Edit Data">
+                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm btn-action" title="Edit Data">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" title="Hapus Data">
@@ -125,20 +125,20 @@
                                     
                                     <?php if ($pagination['current_page'] > 1): ?>
                                         <li class="page-item">
-                                            <a class="page-link" href="<?php echo APP_URL; ?>/call-center?page=<?php echo $pagination['current_page'] - 1; ?>&<?php echo $queryString; ?>">Previous</a>
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/callcenter?page=<?php echo $pagination['current_page'] - 1; ?>&<?php echo $queryString; ?>">Previous</a>
                                         </li>
                                     <?php endif; ?>
 
                                     <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
                                         <?php $activeClass = $i == $pagination['current_page'] ? ' active' : ''; ?>
                                         <li class="page-item<?php echo $activeClass; ?>">
-                                            <a class="page-link" href="<?php echo APP_URL; ?>/call-center?page=<?php echo $i; ?>&<?php echo $queryString; ?>"><?php echo $i; ?></a>
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/callcenter?page=<?php echo $i; ?>&<?php echo $queryString; ?>"><?php echo $i; ?></a>
                                         </li>
                                     <?php endfor; ?>
 
                                     <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
                                         <li class="page-item">
-                                            <a class="page-link" href="<?php echo APP_URL; ?>/call-center?page=<?php echo $pagination['current_page'] + 1; ?>&<?php echo $queryString; ?>">Next</a>
+                                            <a class="page-link" href="<?php echo APP_URL; ?>/callcenter?page=<?php echo $pagination['current_page'] + 1; ?>&<?php echo $queryString; ?>">Next</a>
                                         </li>
                                     <?php endif; ?>
                                 </ul>
@@ -202,7 +202,7 @@ window.csrfToken = '<?php echo $csrfToken; ?>';
 // Initialize drag and drop for call center
 document.addEventListener('DOMContentLoaded', function() {
     initDragDrop({
-        sortOrderUrl: '<?php echo APP_URL; ?>/call-center/update-sort',
+        sortOrderUrl: '<?php echo APP_URL; ?>/callcenter/update-sort',
         csrfToken: '<?php echo $csrfToken; ?>',
         onSuccess: function(data) {
             showSuccessMessage(data.message || 'Urutan berhasil diperbarui!');
@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (deleteCallCenterId) {
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = `<?php echo APP_URL; ?>/call-center/${deleteCallCenterId}/delete`;
+            form.action = `<?php echo APP_URL; ?>/callcenter/${deleteCallCenterId}/delete`;
             
             const tokenInput = document.createElement('input');
             tokenInput.type = 'hidden';

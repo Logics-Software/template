@@ -3,23 +3,23 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Add Call Center</h5>
+                    <h5 class="mb-0">Tambah Call Center</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/call-center" class="text-decoration-none">Call Center</a>
+                                <a href="<?php echo APP_URL; ?>/callcenter" class="text-decoration-none">Call Center</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Add</li>
+                            <li class="breadcrumb-item active" aria-current="page">Tambah</li>
                         </ol>
                     </nav>
                 </div>
             </div>
             
             <div class="form-body">
-                <form method="POST" action="<?php echo APP_URL; ?>/call-center" id="createCallCenterForm">
+                <form method="POST" action="<?php echo APP_URL; ?>/callcenter" id="createCallCenterForm">
                     <input type="hidden" name="_token" value="<?php echo Session::generateCSRF(); ?>">
                     
                     <div class="row">
@@ -27,7 +27,6 @@
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="judul" name="judul" placeholder="Judul" required>
                                 <label for="judul">Judul <span class="text-danger">*</span></label>
-                                <div class="form-text">Enter a descriptive title for this call center entry</div>
                             </div>
                         </div>
                     </div>
@@ -37,7 +36,7 @@
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="nomorwa" name="nomorwa" placeholder="Nomor WhatsApp" required>
                                 <label for="nomorwa">Nomor WhatsApp <span class="text-danger">*</span></label>
-                                <div class="form-text">Enter WhatsApp number (e.g., +6281234567890)</div>
+                                <div class="form-text">Masukkan nomor WhatsApp (contoh, +6281234567890)</div>
                             </div>
                         </div>
                     </div>
@@ -55,11 +54,11 @@
             
             <!-- Form Footer -->
             <div class="form-footer d-flex justify-content-between align-items-center">
-                <a href="<?php echo APP_URL; ?>/call-center" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Back to Call Center
+                <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Call Center
                 </a>
                 <button type="submit" form="createCallCenterForm" class="btn btn-primary">
-                    <i class="fas fa-save me-1"></i>Create Call Center
+                    <i class="fas fa-save me-1"></i>Tambah Call Center
                 </button>
             </div>
         </div>
@@ -80,7 +79,7 @@ document.getElementById("createCallCenterForm").addEventListener("submit", funct
         submitBtn.disabled = true;
     }
     
-    fetch("<?php echo APP_URL; ?>/call-center", {
+    fetch("<?php echo APP_URL; ?>/callcenter", {
         method: "POST",
         body: formData,
         headers: {
@@ -96,7 +95,7 @@ document.getElementById("createCallCenterForm").addEventListener("submit", funct
             
             // Redirect after 2 seconds
             setTimeout(() => {
-                window.location.href = "<?php echo APP_URL; ?>/call-center";
+                window.location.href = "<?php echo APP_URL; ?>/callcenter";
             }, 2000);
         } else {
             // Show error message

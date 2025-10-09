@@ -261,4 +261,33 @@ class MenuGroup extends Model
         $result = $this->db->fetch($sql, $params);
         return $result['count'] > 0;
     }
+    
+    /**
+     * Get default menu group for a specific role
+     * Returns the first menu group ID that is marked as default for the given role
+     */
+    public function getDefaultMenuGroupByRole($role)
+    {
+        // Map role to default column
+        $roleColumnMap = [
+            'admin' => 'default_admin',
+            'manajemen' => 'default_manajemen',
+            'user' => 'default_user',
+            'marketing' => 'default_marketing',
+            'customer' => 'default_customer',
+            'sales' => 'default_user' // sales uses user defaults as fallback
+        ];
+        
+        // If role not found in map, return null
+        if (!isset($roleColumnMap[$role])) {
+            return null;
+        }
+        
+        $column = $roleColumnMap[$role];
+        
+        $sql = "SELECT id FROM {$this->table} WHERE {$column} = 1 AND is_active = 1 LIMIT 1";
+        $result = $this->db->fetch($sql);
+        
+        return $result ? $result['id'] : null;
+    }
 }

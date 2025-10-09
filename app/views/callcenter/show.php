@@ -10,7 +10,7 @@
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/call-center" class="text-decoration-none">Call Center</a>
+                                <a href="<?php echo APP_URL; ?>/callcenter" class="text-decoration-none">Call Center</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Details</li>
                         </ol>
@@ -72,11 +72,11 @@
             
             <!-- Card Footer -->
             <div class="form-footer d-flex justify-content-between align-items-center">
-                <a href="<?php echo APP_URL; ?>/call-center" class="btn btn-secondary">
+                <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-1"></i>Back to Call Center
                 </a>
                 <div class="d-flex gap-2">
-                    <a href="<?php echo APP_URL; ?>/call-center/<?php echo $callCenter['id']; ?>/edit" class="btn btn-warning">
+                    <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>/edit" class="btn btn-warning">
                         <i class="fas fa-edit me-1"></i>Edit
                     </a>
                     <button type="button" class="btn btn-danger" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)">
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (deleteCallCenterId) {
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = `<?php echo APP_URL; ?>/call-center/${deleteCallCenterId}/delete`;
+            form.action = `<?php echo APP_URL; ?>/callcenter/${deleteCallCenterId}/delete`;
             
             const tokenInput = document.createElement('input');
             tokenInput.type = 'hidden';

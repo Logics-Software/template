@@ -37,7 +37,7 @@ if (!$konfigurasi) {
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        Konfigurasi
+                        Konfigurasi Sistem
                     </li>
                 </ol>
             </nav>

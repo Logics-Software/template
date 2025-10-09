@@ -46,14 +46,14 @@ $logo = getSidebarLogo();
             <!-- Dashboard -->
             <li class="nav-item">
                 <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/dashboard') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/dashboard">
-                    <i class="fas fa-tachometer-alt"></i>
+                    <i class="fa-regular fa-house"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
             </li>
             
             <!-- Users Management -->
             <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/users') !== false && strpos($_SERVER['REQUEST_URI'], '/users-menu') === false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/users') !== false && strpos($_SERVER['REQUEST_URI'], '/menuakses') === false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users">
                     <i class="fas fa-users"></i>
                     <span class="nav-text">Users</span>
                 </a>
@@ -71,20 +71,14 @@ $logo = getSidebarLogo();
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#menuManagement" aria-expanded="false">
                     <i class="fas fa-bars"></i>
-                    <span class="nav-text">Menu Management</span>
+                    <span class="nav-text">Setting Menu</span>
                 </a>
                 <div class="collapse" id="menuManagement">
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item">
-                            <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menu') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menu">
-                                <i class="fas fa-list"></i>
-                                <span class="nav-text">Menu List</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menu-builder') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menu-builder">
-                                <i class="fas fa-tools"></i>
-                                <span class="nav-text">Menu Builder</span>
+                            <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menu') !== false && strpos($_SERVER['REQUEST_URI'], '/menuakses') === false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menu">
+                            <i class="fa-brands fa-slack"></i>
+                            <span class="nav-text">Setting Menu Aplikasi</span>
                             </a>
                         </li>
                     </ul>
@@ -93,7 +87,7 @@ $logo = getSidebarLogo();
             
             <!-- Call Center -->
             <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/call-center') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/call-center">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/callcenter') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/callcenter">
                     <i class="fas fa-phone"></i>
                     <span class="nav-text">Call Center</span>
                 </a>
@@ -117,7 +111,7 @@ $logo = getSidebarLogo();
 
             <!-- Menu Akses -->
             <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/users-menu') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users-menu">
+                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menuakses') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menuakses">
                     <i class="fa-solid fa-bars"></i>                    
                     <span class="nav-text">Akses Menu</span>
                 </a>

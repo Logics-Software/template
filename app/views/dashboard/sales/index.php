@@ -146,7 +146,7 @@
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <a href="<?php echo APP_URL; ?>/call-center" class="btn btn-outline-info w-100">
+                        <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-outline-info w-100">
                             <i class="fab fa-whatsapp me-2"></i>WhatsApp</a>
                     </div>
                     <div class="col-md-6">

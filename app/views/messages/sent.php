@@ -75,7 +75,7 @@
                                     <th width="40%">Subjek</th>
                                     <th width="30%">Penerima</th>
                                     <th width="15%">Tanggal</th>
-                                    <th width="12%">Aksi</th>
+                                    <th width="12%"></th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -152,7 +152,7 @@
                     <a href="#" class="btn btn-primary">
                         <i class="fas fa-shopping-cart me-2"></i>Place New Order
                     </a>
-                    <a href="<?php echo APP_URL; ?>/call-center" class="btn btn-outline-success">
+                    <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-outline-success">
                         <i class="fab fa-whatsapp me-2"></i>Contact Support
                     </a>
                     <a href="<?php echo APP_URL; ?>/users/profile" class="btn btn-outline-primary">
@@ -206,7 +206,7 @@
                             <i class="fab fa-whatsapp fa-2x text-success mb-2"></i>
                             <h6>WhatsApp Support</h6>
                             <p class="text-muted">24/7 customer support</p>
-                            <a href="<?php echo APP_URL; ?>/call-center" class="btn btn-success btn-sm">Contact Now</a>
+                            <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-success btn-sm">Contact Now</a>
                         </div>
                     </div>
                     <div class="col-md-4">

@@ -268,5 +268,32 @@ class UsersMenu extends Model
             return false;
         }
     }
+    
+    /**
+     * Assign default menu group to user based on their role
+     * Automatically called when a new user is created/registered
+     */
+    public function assignDefaultMenuByRole($userId, $role)
+    {
+        try {
+            // Get MenuGroup model to fetch default menu group for this role
+            require_once 'app/models/MenuGroup.php';
+            $menuGroupModel = new MenuGroup();
+            
+            // Get default menu group ID for this role
+            $defaultGroupId = $menuGroupModel->getDefaultMenuGroupByRole($role);
+            
+            // If no default group found, return true (no error, just no default to assign)
+            if (!$defaultGroupId) {
+                return true;
+            }
+            
+            // Assign default menu group to the user
+            return $this->addUserMenuAccess($userId, $defaultGroupId);
+        } catch (Exception $e) {
+            error_log("UsersMenu assignDefaultMenuByRole - Error: " . $e->getMessage());
+            return false;
+        }
+    }
 }
 

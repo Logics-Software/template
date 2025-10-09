@@ -151,7 +151,7 @@
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <a href="<?php echo APP_URL; ?>/call-center" class="btn btn-outline-warning w-100">
+                        <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-outline-warning w-100">
                             <i class="fas fa-phone me-2"></i>Support
                         </a>
                     </div>
