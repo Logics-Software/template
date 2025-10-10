@@ -364,426 +364,163 @@ class ModuleController extends BaseController
 
     /**
      * Get available Font Awesome icons for module logo selection
+     * Auto-generated from local Font Awesome metadata with categories
      */
     public function getAvailableIcons()
     {
-        return [
-            'General' => [
-                'fas fa-home' => 'Home',
-                'fas fa-dashboard' => 'Dashboard',
-                'fas fa-cog' => 'Settings',
-                'fas fa-user' => 'User',
-                'fas fa-users' => 'Users',
-                'fas fa-puzzle-piece' => 'Modules',
-                'fas fa-envelope' => 'Messages',
-                'fas fa-phone' => 'Call Center',
-                'fas fa-chart-bar' => 'Analytics',
-                'fas fa-key' => 'Password',
-                'fas fa-globe' => 'Globe',
-                'fas fa-calendar' => 'Calendar',
-                'fas fa-clock' => 'Clock',
-                'fas fa-map-marker' => 'Location',
-                'fas fa-star' => 'Star',
-                'fas fa-heart' => 'Heart',
-                'fas fa-thumbs-up' => 'Thumbs Up',
-                'fas fa-thumbs-down' => 'Thumbs Down',
-                'fas fa-bookmark' => 'Bookmark',
-                'fas fa-flag' => 'Flag',
-                'fas fa-tag' => 'Tag',
-                'fas fa-tags' => 'Tags',
-                'fas fa-book' => 'Book',
-                'fas fa-newspaper' => 'Newspaper',
-                'fas fa-magic' => 'Magic',
-                'fas fa-gem' => 'Gem',
-                'fas fa-crown' => 'Crown',
-                'fas fa-trophy' => 'Trophy',
-                'fas fa-medal' => 'Medal',
-                'fas fa-award' => 'Award',
-                'fas fa-certificate' => 'Certificate',
-                'fas fa-ribbon' => 'Ribbon',
-                'fas fa-gift' => 'Gift',
-                'fas fa-birthday-cake' => 'Birthday Cake',
-                'fas fa-bell' => 'Bell',
-                'fas fa-bell-slash' => 'Bell Slash',
-                'fas fa-volume-up' => 'Volume Up',
-                'fas fa-volume-down' => 'Volume Down',
-                'fas fa-volume-mute' => 'Volume Mute',
-                'fas fa-volume-off' => 'Volume Off',
-            ],
-            'Business & Finance' => [
-                'fas fa-briefcase' => 'Briefcase',
-                'fas fa-building' => 'Building',
-                'fas fa-handshake' => 'Handshake',
-                'fas fa-chart-line' => 'Chart Line',
-                'fas fa-coins' => 'Coins',
-                'fas fa-credit-card' => 'Credit Card',
-                'fas fa-receipt' => 'Receipt',
-                'fas fa-shopping-cart' => 'Shopping Cart',
-                'fas fa-wallet' => 'Wallet',
-                'fas fa-piggy-bank' => 'Piggy Bank',
-                'fas fa-chart-pie' => 'Chart Pie',
-                'fas fa-chart-area' => 'Chart Area',
-                'fas fa-trending-up' => 'Trending Up',
-                'fas fa-trending-down' => 'Trending Down',
-                'fas fa-percentage' => 'Percentage',
-                'fas fa-dollar-sign' => 'Dollar Sign',
-                'fas fa-euro-sign' => 'Euro Sign',
-                'fas fa-pound-sign' => 'Pound Sign',
-                'fas fa-yen-sign' => 'Yen Sign',
-                'fas fa-rupee-sign' => 'Rupee Sign',
-                'fas fa-won-sign' => 'Won Sign',
-                'fas fa-shekel-sign' => 'Shekel Sign',
-                'fas fa-ruble-sign' => 'Ruble Sign',
-                'fas fa-lira-sign' => 'Lira Sign',
-                'fas fa-money-bill' => 'Money Bill',
-                'fas fa-money-bill-wave' => 'Money Bill Wave',
-                'fas fa-money-bill-alt' => 'Money Bill Alt',
-                'fas fa-money-check' => 'Money Check',
-                'fas fa-money-check-alt' => 'Money Check Alt',
-                'fas fa-cash-register' => 'Cash Register',
-                'fas fa-store' => 'Store',
-                'fas fa-store-alt' => 'Store Alt',
-                'fas fa-shopping-bag' => 'Shopping Bag',
-                'fas fa-shopping-basket' => 'Shopping Basket',
-                'fas fa-barcode' => 'Barcode',
-                'fas fa-qrcode' => 'QR Code',
-                'fas fa-receipt' => 'Receipt',
-                'fas fa-file-invoice' => 'File Invoice',
-                'fas fa-file-invoice-dollar' => 'File Invoice Dollar',
-                'fas fa-balance-scale' => 'Balance Scale',
-                'fas fa-balance-scale-left' => 'Balance Scale Left',
-                'fas fa-balance-scale-right' => 'Balance Scale Right',
-                'fas fa-gavel' => 'Gavel',
-                'fas fa-landmark' => 'Landmark',
-                'fas fa-university' => 'University',
-                'fas fa-industry' => 'Industry',
-                'fas fa-warehouse' => 'Warehouse',
-                'fas fa-truck' => 'Truck',
-                'fas fa-shipping-fast' => 'Shipping Fast',
-                'fas fa-shipping-timed' => 'Shipping Timed',
-                'fas fa-box' => 'Box',
-                'fas fa-boxes' => 'Boxes',
-                'fas fa-pallet' => 'Pallet',
-                'fas fa-dolly' => 'Dolly',
-                'fas fa-dolly-flatbed' => 'Dolly Flatbed',
-                'fas fa-forklift' => 'Forklift',
-                'fas fa-truck-loading' => 'Truck Loading',
-                'fas fa-truck-moving' => 'Truck Moving',
-                'fas fa-truck-pickup' => 'Truck Pickup',
-            ],
-            'Communication & Social' => [
-                'fas fa-comments' => 'Comments',
-                'fas fa-comment' => 'Comment',
-                'fas fa-bell' => 'Bell',
-                'fas fa-bell-slash' => 'Bell Slash',
-                'fas fa-paper-plane' => 'Paper Plane',
-                'fas fa-share' => 'Share',
-                'fas fa-reply' => 'Reply',
-                'fas fa-forward' => 'Forward',
-                'fas fa-at' => 'At',
-                'fas fa-hashtag' => 'Hashtag',
-                'fas fa-link' => 'Link',
-                'fas fa-unlink' => 'Unlink',
-                'fas fa-rss' => 'RSS',
-                'fas fa-broadcast-tower' => 'Broadcast Tower',
-                'fas fa-microphone' => 'Microphone',
-                'fas fa-video' => 'Video',
-                'fas fa-camera' => 'Camera',
-                'fas fa-image' => 'Image',
-                'fas fa-comment-dots' => 'Comment Dots',
-                'fas fa-comment-alt' => 'Comment Alt',
-                'fas fa-comment-slash' => 'Comment Slash',
-                'fas fa-comments-dollar' => 'Comments Dollar',
-                'fas fa-comment-medical' => 'Comment Medical',
-                'fas fa-phone' => 'Phone',
-                'fas fa-phone-alt' => 'Phone Alt',
-                'fas fa-phone-slash' => 'Phone Slash',
-                'fas fa-phone-square' => 'Phone Square',
-                'fas fa-phone-square-alt' => 'Phone Square Alt',
-                'fas fa-phone-volume' => 'Phone Volume',
-                'fas fa-fax' => 'Fax',
-                'fas fa-voicemail' => 'Voicemail',
-                'fas fa-address-book' => 'Address Book',
-                'fas fa-address-card' => 'Address Card',
-                'fas fa-user-friends' => 'User Friends',
-                'fas fa-user-plus' => 'User Plus',
-                'fas fa-user-minus' => 'User Minus',
-                'fas fa-user-times' => 'User Times',
-                'fas fa-user-check' => 'User Check',
-                'fas fa-user-clock' => 'User Clock',
-                'fas fa-user-cog' => 'User Cog',
-                'fas fa-user-edit' => 'User Edit',
-                'fas fa-user-graduate' => 'User Graduate',
-                'fas fa-user-injured' => 'User Injured',
-                'fas fa-user-lock' => 'User Lock',
-                'fas fa-user-md' => 'User MD',
-                'fas fa-user-ninja' => 'User Ninja',
-                'fas fa-user-nurse' => 'User Nurse',
-                'fas fa-user-secret' => 'User Secret',
-                'fas fa-user-shield' => 'User Shield',
-                'fas fa-user-tie' => 'User Tie',
-                'fas fa-users-cog' => 'Users Cog',
-                'fas fa-user-astronaut' => 'User Astronaut',
-                'fas fa-users-slash' => 'Users Slash',
-            ],
-            'Files & Documents' => [
-                'fas fa-file' => 'File',
-                'fas fa-file-alt' => 'File Alt',
-                'fas fa-folder' => 'Folder',
-                'fas fa-folder-open' => 'Folder Open',
-                'fas fa-upload' => 'Upload',
-                'fas fa-download' => 'Download',
-                'fas fa-save' => 'Save',
-                'fas fa-print' => 'Print',
-                'fas fa-copy' => 'Copy',
-                'fas fa-cut' => 'Cut',
-                'fas fa-paste' => 'Paste',
-                'fas fa-archive' => 'Archive',
-                'fas fa-compress' => 'Compress',
-                'fas fa-expand' => 'Expand',
-                'fas fa-compress-arrows-alt' => 'Compress Arrows',
-                'fas fa-expand-arrows-alt' => 'Expand Arrows',
-                'fas fa-file-pdf' => 'PDF',
-                'fas fa-file-word' => 'Word',
-                'fas fa-file-excel' => 'Excel',
-            ],
-            'Interface & Controls' => [
-                'fas fa-plus' => 'Plus',
-                'fas fa-minus' => 'Minus',
-                'fas fa-edit' => 'Edit',
-                'fas fa-trash' => 'Trash',
-                'fas fa-eye' => 'Eye',
-                'fas fa-eye-slash' => 'Eye Slash',
-                'fas fa-search' => 'Search',
-                'fas fa-filter' => 'Filter',
-                'fas fa-sort' => 'Sort',
-                'fas fa-sort-up' => 'Sort Up',
-                'fas fa-sort-down' => 'Sort Down',
-                'fas fa-sort-alpha-up' => 'Sort Alpha Up',
-                'fas fa-sort-alpha-down' => 'Sort Alpha Down',
-                'fas fa-sort-numeric-up' => 'Sort Numeric Up',
-                'fas fa-sort-numeric-down' => 'Sort Numeric Down',
-                'fas fa-toggle-on' => 'Toggle On',
-                'fas fa-toggle-off' => 'Toggle Off',
-                'fas fa-sliders-h' => 'Sliders',
-            ],
-            'Navigation & Arrows' => [
-                'fas fa-arrow-left' => 'Arrow Left',
-                'fas fa-arrow-right' => 'Arrow Right',
-                'fas fa-arrow-up' => 'Arrow Up',
-                'fas fa-arrow-down' => 'Arrow Down',
-                'fas fa-chevron-left' => 'Chevron Left',
-                'fas fa-chevron-right' => 'Chevron Right',
-                'fas fa-chevron-up' => 'Chevron Up',
-                'fas fa-chevron-down' => 'Chevron Down',
-                'fas fa-angle-left' => 'Angle Left',
-                'fas fa-angle-right' => 'Angle Right',
-                'fas fa-angle-up' => 'Angle Up',
-                'fas fa-angle-down' => 'Angle Down',
-                'fas fa-caret-left' => 'Caret Left',
-                'fas fa-caret-right' => 'Caret Right',
-                'fas fa-caret-up' => 'Caret Up',
-                'fas fa-caret-down' => 'Caret Down',
-                'fas fa-undo' => 'Undo',
-                'fas fa-redo' => 'Redo',
-            ],
-            'Status & Alerts' => [
-                'fas fa-check' => 'Check',
-                'fas fa-check-circle' => 'Check Circle',
-                'fas fa-times' => 'Times',
-                'fas fa-times-circle' => 'Times Circle',
-                'fas fa-exclamation' => 'Exclamation',
-                'fas fa-exclamation-triangle' => 'Exclamation Triangle',
-                'fas fa-info' => 'Info',
-                'fas fa-question' => 'Question',
-                'fas fa-question-circle' => 'Question Circle',
-                'fas fa-info-circle' => 'Info Circle',
-                'fas fa-exclamation-circle' => 'Exclamation Circle',
-                'fas fa-ban' => 'Ban',
-                'fas fa-lock' => 'Lock',
-                'fas fa-unlock' => 'Unlock',
-                'fas fa-shield-alt' => 'Shield',
-                'fas fa-warning' => 'Warning',
-                'fas fa-bug' => 'Bug',
-                'fas fa-fire' => 'Fire',
-            ],
-            'Technology & Devices' => [
-                'fas fa-desktop' => 'Desktop',
-                'fas fa-laptop' => 'Laptop',
-                'fas fa-tablet' => 'Tablet',
-                'fas fa-mobile' => 'Mobile',
-                'fas fa-server' => 'Server',
-                'fas fa-database' => 'Database',
-                'fas fa-hdd' => 'Hard Drive',
-                'fas fa-memory' => 'Memory',
-                'fas fa-microchip' => 'Microchip',
-                'fas fa-wifi' => 'WiFi',
-                'fas fa-bluetooth' => 'Bluetooth',
-                'fas fa-usb' => 'USB',
-                'fas fa-plug' => 'Plug',
-                'fas fa-battery-full' => 'Battery Full',
-                'fas fa-battery-half' => 'Battery Half',
-                'fas fa-battery-empty' => 'Battery Empty',
-                'fas fa-power-off' => 'Power Off',
-                'fas fa-play' => 'Play',
-                'fas fa-pause' => 'Pause',
-                'fas fa-stop' => 'Stop',
-            ],
-            'Transportation & Travel' => [
-                'fas fa-car' => 'Car',
-                'fas fa-truck' => 'Truck',
-                'fas fa-motorcycle' => 'Motorcycle',
-                'fas fa-bicycle' => 'Bicycle',
-                'fas fa-plane' => 'Plane',
-                'fas fa-helicopter' => 'Helicopter',
-                'fas fa-ship' => 'Ship',
-                'fas fa-train' => 'Train',
-                'fas fa-bus' => 'Bus',
-                'fas fa-taxi' => 'Taxi',
-                'fas fa-ambulance' => 'Ambulance',
-                'fas fa-fire-truck' => 'Fire Truck',
-                'fas fa-scooter' => 'Scooter',
-                'fas fa-walking' => 'Walking',
-                'fas fa-running' => 'Running',
-                'fas fa-swimmer' => 'Swimmer',
-                'fas fa-skiing' => 'Skiing',
-            ],
-            'Food & Health' => [
-                'fas fa-utensils' => 'Utensils',
-                'fas fa-coffee' => 'Coffee',
-                'fas fa-pizza-slice' => 'Pizza',
-                'fas fa-hamburger' => 'Hamburger',
-                'fas fa-apple-alt' => 'Apple',
-                'fas fa-lemon' => 'Lemon',
-                'fas fa-carrot' => 'Carrot',
-                'fas fa-bread-slice' => 'Bread',
-                'fas fa-egg' => 'Egg',
-                'fas fa-fish' => 'Fish',
-                'fas fa-drumstick-bite' => 'Chicken',
-                'fas fa-ice-cream' => 'Ice Cream',
-                'fas fa-candy-cane' => 'Candy',
-                'fas fa-lollipop' => 'Lollipop',
-                'fas fa-cookie' => 'Cookie',
-                'fas fa-cake' => 'Cake',
-                'fas fa-birthday-cake' => 'Birthday Cake',
-                'fas fa-wine-glass' => 'Wine Glass',
-                'fas fa-beer' => 'Beer',
-            ],
-            'Sports & Recreation' => [
-                'fas fa-futbol' => 'Football',
-                'fas fa-basketball-ball' => 'Basketball',
-                'fas fa-baseball-ball' => 'Baseball',
-                'fas fa-volleyball-ball' => 'Volleyball',
-                'fas fa-table-tennis' => 'Table Tennis',
-                'fas fa-golf-ball' => 'Golf Ball',
-                'fas fa-hockey-puck' => 'Hockey Puck',
-                'fas fa-bowling-ball' => 'Bowling Ball',
-                'fas fa-dumbbell' => 'Dumbbell',
-                'fas fa-running' => 'Running',
-                'fas fa-swimmer' => 'Swimmer',
-                'fas fa-skiing' => 'Skiing',
-                'fas fa-snowboarding' => 'Snowboarding',
-                'fas fa-skating' => 'Skating',
-                'fas fa-bicycle' => 'Bicycle',
-                'fas fa-motorcycle' => 'Motorcycle',
-                'fas fa-hiking' => 'Hiking',
-                'fas fa-camping' => 'Camping',
-            ],
-            'Weather & Nature' => [
-                'fas fa-sun' => 'Sun',
-                'fas fa-moon' => 'Moon',
-                'fas fa-cloud' => 'Cloud',
-                'fas fa-cloud-rain' => 'Cloud Rain',
-                'fas fa-cloud-sun' => 'Cloud Sun',
-                'fas fa-cloud-moon' => 'Cloud Moon',
-                'fas fa-snowflake' => 'Snowflake',
-                'fas fa-umbrella' => 'Umbrella',
-                'fas fa-thermometer-half' => 'Thermometer',
-                'fas fa-wind' => 'Wind',
-                'fas fa-bolt' => 'Lightning',
-                'fas fa-tree' => 'Tree',
-                'fas fa-leaf' => 'Leaf',
-                'fas fa-seedling' => 'Seedling',
-                'fas fa-flower' => 'Flower',
-                'fas fa-mountain' => 'Mountain',
-                'fas fa-water' => 'Water',
-                'fas fa-fire' => 'Fire',
-            ],
-            'Education & Learning' => [
-                'fas fa-graduation-cap' => 'Graduation Cap',
-                'fas fa-school' => 'School',
-                'fas fa-university' => 'University',
-                'fas fa-book' => 'Book',
-                'fas fa-book-open' => 'Book Open',
-                'fas fa-book-reader' => 'Book Reader',
-                'fas fa-chalkboard' => 'Chalkboard',
-                'fas fa-chalkboard-teacher' => 'Chalkboard Teacher',
-                'fas fa-pencil-alt' => 'Pencil Alt',
-                'fas fa-pen' => 'Pen',
-                'fas fa-pen-fancy' => 'Pen Fancy',
-                'fas fa-pen-nib' => 'Pen Nib',
-                'fas fa-pen-square' => 'Pen Square',
-                'fas fa-pencil-ruler' => 'Pencil Ruler',
-                'fas fa-ruler' => 'Ruler',
-                'fas fa-ruler-combined' => 'Ruler Combined',
-                'fas fa-ruler-horizontal' => 'Ruler Horizontal',
-                'fas fa-ruler-vertical' => 'Ruler Vertical',
-                'fas fa-calculator' => 'Calculator',
-                'fas fa-microscope' => 'Microscope',
-                'fas fa-flask' => 'Flask',
-                'fas fa-atom' => 'Atom',
-                'fas fa-dna' => 'DNA',
-                'fas fa-vial' => 'Vial',
-                'fas fa-vials' => 'Vials',
-                'fas fa-test-tube' => 'Test Tube',
-                'fas fa-test-tube-alt' => 'Test Tube Alt',
-                'fas fa-mortar-board' => 'Mortar Board',
-                'fas fa-certificate' => 'Certificate',
-                'fas fa-medal' => 'Medal',
-                'fas fa-trophy' => 'Trophy',
-                'fas fa-award' => 'Award',
-                'fas fa-ribbon' => 'Ribbon',
-                'fas fa-star' => 'Star',
-                'fas fa-star-half' => 'Star Half',
-                'fas fa-star-half-alt' => 'Star Half Alt',
-                'fas fa-thumbs-up' => 'Thumbs Up',
-                'fas fa-thumbs-down' => 'Thumbs Down',
-                'fas fa-heart' => 'Heart',
-                'fas fa-heart-broken' => 'Heart Broken',
-                'fas fa-smile' => 'Smile',
-                'fas fa-frown' => 'Frown',
-                'fas fa-meh' => 'Meh',
-                'fas fa-grin' => 'Grin',
-                'fas fa-grin-beam' => 'Grin Beam',
-                'fas fa-grin-beam-sweat' => 'Grin Beam Sweat',
-                'fas fa-grin-hearts' => 'Grin Hearts',
-                'fas fa-grin-squint' => 'Grin Squint',
-                'fas fa-grin-squint-tears' => 'Grin Squint Tears',
-                'fas fa-grin-stars' => 'Grin Stars',
-                'fas fa-grin-tears' => 'Grin Tears',
-                'fas fa-grin-tongue' => 'Grin Tongue',
-                'fas fa-grin-tongue-squint' => 'Grin Tongue Squint',
-                'fas fa-grin-tongue-wink' => 'Grin Tongue Wink',
-                'fas fa-grin-wink' => 'Grin Wink',
-                'fas fa-kiss' => 'Kiss',
-                'fas fa-kiss-beam' => 'Kiss Beam',
-                'fas fa-kiss-wink-heart' => 'Kiss Wink Heart',
-                'fas fa-laugh' => 'Laugh',
-                'fas fa-laugh-beam' => 'Laugh Beam',
-                'fas fa-laugh-squint' => 'Laugh Squint',
-                'fas fa-laugh-wink' => 'Laugh Wink',
-                'fas fa-sad-cry' => 'Sad Cry',
-                'fas fa-sad-tear' => 'Sad Tear',
-                'fas fa-smile-beam' => 'Smile Beam',
-                'fas fa-smile-wink' => 'Smile Wink',
-                'fas fa-surprise' => 'Surprise',
-                'fas fa-tired' => 'Tired',
-                'fas fa-angry' => 'Angry',
-                'fas fa-dizzy' => 'Dizzy',
-                'fas fa-flushed' => 'Flushed',
-                'fas fa-grimace' => 'Grimace',
-                'fas fa-grin-alt' => 'Grin Alt',
-            ]
+        $cacheFile = __DIR__ . '/../../cache/fontawesome_icons.json';
+        $metadataDir = __DIR__ . '/../../assets/fontawesome/metadata/';
+        $categoriesFile = $metadataDir . 'categories.yml';
+        $iconsFile = $metadataDir . 'icons.json';
+        
+        // Check if cache exists and is newer than metadata files
+        if (file_exists($cacheFile) && 
+            file_exists($categoriesFile) && 
+            file_exists($iconsFile) &&
+            filemtime($cacheFile) > filemtime($categoriesFile) &&
+            filemtime($cacheFile) > filemtime($iconsFile)) {
+            $cachedData = file_get_contents($cacheFile);
+            if ($cachedData) {
+                return json_decode($cachedData, true);
+            }
+        }
+        
+        // Parse metadata and build categorized icons
+        $icons = $this->parseIconsFromMetadata($categoriesFile, $iconsFile);
+        
+        // Save to cache
+        $cacheDir = dirname($cacheFile);
+        if (!is_dir($cacheDir)) {
+            mkdir($cacheDir, 0755, true);
+        }
+        file_put_contents($cacheFile, json_encode($icons));
+        
+        return $icons;
+    }
+    
+    /**
+     * Parse Font Awesome icons from metadata files
+     * Uses official Font Awesome categories and icon definitions
+     */
+    private function parseIconsFromMetadata($categoriesFile, $iconsFile)
+    {
+        if (!file_exists($categoriesFile) || !file_exists($iconsFile)) {
+            // Fallback to empty array if metadata files not found
+            return ['All Icons' => []];
+        }
+        
+        // Parse categories YAML file
+        $categoriesData = $this->parseYAML($categoriesFile);
+        
+        // Parse icons JSON file
+        $iconsData = json_decode(file_get_contents($iconsFile), true);
+        
+        $categorizedIcons = [];
+        
+        // Selected popular categories for better UX (to avoid overwhelming users)
+        $selectedCategories = [
+            'accessibility' => true,
+            'alert' => true,
+            'arrows' => true,
+            'business' => true,
+            'charts-diagrams' => true,
+            'communication' => true,
+            'devices-hardware' => true,
+            'editing' => true,
+            'files' => true,
+            'medical-health' => true,
+            'money' => true,
+            'navigation' => false, // Skip, covered by arrows
+            'security' => true,
+            'social' => true,
+            'shopping' => true,
+            'sports-fitness' => true,
+            'time' => true,
+            'transportation' => true,
+            'users-people' => true,
+            'weather' => true
         ];
+        
+        // Process each category
+        foreach ($categoriesData as $categoryKey => $categoryData) {
+            // Skip categories not in selected list or explicitly disabled
+            if (!isset($selectedCategories[$categoryKey]) || $selectedCategories[$categoryKey] === false) {
+                continue;
+            }
+            
+            $categoryLabel = $categoryData['label'] ?? ucwords(str_replace('-', ' ', $categoryKey));
+            $categoryIcons = $categoryData['icons'] ?? [];
+            
+            foreach ($categoryIcons as $iconName) {
+                // Get icon details from icons.json
+                if (isset($iconsData[$iconName])) {
+                    $iconData = $iconsData[$iconName];
+                    $iconLabel = $iconData['label'] ?? ucwords(str_replace('-', ' ', $iconName));
+                    $styles = $iconData['styles'] ?? ['solid'];
+                    
+                    // Use 'solid' style by default (most common for free version)
+                    if (in_array('solid', $styles)) {
+                        $iconClass = 'fas fa-' . $iconName;
+                        $categorizedIcons[$categoryLabel][$iconClass] = $iconLabel;
+                    } elseif (in_array('regular', $styles)) {
+                        $iconClass = 'far fa-' . $iconName;
+                        $categorizedIcons[$categoryLabel][$iconClass] = $iconLabel;
+                    } elseif (in_array('brands', $styles)) {
+                        $iconClass = 'fab fa-' . $iconName;
+                        $categorizedIcons[$categoryLabel][$iconClass] = $iconLabel;
+                    }
+                }
+            }
+        }
+        
+        // Sort categories and icons
+        ksort($categorizedIcons);
+        foreach ($categorizedIcons as $category => $icons) {
+            asort($categorizedIcons[$category]);
+        }
+        
+        return $categorizedIcons;
+    }
+    
+    /**
+     * Simple YAML parser for categories file
+     * Parses basic YAML structure with categories, icons list, and labels
+     */
+    private function parseYAML($filePath)
+    {
+        $content = file_get_contents($filePath);
+        $lines = explode("\n", $content);
+        $result = [];
+        $currentCategory = null;
+        $inIconsList = false;
+        
+        foreach ($lines as $line) {
+            // Category header (no indentation, ends with colon)
+            if (preg_match('/^([a-z0-9-]+):$/', $line, $matches)) {
+                $currentCategory = $matches[1];
+                $result[$currentCategory] = ['icons' => [], 'label' => ''];
+                $inIconsList = false;
+            }
+            // Icons list start
+            elseif (preg_match('/^  icons:$/', $line)) {
+                $inIconsList = true;
+            }
+            // Icon item in list
+            elseif ($inIconsList && preg_match('/^    - (.+)$/', $line, $matches)) {
+                $iconName = trim($matches[1], '\'"');
+                if ($currentCategory) {
+                    $result[$currentCategory]['icons'][] = $iconName;
+                }
+            }
+            // Label
+            elseif (preg_match('/^  label: (.+)$/', $line, $matches)) {
+                if ($currentCategory) {
+                    $result[$currentCategory]['label'] = $matches[1];
+                }
+                $inIconsList = false;
+            }
+        }
+        
+        return $result;
     }
 }

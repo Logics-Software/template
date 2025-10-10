@@ -94,7 +94,7 @@
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                         <button class="btn btn-outline-success" onclick="addDetailMenu(<?php echo $group['id']; ?>)">
-                                                            <i class="fa-solid fa-bars-staggered"></i>
+                                                            <i class="fas fa-bars-staggered"></i>
                                                         </button>
                                                         <button class="btn btn-outline-danger" onclick="deleteGroup(<?php echo $group['id']; ?>)">
                                                             <i class="fas fa-trash"></i>

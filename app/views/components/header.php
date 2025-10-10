@@ -29,7 +29,7 @@ function getGreetingMessage() {
                 <div class="d-flex align-items-center">
                     <!-- Sidebar Toggle -->
                     <button class="btn btn-link sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
-                        <i class="fa-solid fa-bars"></i>
+                        <i class="fas fa-bars"></i>
                     </button>
                     
                     <!-- WhatsApp Contact -->
@@ -50,12 +50,12 @@ function getGreetingMessage() {
                     
                     <!-- Full Screen Toggle -->
                     <button class="btn btn-link" id="fullscreenToggle">
-                        <i class="fa-solid fa-expand"></i>
+                        <i class="fas fa-expand"></i>
                     </button>
                     
                     <!-- Theme Toggle -->
                     <button class="btn btn-link" id="themeToggle">
-                        <i class="fa-solid fa-sun" id="themeIcon"></i>
+                        <i class="fas fa-sun" id="themeIcon"></i>
                     </button>
                     
                     <!-- =================================================== -->
@@ -64,7 +64,7 @@ function getGreetingMessage() {
                     <div class="notification-dropdown">
                         <button class="btn btn-link position-relative" id="notificationToggle" 
                                 aria-label="Notifications" aria-expanded="false" aria-haspopup="true">
-                            <i class="fa-regular fa-bell"></i>
+                            <i class="far fa-bell"></i>
                             <span class="position-absolute badge rounded-pill bg-danger" id="notificationBadge">
                                 5
                             </span>
@@ -163,7 +163,7 @@ function getGreetingMessage() {
                     <!-- =================================================== -->
                     <div class="message-dropdown">
                         <button class="btn btn-link position-relative" id="messageToggle" title="Pesan">
-                            <i class="fa-regular fa-envelope"></i>
+                            <i class="far fa-envelope"></i>
                             <span class="position-absolute badge rounded-pill bg-danger" id="messageBadge" style="display: none;">
                                 0
                             </span>

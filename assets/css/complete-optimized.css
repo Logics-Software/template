@@ -41,8 +41,8 @@ a:active:not(.no-hover-underline) {
 .far,
 .fab,
 .fa {
-  font-family: "Font Awesome 7 Free", "Font Awesome 7 Pro",
-    "Font Awesome 7 Brands" !important;
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro",
+    "Font Awesome 6 Brands" !important;
 }
 
 /* Modules Form Loading States */
@@ -216,7 +216,7 @@ a:active:not(.no-hover-underline) {
 
 /* Ensure sidebar toggle icon is visible */
 .sidebar-toggle-btn i.fa-bars {
-  font-family: "Font Awesome 7 Free";
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   color: var(--text-secondary);
 }

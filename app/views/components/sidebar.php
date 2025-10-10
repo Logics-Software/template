@@ -46,7 +46,7 @@ $logo = getSidebarLogo();
             <!-- Dashboard -->
             <li class="nav-item">
                 <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/dashboard') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/dashboard">
-                    <i class="fa-regular fa-house"></i>
+                    <i class="fas fa-home"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
             </li>
@@ -77,7 +77,6 @@ $logo = getSidebarLogo();
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item">
                             <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menu') !== false && strpos($_SERVER['REQUEST_URI'], '/menuakses') === false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menu">
-                            <i class="fa-brands fa-slack"></i>
                             <span class="nav-text">Setting Menu Aplikasi</span>
                             </a>
                         </li>
@@ -112,7 +111,7 @@ $logo = getSidebarLogo();
             <!-- Menu Akses -->
             <li class="nav-item">
                 <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menuakses') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menuakses">
-                    <i class="fa-solid fa-bars"></i>                    
+                    <i class="fas fa-bars"></i>                    
                     <span class="nav-text">Akses Menu</span>
                 </a>
             </li>

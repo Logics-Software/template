@@ -62,7 +62,7 @@ body {
 }
 
 .user-selection-item:hover .avatar-32 {
-  border-color: var(--primary-color);
+  border-color: var(--secondary-color);
 }
 
 .user-selection-item.selected .avatar-32 {
@@ -267,20 +267,20 @@ body {
 
 .user-selection-item:hover {
   background-color: var(--bg-secondary);
-  border-color: var(--primary-color);
+  border-color: var(--secondary-light);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .user-selection-item.selected {
-  background-color: var(--secondary-color);
-  color: white;
-  border-color: var(--primary-color);
+  background-color: var(--secondary-light);
+  color: var(--secondary-color);
+  border-color: var(--secondary-light);
   box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
 }
 
 .user-selection-item.selected:hover {
-  background-color: var(--secondary-color);
+  background-color: var(--secondary-50);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(var(--primary-color-rgb), 0.4);
 }

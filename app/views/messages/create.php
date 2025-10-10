@@ -59,12 +59,12 @@
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <div class="btn-group d-flex justify-content-end" role="group">
-                                            <button type="button" class="btn btn-primary btn-sm" id="selectAllBtn">
-                                                <i class="fas fa-check-double me-1"></i>
+                                        <div class="btn-group justify-content-end" role="group" style="float: right;">
+                                            <button type="button" class="btn btn-primary btn-sm" id="selectAllBtn" title="Pilih Semua">
+                                                <i class="fas fa-check-double"></i>
                                             </button>
-                                            <button type="button" class="btn btn-danger btn-sm" id="clearAllBtn">
-                                                <i class="fas fa-times me-1"></i>
+                                            <button type="button" class="btn btn-danger btn-sm" id="clearAllBtn" title="Hapus Semua">
+                                                <i class="fas fa-times"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -400,19 +400,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update select all button
         if (selectedCount === displayedUsers.length && displayedUsers.length > 0) {
-            selectAllBtn.innerHTML = '<i class="fas fa-check-double me-1"></i>';
+            selectAllBtn.innerHTML = '<i class="fas fa-check-double"></i>';
             selectAllBtn.disabled = true;
         } else {
-            selectAllBtn.innerHTML = '<i class="fas fa-check-double me-1"></i>';
+            selectAllBtn.innerHTML = '<i class="fas fa-check-double"></i>';
             selectAllBtn.disabled = false;
         }
         
         // Update clear all button
         if (selectedUsers.length === 0) {
-            clearAllBtn.innerHTML = '<i class="fas fa-times me-1"></i>';
+            clearAllBtn.innerHTML = '<i class="fas fa-times"></i>';
             clearAllBtn.disabled = true;
         } else {
-            clearAllBtn.innerHTML = '<i class="fas fa-times me-1"></i>';
+            clearAllBtn.innerHTML = '<i class="fas fa-times"></i>';
             clearAllBtn.disabled = false;
         }
     }
@@ -439,12 +439,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <input type="checkbox" class="form-check-input" ${isSelected ? 'checked' : ''} onchange="toggleUser(${user.id})">
                             </div>
                         </div>
-                        <div class="card-body d-flex align-items-center" style="padding: 0.75rem; min-height: 60px;">
+                        <div class="card-body d-flex align-items-center" style="padding: 0.75rem; min-height: 60px; overflow: hidden;">
                             ${userPicture}
-                            <div class="flex-grow-1 ms-2">
-                                <div class="fw-bold text-truncate" style="font-size: 0.875rem; line-height: 1.2;">${user.namalengkap}</div>
-                                <div class="text-muted text-truncate" style="font-size: 0.75rem; line-height: 1.1;">${user.username}</div>
-                                <div class="text-muted text-truncate" style="font-size: 0.7rem; line-height: 1.1;">${user.email}</div>
+                            <div class="flex-grow-1 ms-2" style="min-width: 0; overflow: hidden;">
+                                <div class="fw-bold text-truncate" style="font-size: 0.875rem; line-height: 1.2; max-width: 100%;" title="${user.namalengkap}">${user.namalengkap}</div>
+                                <div class="text-muted text-truncate" style="font-size: 0.75rem; line-height: 1.1; max-width: 100%;" title="${user.username}">${user.username}</div>
+                                <div class="text-muted text-truncate" style="font-size: 0.7rem; line-height: 1.1; max-width: 100%;" title="${user.email}">${user.email}</div>
                                 <span class="badge bg-secondary" style="font-size: 0.65rem;">${user.role}</span>
                             </div>
                         </div>

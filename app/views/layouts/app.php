@@ -36,12 +36,10 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <link rel="apple-touch-icon" href="<?php echo BASE_URL; ?>assets/images/favicon.png">
     
     <!-- Bootstrap CSS -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="<?php echo BASE_URL; ?>assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Font Awesome 7 - Latest Version -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" /></noscript>
+    <!-- Font Awesome - Local Version -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/fontawesome/css/all.min.css?v=6.5.1">
     
     <!-- Font Preloading for Chrome/Edge -->
     <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-regular.ttf" as="font" type="font/ttf" crossorigin>
@@ -491,7 +489,7 @@ echo ' class="' . $bodyClass . '"';
             
             // Auto select first menu group (index 1, because 0 is placeholder)
             if (menuGroupSelect.options.length > 1) {
-                menuGroupSelect.selectedIndex = 1;
+                menuGroupSelect.selectedIndex = 0;
                 
                 // Show preview immediately for auto-selected option
                 const selectedOption = menuGroupSelect.options[1];
@@ -589,6 +587,16 @@ echo ' class="' . $bodyClass . '"';
             });
         });
         <?php endif; ?>
+
+        // Global Keyboard Shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+F11 untuk Logout
+            if (e.ctrlKey && e.key === 'F11') {
+                e.preventDefault(); // Prevent default F11 behavior (fullscreen)
+                
+                window.location.href = '<?php echo APP_URL; ?>/logout';
+            }
+        });
     </script>
 </body>
 </html>
