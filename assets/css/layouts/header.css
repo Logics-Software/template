@@ -14,7 +14,6 @@
   top: 0;
   z-index: 998;
   transition: margin-left 0.3s ease;
-  /* Ensure sticky works in flex container */
   align-self: flex-start;
   width: 100%;
 }
@@ -75,18 +74,6 @@
   margin-left: 0;
   width: 100%;
   max-width: 100%;
-}
-
-/* Header visibility control - Removed flash effect */
-.top-header {
-  opacity: 1;
-  visibility: visible;
-  transition: margin-left 0.3s ease;
-}
-
-/* Remove fallback animation that causes flash */
-.top-header:not(.js-loaded) {
-  animation: none;
 }
 
 /* Header left section */
@@ -1182,6 +1169,27 @@
   .top-header {
     padding: 0 1rem;
   }
+}
+
+/* User avatar - simple and stable */
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+.user-avatar img,
+.user-avatar-img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  /* Hide broken image icon and alt text */
+  text-indent: -9999px;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
 }
 
 @media (max-width: 576px) {

@@ -43,11 +43,11 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <!-- Font Awesome - Local Version -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/fontawesome/css/all.min.css?v=6.5.1">
     
-    <!-- Font Preloading for Chrome/Edge -->
-    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-regular.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-medium.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-semibold.ttf" as="font" type="font/ttf" crossorigin>
+    <!-- Font Preloading for Chrome/Edge - Prioritize bold for brand text -->
     <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-bold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-semibold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-medium.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="<?php echo BASE_URL; ?>assets/fonts/inter/inter-regular.ttf" as="font" type="font/ttf" crossorigin>
     
     <!-- Local Fonts - Inter -->
     <link href="<?php echo BASE_URL; ?>assets/css/fonts.css" rel="stylesheet">
@@ -63,6 +63,49 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>assets/images/favicon.ico">
+    
+    <!-- Prevent sidebar flash on page load - Must be in head before body renders -->
+    <script>
+        // Immediately apply sidebar state from cookie before DOM renders
+        (function() {
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+            
+            // Check if sidebar should be collapsed
+            const isCollapsed = getCookie('sidebar_collapsed') === 'true';
+            
+            if (isCollapsed) {
+                // Add style to prevent flash - will be applied immediately
+                document.documentElement.classList.add('sidebar-collapsed-init');
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS: Must be inline to prevent sidebar flash -->
+    <style>
+        /* CRITICAL: Prevent sidebar flash when collapsed - Must execute before render */
+        html.sidebar-collapsed-init .sidebar {
+            width: 0;
+            transform: translateX(-100%);
+            overflow: hidden;
+        }
+        
+        html.sidebar-collapsed-init .main-content {
+            margin-left: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        html.sidebar-collapsed-init .top-header {
+            margin-left: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+    </style>
 </head>
 <body<?php 
 $bodyClass = 'bg-light';
@@ -458,30 +501,6 @@ echo ' class="' . $bodyClass . '"';
     <script>
         window.csrfToken = '<?php echo $csrf_token ?? ''; ?>';
         window.appUrl = '<?php echo APP_URL; ?>';
-        
-        // Prevent sidebar flash - apply state immediately
-        document.addEventListener('DOMContentLoaded', function() {
-            const cookieRow = document.cookie.split('; ').find(row => row.startsWith('sidebar_collapsed='));
-            const isCollapsed = cookieRow ? cookieRow.split('=')[1] === 'true' : false;
-            
-            if (isCollapsed) {
-                const sidebar = document.querySelector('.sidebar');
-                const mainContent = document.querySelector('.main-content');
-                const topHeader = document.querySelector('.top-header');
-                
-                if (sidebar) {
-                    sidebar.classList.add('collapsed');
-                }
-                if (mainContent) mainContent.classList.add('sidebar-collapsed');
-                if (topHeader) topHeader.classList.add('sidebar-collapsed');
-            }
-        });
-        
-        // Initialize theme on page load (will be handled by app.js)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Theme initialization will be handled by app.js
-            // This prevents conflicts with duplicate theme management
-        });
         
         // Menu Group Selection Handler
         <?php if (Session::get('pending_menu_selection')): ?>

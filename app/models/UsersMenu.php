@@ -202,32 +202,24 @@ class UsersMenu extends Model
         try {
             $database = Database::getInstance();
             
-            // Log for debugging
-            error_log("UsersMenu syncUserMenuGroups - User ID: " . $userId);
-            error_log("UsersMenu syncUserMenuGroups - Group IDs: " . print_r($groupIds, true));
-            
             $database->beginTransaction();
             
             // Remove all existing menu groups for this user
             $deleteSql = "DELETE FROM {$this->table} WHERE user_id = ?";
-            error_log("UsersMenu syncUserMenuGroups - Delete SQL: " . $deleteSql);
             $database->query($deleteSql, [$userId]);
             
             // Add new menu groups
             if (!empty($groupIds)) {
                 foreach ($groupIds as $groupId) {
                     $insertSql = "INSERT INTO {$this->table} (user_id, group_id) VALUES (?, ?)";
-                    error_log("UsersMenu syncUserMenuGroups - Insert SQL: " . $insertSql . " with values: " . $userId . ", " . $groupId);
                     $database->query($insertSql, [$userId, $groupId]);
                 }
             }
             
             $database->commit();
-            error_log("UsersMenu syncUserMenuGroups - Success");
             return true;
         } catch (Exception $e) {
-            error_log("UsersMenu syncUserMenuGroups - Error: " . $e->getMessage());
-            error_log("UsersMenu syncUserMenuGroups - Error trace: " . $e->getTraceAsString());
+            error_log("UsersMenu syncUserMenuGroups error: " . $e->getMessage());
             
             if (isset($database) && $database->inTransaction()) {
                 $database->rollback();

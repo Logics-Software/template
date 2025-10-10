@@ -9,7 +9,7 @@
   top: 0;
   left: 0;
   z-index: 999;
-  overflow-y: hidden; /* Changed to hidden to allow sticky header */
+  overflow-y: hidden;
   overflow-x: hidden;
   transition: all 0.3s ease;
   max-width: var(--sidebar-width);
@@ -77,6 +77,7 @@
   align-items: center;
   text-decoration: none;
   color: var(--text-primary);
+  min-height: 50px;
 }
 
 .sidebar-header {
@@ -87,6 +88,7 @@
   background-color: var(--bg-primary);
   border-bottom: 1px solid var(--bg-primary);
   flex-shrink: 0;
+  min-height: 70px;
 }
 
 .sidebar-brand .brand-logo {
@@ -100,14 +102,32 @@
   font-weight: 800;
   color: var(--text-primary);
   text-decoration: none !important;
+  /* Prevent flash by ensuring consistent rendering */
+  opacity: 1;
+  visibility: visible;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .sidebar-brand a {
   text-decoration: none !important;
+  display: flex;
+  align-items: center;
 }
 
 .sidebar-brand a:hover {
   text-decoration: none !important;
+}
+
+/* Sidebar brand logo */
+.sidebar-brand img {
+  opacity: 1;
+  visibility: visible;
+  height: 32px;
+  width: auto;
+  display: inline-block;
 }
 
 /* Sidebar navigation */
@@ -209,11 +229,6 @@
 .sidebar {
   opacity: 1;
   visibility: visible;
-}
-
-/* Remove fallback animation that causes flash */
-.sidebar:not(.js-loaded) {
-  animation: none;
 }
 
 /* Sidebar Active State - Optimized with Variables */

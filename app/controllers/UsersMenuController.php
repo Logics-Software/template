@@ -65,11 +65,8 @@ class UsersMenuController extends BaseController
                 'csrf_token' => $this->csrfToken()
             ]);
         } catch (Exception $e) {
-            // Log the error for debugging
             error_log("UsersMenuController index error: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
             
-            // Show a user-friendly error message
             $this->withError('An error occurred while loading user menu access. Please try again.');
             $this->redirect('/menuakses');
         }
@@ -156,14 +153,8 @@ class UsersMenuController extends BaseController
         }
 
         try {
-            // Log incoming request for debugging
-            error_log("UsersMenuController update - User ID: " . $userId);
-            error_log("UsersMenuController update - Raw input: " . print_r($request->all(), true));
-            
             // Get selected group IDs from request
             $groupIds = $request->input('group_ids') ?? [];
-            
-            error_log("UsersMenuController update - Group IDs (raw): " . print_r($groupIds, true));
             
             // If groupIds is a string (from form), convert to array
             if (is_string($groupIds)) {
@@ -172,8 +163,6 @@ class UsersMenuController extends BaseController
             
             // Filter and convert to integers
             $groupIds = array_filter(array_map('intval', $groupIds));
-            
-            error_log("UsersMenuController update - Group IDs (processed): " . print_r($groupIds, true));
 
             // Sync user menu groups
             $result = $this->usersMenuModel->syncUserMenuGroups($userId, $groupIds);
@@ -182,15 +171,12 @@ class UsersMenuController extends BaseController
                 // Clear cache if exists
                 Cache::forget('user_menu_' . $userId);
                 
-                error_log("UsersMenuController update - Success");
                 $this->json(['success' => true, 'message' => 'User menu access updated successfully']);
             } else {
-                error_log("UsersMenuController update - Failed to sync");
                 $this->json(['error' => 'Failed to update user menu access'], 500);
             }
         } catch (Exception $e) {
             error_log("UsersMenuController update error: " . $e->getMessage());
-            error_log("UsersMenuController update error trace: " . $e->getTraceAsString());
             $this->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }

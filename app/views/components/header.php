@@ -1,8 +1,16 @@
 <?php
-// Load call center data
-require_once APP_PATH . '/app/models/CallCenter.php';
-$callCenterModel = new CallCenter();
-$callCenters = $callCenterModel->getAll();
+// Load call center data (with static caching)
+if (!isset($callCenters)) {
+    static $cachedCallCenters = null;
+    
+    if ($cachedCallCenters === null) {
+        require_once APP_PATH . '/app/models/CallCenter.php';
+        $callCenterModel = new CallCenter();
+        $cachedCallCenters = $callCenterModel->getAll();
+    }
+    
+    $callCenters = $cachedCallCenters;
+}
 
 // Function to get greeting message based on time
 if (!function_exists('getGreetingMessage')) {
@@ -202,11 +210,15 @@ function getGreetingMessage() {
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle d-flex align-items-center" id="userProfileToggle" data-bs-toggle="dropdown" title="Profil User">
                                 <div class="user-avatar me-2">
-                                    <?php if (Session::get('user_picture')): ?>
-                                        <img src="<?php echo APP_URL; ?>/<?php echo Session::get('user_picture'); ?>" alt="User" class="rounded-circle object-fit-cover" width="32" height="32">
-                                    <?php else: ?>
-                                        <img src="<?php echo APP_URL; ?>/assets/images/users/avatar.svg" alt="User Avatar" class="rounded-circle object-fit-cover" width="32" height="32">
-                                    <?php endif; ?>
+                                    <?php 
+                                    $userPicture = Session::get('user_picture');
+                                    $avatarUrl = $userPicture ? APP_URL . '/' . $userPicture : APP_URL . '/assets/images/users/avatar.svg';
+                                    ?>
+                                    <img src="<?php echo $avatarUrl; ?>" 
+                                         alt="" 
+                                         class="rounded-circle object-fit-cover user-avatar-img" 
+                                         width="32" 
+                                         height="32">
                                 </div>
                                 <div class="user-info text-start">
                                     <?php echo Session::get('user_name') ?? 'Admin'; ?>

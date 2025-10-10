@@ -28,7 +28,7 @@ body {
   width: calc(100% - var(--sidebar-width));
   max-width: calc(100% - var(--sidebar-width));
   overflow-x: hidden;
-  overflow-y: hidden; /* Changed to hidden to allow sticky header */
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -261,6 +261,6 @@ body {
 }
 
 .user-info {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
 }

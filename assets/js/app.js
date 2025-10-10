@@ -21,33 +21,22 @@ function setCookie(name, value, days = 365) {
   document.cookie = `${name}=${value}; expires=${expires}; path=/`;
 }
 
-// Initialize sidebar state from cookie - SYNCHRONOUS to prevent flash
+// Initialize sidebar state from cookie
 function initSidebarState() {
   const isCollapsed = getCookie("sidebar_collapsed") === "true";
   const sidebar = document.querySelector(".sidebar");
   const mainContent = document.querySelector(".main-content");
   const topHeader = document.querySelector(".top-header");
 
-  if (sidebar) {
-    // Apply classes immediately without transition to prevent flash
-    if (isCollapsed && mainContent && topHeader) {
-      sidebar.style.transition = "none";
-      mainContent.style.transition = "none";
-      topHeader.style.transition = "none";
-
+  if (sidebar && mainContent && topHeader) {
+    if (isCollapsed) {
       sidebar.classList.add("collapsed");
       mainContent.classList.add("sidebar-collapsed");
       topHeader.classList.add("sidebar-collapsed");
-
-      // Re-enable transitions after state is set
-      setTimeout(() => {
-        sidebar.style.transition = "";
-        mainContent.style.transition = "";
-        topHeader.style.transition = "";
-      }, 50);
     }
 
-    // Sidebar state applied
+    // Remove temporary init class after state is properly set
+    document.documentElement.classList.remove("sidebar-collapsed-init");
   }
 }
 
@@ -492,16 +481,9 @@ function initSidebarDropdown() {
   });
 }
 
-// Initialize sidebar state IMMEDIATELY when script loads (before DOM ready)
-// This prevents flash by setting the state as early as possible
-// Use requestAnimationFrame to ensure DOM is available
-requestAnimationFrame(() => {
-  initSidebarState();
-});
-
 // Initialize all functionality when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
-  // Re-initialize sidebar state to ensure consistency
+  // Initialize sidebar state
   initSidebarState();
 
   // Initialize sidebar toggle

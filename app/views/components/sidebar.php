@@ -1,7 +1,14 @@
 <?php
-// Get logo and company name from konfigurasi table
+// Get logo and company name from konfigurasi table (with caching)
 if (!function_exists('getSidebarLogo')) {
     function getSidebarLogo() {
+        // Use static variable for caching within same request
+        static $cachedLogo = null;
+        
+        if ($cachedLogo !== null) {
+            return $cachedLogo;
+        }
+        
         try {
             // Include the Konfigurasi model
             require_once __DIR__ . '/../../models/Konfigurasi.php';
@@ -19,10 +26,12 @@ if (!function_exists('getSidebarLogo')) {
                 $companyName = APP_NAME;
             }
             
-            return ['path' => $logoPath, 'alt' => $logoAlt, 'company_name' => $companyName];
+            $cachedLogo = ['path' => $logoPath, 'alt' => $logoAlt, 'company_name' => $companyName];
+            return $cachedLogo;
         } catch (Exception $e) {
             // Fallback to default logo if error occurs
-            return ['path' => APP_URL . '/assets/images/logo.png', 'alt' => APP_NAME, 'company_name' => APP_NAME];
+            $cachedLogo = ['path' => APP_URL . '/assets/images/logo.png', 'alt' => APP_NAME, 'company_name' => APP_NAME];
+            return $cachedLogo;
         }
     }
 }

@@ -30,12 +30,6 @@ $csrfToken = Session::generateCSRF();
                     <div class="menu-items" id="sortableMenu">
                         <?php if (!empty($menuItems)): ?>
                             <?php 
-                            // DEBUG: Tampilkan data yang diambil
-                            echo '<!-- DEBUG: Total items: ' . count($menuItems) . ' -->';
-                            if (!empty($menuItems)) {
-                                echo '<!-- DEBUG: First item: ' . print_r($menuItems[0], true) . ' -->';
-                            }
-                            
                             // TAMPILKAN URUT DARI ATAS KE BAWAH
                             echo '<table class="table table-hover table-borderless">';
                             echo '<thead class="table-light">';
