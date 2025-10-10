@@ -30,13 +30,6 @@ class MenuController extends BaseController
             return;
         }
 
-        // Check if user is admin
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->redirect('/dashboard');
-            return;
-        }
-
         // Get stats with caching (5 minutes TTL)
         $stats = Cache::remember('menu_stats', function() {
             $database = Database::getInstance();
@@ -82,12 +75,6 @@ class MenuController extends BaseController
     {
         if (!Session::has('user_id')) {
             $this->redirect('/login');
-            return;
-        }
-
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->redirect('/dashboard');
             return;
         }
 
@@ -143,12 +130,6 @@ class MenuController extends BaseController
             return;
         }
 
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
-            return;
-        }
-
         try {
             $data = [
                 'name' => $request->input('name'),
@@ -199,13 +180,6 @@ class MenuController extends BaseController
             $this->json(['error' => 'Unauthorized'], 401);
             return;
         }
-
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
-            return;
-        }
-
 
         try {
             $groupId = $params['id'] ?? $request->input('id');
@@ -262,12 +236,6 @@ class MenuController extends BaseController
 
         if (!Session::has('user_id')) {
             $this->json(['error' => 'Unauthorized'], 401);
-            return;
-        }
-
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
             return;
         }
 
@@ -330,12 +298,6 @@ class MenuController extends BaseController
 
         if (!Session::has('user_id')) {
             $this->json(['error' => 'Unauthorized'], 401);
-            return;
-        }
-
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
             return;
         }
 
@@ -411,12 +373,6 @@ class MenuController extends BaseController
             return;
         }
 
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
-            return;
-        }
-
         $menuItems = $request->json('menu_items');
         
         if (!$menuItems || !is_array($menuItems)) {
@@ -461,12 +417,6 @@ class MenuController extends BaseController
             return;
         }
 
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
-            return;
-        }
-
         $moduleId = $params['id'] ?? $request->input('id');
         
         if (!$moduleId) {
@@ -505,12 +455,6 @@ class MenuController extends BaseController
             return;
         }
 
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
-            return;
-        }
-
         // Export menu configuration directly
         $modules = $this->moduleModel->findAll();
         $groups = $this->menuGroupModel->getAllActive();
@@ -545,12 +489,6 @@ class MenuController extends BaseController
 
         if (!Session::has('user_id')) {
             $this->json(['error' => 'Unauthorized'], 401);
-            return;
-        }
-
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
             return;
         }
 
@@ -837,12 +775,6 @@ class MenuController extends BaseController
             return;
         }
 
-        $userRole = Session::get('user_role');
-        if ($userRole !== 'admin') {
-            $this->json(['error' => 'Forbidden'], 403);
-            return;
-        }
-
         // Accept both 'orders' (from drag-drop.js) and 'menu_items' (legacy)
         $orders = $request->json('orders') ?? $request->json('menu_items');
         
@@ -879,16 +811,11 @@ class MenuController extends BaseController
     }
 
     /**
-     * Check if user is authorized to access menu management
+     * Check if user is authorized (logged in)
      */
     private function isAuthorized()
     {
-        if (!Session::has('user_id')) {
-            return false;
-        }
-
-        $userRole = Session::get('user_role');
-        return in_array($userRole, ['admin', 'manajemen']);
+        return Session::has('user_id');
     }
 
     /**

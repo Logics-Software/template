@@ -25,13 +25,6 @@ class UsersMenuController extends BaseController
             return;
         }
 
-        // Check if user is admin or manajemen
-        $userRole = Session::get('user_role');
-        if (!in_array($userRole, ['admin', 'manajemen'])) {
-            $this->redirect('/dashboard');
-            return;
-        }
-
         try {
             $page = (int) ($request->input('page') ?? 1);
             $search = $request->input('search') ?? '';
@@ -79,12 +72,6 @@ class UsersMenuController extends BaseController
     {
         if (!Session::has('user_id')) {
             $this->redirect('/login');
-            return;
-        }
-
-        $userRole = Session::get('user_role');
-        if (!in_array($userRole, ['admin', 'manajemen'])) {
-            $this->redirect('/dashboard');
             return;
         }
 
@@ -139,12 +126,6 @@ class UsersMenuController extends BaseController
             return;
         }
 
-        $userRole = Session::get('user_role');
-        if (!in_array($userRole, ['admin', 'manajemen'])) {
-            $this->json(['error' => 'Forbidden'], 403);
-            return;
-        }
-
         $userId = $params[0] ?? $request->input('user_id');
         
         if (!$userId) {
@@ -191,12 +172,6 @@ class UsersMenuController extends BaseController
             return;
         }
 
-        $userRole = Session::get('user_role');
-        if (!in_array($userRole, ['admin', 'manajemen'])) {
-            $this->json(['error' => 'Forbidden'], 403);
-            return;
-        }
-
         try {
             $userId = $request->input('user_id');
             $groupId = $request->input('group_id');
@@ -227,12 +202,6 @@ class UsersMenuController extends BaseController
     {
         if (!Session::has('user_id')) {
             $this->json(['error' => 'Unauthorized'], 401);
-            return;
-        }
-
-        $userRole = Session::get('user_role');
-        if (!in_array($userRole, ['admin', 'manajemen'])) {
-            $this->json(['error' => 'Forbidden'], 403);
             return;
         }
 
