@@ -60,7 +60,8 @@ class App
                     '/api/messages/mark-read',
                     '/api/messages/mark-all-read',
                     '/api/messages/unread-count',
-                    '/api/messages/search-users'
+                    '/api/messages/search-users',
+                    '/api/validate-module-access'  // Read-only validation, no data modification
                 ];
                 
                 if (!in_array($uri, $skipCSRF)) {
@@ -105,6 +106,7 @@ class App
         $this->router->get('/api/session-check', 'ApiController@checkSession');
         $this->router->post('/api/extend-session', 'ApiController@extendSession');
         $this->router->get('/api/session-warning', 'ApiController@getSessionWarning');
+        $this->router->post('/api/validate-module-access', 'ApiController@validateModuleAccess');
         
         // User management routes
         $this->router->get('/users', 'UserController@index');

@@ -190,4 +190,90 @@ class ApiController extends BaseController
             'unread_count' => $unreadCount
         ]);
     }
+
+    /**
+     * Validate module access based on user role
+     */
+    public function validateModuleAccess()
+    {
+        // Check if user is logged in
+        if (!Session::has('user_id') || !Session::has('user_role')) {
+            $this->json([
+                'success' => false,
+                'error' => 'Unauthorized',
+                'message' => 'User not logged in'
+            ], 401);
+            return;
+        }
+
+        // Get the requested link/route from POST data
+        $link = $this->input('link');
+        
+        if (!$link) {
+            $this->json([
+                'success' => false,
+                'error' => 'Bad Request',
+                'message' => 'Link parameter is required'
+            ], 400);
+            return;
+        }
+
+        // Get user role from session
+        $userRole = Session::get('user_role');
+
+        try {
+            // Get module data by link
+            $moduleModel = new Module();
+            $module = $moduleModel->getByLink($link);
+            
+            // If module not found in database, allow access (backward compatibility)
+            if (!$module) {
+                $this->json([
+                    'success' => true,
+                    'allowed' => true,
+                    'message' => 'Module not found in database, access allowed'
+                ]);
+                return;
+            }
+            
+            // Check if user's role has access to this module
+            $hasAccess = false;
+            
+            if (isset($module[$userRole])) {
+                $hasAccess = (bool) $module[$userRole];
+            }
+            
+            if ($hasAccess) {
+                // User has access
+                $this->json([
+                    'success' => true,
+                    'allowed' => true,
+                    'message' => 'Access granted',
+                    'module' => [
+                        'caption' => $module['caption'] ?? 'Unknown',
+                        'link' => $module['link'] ?? $link
+                    ]
+                ]);
+            } else {
+                // User does NOT have access
+                $this->json([
+                    'success' => true,
+                    'allowed' => false,
+                    'message' => 'Access denied',
+                    'module' => [
+                        'caption' => $module['caption'] ?? 'Unknown',
+                        'link' => $module['link'] ?? $link
+                    ]
+                ]);
+            }
+            
+        } catch (Exception $e) {
+            // Error occurred
+            $this->json([
+                'success' => false,
+                'error' => 'Internal Server Error',
+                'message' => 'Failed to validate module access: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

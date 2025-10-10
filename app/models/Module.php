@@ -46,4 +46,15 @@ class Module extends Model
     {
         return $this->findAll('customer = 1', [], 'caption ASC');
     }
+
+    /**
+     * Get module by link/route
+     * @param string $link - The module link/route (e.g., "/konfigurasi", "/users")
+     * @return array|null - Module data or null if not found
+     */
+    public function getByLink($link)
+    {
+        $modules = $this->findAll('link = :link', ['link' => $link]);
+        return !empty($modules) ? $modules[0] : null;
+    }
 }

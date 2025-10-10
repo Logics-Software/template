@@ -1189,8 +1189,148 @@ function setupTooltipAutoCleanup() {
   });
 }
 
+/**
+ * Module Access Validation
+ * Validates user access to modules before navigation
+ */
+function initModuleAccessValidation() {
+  const moduleLinks = document.querySelectorAll(".validate-module-access");
+
+  moduleLinks.forEach((link) => {
+    link.addEventListener("click", async function (e) {
+      e.preventDefault();
+
+      const moduleLink = this.getAttribute("data-module-link");
+      const targetUrl = this.getAttribute("href");
+
+      // If no module link data, just navigate normally
+      if (!moduleLink || moduleLink === "#") {
+        window.location.href = targetUrl;
+        return;
+      }
+
+      // Show loading indicator
+      const originalText = this.innerHTML;
+      this.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> ' +
+          this.querySelector(".nav-text")?.textContent || "";
+      this.style.pointerEvents = "none";
+
+      try {
+        // Call validation API
+        const apiUrl = window.appUrl + "/api/validate-module-access";
+
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": window.csrfToken, // CSRF protection
+          },
+          credentials: "same-origin", // Important: Include cookies/session
+          body: JSON.stringify({
+            link: moduleLink,
+          }),
+        });
+
+        // Check if response is OK
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parse JSON response
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          const text = await response.text();
+          console.error("Non-JSON response:", text);
+          throw new Error("Server returned non-JSON response");
+        }
+
+        const data = await response.json();
+
+        // Restore link
+        this.innerHTML = originalText;
+        this.style.pointerEvents = "auto";
+
+        if (data.success && data.allowed) {
+          // Access granted - navigate to page
+          window.location.href = targetUrl;
+        } else {
+          // Access denied - show modal
+          showAccessDeniedModal(data.module?.caption || "modul ini");
+        }
+      } catch (error) {
+        // Restore link on error
+        this.innerHTML = originalText;
+        this.style.pointerEvents = "auto";
+
+        console.error("Module access validation error:", error);
+        window.Notify.error("Terjadi kesalahan saat validasi akses modul");
+      }
+    });
+  });
+}
+
+/**
+ * Show access denied modal
+ */
+function showAccessDeniedModal(moduleName) {
+  // Check if modal already exists
+  let modal = document.getElementById("accessDeniedModal");
+
+  if (!modal) {
+    // Create modal
+    const modalHtml = `
+      <div class="modal fade" id="accessDeniedModal" tabindex="-1" aria-labelledby="accessDeniedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title" id="accessDeniedModalLabel">
+                <i class="fas fa-exclamation-triangle me-2"></i>Akses Ditolak
+              </h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+              <i class="fas fa-ban fa-3x text-danger mb-3"></i>
+              <p class="fs-5 mb-0" id="accessDeniedMessage">Anda tidak berhak menjalankan modul tersebut</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="accessDeniedOkBtn">
+                <i class="fas fa-check me-2"></i>OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", modalHtml);
+    modal = document.getElementById("accessDeniedModal");
+
+    // Add event listener for OK button to redirect to dashboard
+    document
+      .getElementById("accessDeniedOkBtn")
+      .addEventListener("click", function () {
+        window.location.href = window.appUrl + "/dashboard";
+      });
+
+    // Also redirect when modal is closed by backdrop or X button
+    modal.addEventListener("hidden.bs.modal", function () {
+      window.location.href = window.appUrl + "/dashboard";
+    });
+  }
+
+  // Update message
+  document.getElementById("accessDeniedMessage").textContent =
+    "Anda tidak berhak menjalankan modul tersebut";
+
+  // Show modal
+  const bsModal = new bootstrap.Modal(modal);
+  bsModal.show();
+}
+
 // Initialize tooltips on page load
 document.addEventListener("DOMContentLoaded", function () {
   initTooltips();
   setupTooltipAutoCleanup();
+  initModuleAccessValidation();
 });

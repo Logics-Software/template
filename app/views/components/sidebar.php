@@ -148,7 +148,9 @@ $logo = getSidebarLogo();
                                         $isActive = ($childLink !== '#' && ($currentPath === $childLink || strpos($currentPath, $childLink . '/') === 0)) ? 'active' : '';
                                     ?>
                                     <li class="nav-item">
-                                        <a class="nav-link submenu-link <?php echo $isActive; ?>" href="<?php echo APP_URL . $childLink; ?>">
+                                        <a class="nav-link submenu-link validate-module-access <?php echo $isActive; ?>" 
+                                           href="<?php echo APP_URL . $childLink; ?>"
+                                           data-module-link="<?php echo htmlspecialchars($childLink); ?>">
                                             <i class="<?php echo htmlspecialchars($childIcon); ?>"></i>
                                             <span class="nav-text"><?php echo htmlspecialchars($childLabel); ?></span>
                             </a>
@@ -166,7 +168,9 @@ $logo = getSidebarLogo();
                         $isActive = ($menuLink !== '#' && ($currentPath === $menuLink || strpos($currentPath, $menuLink . '/') === 0)) ? 'active' : '';
                         ?>
             <li class="nav-item">
-                            <a class="nav-link <?php echo $isActive; ?>" href="<?php echo APP_URL . $menuLink; ?>">
+                            <a class="nav-link validate-module-access <?php echo $isActive; ?>" 
+                               href="<?php echo APP_URL . $menuLink; ?>"
+                               data-module-link="<?php echo htmlspecialchars($menuLink); ?>">
                                 <i class="<?php echo htmlspecialchars($menuIcon); ?>"></i>
                                 <span class="nav-text"><?php echo htmlspecialchars($menuLabel); ?></span>
                 </a>
