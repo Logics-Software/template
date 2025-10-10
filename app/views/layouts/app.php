@@ -439,7 +439,8 @@ echo ' class="' . $bodyClass . '"';
     <?php endif; ?>
 
     <!-- Bootstrap JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+    <!-- Popper.js required for Bootstrap dropdowns (local file) -->
+    <script src="<?php echo APP_URL; ?>/assets/js/popper.min.js"></script>
     <script src="<?php echo APP_URL; ?>/assets/js/bootstrap/bootstrap.min.js"></script>
         
     <!-- Alert Manager -->

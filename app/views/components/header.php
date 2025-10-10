@@ -191,7 +191,7 @@ function getGreetingMessage() {
                     <!-- User Profile -->
                     <div class="user-dropdown">
                         <div class="dropdown">
-                            <button class="btn btn-link dropdown-toggle d-flex align-items-center" id="messageToggle" data-bs-toggle="dropdown" title="Profil User">
+                            <button class="btn btn-link dropdown-toggle d-flex align-items-center" id="userProfileToggle" data-bs-toggle="dropdown" title="Profil User">
                                 <div class="user-avatar me-2">
                                     <?php if (Session::get('user_picture')): ?>
                                         <img src="<?php echo APP_URL; ?>/<?php echo Session::get('user_picture'); ?>" alt="User" class="rounded-circle object-fit-cover" width="32" height="32">
