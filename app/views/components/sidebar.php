@@ -75,6 +75,7 @@ $logo = getSidebarLogo();
                     <i class="<?php echo $dashboardIcon; ?>"></i>
                     <span class="nav-text"><?php echo $dashboardLabel; ?></span>
                 </a>
+                <span class="text-muted m-4">Menu</span>
             </li>
             
             <?php

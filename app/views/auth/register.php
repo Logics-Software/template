@@ -171,8 +171,8 @@ $validationErrors = Session::getFlash('errors');
                                         
                                         <!-- Default state when no file selected -->
                                         <div id="no-file-preview" class="text-center text-muted py-3">
-                                            <i class="fas fa-image fa-3x mb-2 opacity-50"></i>
-                                            <div class="small">Belum ada foto profil</div>
+                                            <i class="fas fa-image fa-3x opacity-50"></i>
+                                            <div class="small m-3">Belum ada foto</div>
                                         </div>
                                     </div>
                                 </div>

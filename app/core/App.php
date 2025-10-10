@@ -196,6 +196,7 @@ class App
         $this->router->post('/menu/create-menu-item', 'MenuController@createMenuItem');
         $this->router->post('/menu/update-menu-item', 'MenuController@updateMenuItem');
         $this->router->post('/menu/delete-menu-item', 'MenuController@deleteMenuItem');
+        $this->router->post('/menu/update-menu-sort', 'MenuController@updateMenuItemSort');
         
         // Legacy menu module routes (for backward compatibility)
         $this->router->post('/menu/update-module', 'MenuController@updateMenuItem');

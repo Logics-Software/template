@@ -146,6 +146,34 @@ body {
 .cursor-not-allowed {
   cursor: not-allowed !important;
 }
+.cursor-grab {
+  cursor: grab !important;
+}
+.cursor-grab:active {
+  cursor: grabbing !important;
+}
+
+/* Drag and Drop utilities */
+.drag-handle {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.drag-handle:active {
+  cursor: grabbing;
+}
+.draggable-row {
+  transition: background-color 0.2s ease;
+}
+.draggable-row:hover {
+  background-color: var(--bg-secondary, #f8f9fa);
+}
+.draggable-row.dragging {
+  opacity: 0.5;
+  background-color: var(--bg-secondary, #f8f9fa);
+}
 
 /* Border utilities */
 .border-none {

@@ -823,6 +823,62 @@ class MenuController extends BaseController
     }
 
     /**
+     * Update menu items sort order via drag and drop
+     */
+    public function updateMenuItemSort($request = null, $response = null, $params = [])
+    {
+        if (!$request->isPost()) {
+            $this->json(['error' => 'Method not allowed'], 405);
+            return;
+        }
+
+        if (!Session::has('user_id')) {
+            $this->json(['error' => 'Unauthorized'], 401);
+            return;
+        }
+
+        $userRole = Session::get('user_role');
+        if ($userRole !== 'admin') {
+            $this->json(['error' => 'Forbidden'], 403);
+            return;
+        }
+
+        // Accept both 'orders' (from drag-drop.js) and 'menu_items' (legacy)
+        $orders = $request->json('orders') ?? $request->json('menu_items');
+        
+        if (!$orders || !is_array($orders)) {
+            $this->json(['error' => 'Invalid menu items data'], 400);
+            return;
+        }
+
+        // Update sort order for menu_items table
+        try {
+            $database = Database::getInstance();
+            $database->beginTransaction();
+
+            foreach ($orders as $item) {
+                if (isset($item['id']) && isset($item['sort_order'])) {
+                    $sql = "UPDATE menu_items SET sort_order = ? WHERE id = ?";
+                    $database->query($sql, [$item['sort_order'], $item['id']]);
+                }
+            }
+
+            $database->commit();
+            
+            // Clear menu cache after update
+            Cache::forget('menu_all_items');
+            Cache::forget('menu_groups_with_count');
+            
+            $this->json(['success' => true, 'message' => 'Menu items sort order updated successfully']);
+        } catch (Exception $e) {
+            if (isset($database)) {
+                $database->rollback();
+            }
+            $this->json(['error' => 'Failed to update menu items sort order: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
      * Check if user is authorized to access menu management
      */
     private function isAuthorized()

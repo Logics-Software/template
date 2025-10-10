@@ -9,7 +9,9 @@ $isLoginPage = (strpos($currentUrl, '/login') !== false) ||
 $isLockScreenPage = (strpos($currentUrl, '/lock-screen') !== false) ||
                    (strpos($currentUrl, '/unlock') !== false) ||
                    (strpos($currentUrl, '/lock') !== false);
-$isRegisterPage = (strpos($currentUrl, '/register') !== false);
+$isRegisterPage = (strpos($currentUrl, '/register') !== false) ||
+                  (strpos($currentUrl, '/auth/register') !== false) ||
+                  (basename($_SERVER['PHP_SELF']) === 'register.php');
 
 // If not logged in and not on login page, register page, or lock screen, redirect to login
 if (!$isLoggedIn && !$isLoginPage && !$isLockScreenPage && !$isRegisterPage) {
@@ -52,10 +54,7 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     
     <!-- Chart.js -->
     <script src="<?php echo BASE_URL; ?>assets/js/chart.js"></script>
-    
-    <!-- Prevent sidebar flash effect -->
-    <!-- Sidebar styles moved to complete.css -->
-    
+        
     <!-- Optimized CSS -->
     <link href="<?php echo BASE_URL; ?>assets/css/complete-optimized.css" rel="stylesheet">
     
@@ -135,6 +134,11 @@ echo ' class="' . $bodyClass . '"';
             include APP_PATH . '/app/views/components/footer.php';
             ?>
         </div>
+    </div>
+    <?php elseif ($isRegisterPage): ?>
+    <!-- Register Page - No Header, Sidebar, or Footer -->
+    <div class="register-page-content">
+        <?php echo $content; ?>
     </div>
     <?php else: ?>
     <!-- Login Page - No Header, Sidebar, or Footer -->
@@ -225,10 +229,10 @@ echo ' class="' . $bodyClass . '"';
                         <div id="selected_menu_preview" class="menu-preview-card d-none">
                             <div class="d-flex align-items-center">
                                 <div class="me-3 preview-icon-wrapper">
-                                    <i id="preview_icon" class="fas fa-folder fa-3x"></i>
+                                    <i id="preview_icon" class="fas fa-folder fa-2x"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 id="preview_name" class="mb-1"></h5>
+                                    <h6 id="preview_name" class="mb-1"></h6>
                                     <p id="preview_description" class="mb-0 text-muted small"></p>
                                 </div>
                             </div>
@@ -236,10 +240,10 @@ echo ' class="' . $bodyClass . '"';
                     </form>
                 </div>
                 <div class="menu-selection-footer">
-                    <button type="button" class="btn btn-secondary btn-lg" onclick="location.href='<?php echo APP_URL; ?>/logout'">
+                    <button type="button" class="btn btn-secondary" onclick="location.href='<?php echo APP_URL; ?>/logout'">
                         <i class="fas fa-sign-out-alt me-2"></i>Logout
                     </button>
-                    <button type="button" class="btn btn-primary btn-lg" id="confirmMenuGroupBtn">
+                    <button type="button" class="btn btn-primary" id="confirmMenuGroupBtn">
                         <i class="fas fa-check-circle me-2"></i>Konfirmasi
                     </button>
                 </div>
@@ -274,7 +278,7 @@ echo ' class="' . $bodyClass . '"';
         
         .menu-selection-container {
             width: 100%;
-            max-width: 550px;
+            max-width: 450px;
             animation: fadeInUp 0.5s ease-out;
         }
         
@@ -298,22 +302,22 @@ echo ' class="' . $bodyClass . '"';
         
         .menu-selection-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 30px;
+            padding: 20px;
         }
         
         .menu-header-logo {
-            height: 50px;
+            height: 40px;
             width: auto;
             max-width: 80px;
             object-fit: contain;
         }
         
         .menu-selection-body {
-            padding: 40px 30px;
+            padding: 30px 30px;
         }
         
         .menu-selection-footer {
-            padding: 20px 30px;
+            padding: 20px 20px;
             background: #f8f9fa;
             display: flex;
             gap: 15px;
@@ -332,7 +336,7 @@ echo ' class="' . $bodyClass . '"';
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
             border: 2px solid var(--border-color-secondary);
             border-radius: 10px;
-            padding: 20px;
+            padding: 10px;
             animation: slideIn 0.3s ease-out;
         }
         
@@ -348,14 +352,12 @@ echo ' class="' . $bodyClass . '"';
         }
         
         .preview-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
         
         .preview-icon-wrapper i {
@@ -493,7 +495,7 @@ echo ' class="' . $bodyClass . '"';
                 menuGroupSelect.selectedIndex = 0;
                 
                 // Show preview immediately for auto-selected option
-                const selectedOption = menuGroupSelect.options[1];
+                const selectedOption = menuGroupSelect.options[0];
                 const icon = selectedOption.getAttribute('data-icon');
                 const description = selectedOption.getAttribute('data-description');
                 const name = selectedOption.text;

@@ -152,9 +152,10 @@ html.auth-page {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Changed from center to flex-start */
   justify-content: center;
   padding: 2rem;
+  overflow-y: auto; /* Allow vertical scrolling */
 }
 
 .register-page-content {
@@ -166,14 +167,16 @@ html.auth-page {
 .register-container {
   display: flex;
   align-items: center;
+  min-width: 800px;
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
+  overflow-y: auto; /* Allow scrolling if content is too tall */
 }
 
 .register-wrapper-single {
   width: 100%;
-  min-width: 800px;
+  max-width: 900px; /* Changed from min-width to max-width */
   animation: slideInUp 0.6s ease-out;
 }
 
@@ -460,11 +463,8 @@ html.auth-page {
   .register-wrapper-single,
   .lock-screen-modal {
     max-width: 100%;
+    min-width: auto; /* Remove min-width constraint on mobile */
     margin: 0;
-  }
-
-  .register-wrapper-single {
-    max-width: 100% !important;
   }
 
   .login-wrapper-single .card-header,

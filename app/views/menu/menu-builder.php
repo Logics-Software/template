@@ -1,3 +1,7 @@
+<?php
+// Generate CSRF token ONCE at the beginning
+$csrfToken = Session::generateCSRF();
+?>
 <!-- Menu Builder -->
 <div class="row">
     <!-- Menu Builder Panel -->
@@ -36,14 +40,15 @@
                             echo '<table class="table table-hover table-borderless">';
                             echo '<thead class="table-light">';
                             echo '<tr>';
-                            echo '<th width="40%">Caption Menu</th>';
+                            echo '<th width="5%"><i class="fas fa-grip-vertical text-muted"></i></th>';
+                            echo '<th width="35%">Caption Menu</th>';
                             echo '<th width="20%">URL</th>';
                             echo '<th width="10%">Order</th>';
                             echo '<th width="10%">Status</th>';
                             echo '<th width="15%">Actions</th>';
                             echo '</tr>';
                             echo '</thead>';
-                            echo '<tbody table-borderless>';
+                            echo '<tbody id="sortable-menu-items">';
                             
                             $counter = 1;
                             foreach ($menuItems as $item) {
@@ -52,7 +57,10 @@
                                 // JIKA ADA PARENT_ID = INDENTASI
                                 $indentStyle = !empty($item['parent_id']) ? 'padding-left: 30px;' : '';
                                 
-                                echo '<tr class="' . $isActive . '" data-menu-item-id="' . $item['id'] . '">';
+                                echo '<tr class="' . $isActive . ' draggable-row" draggable="true" data-id="' . $item['id'] . '" data-menu-item-id="' . $item['id'] . '">';
+                                echo '<td>';
+                                echo '<i class="fas fa-grip-vertical text-muted drag-handle cursor-grab"></i>';
+                                echo '</td>';
                                 echo '<td class="text-secondary" style="' . $indentStyle . '">';
                                 echo '<i class="' . ($item['icon'] ?? 'fas fa-circle') . '"></i>&nbsp;';
                                 echo ' <strong>' . htmlspecialchars($item['name']) . '</strong></div>';
@@ -119,7 +127,7 @@
                 <div class="modal-body p-4">
                     <input type="hidden" id="menuItemId" name="id">
                     <input type="hidden" id="menuItemGroupId" name="group_id" value="<?php echo $selected_group['id']; ?>">
-                    <input type="hidden" name="_token" value="<?php echo Session::generateCSRF(); ?>">
+                    <input type="hidden" name="_token" value="<?php echo $csrfToken; ?>">
                     
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="menuItemName" name="name" placeholder="" required>
@@ -1039,6 +1047,32 @@ window.selectIcon = function() {
 };
 
 // Legacy showToast functions removed - now using window.Notify system
+</script>
+
+<!-- Include drag and drop utility -->
+<script src="<?php echo BASE_URL; ?>assets/js/drag-drop.js"></script>
+
+<script>
+// Initialize drag and drop for menu items
+document.addEventListener('DOMContentLoaded', function() {
+    // Only initialize if there are menu items
+    const sortableBody = document.getElementById('sortable-menu-items');
+    if (sortableBody && sortableBody.children.length > 0) {
+        initDragDrop({
+            sortOrderUrl: '<?php echo BASE_URL; ?>menu/update-menu-sort',
+            csrfToken: '<?php echo $csrfToken; ?>',
+            onSuccess: function(data) {
+                window.Notify.success(data.message || 'Urutan menu berhasil diperbarui!');
+            },
+            onError: function(data) {
+                window.Notify.error(data.error || 'Gagal memperbarui urutan menu');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }
+        });
+    }
+});
 </script>
 
         <style>

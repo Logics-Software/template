@@ -78,6 +78,8 @@
   /* Border colors */
   --border-color: #e5e7eb;
   --border-color-secondary: #d0d4d9;
+  --border-color-tertiary: #f0f2f5;
+  --border-color-sidebar: #f9fafc;
   /* Form specific colors */
   --form-bg-tertiary: #f1f5f9;
   --form-text: #2d3748;

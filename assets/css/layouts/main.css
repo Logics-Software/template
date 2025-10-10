@@ -28,7 +28,7 @@ body {
   width: calc(100% - var(--sidebar-width));
   max-width: calc(100% - var(--sidebar-width));
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden; /* Changed to hidden to allow sticky header */
   display: flex;
   flex-direction: column;
 }
@@ -44,6 +44,8 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: auto; /* Moved overflow here to allow sticky header */
+  overflow-x: hidden;
 }
 
 /* Content area */
@@ -142,7 +144,7 @@ body {
   padding: 1rem 0.5rem;
   margin: 0;
   background-color: var(--bg-primary);
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color-tertiary);
   color: var(--text-primary);
   position: relative;
   bottom: 0;

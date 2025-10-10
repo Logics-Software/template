@@ -184,8 +184,8 @@
                                                 </div>
                                             <?php else: ?>
                                                 <!-- No existing photo -->
-                                                <i class="fas fa-image fa-3x mb-2 opacity-50"></i>
-                                                <div class="small">Belum ada foto profil</div>
+                                                <i class="fas fa-image fa-3x opacity-50"></i>
+                                                <div class="small m-3">Belum ada foto</div>
                                             <?php endif; ?>
                                         </div>
                                     </div>

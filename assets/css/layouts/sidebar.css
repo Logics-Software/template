@@ -1,7 +1,7 @@
 /* Sidebar Layout Styles */
 .sidebar {
   background-color: var(--bg-primary);
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color-sidebar);
   box-shadow: var(--shadow-sm);
   width: var(--sidebar-width);
   height: 100vh;
@@ -9,36 +9,29 @@
   top: 0;
   left: 0;
   z-index: 999;
-  overflow-y: auto;
+  overflow-y: hidden; /* Changed to hidden to allow sticky header */
   overflow-x: hidden;
   transition: all 0.3s ease;
   max-width: var(--sidebar-width);
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
   opacity: 1;
   visibility: visible;
-
-  /* Scrollbar styles */
-  scrollbar-color: var(--border-color) transparent;
-  scrollbar-width: 3px;
-  -ms-overflow-style: none;
-  /* Hide vertical scrollbar */
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-
-.sidebar:hover {
-  scrollbar-width: 3px;
-  -ms-overflow-style: auto;
-  overflow-y: scroll; /* Hide vertical scrollbar */
-}
-
-.sidebar:hover::-webkit-scrollbar {
-  width: 3px;
-  background: var(--border-color);
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar .sidebar-body {
   padding: 0.5rem;
+  flex: 1;
+  overflow-y: auto; /* Allow scrolling */
+  overflow-x: hidden;
+  /* Hide scrollbar completely but keep scroll functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.sidebar .sidebar-body::-webkit-scrollbar {
+  display: none;
 }
 
 /* Sidebar collapsed state */
@@ -88,6 +81,12 @@
 
 .sidebar-header {
   height: var(--header-height);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--bg-primary);
+  flex-shrink: 0;
 }
 
 .sidebar-brand .brand-logo {
@@ -189,7 +188,7 @@
   font-weight: 300;
   color: var(--text-secondary);
   transition: all 0.3s ease;
-  line-height: 0.8rem;
+  line-height: 0.7rem;
 }
 
 .sidebar-nav .collapse .nav-link:hover {
@@ -412,6 +411,12 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: var(--primary-color);
+}
+
+/* Dark theme - sidebar header */
+[data-bs-theme="dark"] .sidebar-header {
+  background-color: var(--bg-primary);
+  border-bottom-color: var(--border-color);
 }
 
 /* Mobile sidebar */
