@@ -32,7 +32,7 @@
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($users['per_page']); ?>">
-                        <select class="form-select" id="status" name="status" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="status" name="status" onchange="this.form.submit()">
                             <option value="">Semua Status</option>
                             <option value="aktif"<?php echo $status === 'aktif' ? ' selected' : ''; ?>>Aktif</option>
                             <option value="non_aktif"<?php echo $status === 'non_aktif' ? ' selected' : ''; ?>>Non Aktif</option>
@@ -43,7 +43,7 @@
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($users['per_page']); ?>">
-                        <select class="form-select" id="role" name="role" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="role" name="role" onchange="this.form.submit()">
                             <option value="">Semua Role</option>
                             <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
                             <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
@@ -56,7 +56,7 @@
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
-                        <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="per_page" name="per_page" onchange="this.form.submit()">
                             <option value="5"<?php echo $users['per_page'] == 5 ? ' selected' : ''; ?>>5</option>
                             <option value="10"<?php echo $users['per_page'] == 10 ? ' selected' : ''; ?>>10</option>
                             <option value="15"<?php echo $users['per_page'] == 15 ? ' selected' : ''; ?>>15</option>
@@ -77,15 +77,15 @@
                             <tr>
                                 <th class="sortable" data-sort="username">
                                     Username 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="namalengkap">
                                     Nama Lengkap 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="role">
                                     Role 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th>Group Menu</th>
                                 <th></th>

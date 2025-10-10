@@ -1103,3 +1103,112 @@ document.addEventListener("keydown", function (event) {
     }
   }
 });
+
+// ============================================
+// Bootstrap Tooltips Initialization
+// ============================================
+
+/**
+ * Initialize all Bootstrap tooltips on page load
+ */
+function initTooltips() {
+  // Find all elements with tooltip attribute
+  var tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+
+  // Initialize each tooltip with custom options
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl, {
+      delay: {
+        show: 500, // Delay 500ms sebelum muncul
+        hide: 100, // Cepat hilang saat hover out
+      },
+      placement: "top", // Default position (akan auto-adjust jika tidak cukup ruang)
+      trigger: "hover focus", // Show on hover and focus (accessibility)
+      html: false, // Security: disable HTML parsing
+      animation: true, // Enable CSS animation
+      boundary: "viewport", // Keep tooltip dalam viewport
+      fallbackPlacements: ["top", "bottom", "left", "right"], // Auto adjust position
+      popperConfig: {
+        modifiers: [
+          {
+            name: "offset",
+            options: {
+              offset: [0, 8], // Offset dari element (horizontal, vertical)
+            },
+          },
+          {
+            name: "preventOverflow",
+            options: {
+              boundary: "viewport",
+              padding: 8,
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  return tooltipList;
+}
+
+/**
+ * Refresh tooltips - untuk dynamic content
+ * Call this after AJAX load atau DOM manipulation
+ */
+window.refreshTooltips = function () {
+  // Dispose all existing tooltips
+  document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach(function (el) {
+      const tooltipInstance = bootstrap.Tooltip.getInstance(el);
+      if (tooltipInstance) {
+        tooltipInstance.dispose();
+      }
+    });
+
+  // Re-initialize
+  initTooltips();
+};
+
+/**
+ * Auto cleanup tooltips when elements are removed from DOM
+ */
+function setupTooltipAutoCleanup() {
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      mutation.removedNodes.forEach(function (node) {
+        if (node.nodeType === 1) {
+          // Check if the node itself has a tooltip
+          const tooltipInstance = bootstrap.Tooltip.getInstance(node);
+          if (tooltipInstance) {
+            tooltipInstance.dispose();
+          }
+
+          // Check if any children have tooltips
+          const childrenWithTooltips = node.querySelectorAll
+            ? node.querySelectorAll('[data-bs-toggle="tooltip"]')
+            : [];
+          childrenWithTooltips.forEach(function (child) {
+            const childTooltip = bootstrap.Tooltip.getInstance(child);
+            if (childTooltip) {
+              childTooltip.dispose();
+            }
+          });
+        }
+      });
+    });
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+}
+
+// Initialize tooltips on page load
+document.addEventListener("DOMContentLoaded", function () {
+  initTooltips();
+  setupTooltipAutoCleanup();
+});

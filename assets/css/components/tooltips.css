@@ -1,0 +1,184 @@
+/**
+ * Custom Tooltips - Minimal Clean Style
+ * Professional, simple, dan modern
+ */
+
+/* Base Tooltip Container */
+.tooltip {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.8125rem;
+  opacity: 1 !important;
+  z-index: 1080;
+}
+
+/* Tooltip Inner - Main Content Box */
+.tooltip-inner {
+  max-width: 250px;
+  min-width: 60px;
+  padding: 0.5rem 0.875rem;
+  color: #374151;
+  text-align: left;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* Arrow Base */
+.tooltip-arrow {
+  width: 0.7rem;
+  height: 0.35rem;
+}
+
+/* Arrow - Top Position (Tooltip below element) */
+.tooltip.bs-tooltip-top .tooltip-arrow::before,
+.tooltip.bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
+  border-top-color: #ffffff !important;
+  filter: drop-shadow(0 -1px 1px rgba(0, 0, 0, 0.06));
+}
+
+/* Arrow - Bottom Position (Tooltip above element) */
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before,
+.tooltip.bs-tooltip-auto[data-popper-placement^="bottom"]
+  .tooltip-arrow::before {
+  border-bottom-color: #ffffff !important;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.06));
+}
+
+/* Arrow - Left Position */
+.tooltip.bs-tooltip-start .tooltip-arrow::before,
+.tooltip.bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before {
+  border-left-color: #ffffff !important;
+  filter: drop-shadow(-1px 0 1px rgba(0, 0, 0, 0.06));
+}
+
+/* Arrow - Right Position */
+.tooltip.bs-tooltip-end .tooltip-arrow::before,
+.tooltip.bs-tooltip-auto[data-popper-placement^="right"]
+  .tooltip-arrow::before {
+  border-right-color: #ffffff !important;
+  filter: drop-shadow(1px 0 1px rgba(0, 0, 0, 0.06));
+}
+
+/* Show Animation - Smooth Fade In */
+.tooltip.show {
+  animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Hide Animation */
+.tooltip:not(.show) {
+  animation: tooltipFadeOut 0.15s ease-in;
+}
+
+@keyframes tooltipFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+/* Dark Theme Support */
+[data-bs-theme="dark"] .tooltip-inner,
+body.dark-theme .tooltip-inner {
+  color: #e5e7eb;
+  background-color: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-bs-theme="dark"] .tooltip.bs-tooltip-top .tooltip-arrow::before,
+body.dark-theme .tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-top-color: #1f2937 !important;
+}
+
+[data-bs-theme="dark"] .tooltip.bs-tooltip-bottom .tooltip-arrow::before,
+body.dark-theme .tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+  border-bottom-color: #1f2937 !important;
+}
+
+[data-bs-theme="dark"] .tooltip.bs-tooltip-start .tooltip-arrow::before,
+body.dark-theme .tooltip.bs-tooltip-start .tooltip-arrow::before {
+  border-left-color: #1f2937 !important;
+}
+
+[data-bs-theme="dark"] .tooltip.bs-tooltip-end .tooltip-arrow::before,
+body.dark-theme .tooltip.bs-tooltip-end .tooltip-arrow::before {
+  border-right-color: #1f2937 !important;
+}
+
+/* Responsive - Mobile Adjustments */
+@media (max-width: 768px) {
+  .tooltip-inner {
+    max-width: 220px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Long Text Support */
+.tooltip-inner.text-long {
+  max-width: 300px;
+  text-align: justify;
+}
+
+/* Icon in Tooltip (Optional) */
+.tooltip-inner i.fas,
+.tooltip-inner i.far,
+.tooltip-inner i.fab {
+  margin-right: 0.4rem;
+  opacity: 0.8;
+  font-size: 0.875em;
+}
+
+/* Hover Effect - Subtle highlight */
+.tooltip.show .tooltip-inner {
+  transition: box-shadow 0.2s ease;
+}
+
+/* Success Variant (Optional) */
+.tooltip.tooltip-success .tooltip-inner {
+  color: #065f46;
+  background-color: #d1fae5;
+  border-color: #a7f3d0;
+}
+
+/* Warning Variant (Optional) */
+.tooltip.tooltip-warning .tooltip-inner {
+  color: #92400e;
+  background-color: #fef3c7;
+  border-color: #fde68a;
+}
+
+/* Error Variant (Optional) */
+.tooltip.tooltip-error .tooltip-inner {
+  color: #991b1b;
+  background-color: #fee2e2;
+  border-color: #fecaca;
+}
+
+/* Info Variant (Optional) */
+.tooltip.tooltip-info .tooltip-inner {
+  color: #1e40af;
+  background-color: #dbeafe;
+  border-color: #bfdbfe;
+}

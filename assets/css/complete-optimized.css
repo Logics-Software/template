@@ -294,11 +294,11 @@ a:active:not(.no-hover-underline) {
 
 .table > thead > tr > th.sortable:hover {
   background-color: var(--primary-color-10);
-  color: var(--primary-color);
+  color: var(--text-primary);
 }
 
 .table > thead > tr > th.sortable:hover .fas.fa-sort {
-  color: var(--primary-color);
+  color: var(--text-tertiary);
   transform: scale(1.1);
 }
 
@@ -317,7 +317,7 @@ a:active:not(.no-hover-underline) {
 /* Active sort states */
 .table > thead > tr > th.sortable.sort-asc .fas.fa-sort,
 .table > thead > tr > th.sortable.sort-desc .fas.fa-sort {
-  color: var(--primary-color);
+  color: var(--text-tertiary);
   opacity: 1;
 }
 

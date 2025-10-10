@@ -3,7 +3,7 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Modules List</h5>
+                    <h5 class="mb-0">Daftar Modul</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
@@ -31,7 +31,7 @@
                     <form method="GET" action="<?php echo APP_URL; ?>/modules" class="col-md-3">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($modules['per_page']); ?>">
-                        <select class="form-select" id="role" name="role" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="role" name="role" onchange="this.form.submit()">
                             <option value="">All Roles</option>
                             <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
                             <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
@@ -43,7 +43,7 @@
                     <form method="GET" action="<?php echo APP_URL; ?>/modules" class="col-md-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
-                        <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="per_page" name="per_page" onchange="this.form.submit()">
                             <option value="5"<?php echo $modules['per_page'] == 5 ? ' selected' : ''; ?>>5</option>
                             <option value="10"<?php echo $modules['per_page'] == 10 ? ' selected' : ''; ?>>10</option>
                             <option value="15"<?php echo $modules['per_page'] == 15 ? ' selected' : ''; ?>>15</option>
@@ -69,20 +69,20 @@
                                 <th>Logo</th>
                                 <th class="sortable" data-sort="caption">
                                     Caption 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="link">
                                     Link 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th>Role Access</th>
                                 <th class="sortable" data-sort="created_at">
                                     Created At 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="updated_at">
                                     Last Update 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th></th>
                             </tr>
@@ -138,14 +138,14 @@
                                     </td>
                                     <td align="center">
                                         <div class="d-flex gap-1 min-w-80">
-                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>" class="btn btn-sm btn-outline-info btn-action" title="View Details">
+                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" data-bs-title="Tampilkan Data Modul">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>/edit" class="btn btn-sm btn-outline-warning btn-action" title="Edit Module">
+                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>/edit" class="btn btn-sm btn-outline-warning btn-action" data-bs-toggle="tooltip" data-bs-title="Edit Modul">
                                                 <i class="fas fa-pencil"></i>
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteModule(<?php echo $module['id']; ?>)" title="Delete Module">
-                                                <i class="fas fa-trash"></i>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteModule(<?php echo $module['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Hapus Modul">
+                                                <i class="fas fa-trash-can"></i>
                                             </button>
                                         </div>
                                     </td>

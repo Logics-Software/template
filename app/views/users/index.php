@@ -35,7 +35,7 @@
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($users['per_page']); ?>">
-                        <select class="form-select" id="status" name="status" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="status" name="status" onchange="this.form.submit()">
                             <option value="">All Status</option>
                             <option value="aktif"<?php echo $status === 'aktif' ? ' selected' : ''; ?>>Aktif</option>
                             <option value="non_aktif"<?php echo $status === 'non_aktif' ? ' selected' : ''; ?>>Non Aktif</option>
@@ -46,7 +46,7 @@
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($users['per_page']); ?>">
-                        <select class="form-select" id="role" name="role" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="role" name="role" onchange="this.form.submit()">
                             <option value="">All Roles</option>
                             <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
                             <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
@@ -59,7 +59,7 @@
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
-                        <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="per_page" name="per_page" onchange="this.form.submit()">
                             <option value="5"<?php echo $users['per_page'] == 5 ? ' selected' : ''; ?>>5</option>
                             <option value="10"<?php echo $users['per_page'] == 10 ? ' selected' : ''; ?>>10</option>
                             <option value="15"<?php echo $users['per_page'] == 15 ? ' selected' : ''; ?>>15</option>
@@ -85,28 +85,28 @@
                                 <th>Foto</th>
                                 <th class="sortable" data-sort="username">
                                     Username 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="namalengkap">
                                     Nama Lengkap 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="email">
                                     Email 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="role">
                                     Role 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th>Status</th>
                                 <th class="sortable" data-sort="lastlogin">
                                     Last Login 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="updated_at">
                                     Last Update 
-                                    <i class="fas fa-sort text-muted ms-1"></i>
+                                    <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th></th>
                             </tr>
@@ -170,33 +170,33 @@
                                         <div class="d-flex gap-1 min-w-80">
                                             <?php if ($user['status'] === 'register'): ?>
                                                 <!-- For pending registration users -->
-                                                <button type="button" class="btn btn-sm btn-outline-success btn-action" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" title="Approve User">
+                                                <button type="button" class="btn btn-sm btn-outline-success btn-action" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" data-bs-toggle="tooltip" data-bs-title="Menyetujui User">
                                                     <i class="fas fa-check"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" title="Reject User">
+                                                <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" data-bs-toggle="tooltip" data-bs-title="Menolak User">
                                                     <i class="fas fa-times"></i>
                                                 </button>
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-info btn-action" title="View Details">
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" data-bs-title="Menampilkan Detail User">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             <?php else: ?>
                                                 <!-- For active/inactive users -->
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-info btn-action" title="View Details">
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" data-bs-title="Menampilkan Detail User">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-success btn-action" title="Edit User">
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-success btn-action" data-bs-toggle="tooltip" data-bs-title="Edit User">
                                                     <i class="fas fa-pencil"></i>
                                                 </a>
                                                 <?php if ($user['status'] === 'aktif'): ?>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning btn-action" onclick="deactivateUser(<?php echo $user['id']; ?>)" title="Deactivate User">
+                                                    <button type="button" class="btn btn-sm btn-outline-warning btn-action" onclick="deactivateUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Nonaktifkan User">
                                                         <i class="fas fa-user-slash"></i>
                                                     </button>
                                                 <?php elseif ($user['status'] === 'non_aktif'): ?>
-                                                    <button type="button" class="btn btn-sm btn-outline-success btn-action" onclick="activateUser(<?php echo $user['id']; ?>)" title="Activate User">
+                                                    <button type="button" class="btn btn-sm btn-outline-success btn-action" onclick="activateUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Mengaktifkan User">
                                                         <i class="fas fa-user-check"></i>
                                                     </button>
                                                 <?php endif; ?>
-                                                <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteUser(<?php echo $user['id']; ?>)" title="Delete User">
+                                                <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Hapus User">
                                                     <i class="fas fa-trash-can"></i>
                                                 </button>
                                             <?php endif; ?>

@@ -28,12 +28,21 @@ function getGreetingMessage() {
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <!-- Sidebar Toggle -->
-                    <button class="btn btn-link sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
-                        <i class="fas fa-bars"></i>
+                    <button class="btn btn-link sidebar-toggle-btn" 
+                            id="sidebarToggle" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="bottom"
+                            data-bs-title="Toggle Sidebar"
+                            aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
                     
                     <!-- WhatsApp Contact -->
-                    <button class="btn btn-link" id="whatsappToggle" data-bs-toggle="modal" data-bs-target="#whatsappModal" title="Hubungi via WhatsApp">
+                    <button class="btn btn-link" 
+                            id="whatsappToggle" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#whatsappModal"
+                            title="Hubungi via WhatsApp">
                         <i class="fab fa-whatsapp"></i>
                     </button>
                     

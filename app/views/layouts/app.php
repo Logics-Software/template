@@ -58,6 +58,9 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <!-- Optimized CSS -->
     <link href="<?php echo BASE_URL; ?>assets/css/complete-optimized.css" rel="stylesheet">
     
+    <!-- Custom Tooltips CSS -->
+    <link href="<?php echo BASE_URL; ?>assets/css/components/tooltips.css" rel="stylesheet">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_URL; ?>assets/images/favicon.ico">
 </head>

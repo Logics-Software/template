@@ -71,11 +71,11 @@ $logo = getSidebarLogo();
                 $currentPath = parse_url($currentUri, PHP_URL_PATH);
                 $isDashboardActive = ($currentPath === '/dashboard' || strpos($currentPath, '/dashboard/') === 0) ? 'active' : '';
                 ?>
-                <a class="nav-link <?php echo $isDashboardActive; ?>" href="<?php echo APP_URL; ?>/dashboard">
+                <a class="nav-link mb-3 <?php echo $isDashboardActive; ?>" href="<?php echo APP_URL; ?>/dashboard">
                     <i class="<?php echo $dashboardIcon; ?>"></i>
                     <span class="nav-text"><?php echo $dashboardLabel; ?></span>
                 </a>
-                <span class="text-muted m-4">Menu</span>
+                <span class="text-muted m-4 fw-bold">Menu</span>
             </li>
             
             <?php
