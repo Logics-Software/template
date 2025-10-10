@@ -43,78 +43,130 @@ $logo = getSidebarLogo();
     
     <div class="sidebar-body">
         <ul class="nav nav-pills flex-column sidebar-nav">
-            <!-- Dashboard -->
+            <?php
+            // Always show Dashboard first (based on role)
+            $userRole = Session::get('user_role');
+            $dashboardIcon = 'fas fa-home';
+            $dashboardLabel = 'Dashboard';
+            
+            // Customize dashboard based on role
+            if ($userRole === 'admin') {
+                $dashboardLabel = 'Dashboard Admin';
+            } elseif ($userRole === 'manajemen') {
+                $dashboardLabel = 'Dashboard Manajemen';
+            } elseif ($userRole === 'user') {
+                $dashboardLabel = 'Dashboard User';
+            } elseif ($userRole === 'marketing') {
+                $dashboardLabel = 'Dashboard Marketing';
+            } elseif ($userRole === 'customer') {
+                $dashboardLabel = 'Dashboard Customer';
+            }
+            ?>
+            
+            <!-- Dashboard - Always shown first -->
             <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/dashboard') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/dashboard">
-                    <i class="fas fa-home"></i>
-                    <span class="nav-text">Dashboard</span>
+                <?php
+                // Exact matching for dashboard
+                $currentUri = $_SERVER['REQUEST_URI'];
+                $currentPath = parse_url($currentUri, PHP_URL_PATH);
+                $isDashboardActive = ($currentPath === '/dashboard' || strpos($currentPath, '/dashboard/') === 0) ? 'active' : '';
+                ?>
+                <a class="nav-link <?php echo $isDashboardActive; ?>" href="<?php echo APP_URL; ?>/dashboard">
+                    <i class="<?php echo $dashboardIcon; ?>"></i>
+                    <span class="nav-text"><?php echo $dashboardLabel; ?></span>
                 </a>
             </li>
             
-            <!-- Users Management -->
-            <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/users') !== false && strpos($_SERVER['REQUEST_URI'], '/menuakses') === false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/users">
-                    <i class="fas fa-users"></i>
-                    <span class="nav-text">Users</span>
-                </a>
-            </li>
+            <?php
+            // Load dynamic menu from selected group
+            $activeGroupId = Session::get('active_menu_group_id');
             
-            <!-- Modules Management -->
-            <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/modules') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/modules">
-                    <i class="fas fa-cube"></i>
-                    <span class="nav-text">Modules</span>
-                </a>
-            </li>
-            
-            <!-- Menu Management -->
-            <li class="nav-item">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#menuManagement" aria-expanded="false">
-                    <i class="fas fa-bars"></i>
-                    <span class="nav-text">Setting Menu</span>
-                </a>
-                <div class="collapse" id="menuManagement">
-                    <ul class="nav nav-pills flex-column">
+            if ($activeGroupId) {
+                // Load menu items for the active group
+                require_once __DIR__ . '/../../models/MenuItem.php';
+                require_once __DIR__ . '/../../models/Module.php';
+                
+                $menuItemModel = new MenuItem();
+                $moduleModel = new Module();
+                
+                // Get all menu items for this group (only parent items, no parent_id)
+                $menuItems = $menuItemModel->getItemsByGroup($activeGroupId);
+                
+                // Filter to get only parent items (parent_id IS NULL)
+                $parentItems = array_filter($menuItems, function($item) {
+                    return empty($item['parent_id']);
+                });
+                
+                foreach ($parentItems as $menuItem) {
+                    $isParent = !empty($menuItem['is_parent']);
+                    $module = null;
+                    
+                    // Get module details if module_id exists
+                    if (!empty($menuItem['module_id'])) {
+                        $module = $moduleModel->find($menuItem['module_id']);
+                    }
+                    
+                    // Determine link and label
+                    $menuLink = $module ? $module['link'] : '#';
+                    $menuLabel = $menuItem['name'];
+                    $menuIcon = $menuItem['icon'] ?? 'fas fa-circle';
+                    
+                    if ($isParent) {
+                        // Parent menu with children
+                        $collapseId = 'menu-' . $menuItem['id'];
+                        $children = $menuItemModel->getChildren($menuItem['id']);
+                        ?>
                         <li class="nav-item">
-                            <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menu') !== false && strpos($_SERVER['REQUEST_URI'], '/menuakses') === false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menu">
-                            <span class="nav-text">Setting Menu Aplikasi</span>
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#<?php echo $collapseId; ?>" aria-expanded="false">
+                                <i class="<?php echo htmlspecialchars($menuIcon); ?>"></i>
+                                <span class="nav-text"><?php echo htmlspecialchars($menuLabel); ?></span>
+                            </a>
+                            <div class="collapse" id="<?php echo $collapseId; ?>">
+                                <ul class="nav nav-pills flex-column submenu">
+                                    <?php foreach ($children as $child) {
+                                        $childModule = null;
+                                        if (!empty($child['module_id'])) {
+                                            $childModule = $moduleModel->find($child['module_id']);
+                                        }
+                                        $childLink = $childModule ? $childModule['link'] : '#';
+                                        $childLabel = $child['name'];
+                                        $childIcon = $child['icon'] ?? 'fas fa-angle-right';
+                                        
+                                        // Exact matching with boundary check to avoid substring matches
+                                        $currentUri = $_SERVER['REQUEST_URI'];
+                                        $currentPath = parse_url($currentUri, PHP_URL_PATH);
+                                        $isActive = ($childLink !== '#' && ($currentPath === $childLink || strpos($currentPath, $childLink . '/') === 0)) ? 'active' : '';
+                                    ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link submenu-link <?php echo $isActive; ?>" href="<?php echo APP_URL . $childLink; ?>">
+                                            <i class="<?php echo htmlspecialchars($childIcon); ?>"></i>
+                                            <span class="nav-text"><?php echo htmlspecialchars($childLabel); ?></span>
                             </a>
                         </li>
+                                    <?php } ?>
                     </ul>
                 </div>
             </li>
-            
-            <!-- Call Center -->
+                        <?php
+                    } else {
+                        // Single menu item
+                        // Exact matching with boundary check to avoid substring matches
+                        $currentUri = $_SERVER['REQUEST_URI'];
+                        $currentPath = parse_url($currentUri, PHP_URL_PATH);
+                        $isActive = ($menuLink !== '#' && ($currentPath === $menuLink || strpos($currentPath, $menuLink . '/') === 0)) ? 'active' : '';
+                        ?>
             <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/callcenter') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/callcenter">
-                    <i class="fas fa-phone"></i>
-                    <span class="nav-text">Call Center</span>
+                            <a class="nav-link <?php echo $isActive; ?>" href="<?php echo APP_URL . $menuLink; ?>">
+                                <i class="<?php echo htmlspecialchars($menuIcon); ?>"></i>
+                                <span class="nav-text"><?php echo htmlspecialchars($menuLabel); ?></span>
                 </a>
             </li>
-            
-            <!-- Messages -->
-            <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/messages') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/messages">
-                    <i class="fas fa-envelope"></i>
-                    <span class="nav-text">Messages</span>
-                </a>
-            </li>
-            
-            <!-- Configuration -->
-            <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/konfigurasi') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/konfigurasi">
-                    <i class="fas fa-cog"></i>
-                    <span class="nav-text">Configuration</span>
-                </a>
-            </li>
-
-            <!-- Menu Akses -->
-            <li class="nav-item">
-                <a class="nav-link <?php echo (strpos($_SERVER['REQUEST_URI'], '/menuakses') !== false) ? 'active' : ''; ?>" href="<?php echo APP_URL; ?>/menuakses">
-                    <i class="fas fa-bars"></i>                    
-                    <span class="nav-text">Akses Menu</span>
-                </a>
-            </li>
+                        <?php
+                    }
+                }
+            }
+            // If no active_menu_group_id, only Dashboard will be shown (already rendered above)
+            ?>
 
         </ul>
     </div>

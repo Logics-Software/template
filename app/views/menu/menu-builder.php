@@ -119,6 +119,7 @@
                 <div class="modal-body p-4">
                     <input type="hidden" id="menuItemId" name="id">
                     <input type="hidden" id="menuItemGroupId" name="group_id" value="<?php echo $selected_group['id']; ?>">
+                    <input type="hidden" name="_token" value="<?php echo Session::generateCSRF(); ?>">
                     
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="menuItemName" name="name" placeholder="" required>
@@ -143,7 +144,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="menuItemIsParent" name="is_parent" value="1">
                                 <label class="form-check-label" for="menuItemIsParent">
-                                    Is Parent Menu
+                                    Menu Induk / Dropdown Menu
                                 </label>
                             </div>
                         </div>
@@ -368,13 +369,14 @@ function initializeMenuBuilder() {
                 '<?php echo APP_URL; ?>/menu/update-menu-item' : 
                 '<?php echo APP_URL; ?>/menu/create-menu-item';
             
+            // Get CSRF token from hidden field (don't generate new one!)
+            const csrfToken = this.querySelector('input[name="_token"]').value;
             
             fetch(url, {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
             .then(response => {
@@ -655,16 +657,18 @@ function confirmDeleteMenuItem() {
     const id = deleteMenuItemId;
     if (!id) return;
     
+    // Get CSRF token from form (don't generate new one!)
+    const csrfToken = document.querySelector('input[name="_token"]').value;
+    
     fetch('<?php echo APP_URL; ?>/menu/delete-menu-item', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
+            'X-Requested-With': 'XMLHttpRequest'
         },
         body: JSON.stringify({
             id: id,
-            _token: '<?php echo Session::generateCSRF(); ?>'
+            _token: csrfToken
         })
     })
     .then(response => {

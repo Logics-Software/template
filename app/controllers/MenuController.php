@@ -727,7 +727,8 @@ class MenuController extends BaseController
             return;
         }
 
-        $this->validateCSRF($request);
+        // CSRF validation already handled globally in App.php
+        // No need to validate again here
 
         try {
             // Get module_id directly (no conversion needed)
@@ -795,8 +796,7 @@ class MenuController extends BaseController
             return;
         }
 
-        $this->validateCSRF($request);
-
+        // CSRF validation already handled globally in App.php
         $itemId = $params['id'] ?? $request->input('id');
         
         if (!$itemId) {

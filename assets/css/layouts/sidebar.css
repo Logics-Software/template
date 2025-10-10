@@ -57,7 +57,7 @@
 }
 
 .sidebar.collapsed .nav-item .nav-link {
-  padding: 0.75rem 0.5rem;
+  padding: 0.8rem 0.5rem;
   text-align: center;
 }
 
@@ -93,7 +93,7 @@
 .sidebar-brand .brand-logo {
   width: 32px;
   height: 32px;
-  margin-right: 0.75rem;
+  margin-right: 0.8rem;
 }
 
 .sidebar-brand .brand-text {
@@ -129,11 +129,12 @@
   transition: all 0.3s ease;
   border-radius: 0;
   position: relative;
+  font-size: 0.8rem; /* Ukuran font menu utama */
 }
 
 .sidebar-nav .nav-link i {
   width: 20px;
-  margin-right: 0.75rem;
+  margin-right: 0.8rem;
   text-align: center;
 }
 
@@ -175,13 +176,30 @@
 
 .sidebar-nav .collapse .nav-link {
   padding-left: 55px;
-  font-size: 0.6rem; /* Text lebih kecil */
+  font-size: 0.8rem; /* Text sub menu lebih kecil dari menu utama */
   font-weight: 300;
   color: var(--text-secondary);
   transition: all 0.3s ease;
 }
 
+/* Submenu specific styling - more specific selector */
+.sidebar-nav .submenu .submenu-link {
+  padding-left: 55px;
+  font-size: 0.8rem !important; /* Force smaller font for submenu */
+  font-weight: 300;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  line-height: 0.8rem;
+}
+
 .sidebar-nav .collapse .nav-link:hover {
+  background: var(--sidebar-hover-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  color: var(--primary-color);
+}
+
+.sidebar-nav .submenu .submenu-link:hover {
   background: var(--sidebar-hover-bg);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -228,7 +246,21 @@
   -webkit-backdrop-filter: blur(20px);
   color: var(--sidebar-active-text);
   font-weight: 500;
-  font-size: 0.85rem; /* Text lebih kecil */
+  font-size: 0.8rem; /* Text sub menu lebih kecil dari menu utama */
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+  margin-left: 28px;
+  padding-left: 28px;
+}
+
+/* Submenu active - more specific selector */
+.sidebar .submenu .submenu-link.active {
+  background: var(--sidebar-active-bg);
+  border-radius: 7.5px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--sidebar-active-text);
+  font-weight: 500;
+  font-size: 0.8rem !important; /* Force smaller font for submenu */
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
   margin-left: 28px;
   padding-left: 28px;
@@ -239,7 +271,18 @@
 .sidebar .collapse .nav-pills .show > .nav-link {
   background: var(--sidebar-active-bg);
   color: var(--sidebar-active-text);
-  font-size: 0.85rem; /* Text lebih kecil */
+  font-size: 0.8rem; /* Text sub menu lebih kecil dari menu utama */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+}
+
+/* Override Bootstrap nav-pills active state for submenu */
+.sidebar .submenu .submenu-link.active,
+.sidebar .submenu .nav-pills .show > .submenu-link {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+  font-size: 0.8rem !important; /* Force smaller font for submenu */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
@@ -283,7 +326,15 @@
 /* Dark theme - sidebar collapse nav-link active - Same as main menu */
 [data-bs-theme="dark"] .sidebar .collapse .nav-link.active {
   background: var(--primary-color-20);
-  font-size: 0.85rem; /* Text lebih kecil */
+  font-size: 0.8rem; /* Text sub menu lebih kecil dari menu utama */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* Dark theme - submenu active - more specific selector */
+[data-bs-theme="dark"] .sidebar .submenu .submenu-link.active {
+  background: var(--primary-color-20);
+  font-size: 0.8rem !important; /* Force smaller font for submenu */
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }
@@ -293,7 +344,17 @@
 [data-bs-theme="dark"] .sidebar .collapse .nav-pills .show > .nav-link {
   background: var(--primary-color-20);
   color: var(--primary-color);
-  font-size: 0.85rem; /* Text lebih kecil */
+  font-size: 0.8rem; /* Text sub menu lebih kecil dari menu utama */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* Dark theme - Override Bootstrap nav-pills active state for submenu */
+[data-bs-theme="dark"] .sidebar .submenu .submenu-link.active,
+[data-bs-theme="dark"] .sidebar .submenu .nav-pills .show > .submenu-link {
+  background: var(--primary-color-20);
+  color: var(--primary-color);
+  font-size: 0.8rem !important; /* Force smaller font for submenu */
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }
@@ -322,7 +383,15 @@
 /* Dark theme - sidebar collapse nav-link unselected - Same as main menu */
 [data-bs-theme="dark"] .sidebar .collapse .nav-link {
   background: var(--bg-primary);
-  font-size: 0.85rem; /* Text lebih kecil */
+  font-size: 0.8rem; /* Text sub menu lebih kecil dari menu utama */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Dark theme - submenu unselected - more specific selector */
+[data-bs-theme="dark"] .sidebar .submenu .submenu-link {
+  background: var(--bg-primary);
+  font-size: 0.8rem !important; /* Force smaller font for submenu */
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
@@ -330,7 +399,16 @@
 /* Dark theme - sidebar collapse nav-link hover - Same as main menu */
 [data-bs-theme="dark"] .sidebar .collapse .nav-link:hover {
   background: var(--white-5);
-  font-size: 0.85rem; /* Text lebih kecil */
+  font-size: 0.8rem; /* Text sub menu lebih kecil dari menu utama */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--primary-color);
+}
+
+/* Dark theme - submenu hover - more specific selector */
+[data-bs-theme="dark"] .sidebar .submenu .submenu-link:hover {
+  background: var(--white-5);
+  font-size: 0.8rem !important; /* Force smaller font for submenu */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: var(--primary-color);
