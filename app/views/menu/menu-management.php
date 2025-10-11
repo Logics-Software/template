@@ -87,16 +87,20 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm">
-                                                        <button class="btn btn-sm btn-outline-info" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)">
+                                                        <button class="btn btn-sm btn-outline-info" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)"
+                                                        data-bs-toggle="tooltip" data-bs-title="Tampilkan Struktur Menu">
                                                             <i class="fas fa-eye"></i>&nbsp;Struktur
                                                         </button>
-                                                        <button class="btn btn-outline-primary" onclick="editGroup(<?php echo $group['id']; ?>)">
+                                                        <button class="btn btn-outline-primary" onclick="editGroup(<?php echo $group['id']; ?>)"
+                                                        data-bs-toggle="tooltip" data-bs-title="Edit Group Menu">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        <button class="btn btn-outline-success" onclick="addDetailMenu(<?php echo $group['id']; ?>)">
-                                                            <i class="fas fa-bars-staggered"></i>
+                                                        <button class="btn btn-outline-success" onclick="addDetailMenu(<?php echo $group['id']; ?>)"
+                                                        data-bs-toggle="tooltip" data-bs-title="Atur Detail Menu">
+                                                            <i class="fas fa-list-check"></i>
                                                         </button>
-                                                        <button class="btn btn-outline-danger" onclick="deleteGroup(<?php echo $group['id']; ?>)">
+                                                        <button class="btn btn-outline-danger" onclick="deleteGroup(<?php echo $group['id']; ?>)"
+                                                        data-bs-toggle="tooltip" data-bs-title="Hapus Group Menu">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </div>

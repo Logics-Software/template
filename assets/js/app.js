@@ -1289,9 +1289,11 @@ function showAccessDeniedModal(moduleName) {
               </h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-center py-4">
-              <i class="fas fa-ban fa-3x text-danger mb-3"></i>
-              <p class="fs-5 mb-0" id="accessDeniedMessage">Anda tidak berhak menjalankan modul tersebut</p>
+            <div class="modal-body py-4">
+              <div class="d-flex align-items-center">
+              <i class="fa-solid fa-user-shield fa-4x text-danger m-4"></i>
+                <p class="fs-5 m-2" id="accessDeniedMessage">Anda tidak berhak menjalankan modul tersebut!</p>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="accessDeniedOkBtn">

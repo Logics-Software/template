@@ -3,7 +3,8 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Call Center</h5>
+                    <h5 class="mb-0">
+                    Call Center</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
@@ -30,7 +31,7 @@
                     </div>
                     <form method="GET" action="<?php echo APP_URL; ?>/callcenter" class="col-md-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
-                        <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
+                        <select class="form-select p-2" id="per_page" name="per_page" onchange="this.form.submit()">
                             <option value="5"<?php echo ($pagination['per_page'] ?? 10) == 5 ? ' selected' : ''; ?>>5</option>
                             <option value="10"<?php echo ($pagination['per_page'] ?? 10) == 10 ? ' selected' : ''; ?>>10</option>
                             <option value="15"<?php echo ($pagination['per_page'] ?? 10) == 15 ? ' selected' : ''; ?>>15</option>
@@ -91,13 +92,16 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1 min-w-80">
-                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>" class="btn btn-outline-info btn-sm btn-action" title="Lihat Detail">
+                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>" class="btn btn-outline-info btn-sm btn-action" 
+                                                data-bs-toggle="tooltip" data-bs-title="Menampilkan Data Call Center">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm btn-action" title="Edit Data">
+                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm btn-action" 
+                                                data-bs-toggle="tooltip" data-bs-title="Edit Data Call Center">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" title="Hapus Data">
+                                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" 
+                                                data-bs-toggle="tooltip" data-bs-title="Hapus Data Call Center">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>

@@ -129,7 +129,8 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1">
-                                                <a href="<?php echo APP_URL; ?>/menuakses/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-primary btn-action" title="Edit Menu Access">
+                                                <a href="<?php echo APP_URL; ?>/menuakses/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-primary btn-action" 
+                                                data-bs-toggle="tooltip" data-bs-title="Edit Menu Access">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                             </div>
