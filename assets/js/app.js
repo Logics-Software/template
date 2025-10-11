@@ -563,14 +563,25 @@ function initMessageSystem() {
 
   // Update unread count badge
   function updateUnreadCount() {
-    fetch(`${window.appUrl}/api/messages/unread-count`)
+    // Debug: Verify window.appUrl is set
+    if (!window.appUrl) {
+      console.error("ERROR: window.appUrl is not defined!");
+      return;
+    }
+
+    const apiUrl = `${window.appUrl}/api/messages/unread-count`;
+    console.log("Fetching unread count from:", apiUrl);
+
+    fetch(apiUrl)
       .then((response) => {
+        console.log("Unread count response status:", response.status);
         if (!response.ok) {
           throw new Error("Unauthorized");
         }
         return response.json();
       })
       .then((data) => {
+        console.log("Unread count data:", data);
         if (data.success) {
           const badge = document.getElementById("unread-count-badge");
           if (badge) {
@@ -584,6 +595,7 @@ function initMessageSystem() {
         }
       })
       .catch((error) => {
+        console.error("Unread count fetch error:", error);
         // Silently handle unauthorized errors
         if (error.message !== "Unauthorized") {
           // Error handled silently
@@ -802,15 +814,28 @@ function initHeaderMessageDropdown() {
 
   // Load unread count and recent messages
   function loadMessageData() {
+    // Debug: Verify window.appUrl is set
+    if (!window.appUrl) {
+      console.error("ERROR: window.appUrl is not defined in loadMessageData!");
+      return;
+    }
+
+    console.log("Loading message data from:", window.appUrl);
+
     // Load unread count
-    fetch(`${window.appUrl}/api/messages/unread-count`)
+    const unreadCountUrl = `${window.appUrl}/api/messages/unread-count`;
+    console.log("Fetching unread count from:", unreadCountUrl);
+
+    fetch(unreadCountUrl)
       .then((response) => {
+        console.log("Message unread count response status:", response.status);
         if (!response.ok) {
           throw new Error("Unauthorized");
         }
         return response.json();
       })
       .then((data) => {
+        console.log("Message unread count data:", data);
         if (data.success && data.unread_count > 0) {
           messageBadge.textContent = data.unread_count;
           messageBadge.style.display = "inline";
@@ -819,6 +844,7 @@ function initHeaderMessageDropdown() {
         }
       })
       .catch((error) => {
+        console.error("Message unread count fetch error:", error);
         // Silently handle unauthorized errors
         if (error.message !== "Unauthorized") {
           // Error handled silently
@@ -826,14 +852,19 @@ function initHeaderMessageDropdown() {
       });
 
     // Load recent messages
-    fetch(`${window.appUrl}/api/messages/recent`)
+    const recentMessagesUrl = `${window.appUrl}/api/messages/recent`;
+    console.log("Fetching recent messages from:", recentMessagesUrl);
+
+    fetch(recentMessagesUrl)
       .then((response) => {
+        console.log("Recent messages response status:", response.status);
         if (!response.ok) {
           throw new Error("Unauthorized");
         }
         return response.json();
       })
       .then((data) => {
+        console.log("Recent messages data:", data);
         if (data.success && data.messages && data.messages.length > 0) {
           let html = "";
           data.messages.forEach((message) => {
@@ -904,6 +935,7 @@ function initHeaderMessageDropdown() {
         }
       })
       .catch((error) => {
+        console.error("Recent messages fetch error:", error);
         // Error handled silently
         messageList.innerHTML = `
           <div class="text-center p-4">

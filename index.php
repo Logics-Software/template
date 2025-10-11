@@ -9,7 +9,21 @@ ob_start();
 
 // Define application constants
 define('APP_PATH', __DIR__);
-define('APP_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost:8000'));
+
+// Build APP_URL with proper sub-directory support (same as BASE_URL logic)
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost:8000';
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+$scriptDir = dirname($scriptName);
+
+// Build APP_URL to match BASE_URL structure
+if ($scriptDir === '/' || $scriptDir === '.' || $scriptDir === '\\') {
+    // Root directory
+    define('APP_URL', $protocol . '://' . $host);
+} else {
+    // Subdirectory - include the path
+    define('APP_URL', $protocol . '://' . $host . $scriptDir);
+}
 
 // Set error reporting (but suppress warnings that cause headers issues)
 error_reporting(E_ALL);

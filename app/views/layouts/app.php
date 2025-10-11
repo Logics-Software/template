@@ -487,6 +487,16 @@ echo ' class="' . $bodyClass . '"';
     <?php endif; ?>
 
     <!-- Bootstrap JS -->
+    <!-- CRITICAL: Set global variables BEFORE loading app.js -->
+    <script>
+        // These must be set before app.js is loaded
+        window.csrfToken = '<?php echo $csrf_token ?? ''; ?>';
+        window.appUrl = '<?php echo APP_URL; ?>';
+        
+        // Debug: Log to console for verification
+        console.log('App URL configured:', window.appUrl);
+    </script>
+    
     <!-- Popper.js required for Bootstrap dropdowns (local file) -->
     <script src="<?php echo APP_URL; ?>/assets/js/popper.min.js"></script>
     <script src="<?php echo APP_URL; ?>/assets/js/bootstrap/bootstrap.min.js"></script>
@@ -497,11 +507,8 @@ echo ' class="' . $bodyClass . '"';
     <!-- Custom JS -->
     <script src="<?php echo APP_URL; ?>/assets/js/app.js"></script>
     
-    <!-- CSRF Token for AJAX -->
+    <!-- Additional Configuration -->
     <script>
-        window.csrfToken = '<?php echo $csrf_token ?? ''; ?>';
-        window.appUrl = '<?php echo APP_URL; ?>';
-        
         // Menu Group Selection Handler
         <?php if (Session::get('pending_menu_selection')): ?>
         document.addEventListener('DOMContentLoaded', function() {
