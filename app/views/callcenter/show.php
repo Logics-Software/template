@@ -3,16 +3,16 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Call Center Details</h5>
+                    <h5 class="mb-0">Lihat Detail Call Center</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/callcenter" class="text-decoration-none">Call Center</a>
+                                <a href="<?php echo APP_URL; ?>/callcenter" class="text-decoration-none">Daftar Call Center</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Details</li>
+                            <li class="breadcrumb-item active" aria-current="page">Detail Call Center</li>
                         </ol>
                     </nav>
                 </div>
@@ -73,7 +73,7 @@
             <!-- Card Footer -->
             <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Back to Call Center
+                    <i class="fas fa-arrow-left me-1"></i>Kembali Ke Daftar Call Center
                 </a>
                 <div class="d-flex gap-2">
                     <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>/edit" class="btn btn-warning">

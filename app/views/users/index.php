@@ -12,7 +12,7 @@
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Users</li>
+                            <li class="breadcrumb-item active" aria-current="page">Daftar User</li>
                         </ol>
                     </nav>
                 </div>
@@ -72,7 +72,7 @@
                     <div class="col-md-2">
                         <div class="d-flex gap-2 justify-content-end">
                             <a href="<?php echo APP_URL; ?>/users/create" class="btn btn-primary">
-                                <i class="fas fa-plus me-1"></i>Add User
+                                <i class="fas fa-plus me-1"></i>Tambah User
                             </a>
                         </div>
                     </div>
@@ -101,11 +101,11 @@
                                 </th>
                                 <th>Status</th>
                                 <th class="sortable" data-sort="lastlogin">
-                                    Last Login 
+                                    Login Terakhir  
                                     <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="updated_at">
-                                    Last Update 
+                                    Update Terakhir  
                                     <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th></th>
@@ -170,33 +170,33 @@
                                         <div class="d-flex gap-1 min-w-80">
                                             <?php if ($user['status'] === 'register'): ?>
                                                 <!-- For pending registration users -->
-                                                <button type="button" class="btn btn-sm btn-outline-success btn-action" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" data-bs-toggle="tooltip" data-bs-title="Menyetujui User">
+                                                <button type="button" class="btn btn-success btn-sm btn-action" onclick="approveUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" data-bs-toggle="tooltip" data-bs-title="Menyetujui User">
                                                     <i class="fas fa-check"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" data-bs-toggle="tooltip" data-bs-title="Menolak User">
+                                                <button type="button" class="btn btn-danger btn-sm btn-action" onclick="rejectUser(<?php echo $user['id']; ?>)" data-registration-reason="<?php echo htmlspecialchars($user['registration_reason'] ?? 'Tidak ada alasan yang diberikan'); ?>" data-bs-toggle="tooltip" data-bs-title="Menolak User">
                                                     <i class="fas fa-times"></i>
                                                 </button>
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" data-bs-title="Menampilkan Detail User">
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-info btn-sm btn-action" data-bs-toggle="tooltip" data-bs-title="Menampilkan Detail User">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             <?php else: ?>
                                                 <!-- For active/inactive users -->
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" data-bs-title="Menampilkan Detail User">
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>" class="btn btn-info btn-sm btn-action" data-bs-toggle="tooltip" data-bs-title="Menampilkan Detail User">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-success btn-action" data-bs-toggle="tooltip" data-bs-title="Edit User">
-                                                    <i class="fas fa-pencil"></i>
+                                                <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit" class="btn btn-success btn-sm btn-action" data-bs-toggle="tooltip" data-bs-title="Edit User">
+                                                    <i class="fas fa-edit"></i>
                                                 </a>
                                                 <?php if ($user['status'] === 'aktif'): ?>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning btn-action" onclick="deactivateUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Nonaktifkan User">
+                                                    <button type="button" class="btn btn-warning btn-sm btn-action" onclick="deactivateUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Nonaktifkan User">
                                                         <i class="fas fa-user-slash"></i>
                                                     </button>
                                                 <?php elseif ($user['status'] === 'non_aktif'): ?>
-                                                    <button type="button" class="btn btn-sm btn-outline-success btn-action" onclick="activateUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Mengaktifkan User">
+                                                    <button type="button" class="btn btn-success btn-sm btn-action" onclick="activateUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Mengaktifkan User">
                                                         <i class="fas fa-user-check"></i>
                                                     </button>
                                                 <?php endif; ?>
-                                                <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Hapus User">
+                                                <button type="button" class="btn btn-danger btn-sm btn-action" onclick="deleteUser(<?php echo $user['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Hapus User">
                                                     <i class="fas fa-trash-can"></i>
                                                 </button>
                                             <?php endif; ?>
@@ -311,15 +311,15 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this user? This action cannot be undone.
+                Anda yakin akan menghapus user ini? Proses ini tidak dapat dibatalkan.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
             </div>
         </div>
     </div>
@@ -330,11 +330,11 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Approval</h5>
+                <h5 class="modal-title">Konfirmasi Persetujuan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p class="mb-3">Are you sure you want to approve this user? They will be able to login to the system.</p>
+                <p class="mb-3">Anda yakin setuju untuk mengaktifkan user ini? User yang sudah disetujui bida langsung melakukan login ke sistem.</p>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Alasan Registrasi:</label>
                     <div class="form-control-plaintext bg-light p-3 rounded border" id="approveRegistrationReason">
@@ -343,8 +343,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="confirmApprove">Approve</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-success" id="confirmApprove">Setuju</button>
             </div>
         </div>
     </div>
@@ -355,11 +355,11 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Rejection</h5>
+                <h5 class="modal-title">Konfirmasi Penolakan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p class="mb-3">Are you sure you want to reject this user? This action will permanently delete their account and cannot be undone.</p>
+                <p class="mb-3">Anda yakin menolak pendaftaran user ini? Proses ini akan menghapus akun dan tidak dapat dibatalkan.</p>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Alasan Registrasi:</label>
                     <div class="form-control-plaintext bg-light p-3 rounded border" id="rejectRegistrationReason">
@@ -368,8 +368,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmReject">Reject</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmReject">Tolak</button>
             </div>
         </div>
     </div>
@@ -380,15 +380,15 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Activation</h5>
+                <h5 class="modal-title">Konfirmasi Pengaktifan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to activate this user? They will be able to login to the system.</p>
+                <p>Anda yakin akan mengaktifkan user ini? Setelah diaktifkan user ini bisa langsung melakukan login ke sistem.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="confirmActivate">Activate</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-success" id="confirmActivate">Aktfikan</button>
             </div>
         </div>
     </div>
@@ -399,15 +399,15 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Deactivation</h5>
+                <h5 class="modal-title">Konfirmasi Penonaktifan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to deactivate this user? They will not be able to login to the system.</p>
+                <p>Anda yakin akan menonaktfikan user ini? User yang sudah dinonaktifkan tidak dapat login ke sistem.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-warning" id="confirmDeactivate">Deactivate</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-warning" id="confirmDeactivate">Nonaktifkan</button>
             </div>
         </div>
     </div>

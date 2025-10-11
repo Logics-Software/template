@@ -199,10 +199,10 @@
             <!-- Form Footer -->
             <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/users" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Back to Users
+                    <i class="fas fa-times me-1"></i>Cancel
                 </a>
                 <button type="submit" form="editUserForm" class="btn btn-primary">
-                    <i class="fas fa-save me-1"></i>Update User
+                    <i class="fas fa-save me-1"></i>Simpan
                 </button>
             </div>
         </div>
@@ -353,10 +353,8 @@ document.getElementById("editUserForm").addEventListener("submit", function(e) {
             // Show success notification
             window.Notify.success(data.message || 'User updated successfully');
             
-            // Redirect after 2 seconds to allow notification to be visible
-            setTimeout(() => {
-                window.location.href = "<?php echo APP_URL; ?>/users";
-            }, 2000);
+            // Redirect after delay to allow notification to be visible
+            window.delayedRedirect("<?php echo APP_URL; ?>/users");
         } else {
             // Show error notification
             window.Notify.error(data.error || "An error occurred while updating the user");

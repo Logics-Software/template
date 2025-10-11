@@ -9,6 +9,7 @@ class Middleware
      */
     public static function auth()
     {
+        // Check if user session exists
         if (!Session::has('user_id')) {
             if (self::isAjaxRequest()) {
                 http_response_code(401);
@@ -20,6 +21,28 @@ class Middleware
                 exit;
             }
         }
+        
+        // Check if session is still valid (not expired)
+        // Pass true to update activity on page loads (real user navigation)
+        if (!Session::isValid(true)) {
+            // Session expired - destroy and redirect to login
+            Session::destroy();
+            if (self::isAjaxRequest()) {
+                http_response_code(401);
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'error' => 'Session expired', 
+                    'redirect' => BASE_URL . 'login',
+                    'message' => 'Sesi Anda telah berakhir. Silakan login kembali.'
+                ]);
+                exit;
+            } else {
+                Session::flash('error', 'Sesi Anda telah berakhir. Silakan login kembali.');
+                header('Location: ' . BASE_URL . 'login');
+                exit;
+            }
+        }
+        
         return true;
     }
 

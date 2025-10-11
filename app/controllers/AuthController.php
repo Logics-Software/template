@@ -81,6 +81,11 @@ class AuthController extends BaseController
             Session::set('user_role', $user['role']);
             Session::set('user_username', $user['username']);
             Session::set('user_picture', $user['picture']);
+            
+            // Initialize session activity tracking
+            Session::set('_last_activity', time());
+            Session::set('_last_regeneration', time());
+            
             Session::regenerate();
 
             // Handle Remember Me functionality

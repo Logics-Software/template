@@ -3,16 +3,16 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Create New User</h5>
+                    <h5 class="mb-0">Tambah User Baru</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/users" class="text-decoration-none">Users</a>
+                                <a href="<?php echo APP_URL; ?>/users" class="text-decoration-none">Daftar User</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Create</li>
+                            <li class="breadcrumb-item active" aria-current="page">Tambah</li>
                         </ol>
                     </nav>
                 </div>
@@ -41,7 +41,7 @@
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required>
-                                <label for="email">Email Address <span class="text-danger">*</span></label>
+                                <label for="email">Alamat Email <span class="text-danger">*</span></label>
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" autocomplete="new-password" required>
-                                <label for="password_confirmation">Confirm Password <span class="text-danger">*</span></label>
+                                <label for="password_confirmation">Konfirmasi Password <span class="text-danger">*</span></label>
                                 <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="togglePasswordConfirmation" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -71,7 +71,7 @@
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <select class="form-select" id="role" name="role" required>
-                                    <option value="">Select Role</option>
+                                    <option value="">Pilih Role</option>
                                     <option value="admin">Administrator</option>
                                     <option value="manajemen">Manajemen</option>
                                     <option value="user">User</option>
@@ -96,7 +96,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Profile Picture</label>
+                                <label class="form-label fw-bold">Foto Profil</label>
                                 <div class="row">
                                     <!-- File Input Section -->
                                     <div class="col-md-6">
@@ -141,10 +141,10 @@
             <!-- Form Footer -->
             <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/users" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Back to Users
+                    <i class="fas fa-times me-1"></i>Batal
                 </a>
                 <button type="submit" form="createUserForm" class="btn btn-primary">
-                    <i class="fas fa-check-circle me-1"></i>Create User
+                    <i class="fas fa-save me-1"></i>Simpan
                 </button>
             </div>
         </div>
@@ -291,10 +291,8 @@ document.getElementById("createUserForm").addEventListener("submit", function(e)
             // Reset form
             this.reset();
             
-            // Redirect after 2 seconds to allow notification to be visible
-            setTimeout(() => {
-                window.location.href = "<?php echo APP_URL; ?>/users";
-            }, 2000);
+            // Redirect after delay to allow notification to be visible
+            window.delayedRedirect("<?php echo APP_URL; ?>/users");
         } else {
             // Show error notification
             window.Notify.error(data.error || "An error occurred while creating the user");

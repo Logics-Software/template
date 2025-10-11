@@ -106,7 +106,7 @@ $title = $data['title'] ?? 'Buat Konfigurasi Sistem';
                 <div class="form-footer">
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="<?php echo APP_URL; ?>/dashboard" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-1"></i>Batal
+                            <i class="fas fa-times me-1"></i>Batal
                         </a>
                         <div>
                             <button type="submit" form="konfigurasiForm" class="btn btn-primary">

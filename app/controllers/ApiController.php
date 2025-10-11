@@ -44,11 +44,12 @@ class ApiController extends BaseController
     }
 
     /**
-     * Check session validity
+     * Check session validity (READ-ONLY - does not update activity)
      */
     public function checkSession()
     {
-        $isValid = Session::isValid();
+        // Don't update activity - this is just a check
+        $isValid = Session::isValid(false);
         $timeRemaining = 0;
         
         if ($isValid) {
@@ -67,6 +68,25 @@ class ApiController extends BaseController
                 'role' => Session::get('user_role')
             ] : null
         ]);
+    }
+    
+    /**
+     * Update session activity (for real user interactions)
+     */
+    public function updateActivity()
+    {
+        if (Session::updateActivity()) {
+            $lastActivity = Session::get('_last_activity', time());
+            $sessionLifetime = defined('SESSION_LIFETIME') ? SESSION_LIFETIME : 3600;
+            $timeRemaining = $sessionLifetime - (time() - $lastActivity);
+            
+            $this->json([
+                'success' => true,
+                'timeRemaining' => max(0, $timeRemaining)
+            ]);
+        } else {
+            $this->json(['success' => false, 'error' => 'Not authenticated'], 401);
+        }
     }
 
     /**
@@ -96,11 +116,12 @@ class ApiController extends BaseController
     }
 
     /**
-     * Get session warning info
+     * Get session warning info (READ-ONLY - does not update activity)
      */
     public function getSessionWarning()
     {
-        if (!Session::isValid()) {
+        // Don't update activity - this is just a check
+        if (!Session::isValid(false)) {
             $this->json(['warning' => false]);
             return;
         }

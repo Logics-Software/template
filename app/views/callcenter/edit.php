@@ -10,7 +10,7 @@
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/callcenter" class="text-decoration-none">Call Center</a>
+                                <a href="<?php echo APP_URL; ?>/callcenter" class="text-decoration-none">Daftar Call Center</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -56,10 +56,10 @@
             <!-- Form Footer -->
             <div class="form-footer d-flex justify-content-between align-items-center">
                 <a href="<?php echo APP_URL; ?>/callcenter" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Call Center
+                    <i class="fas fa-times me-1"></i>Batal
                 </a>
                 <button type="submit" form="editCallCenterForm" class="btn btn-primary">
-                    <i class="fas fa-save me-1"></i>Update Call Center
+                    <i class="fas fa-save me-1"></i>Simpan
                 </button>
             </div>
         </div>
@@ -94,10 +94,8 @@ document.getElementById("editCallCenterForm").addEventListener("submit", functio
             // Show success message
             showToast('success', data.message);
             
-            // Redirect after 2 seconds
-            setTimeout(() => {
-                window.location.href = "<?php echo APP_URL; ?>/callcenter";
-            }, 2000);
+            // Redirect after delay to allow notification to be visible
+            window.delayedRedirect("<?php echo APP_URL; ?>/callcenter");
         } else {
             // Show error message
             const alertDiv = document.createElement("div");

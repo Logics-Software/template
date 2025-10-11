@@ -49,7 +49,7 @@ function renderIconPicker($selectedValue = '', $inputName = 'logo', $inputId = '
                     <div class="search-section">
                         <div class="search-box">
                             <i class="fas fa-search search-icon"></i>
-                            <input type="text" class="form-control search-input" id="iconSearch" placeholder="Search icons...">
+                            <input type="text" class="form-control search-input" id="iconSearch" placeholder="Cari icon...">
                             <button type="button" class="search-clear d-none" id="clearSearch">
                                 <i class="fas fa-times"></i>
                             </button>

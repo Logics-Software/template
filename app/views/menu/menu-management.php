@@ -4,13 +4,13 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Setting Menu</h5>
+                    <h5 class="mb-0">Daftar Group Menu</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Setting Menu</li>
+                            <li class="breadcrumb-item active" aria-current="page">Daftar Group Menu</li>
                         </ol>
                     </nav>
                 </div>
@@ -33,7 +33,7 @@
                                         <th>Description</th>
                                         <th>Item</th>
                                         <th>Default Role</th>
-                                        <th>Actions</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -86,22 +86,22 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="btn-group btn-group-sm">
-                                                        <button class="btn btn-sm btn-outline-info" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)"
+                                                    <div class="d-flex gap-1 min-w-80">
+                                                        <button class="btn btn-info btn-sm btn-action" onclick="toggleDetailMenu(<?php echo $group['id']; ?>)"
                                                         data-bs-toggle="tooltip" data-bs-title="Tampilkan Struktur Menu">
                                                             <i class="fas fa-eye"></i>&nbsp;Struktur
                                                         </button>
-                                                        <button class="btn btn-outline-primary" onclick="editGroup(<?php echo $group['id']; ?>)"
+                                                        <button class="btn btn-success btn-sm btn-action" onclick="editGroup(<?php echo $group['id']; ?>)"
                                                         data-bs-toggle="tooltip" data-bs-title="Edit Group Menu">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        <button class="btn btn-outline-success" onclick="addDetailMenu(<?php echo $group['id']; ?>)"
+                                                        <button class="btn btn-primary btn-sm btn-action" onclick="addDetailMenu(<?php echo $group['id']; ?>)"
                                                         data-bs-toggle="tooltip" data-bs-title="Atur Detail Menu">
                                                             <i class="fas fa-list-check"></i>
                                                         </button>
-                                                        <button class="btn btn-outline-danger" onclick="deleteGroup(<?php echo $group['id']; ?>)"
+                                                        <button class="btn btn-danger btn-sm btn-action" onclick="deleteGroup(<?php echo $group['id']; ?>)"
                                                         data-bs-toggle="tooltip" data-bs-title="Hapus Group Menu">
-                                                            <i class="fas fa-trash"></i>
+                                                            <i class="fas fa-trash-can"></i>
                                                         </button>
                                                     </div>
                                                 </td>
@@ -147,7 +147,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="groupModalLabel">Add Menu Group</h5>
+                <h5 class="modal-title" id="groupModalLabel">Tambag Menu Group</h5>
                 <button type="button" class="btn-close" onclick="closeGroupModal()"></button>
             </div>
             <form id="groupForm">
@@ -156,13 +156,13 @@
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="groupName" name="name" placeholder="" required>
                         <label for="groupName">
-                            <i class="fas fa-tag me-2"></i>Group Name
+                            <i class="fas fa-tag me-2"></i>Nama Group Menu
                         </label>
                     </div>
                     <div class="form-floating mb-3">
                         <textarea class="form-control" id="groupDescription" name="description" placeholder="" style="height: 100px"></textarea>
                         <label for="groupDescription">
-                            <i class="fas fa-align-left me-2"></i>Description
+                            <i class="fas fa-align-left me-2"></i>Deskripsi
                         </label>
                     </div>
                     <div class="mb-3">
@@ -180,7 +180,7 @@
                             <!-- Choose Icon Button -->
                             <div class="col-auto">
                                 <button type="button" class="btn btn-warning" onclick="openIconPicker()">
-                                    <i class="fas fa-search me-1"></i>Choose Icon
+                                    <i class="fas fa-search me-1"></i>Pilih Icon
                                 </button>
                             </div>
                         </div>
@@ -247,8 +247,8 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="closeGroupModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Group</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeGroupModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -261,7 +261,7 @@
         <div class="modal-content d-flex flex-column" style="height: 80vh;">
             <!-- Sticky Header -->
             <div class="modal-header sticky-top bg-white border-bottom">
-                <h5 class="modal-title" id="iconPickerModalLabel">Choose Icon</h5>
+                <h5 class="modal-title" id="iconPickerModalLabel">Pilih Icon</h5>
                 <button type="button" class="btn-close" onclick="closeIconPickerModal()"></button>
             </div>
             
@@ -278,7 +278,7 @@
                 </div>
                 <div class="mt-2">
                     <small class="text-muted">
-                        <span id="iconCount">0</span> icons available
+                        <span id="iconCount">0</span> icon tersedia
                     </small>
                 </div>
             </div>
@@ -295,12 +295,12 @@
                 <div class="d-flex justify-content-between w-100">
                     <div>
                         <small class="text-muted">
-                            <span class="fw-bold" id="selectedIconName">None</span>
+                            <span class="fw-bold" id="selectedIconName">Tidak ada</span>
                         </small>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-secondary me-2" onclick="closeIconPickerModal()">Cancel</button>
-                        <button type="button" class="btn btn-primary" onclick="selectIcon()" id="selectIconBtn" disabled>Select Icon</button>
+                        <button type="button" class="btn btn-secondary me-2" onclick="closeIconPickerModal()">Batal</button>
+                        <button type="button" class="btn btn-primary" onclick="selectIcon()" id="selectIconBtn" disabled>Pilih Icon</button>
                     </div>
                 </div>
             </div>
@@ -313,15 +313,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this group? This action cannot be undone.
+                Anda yakun untuk menghapus data group menu ini? Proses ini tidak bisa dibatalkan.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
             </div>
         </div>
     </div>
@@ -409,7 +409,7 @@ window.addGroup = function() {
     const groupForm = document.getElementById('groupForm');
     const groupIdField = document.getElementById('groupId');
     
-    if (modalLabel) modalLabel.textContent = 'Add Menu Group';
+    if (modalLabel) modalLabel.textContent = 'Tambah Menu Group';
     if (groupForm) groupForm.reset();
     if (groupIdField) groupIdField.value = '';
     
@@ -706,9 +706,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     const modal = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
                     modal.hide();
                     // Delay reload to allow notification to be visible
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
+                    window.delayedReload();
                 } else if (data && data.error) {
                     window.Notify.error(data.error || 'Failed to delete group');
                 }
@@ -767,9 +765,7 @@ function initializeMenuManagement() {
                         modal.hide();
                     }
                     // Delay reload to allow notification to be visible
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
+                    window.delayedReload();
                 } else if (data && data.error) {
                     window.Notify.error(data.error);
                 }

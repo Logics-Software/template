@@ -9,7 +9,7 @@
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Modules</li>
+                            <li class="breadcrumb-item active" aria-current="page">Daftar Modul</li>
                         </ol>
                     </nav>
                 </div>
@@ -32,7 +32,7 @@
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($modules['per_page']); ?>">
                         <select class="form-select p-2" id="role" name="role" onchange="this.form.submit()">
-                            <option value="">All Roles</option>
+                            <option value="">Semua Role</option>
                             <option value="admin"<?php echo $role === 'admin' ? ' selected' : ''; ?>>Admin</option>
                             <option value="manajemen"<?php echo $role === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
                             <option value="user"<?php echo $role === 'user' ? ' selected' : ''; ?>>User</option>
@@ -56,7 +56,7 @@
                     <div class="col-md-3">
                         <div class="d-flex gap-2 justify-content-end">
                             <a href="<?php echo APP_URL; ?>/modules/create" class="btn btn-primary">
-                                <i class="fas fa-plus me-1"></i>Add Module
+                                <i class="fas fa-plus me-1"></i>Tambah Modul
                             </a>
                         </div>
                     </div>
@@ -75,13 +75,13 @@
                                     Link 
                                     <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
-                                <th>Role Access</th>
+                                <th>Hak Akses Role</th>
                                 <th class="sortable" data-sort="created_at">
-                                    Created At 
+                                    Dibuat Pada 
                                     <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th class="sortable" data-sort="updated_at">
-                                    Last Update 
+                                    Update 
                                     <i class="fas fa-sort color-muted ms-1"></i>
                                 </th>
                                 <th></th>
@@ -138,13 +138,13 @@
                                     </td>
                                     <td align="center">
                                         <div class="d-flex gap-1 min-w-80">
-                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>" class="btn btn-sm btn-outline-info btn-action" data-bs-toggle="tooltip" data-bs-title="Tampilkan Data Modul">
+                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>" class="btn btn-info btn-sm btn-action" data-bs-toggle="tooltip" data-bs-title="Tampilkan Data Modul">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>/edit" class="btn btn-sm btn-outline-warning btn-action" data-bs-toggle="tooltip" data-bs-title="Edit Modul">
-                                                <i class="fas fa-pencil"></i>
+                                            <a href="<?php echo APP_URL; ?>/modules/<?php echo $module['id']; ?>/edit" class="btn btn-success btn-sm btn-action" data-bs-toggle="tooltip" data-bs-title="Edit Modul">
+                                                <i class="fas fa-edit"></i>
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger btn-action" onclick="deleteModule(<?php echo $module['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Hapus Modul">
+                                            <button type="button" class="btn btn-danger btn-sm btn-action" onclick="deleteModule(<?php echo $module['id']; ?>)" data-bs-toggle="tooltip" data-bs-title="Hapus Modul">
                                                 <i class="fas fa-trash-can"></i>
                                             </button>
                                         </div>
@@ -208,15 +208,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this module? This action cannot be undone.
+                Anda yakin akan menghapus modul ini? Proses ini tidak dapat dibatalkan.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
             </div>
         </div>
     </div>

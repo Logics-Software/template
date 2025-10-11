@@ -3,13 +3,13 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Setting Akses Menu</h5>
+                    <h5 class="mb-0">Daftar Akses Menu</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Setting Akses Menu</li>
+                            <li class="breadcrumb-item active" aria-current="page">Daftar Akses Menu</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,7 +22,7 @@
                         <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="d-flex" id="searchForm">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Cari user..." value="<?php echo htmlspecialchars($search); ?>" id="searchInput">
-                                <button type="button" class="btn btn-secondary" id="searchToggleBtn" title="Search">
+                                <button type="button" class="btn btn-secondary" id="searchToggleBtn">
                                     <i class="fas fa-search" id="searchIcon"></i>
                                 </button>
                             </div>
@@ -123,14 +123,14 @@
                                                         </span>
                                                     <?php endforeach; ?>
                                                 <?php else: ?>
-                                                    <span class="text-muted small">No menu groups assigned</span>
+                                                    <span class="text-muted small">Belum ada group menu ditentukan</span>
                                                 <?php endif; ?>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1">
-                                                <a href="<?php echo APP_URL; ?>/menuakses/<?php echo $user['id']; ?>/edit" class="btn btn-sm btn-outline-primary btn-action" 
-                                                data-bs-toggle="tooltip" data-bs-title="Edit Menu Access">
+                                                <a href="<?php echo APP_URL; ?>/menuakses/<?php echo $user['id']; ?>/edit" class="btn btn-success btn-sm btn-action" 
+                                                data-bs-toggle="tooltip" data-bs-title="Edit Akses Menu">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                             </div>
@@ -283,4 +283,3 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
-

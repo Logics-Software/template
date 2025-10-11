@@ -3,16 +3,16 @@
         <div class="form-container modules-form-loading" id="moduleFormCard">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Create New Module</h5>
+                    <h5 class="mb-0">Tambah Modul Baru</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/modules" class="text-decoration-none">Modules</a>
+                                <a href="<?php echo APP_URL; ?>/modules" class="text-decoration-none">Daftar Module</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Create</li>
+                            <li class="breadcrumb-item active" aria-current="page">Tambah</li>
                         </ol>
                     </nav>
                 </div>
@@ -58,11 +58,11 @@
                         <div class="col-12">
                             <div class="mb-3">
                                 <div class="d-flex align-items-center mb-2">
-                                    <label class="form-label mb-0 me-2">Role Access</label>
+                                    <label class="form-label mb-0 me-2">Hak Akses Role</label>
                                     <div class="d-flex gap-1">
-                                        <button type="button" class="btn btn-outline-secondary btn-sm px-3" id="toggleAllRoles" title="Toggle Semua Role">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm px-3" id="toggleAllRoles" title="Pilih Semua Role">
                                             <i class="fas fa-check-double me-1"></i>
-                                            <span>Select All</span>
+                                            <span>Pilih Semua</span>
                                         </button>
                                     </div>
                                 </div>
@@ -117,11 +117,11 @@
             
             <!-- Form Footer -->
             <div class="form-footer d-flex justify-content-between align-items-center">
-                <a href="<?php echo APP_URL; ?>/modules" class="btn btn-secondary" title="Kembali ke Daftar Modul">
-                    <i class="fas fa-arrow-left me-1"></i>Back to Modules
+                <a href="<?php echo APP_URL; ?>/modules" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i>Batal
                 </a>
-                <button type="submit" form="createModuleForm" class="btn btn-primary loading" id="createBtn" title="Buat Modul Baru" disabled>
-                    <i class="fas fa-check-circle me-1"></i>Create Module
+                <button type="submit" form="createModuleForm" class="btn btn-primary loading" id="createBtn" disabled>
+                    <i class="fas fa-save me-1"></i>Simpan
                 </button>
             </div>
         </div>
@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         
         // Clear loading option
-        linkSelect.innerHTML = '<option value="">Select a route...</option>';
+        linkSelect.innerHTML = '<option value="">Pilih route/link...</option>';
         
         // Check if routes data is available
         try {
@@ -308,12 +308,12 @@ document.addEventListener("DOMContentLoaded", function() {
             // All selected - show "Unselect All"
             toggleAllBtn.innerHTML = '<i class="fas fa-times"></i>';
             toggleAllBtn.className = 'btn btn-outline-danger btn-sm';
-            toggleAllBtn.title = 'Unselect All Roles';
+            toggleAllBtn.title = 'Batalkan Semua Role';
         } else {
             // Not all selected - show "Select All"
             toggleAllBtn.innerHTML = '<i class="fas fa-check-double">';
             toggleAllBtn.className = 'btn btn-outline-secondary btn-sm';
-            toggleAllBtn.title = 'Select All Roles';
+            toggleAllBtn.title = 'Pilih Semua Role';
         }
     }
     

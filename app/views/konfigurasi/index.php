@@ -48,7 +48,7 @@ if (!$konfigurasi) {
             <!-- Logo Section -->
             <div class="col-md-4 mb-4">
                 <div class="text-center">
-                    <label class="form-label fw-bold">Logo Perusahaan</label>
+                    <label class="form-label fs-5 fw-bold">Logo Perusahaan</label>
                     <div>
                         <?php if (!empty($konfigurasi['logo'])): ?>
                             <img src="<?php echo APP_URL; ?>/assets/images/konfigurasi/<?php echo htmlspecialchars($konfigurasi['logo']); ?>" 

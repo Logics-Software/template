@@ -4,13 +4,13 @@
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
-                    Call Center</h5>
+                    Daftar Call Center</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Call Center</li>
+                            <li class="breadcrumb-item active" aria-current="page">Daftar Call Center</li>
                         </ol>
                     </nav>
                 </div>
@@ -92,17 +92,17 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1 min-w-80">
-                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>" class="btn btn-outline-info btn-sm btn-action" 
+                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>" class="btn btn-info btn-sm btn-action" 
                                                 data-bs-toggle="tooltip" data-bs-title="Menampilkan Data Call Center">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>/edit" class="btn btn-outline-warning btn-sm btn-action" 
+                                                <a href="<?php echo APP_URL; ?>/callcenter/<?php echo $callCenter['id']; ?>/edit" class="btn btn-success btn-sm btn-action" 
                                                 data-bs-toggle="tooltip" data-bs-title="Edit Data Call Center">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" 
+                                                <button type="button" class="btn btn-danger btn-sm btn-action" onclick="deleteCallCenter(<?php echo $callCenter['id']; ?>)" 
                                                 data-bs-toggle="tooltip" data-bs-title="Hapus Data Call Center">
-                                                    <i class="fas fa-trash"></i>
+                                                    <i class="fas fa-trash-can"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -213,9 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         onError: function(data) {
             showErrorMessage(data.error || 'Gagal memperbarui urutan');
-            setTimeout(() => {
-                location.reload();
-            }, 2000);
+            window.delayedReload();
         }
     });
 });

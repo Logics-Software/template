@@ -121,9 +121,10 @@ class Session
     }
 
     /**
-     * Check if session is valid and not expired
+     * Check if session is valid and not expired (READ-ONLY)
+     * Does NOT update last activity - use updateActivity() for that
      */
-    public static function isValid()
+    public static function isValid($updateActivity = false)
     {
         if (!self::has('user_id')) {
             return false;
@@ -138,9 +139,24 @@ class Session
             return false;
         }
         
-        // Update last activity
-        self::set('_last_activity', time());
+        // Only update last activity if explicitly requested (for real user activity)
+        if ($updateActivity) {
+            self::set('_last_activity', time());
+        }
+        
         return true;
+    }
+    
+    /**
+     * Update last activity timestamp (for real user interactions)
+     */
+    public static function updateActivity()
+    {
+        if (self::has('user_id')) {
+            self::set('_last_activity', time());
+            return true;
+        }
+        return false;
     }
 
     /**

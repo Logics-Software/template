@@ -86,7 +86,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                                     <!-- Logo Upload Section -->
                                     <div class="col-12 mb-3">
                                         <div class="form-group">
-                                            <label for="logo" class="form-label fw-bold">Logo Perusahaan</label>
+                                            <label for="logo" class="form-label fs-6 fw-bold">Logo Perusahaan</label>
                                             
                                             <!-- Current Logo Display -->
                                             <?php if (!empty($konfigurasi['logo'])): ?>
@@ -94,7 +94,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                                                     <div class="text-center">
                                                         <img src="<?php echo APP_URL; ?>/assets/images/konfigurasi/<?php echo htmlspecialchars($konfigurasi['logo']); ?>" 
                                                              alt="Logo Perusahaan" 
-                                                             class="img-fluid mb-2 max-h-150">
+                                                             class="img-fluid mb-2 max-h-100">
                                                         <div class="text-muted small"><?php echo htmlspecialchars($konfigurasi['logo']); ?></div>
                                                     </div>
                                                 </div>
@@ -125,7 +125,7 @@ $konfigurasi = $data['konfigurasi'] ?? [];
                 <div class="form-footer">
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="<?php echo APP_URL; ?>/konfigurasi" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-1"></i>Batal
+                            <i class="fas fa-times me-1"></i>Batal
                         </a>
                         <div>
                             <button type="submit" form="konfigurasiForm" class="btn btn-primary">

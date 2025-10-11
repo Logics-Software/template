@@ -120,11 +120,13 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-1 min-w-80">
-                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-outline-info btn-sm btn-action" title="Lihat Pesan">
+                                                <a href="<?php echo APP_URL; ?>/messages/<?php echo $message['id']; ?>" class="btn btn-info btn-sm btn-action" 
+                                                data-bs-toggle="tooltip" data-bs-title="Lihat Pesan">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deleteMessage(<?php echo $message['id']; ?>)" title="Hapus Pesan">
-                                                    <i class="fas fa-trash"></i>
+                                                <button type="button" class="btn btn-danger btn-sm btn-action" onclick="deleteMessage(<?php echo $message['id']; ?>)" 
+                                                data-bs-toggle="tooltip" data-bs-title="Hapus Pesan">
+                                                    <i class="fas fa-trash-can"></i>
                                                 </button>
                                             </div>
                                         </td>

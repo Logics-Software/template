@@ -12,7 +12,7 @@ $csrfToken = Session::generateCSRF();
                     <h5 class="card-title mb-0">Detail Menu</h5>
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/dashboard">Home</a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/menu">Menu Management</a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/menu">Daftar Group Menu</a></li>
                         <li class="breadcrumb-item active">Detail Menu</li>
                     </ol>
                 </div>
@@ -36,10 +36,10 @@ $csrfToken = Session::generateCSRF();
                             echo '<tr>';
                             echo '<th width="5%"><i class="fas fa-grip-vertical text-muted"></i></th>';
                             echo '<th width="35%">Caption Menu</th>';
-                            echo '<th width="20%">URL</th>';
+                            echo '<th width="20%">Link/Route</th>';
                             echo '<th width="10%">Order</th>';
                             echo '<th width="10%">Status</th>';
-                            echo '<th width="15%">Actions</th>';
+                            echo '<th width="15%"></th>';
                             echo '</tr>';
                             echo '</thead>';
                             echo '<tbody id="sortable-menu-items">';
@@ -79,12 +79,12 @@ $csrfToken = Session::generateCSRF();
                                 }
                                 echo '</td>';
                                 echo '<td>';
-                                echo '<div class="btn-group btn-group-sm">';
-                                echo '<button class="btn btn-outline-primary btn-sm" onclick="editMenuItem(' . $item['id'] . ')" data-bs-toggle="tooltip" data-bs-title="Edit Detail Menu">';
+                                echo '<div class="d-flex gap-1 min-w-80">';
+                                echo '<button class="btn btn-primary btn-sm btn-action" onclick="editMenuItem(' . $item['id'] . ')" data-bs-toggle="tooltip" data-bs-title="Edit Detail Menu">';
                                                 echo '<i class="fas fa-edit"></i>';
                                                 echo '</button>';
-                                echo '<button class="btn btn-outline-danger btn-sm" onclick="deleteMenuItem(' . $item['id'] . ')" data-bs-toggle="tooltip" data-bs-title="Hapus Detail Menu">';
-                                                echo '<i class="fas fa-trash"></i>';
+                                echo '<button class="btn btn-danger btn-sm btn-action" onclick="deleteMenuItem(' . $item['id'] . ')" data-bs-toggle="tooltip" data-bs-title="Hapus Detail Menu">';
+                                                echo '<i class="fas fa-trash-can"></i>';
                                                 echo '</button>';
                                                 echo '</div>';
                                 echo '</td>';
@@ -114,7 +114,7 @@ $csrfToken = Session::generateCSRF();
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="menuItemModalLabel">Add Menu Item</h5>
+                <h5 class="modal-title" id="menuItemModalLabel">Tambah Detail Menu</h5>
                 <button type="button" class="btn-close" onclick="closeMenuItemModal()"></button>
             </div>
             <form id="menuItemForm">
@@ -154,11 +154,11 @@ $csrfToken = Session::generateCSRF();
 
                     <div class="form-floating mb-3">
                         <select class="form-control" id="menuItemModule" name="module_id">
-                            <option value="">No Module</option>
+                            <option value="">Tanpa Modul</option>
                             <!-- Routes will be loaded dynamically -->
                         </select>
                         <label for="menuItemModule">
-                            <i class="fas fa-cube me-2"></i>Module
+                            <i class="fas fa-cube me-2"></i>Modul
                         </label>
                     </div>
                     
@@ -178,7 +178,7 @@ $csrfToken = Session::generateCSRF();
                             <!-- Choose Icon Button -->
                             <div class="col-auto">
                                 <button type="button" class="btn btn-warning" onclick="openIconPicker('menuItemIcon')">
-                                    <i class="fas fa-search me-1"></i>Choose Icon
+                                    <i class="fas fa-search me-1"></i>Pilih Icon
                                     </button>
                             </div>
                         </div>
@@ -198,15 +198,15 @@ $csrfToken = Session::generateCSRF();
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="menuItemIsActive" name="is_active" value="1" checked>
                                 <label class="form-check-label" for="menuItemIsActive">
-                                    Active
+                                    Aktif
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="closeMenuItemModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Menu Item</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeMenuItemModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -219,7 +219,7 @@ $csrfToken = Session::generateCSRF();
         <div class="modal-content d-flex flex-column" style="height: 80vh;">
             <!-- Sticky Header -->
             <div class="modal-header sticky-top bg-white border-bottom">
-                <h5 class="modal-title" id="iconPickerModalLabel">Choose Icon</h5>
+                <h5 class="modal-title" id="iconPickerModalLabel">Pilih Icon</h5>
                 <button type="button" class="btn-close" onclick="closeIconPickerModal()"></button>
             </div>
             
@@ -236,7 +236,7 @@ $csrfToken = Session::generateCSRF();
                 </div>
                 <div class="mt-2">
                     <small class="text-muted">
-                        <span id="iconCount">0</span> icons available
+                        <span id="iconCount">0</span> icon tersedia
                     </small>
                 </div>
             </div>
@@ -253,12 +253,12 @@ $csrfToken = Session::generateCSRF();
                 <div class="d-flex justify-content-between w-100">
                     <div>
                         <small class="text-muted">
-                            <span class="fw-bold" id="selectedIconName">None</span>
+                            <span class="fw-bold" id="selectedIconName">Tidak ada</span>
                         </small>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-secondary me-2" onclick="closeIconPickerModal()">Cancel</button>
-                        <button type="button" class="btn btn-primary" onclick="selectIcon()" id="selectIconBtn" disabled>Select Icon</button>
+                        <button type="button" class="btn btn-secondary me-2" onclick="closeIconPickerModal()">Batal</button>
+                        <button type="button" class="btn btn-primary" onclick="selectIcon()" id="selectIconBtn" disabled>Pilih Icon</button>
                     </div>
                 </div>
             </div>
@@ -271,15 +271,15 @@ $csrfToken = Session::generateCSRF();
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this menu item? This action cannot be undone.
+                Anda yakin akan menghapu data detail menu ini? Proses ini tidak bisa dibatalkan.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
             </div>
         </div>
     </div>
@@ -397,9 +397,7 @@ function initializeMenuBuilder() {
                         modal.hide();
                     }
                     // Delay reload to allow notification to be visible
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
+                    window.delayedReload();
                 } else if (data && data.error) {
                     window.Notify.error(data.error);
                 }
@@ -689,9 +687,7 @@ function confirmDeleteMenuItem() {
                 modal.hide();
             }
             // Delay reload to allow notification to be visible
-            setTimeout(() => {
-                location.reload();
-            }, 2000);
+            window.delayedReload();
         } else if (data && data.error) {
             window.Notify.error(data.error || 'Failed to delete menu item');
         }
@@ -1060,9 +1056,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             onError: function(data) {
                 window.Notify.error(data.error || 'Gagal memperbarui urutan menu');
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
+                window.delayedReload();
             }
         });
     }

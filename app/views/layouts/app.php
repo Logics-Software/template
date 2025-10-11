@@ -54,6 +54,9 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     
     <!-- Chart.js -->
     <script src="<?php echo BASE_URL; ?>assets/js/chart.js"></script>
+    
+    <!-- App Configuration -->
+    <script src="<?php echo BASE_URL; ?>assets/js/config.js"></script>
         
     <!-- Optimized CSS -->
     <link href="<?php echo BASE_URL; ?>assets/css/complete-optimized.css" rel="stylesheet">
@@ -629,6 +632,243 @@ echo ' class="' . $bodyClass . '"';
                 window.location.href = '<?php echo APP_URL; ?>/logout';
             }
         });
+
+        <?php if ($isLoggedIn): ?>
+        // ============================================
+        // Session Timeout Monitor
+        // ============================================
+        (function() {
+            const SESSION_LIFETIME = <?php echo SESSION_LIFETIME; ?>; // seconds
+            const SESSION_WARNING_TIME = <?php echo SESSION_WARNING_TIME; ?>; // 5 minutes warning
+            const CHECK_INTERVAL = 60000; // Check every 60 seconds
+            
+            let sessionWarningModal = null;
+            let sessionWarningShown = false;
+            let countdownInterval = null;
+            
+            // Check session status via API
+            function checkSession() {
+                fetch('<?php echo BASE_URL; ?>api/session-check', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.valid) {
+                        // Session expired - redirect to login
+                        sessionExpired();
+                    } else if (data.timeRemaining <= SESSION_WARNING_TIME && !sessionWarningShown) {
+                        // Show warning modal
+                        showSessionWarning(data.timeRemaining);
+                    } else if (data.timeRemaining > SESSION_WARNING_TIME && sessionWarningShown) {
+                        // Session was extended - hide warning
+                        hideSessionWarning();
+                    }
+                })
+                .catch(error => {
+                    console.error('Session check error:', error);
+                });
+            }
+            
+            // Show session warning modal
+            function showSessionWarning(timeRemaining) {
+                sessionWarningShown = true;
+                
+                // Create modal if not exists
+                if (!sessionWarningModal) {
+                    const modalHtml = `
+                        <div class="modal fade" id="sessionWarningModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-warning text-dark">
+                                        <h5 class="modal-title">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>Sesi Akan Berakhir
+                                        </h5>
+                                    </div>
+                                    <div class="modal-body text-center py-4">
+                                        <i class="fas fa-clock fa-4x text-warning mb-3"></i>
+                                        <p class="fs-5 mb-3">Sesi Anda akan berakhir dalam:</p>
+                                        <h2 class="text-warning mb-3" id="sessionCountdown">5:00</h2>
+                                        <p class="text-muted">Klik "Perpanjang Sesi" untuk tetap login, atau Anda akan otomatis logout.</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-warning" id="extendSessionBtn">
+                                            <i class="fas fa-clock me-2"></i>Perpanjang Sesi
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" id="logoutNowBtn">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Logout Sekarang
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    document.body.insertAdjacentHTML('beforeend', modalHtml);
+                    
+                    // Add event listeners
+                    document.getElementById('extendSessionBtn').addEventListener('click', extendSession);
+                    document.getElementById('logoutNowBtn').addEventListener('click', function() {
+                        window.location.href = '<?php echo BASE_URL; ?>logout';
+                    });
+                }
+                
+                // Show modal
+                const modal = document.getElementById('sessionWarningModal');
+                sessionWarningModal = new bootstrap.Modal(modal);
+                sessionWarningModal.show();
+                
+                // Start countdown
+                startCountdown(timeRemaining);
+            }
+            
+            // Hide session warning modal
+            function hideSessionWarning() {
+                if (sessionWarningModal) {
+                    sessionWarningModal.hide();
+                    sessionWarningShown = false;
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                    }
+                }
+            }
+            
+            // Start countdown timer
+            function startCountdown(seconds) {
+                const countdownEl = document.getElementById('sessionCountdown');
+                if (!countdownEl) return;
+                
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                let remaining = seconds;
+                
+                function updateCountdown() {
+                    const minutes = Math.floor(remaining / 60);
+                    const secs = remaining % 60;
+                    countdownEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                    
+                    if (remaining <= 0) {
+                        clearInterval(countdownInterval);
+                        sessionExpired();
+                    }
+                    
+                    remaining--;
+                }
+                
+                updateCountdown();
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
+            
+            // Extend session via API
+            function extendSession() {
+                const btn = document.getElementById('extendSessionBtn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Memperpanjang...';
+                btn.disabled = true;
+                
+                fetch('<?php echo BASE_URL; ?>api/extend-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.Notify.success('Sesi berhasil diperpanjang');
+                        hideSessionWarning();
+                    } else {
+                        window.Notify.error('Gagal memperpanjang sesi');
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Extend session error:', error);
+                    window.Notify.error('Terjadi kesalahan');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+            }
+            
+            // Session expired - redirect to login
+            function sessionExpired() {
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                window.Notify.error('Sesi Anda telah berakhir. Silakan login kembali.');
+                
+                setTimeout(() => {
+                    window.location.href = '<?php echo BASE_URL; ?>login';
+                }, 1500);
+            }
+            
+            // Start monitoring session
+            checkSession(); // Initial check
+            setInterval(checkSession, CHECK_INTERVAL); // Check periodically
+            
+            // ============================================
+            // True Idle Timeout - Track Real User Activity
+            // ============================================
+            let lastActivitySent = Date.now();
+            let activityTimeout;
+            const ACTIVITY_UPDATE_INTERVAL = 60000; // Send activity update every 60 seconds max
+            
+            function sendActivityUpdate() {
+                // Only send if enough time has passed since last update
+                const timeSinceLastUpdate = Date.now() - lastActivitySent;
+                
+                if (timeSinceLastUpdate >= ACTIVITY_UPDATE_INTERVAL) {
+                    fetch('<?php echo BASE_URL; ?>api/update-activity', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            lastActivitySent = Date.now();
+                            console.log('Activity updated. Time remaining:', Math.floor(data.timeRemaining / 60), 'minutes');
+                            
+                            // Hide warning if session was extended by activity
+                            if (data.timeRemaining > SESSION_WARNING_TIME && sessionWarningShown) {
+                                hideSessionWarning();
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Activity update error:', error);
+                    });
+                }
+            }
+            
+            function onUserActivity() {
+                // Debounce - only process activity after user stops for 2 seconds
+                clearTimeout(activityTimeout);
+                activityTimeout = setTimeout(() => {
+                    sendActivityUpdate();
+                }, 2000);
+            }
+            
+            // Track real user interactions
+            document.addEventListener('mousemove', onUserActivity, { passive: true });
+            document.addEventListener('keydown', onUserActivity, { passive: true });
+            document.addEventListener('click', onUserActivity, { passive: true });
+            document.addEventListener('scroll', onUserActivity, { passive: true });
+            document.addEventListener('touchstart', onUserActivity, { passive: true });
+        })();
+        <?php endif; ?>
     </script>
 </body>
 </html>

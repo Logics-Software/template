@@ -3,16 +3,16 @@
         <div class="form-container">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">User Details</h5>
+                    <h5 class="mb-0">Lihat Detal User</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/users" class="text-decoration-none">Users</a>
+                                <a href="<?php echo APP_URL; ?>/users" class="text-decoration-none">Daftar User</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">View</li>
+                            <li class="breadcrumb-item active" aria-current="page">Lihat Data</li>
                         </ol>
                     </nav>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Email Address</label>
+                            <label class="form-label fw-bold">Alamaat Email</label>
                             <div class="form-control-plaintext bg-light p-3 rounded border"><?php echo htmlspecialchars($user['email'] ?? 'N/A'); ?></div>
                         </div>
                     </div>
@@ -93,21 +93,21 @@
 
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Last Login</label>
+                            <label class="form-label fw-bold">Login Terakhir</label>
                             <div class="form-control-plaintext bg-light p-3 rounded border"><?php echo $user['lastlogin'] ? date('M d, Y H:i', strtotime($user['lastlogin'])) : 'Never'; ?></div>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Created At</label>
+                            <label class="form-label fw-bold">Dibuat Pada</label>
                             <div class="form-control-plaintext bg-light p-3 rounded border"><?php echo date('M d, Y H:i', strtotime($user['created_at'] ?? '')); ?></div>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Last Updated</label>
+                            <label class="form-label fw-bold">Terakhir Update</label>
                             <div class="form-control-plaintext bg-light p-3 rounded border"><?php echo date('M d, Y H:i', strtotime($user['updated_at'] ?? '')); ?></div>
                         </div>
                     </div>
@@ -117,14 +117,14 @@
             <div class="card-footer">
                 <div class="d-flex justify-content-between align-items-center">
                     <a href="<?php echo APP_URL; ?>/users" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i>Back to Users
+                        <i class="fas fa-arrow-left me-1"></i>Kembali ke Daftar User
                     </a>
                     <div>
                         <a href="<?php echo APP_URL; ?>/users/<?php echo $user['id']; ?>/edit" class="btn btn-warning">
-                            <i class="fas fa-pencil me-1"></i>Edit User
+                            <i class="fas fa-pencil me-1"></i>Edit
                         </a>
                         <button class="btn btn-danger" onclick="deleteUser(<?php echo $user['id']; ?>)">
-                            <i class="fas fa-trash me-1"></i>Delete User
+                            <i class="fas fa-trash me-1"></i>Hapus
                         </button>
                     </div>
                 </div>
@@ -149,9 +149,7 @@ async function deleteUser(id) {
         .then(data => {
             if (data.success) {
                 window.Notify.success(data.message || 'User deleted successfully');
-                setTimeout(() => {
-                    window.location.href = "<?php echo APP_URL; ?>/users";
-                }, 2000);
+                window.delayedRedirect("<?php echo APP_URL; ?>/users");
             } else {
                 window.Notify.error(data.error || "An error occurred");
             }

@@ -3,14 +3,14 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Setting Akses Menu</h5>
+                    <h5 class="mb-0">Edit Akses Menu</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?php echo APP_URL; ?>/menuakses" class="text-decoration-none">Setting Akses Menu</a>
+                                <a href="<?php echo APP_URL; ?>/menuakses" class="text-decoration-none">Daftar Akses Menu</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -104,7 +104,7 @@
 
                     <div class="d-flex justify-content-between mt-4">
                         <a href="<?php echo APP_URL; ?>/menuakses" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-2"></i>Batal
+                            <i class="fas fa-times me-2"></i>Batal
                         </a>
                         <button type="submit" class="btn btn-primary" id="submitBtn">
                             <i class="fas fa-save me-2"></i>Simpan
@@ -152,9 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.Notify.success(data.message || 'Menu access updated successfully');
                 
                 // Redirect to list page after delay to allow notification to be visible
-                setTimeout(() => {
-                    window.location.href = '<?php echo APP_URL; ?>/menuakses';
-                }, 2000);
+                window.delayedRedirect('<?php echo APP_URL; ?>/menuakses');
             } else {
                 window.Notify.error(data.error || 'Failed to update menu access');
                 

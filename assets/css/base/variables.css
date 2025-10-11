@@ -210,7 +210,9 @@
   --form-border-focus: #667eea;
   --form-input-bg: #252836;
   --form-input-bg-readonly: #1f2028;
-
+  /* Border colors for dark theme */
+  --border-color-tertiary: #2f323d;
+  --border-color-sidebar: #2f323d;
   /* Lock screen specific colors for dark theme - Apply to all forms */
   --lock-bg-primary: linear-gradient(135deg, #1f2028 0%, #252836 100%);
   --lock-bg-secondary: #252836;
