@@ -240,11 +240,11 @@ document.addEventListener("DOMContentLoaded", function() {
         headers: {
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
+            'X-CSRF-Token': '<?php echo $csrf_token; ?>'
         },
         body: JSON.stringify({
             message_id: <?php echo $message['id']; ?>,
-            _token: '<?php echo Session::generateCSRF(); ?>'
+            _token: '<?php echo $csrf_token; ?>'
         })
     });
     <?php endif; ?>

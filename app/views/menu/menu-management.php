@@ -679,18 +679,9 @@ window.deleteGroup = function(id) {
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("confirmDelete").addEventListener("click", function() {
         if (deleteGroupId) {
-            // Delete group from database
-            fetch('<?php echo APP_URL; ?>/menu/delete-group', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
-                },
-                body: JSON.stringify({
-                    id: deleteGroupId,
-                    _token: '<?php echo Session::generateCSRF(); ?>'
-                })
+            // UNIVERSAL SOLUTION: Use window.csrf helper
+            window.csrf.post('<?php echo APP_URL; ?>/menu/delete-group', {
+                id: deleteGroupId
             })
             .then(response => {
                 if (response.status === 403) {
@@ -744,11 +735,10 @@ function initializeMenuManagement() {
                 body: formData,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': '<?php echo Session::generateCSRF(); ?>'
+                    'X-CSRF-Token': window.csrfToken
                 }
             })
             .then(response => {
-                console.log('Response status:', response.status);
                 if (response.status === 403) {
                     window.Notify.error('Access denied. Please refresh the page and try again.');
                     return;
@@ -756,7 +746,6 @@ function initializeMenuManagement() {
                 return response.json();
             })
             .then(data => {
-                console.log('Response data:', data);
                 if (data && data.success) {
                     window.Notify.success(data.message);
                     // Hide modal using Bootstrap Modal API

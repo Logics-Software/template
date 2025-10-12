@@ -62,7 +62,8 @@ class MenuController extends BaseController
             'modules' => $modules,
             'groups' => $groups,
             'menuItems' => $menuItems,
-            'available_icons' => $availableIcons
+            'available_icons' => $availableIcons,
+            'csrf_token' => $this->csrfToken()
         ];
 
         $this->view('menu/menu-management', $data);
@@ -109,7 +110,8 @@ class MenuController extends BaseController
             'menuItems' => $menuItems,
             'available_icons' => $availableIcons,
             'selected_group_id' => $groupId,
-            'selected_group' => $selectedGroup
+            'selected_group' => $selectedGroup,
+            'csrf_token' => $this->csrfToken()
         ];
 
         $this->view('menu/menu-builder', $data);
@@ -251,18 +253,16 @@ class MenuController extends BaseController
             $database = Database::getInstance();
             $database->beginTransaction();
             
-            // If group has menu items, delete them first (cascade delete)
-            if ($this->menuGroupModel->hasMenuItems($groupId)) {
-                $menuItems = $this->menuGroupModel->getMenuItems($groupId);
-                
-                foreach ($menuItems as $item) {
-                    // Delete menu item from database
-                    $sql = "DELETE FROM menu_items WHERE id = ?";
-                    $database->query($sql, [$item['id']]);
-                }
-            }
+            // CASCADE DELETE in correct order:
+            // 1. Delete users_menu entries with this group_id
+            $sql = "DELETE FROM users_menu WHERE group_id = ?";
+            $database->query($sql, [$groupId]);
             
-            // Now delete the group
+            // 2. Delete menu_items entries with this group_id
+            $sql = "DELETE FROM menu_items WHERE group_id = ?";
+            $database->query($sql, [$groupId]);
+            
+            // 3. Finally delete the group itself
             $result = $this->menuGroupModel->deleteGroup($groupId);
             
             if ($result) {

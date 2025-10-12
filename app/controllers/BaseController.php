@@ -15,6 +15,12 @@ abstract class BaseController
 
     protected function view($template, $data = [])
     {
+        // AUTOMATIC CSRF TOKEN INJECTION
+        // Setiap view otomatis mendapat csrf_token jika belum ada
+        if (!isset($data['csrf_token'])) {
+            $data['csrf_token'] = $this->csrfToken();
+        }
+        
         $this->response->view($template, $data);
     }
 
@@ -45,7 +51,13 @@ abstract class BaseController
 
     protected function csrfToken()
     {
-        return Session::generateCSRF();
+        // Get existing token instead of generating new one
+        // This ensures same token across all views in same request
+        $token = Session::get('_csrf_token');
+        if (!$token) {
+            $token = Session::generateCSRF();
+        }
+        return $token;
     }
 
     protected function validateCSRF($request = null)

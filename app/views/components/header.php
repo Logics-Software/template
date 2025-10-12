@@ -38,9 +38,6 @@ function getGreetingMessage() {
                     <!-- Sidebar Toggle -->
                     <button class="btn btn-link sidebar-toggle-btn" 
                             id="sidebarToggle" 
-                            data-bs-toggle="tooltip" 
-                            data-bs-placement="bottom"
-                            data-bs-title="Toggle Sidebar"
                             aria-label="Toggle Sidebar">
                         <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
@@ -49,8 +46,7 @@ function getGreetingMessage() {
                     <button class="btn btn-link" 
                             id="whatsappToggle" 
                             data-bs-toggle="modal" 
-                            data-bs-target="#whatsappModal"
-                            title="Hubungi via WhatsApp">
+                            data-bs-target="#whatsappModal">
                         <i class="fab fa-whatsapp"></i>
                     </button>
                     

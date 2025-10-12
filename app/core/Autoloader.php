@@ -10,7 +10,6 @@ class Autoloader
         'app/controllers/',
         'app/services/',
         'app/views/',
-        'app/helpers/',
         'app/middleware/',
         'app/config/'
     ];

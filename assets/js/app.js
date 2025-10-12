@@ -570,18 +570,15 @@ function initMessageSystem() {
     }
 
     const apiUrl = `${window.appUrl}/api/messages/unread-count`;
-    console.log("Fetching unread count from:", apiUrl);
 
     fetch(apiUrl)
       .then((response) => {
-        console.log("Unread count response status:", response.status);
         if (!response.ok) {
           throw new Error("Unauthorized");
         }
         return response.json();
       })
       .then((data) => {
-        console.log("Unread count data:", data);
         if (data.success) {
           const badge = document.getElementById("unread-count-badge");
           if (badge) {
@@ -820,22 +817,17 @@ function initHeaderMessageDropdown() {
       return;
     }
 
-    console.log("Loading message data from:", window.appUrl);
-
     // Load unread count
     const unreadCountUrl = `${window.appUrl}/api/messages/unread-count`;
-    console.log("Fetching unread count from:", unreadCountUrl);
 
     fetch(unreadCountUrl)
       .then((response) => {
-        console.log("Message unread count response status:", response.status);
         if (!response.ok) {
           throw new Error("Unauthorized");
         }
         return response.json();
       })
       .then((data) => {
-        console.log("Message unread count data:", data);
         if (data.success && data.unread_count > 0) {
           messageBadge.textContent = data.unread_count;
           messageBadge.style.display = "inline";
@@ -853,18 +845,15 @@ function initHeaderMessageDropdown() {
 
     // Load recent messages
     const recentMessagesUrl = `${window.appUrl}/api/messages/recent`;
-    console.log("Fetching recent messages from:", recentMessagesUrl);
 
     fetch(recentMessagesUrl)
       .then((response) => {
-        console.log("Recent messages response status:", response.status);
         if (!response.ok) {
           throw new Error("Unauthorized");
         }
         return response.json();
       })
       .then((data) => {
-        console.log("Recent messages data:", data);
         if (data.success && data.messages && data.messages.length > 0) {
           let html = "";
           data.messages.forEach((message) => {

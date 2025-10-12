@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const tokenInput = document.createElement('input');
             tokenInput.type = 'hidden';
             tokenInput.name = '_token';
-            tokenInput.value = '<?php echo Session::generateCSRF(); ?>';
+            tokenInput.value = '<?php echo $csrf_token; ?>';
             
             form.appendChild(tokenInput);
             document.body.appendChild(form);

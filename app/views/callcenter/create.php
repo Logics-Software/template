@@ -20,7 +20,7 @@
             
             <div class="form-body">
                 <form method="POST" action="<?php echo APP_URL; ?>/callcenter" id="createCallCenterForm">
-                    <input type="hidden" name="_token" value="<?php echo Session::generateCSRF(); ?>">
+                    <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     
                     <div class="row">
                         <div class="col-md-12">

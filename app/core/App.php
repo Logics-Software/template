@@ -39,8 +39,13 @@ class App
     public function run()
     {
         try {
-            // Start session
-            Session::start();
+        // Start session
+        Session::start();
+        
+        // Generate CSRF token if not exists (ONE TOKEN PER SESSION)
+        if (!Session::get('_csrf_token')) {
+            Session::generateCSRF();
+        }
             
             // Check remember me cookie for auto-login
             Session::checkRememberMe();

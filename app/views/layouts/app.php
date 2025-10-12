@@ -490,15 +490,15 @@ echo ' class="' . $bodyClass . '"';
     <?php endif; ?>
 
     <!-- Bootstrap JS -->
-    <!-- CRITICAL: Set global variables BEFORE loading app.js -->
+    <!-- CRITICAL: Set global variables BEFORE loading ANY scripts -->
     <script>
-        // These must be set before app.js is loaded
+        // These must be set before ANY JS libraries are loaded
         window.csrfToken = '<?php echo $csrf_token ?? ''; ?>';
         window.appUrl = '<?php echo APP_URL; ?>';
-        
-        // Debug: Log to console for verification
-        console.log('App URL configured:', window.appUrl);
     </script>
+    
+    <!-- CSRF Helper - Load AFTER csrfToken is set -->
+    <script src="<?php echo BASE_URL; ?>assets/js/modules/CsrfHelper.js"></script>
     
     <!-- Popper.js required for Bootstrap dropdowns (local file) -->
     <script src="<?php echo APP_URL; ?>/assets/js/popper.min.js"></script>
@@ -839,7 +839,6 @@ echo ' class="' . $bodyClass . '"';
                     .then(data => {
                         if (data.success) {
                             lastActivitySent = Date.now();
-                            console.log('Activity updated. Time remaining:', Math.floor(data.timeRemaining / 60), 'minutes');
                             
                             // Hide warning if session was extended by activity
                             if (data.timeRemaining > SESSION_WARNING_TIME && sessionWarningShown) {

@@ -190,7 +190,7 @@
 
 <?php
 // Generate CSRF token once
-$csrfToken = Session::generateCSRF();
+$csrfToken = $csrf_token;
 ?>
 
 <!-- CSRF Token Meta Tag -->

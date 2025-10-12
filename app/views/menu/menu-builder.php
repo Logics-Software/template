@@ -1,6 +1,5 @@
 <?php
-// Generate CSRF token ONCE at the beginning
-$csrfToken = Session::generateCSRF();
+// CSRF token already passed from controller
 ?>
 <!-- Menu Builder -->
 <div class="row">

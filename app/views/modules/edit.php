@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     const missingElements = requiredElements.filter(id => !document.getElementById(id));
     if (missingElements.length > 0) {
-        // console.error('Missing required elements:', missingElements);
+        // Missing required elements - silent check
     }
     
     // Initialize loading state
@@ -221,7 +221,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const linkSelect = document.getElementById('link');
         
         if (!linkSelect) {
-            // console.error('Link select element not found!');
             return;
         }
         
@@ -231,10 +230,8 @@ document.addEventListener("DOMContentLoaded", function() {
         // Check if routes data is available
         try {
             const routes = <?php echo json_encode($available_routes ?? []); ?>;
-            // console.log('Routes data:', routes);
             
             if (routes && routes.length > 0) {
-                // console.log('Adding routes to select...');
                 // Add routes
                 routes.forEach(route => {
                     const option = document.createElement('option');
@@ -249,9 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     
                     linkSelect.appendChild(option);
                 });
-                // console.log('Routes added successfully');
             } else {
-                // console.log('No routes data available, using fallback routes');
                 // Fallback routes if no data available
                 const fallbackRoutes = [
                     { value: '/dashboard', label: 'Dashboard', description: 'Main dashboard page' },
@@ -273,10 +268,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     
                     linkSelect.appendChild(option);
                 });
-                // console.log('Fallback routes added');
             }
         } catch (error) {
-            // console.error('Error loading routes:', error);
             // Fallback routes
             const fallbackRoutes = [
                 { value: '/dashboard', label: 'Dashboard', description: 'Main dashboard page' },
@@ -296,37 +289,30 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 linkSelect.appendChild(option);
             });
-            // console.log('Error fallback routes added');
         }
     }
     
     // Function to load icon picker
     function loadIconPicker() {
-        // console.log('Loading icon picker...');
         const loadingDiv = document.getElementById('iconPickerLoading');
         const containerDiv = document.getElementById('iconPickerContainer');
         
         if (!loadingDiv) {
-            // console.error('Icon picker loading div not found!');
             return;
         }
         
         if (!containerDiv) {
-            // console.error('Icon picker container div not found!');
             return;
         }
         
         // Hide loading, show picker
         loadingDiv.style.display = 'none';
         containerDiv.style.display = 'block';
-        // console.log('Icon picker loaded successfully');
     }
     
     // Function to enable role checkboxes
     function enableRoleCheckboxes() {
-        // console.log('Enabling role checkboxes...');
         const checkboxes = document.querySelectorAll('.role-checkbox');
-        // console.log('Found checkboxes:', checkboxes.length);
         
         // Module role data
         const moduleRoles = {
@@ -346,10 +332,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (moduleRoles.hasOwnProperty(roleName)) {
                 checkbox.checked = moduleRoles[roleName];
             }
-            
-            // console.log(`Enabled checkbox ${index + 1} (${roleName}): ${checkbox.checked}`);
         });
-        // console.log('Role checkboxes enabled successfully');
     }
     
     // Check initial state and update button

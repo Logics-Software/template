@@ -32,7 +32,7 @@ $title = $data['title'] ?? 'Buat Konfigurasi Sistem';
                 </div>
                 <div class="form-body">
                     <form id="konfigurasiForm" action="<?php echo APP_URL; ?>/konfigurasi" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="csrf_token" value="<?php echo Session::generateCSRF(); ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                         
                         <div class="row">
                             <!-- Logo Upload Section -->
