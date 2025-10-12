@@ -130,22 +130,30 @@ class Notify {
   }
 
   /**
-   * Quick methods
+   * Quick methods - Uses AppConfig for duration
    */
-  success(message, duration = 5000) {
-    return this.show("success", message, duration);
+  success(message, duration = null) {
+    const defaultDuration =
+      window.AppConfig?.NOTIFICATION_DURATION?.success || 5000;
+    return this.show("success", message, duration || defaultDuration);
   }
 
-  error(message, duration = 7000) {
-    return this.show("error", message, duration);
+  error(message, duration = null) {
+    const defaultDuration =
+      window.AppConfig?.NOTIFICATION_DURATION?.error || 7000;
+    return this.show("error", message, duration || defaultDuration);
   }
 
-  warning(message, duration = 6000) {
-    return this.show("warning", message, duration);
+  warning(message, duration = null) {
+    const defaultDuration =
+      window.AppConfig?.NOTIFICATION_DURATION?.warning || 6000;
+    return this.show("warning", message, duration || defaultDuration);
   }
 
-  info(message, duration = 5000) {
-    return this.show("info", message, duration);
+  info(message, duration = null) {
+    const defaultDuration =
+      window.AppConfig?.NOTIFICATION_DURATION?.info || 5000;
+    return this.show("info", message, duration || defaultDuration);
   }
 
   /**
@@ -255,9 +263,9 @@ class Notify {
 // Create global instance
 window.Notify = new Notify();
 
-// Legacy support - Use proper durations matching main Notify system
+// Legacy support - Use AppConfig for durations
 window.showToast = function (type, message, options = {}) {
-  const defaultDurations = {
+  const defaultDurations = window.AppConfig?.NOTIFICATION_DURATION || {
     success: 5000,
     error: 7000,
     warning: 6000,

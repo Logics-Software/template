@@ -12,12 +12,13 @@ window.AppConfig = {
 
   /**
    * Notification auto-dismiss duration (in milliseconds)
+   * Used by Notify.js - Change here to affect all notifications
    */
   NOTIFICATION_DURATION: {
-    success: 2000,
-    error: 3000,
-    warning: 3000,
-    info: 3000,
+    success: 5000, // 5 seconds
+    error: 7000, // 7 seconds
+    warning: 6000, // 6 seconds
+    info: 5000, // 5 seconds
   },
 
   /**

@@ -59,7 +59,7 @@ if ($isLoggedIn && ($isLoginPage || $isRegisterPage)) {
     <script src="<?php echo BASE_URL; ?>assets/js/config.js"></script>
         
     <!-- Optimized CSS -->
-    <link href="<?php echo BASE_URL; ?>assets/css/complete-optimized.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL; ?>assets/css/complete-optimized.css?v=<?php echo time(); ?>" rel="stylesheet">
     
     <!-- Custom Tooltips CSS -->
     <link href="<?php echo BASE_URL; ?>assets/css/components/tooltips.css" rel="stylesheet">
