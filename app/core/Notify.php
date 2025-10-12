@@ -107,11 +107,11 @@ class Notify
 
         // Determine auto-dismiss duration based on type
         $duration = match($type) {
-            'success' => 5000,
-            'error' => 7000,
-            'warning' => 6000,
-            'info' => 5000,
-            default => 5000
+            'success' => 2000,
+            'error' => 4000,
+            'warning' => 3000,
+            'info' => 3000,
+            default => 3000
         };
 
         return "

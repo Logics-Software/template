@@ -297,4 +297,109 @@ class ApiController extends BaseController
             ], 500);
         }
     }
+    
+    /**
+     * Get all menu items for search
+     * Returns all active menu items with their module info
+     * Filtered by user's active menu group
+     */
+    public function getMenuItems()
+    {
+        if (!Session::has('user_id')) {
+            $this->json(['error' => 'Unauthorized'], 401);
+        }
+        
+        // Get user's active menu group from session
+        $activeGroupId = Session::get('active_menu_group_id');
+        
+        if (!$activeGroupId) {
+            $this->json([
+                'success' => true,
+                'data' => [],
+                'total' => 0,
+                'message' => 'No active menu group selected'
+            ]);
+            return;
+        }
+        
+        try {
+            require_once APP_PATH . '/app/models/MenuItem.php';
+            require_once APP_PATH . '/app/models/Module.php';
+            require_once APP_PATH . '/app/models/MenuGroup.php';
+            
+            $menuItemModel = new MenuItem();
+            
+            // Get menu items ONLY from user's active group
+            $sql = "SELECT 
+                        mi.id,
+                        mi.name,
+                        mi.icon,
+                        mi.parent_id,
+                        mi.is_parent,
+                        mi.group_id,
+                        m.link as url,
+                        m.caption as module_name,
+                        mg.name as group_name
+                    FROM menu_items mi
+                    LEFT JOIN modules m ON mi.module_id = m.id
+                    LEFT JOIN menu_groups mg ON mi.group_id = mg.id
+                    WHERE mi.is_active = 1 
+                    AND mi.group_id = ?
+                    ORDER BY mi.sort_order ASC";
+            
+            $db = Database::getInstance();
+            $items = $db->fetchAll($sql, [$activeGroupId]);
+            
+            // Build menu structure with parent-child relationships
+            $menuItems = [];
+            $parentMap = [];
+            
+            foreach ($items as $item) {
+                $menuItem = [
+                    'id' => $item['id'],
+                    'name' => $item['name'],
+                    'icon' => $item['icon'] ?? 'fas fa-circle',
+                    'url' => $item['url'] ?? '#',
+                    'group' => $item['group_name'] ?? 'Menu',
+                    'is_parent' => (bool) $item['is_parent'],
+                    'parent_id' => $item['parent_id']
+                ];
+                
+                // Build breadcrumb path
+                $path = [];
+                
+                if ($item['parent_id']) {
+                    // This is a child item, find parent name
+                    if (!isset($parentMap[$item['parent_id']])) {
+                        // Load parent from database
+                        $parentSql = "SELECT name FROM menu_items WHERE id = ?";
+                        $parent = $db->fetch($parentSql, [$item['parent_id']]);
+                        $parentMap[$item['parent_id']] = $parent['name'] ?? 'Parent';
+                    }
+                    $path[] = $parentMap[$item['parent_id']];
+                }
+                
+                $path[] = $item['name'];
+                $menuItem['path'] = implode(' > ', $path);
+                
+                // Only include items that have URLs (not just parent containers)
+                if ($item['url'] && $item['url'] !== '#') {
+                    $menuItems[] = $menuItem;
+                }
+            }
+            
+            $this->json([
+                'success' => true,
+                'data' => $menuItems,
+                'total' => count($menuItems)
+            ]);
+            
+        } catch (Exception $e) {
+            $this->json([
+                'success' => false,
+                'error' => 'Failed to fetch menu items',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

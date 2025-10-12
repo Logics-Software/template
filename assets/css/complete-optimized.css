@@ -345,3 +345,233 @@ a:active:not(.no-hover-underline) {
 }
 
 /* Responsive adjustments moved to layouts/sidebar.css for better organization */
+
+/* ============================================================================ */
+/* FOOTER ICONS HOVER EFFECT (DESKTOP) */
+/* ============================================================================ */
+.footer-links i {
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.footer-links i:hover {
+  color: var(--primary-color) !important;
+  transform: scale(1.1);
+}
+
+/* ============================================================================ */
+/* MOBILE RESPONSIVE STYLES - ONLY AFFECTS SCREENS 768px AND BELOW */
+/* DESKTOP STYLES (769px+) REMAIN COMPLETELY UNCHANGED */
+/* ============================================================================ */
+
+@media (max-width: 768px) {
+  /* ========================================= */
+  /* HIDE DESKTOP ELEMENTS ON MOBILE */
+  /* ========================================= */
+
+  /* Hide desktop sidebar toggle, fullscreen */
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* Hide footer links on mobile */
+  .footer-links {
+    display: none !important;
+  }
+
+  /* ========================================= */
+  /* SHOW MOBILE ELEMENTS ONLY ON MOBILE */
+  /* ========================================= */
+
+  /* Show mobile hamburger menu */
+  .mobile-hamburger-btn {
+    display: block !important;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    margin-right: 0;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.3s ease;
+  }
+
+  .mobile-hamburger-btn:hover {
+    color: var(--text-primary);
+  }
+
+  /* Show mobile navigation icons in footer */
+  .mobile-nav-icons {
+    display: flex !important;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Wrapper for icon + text */
+  .mobile-icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  /* Icon button */
+  .mobile-icon-btn {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-icon-btn:hover {
+    color: var(--primary-color);
+    background: rgba(var(--primary-rgb), 0.1);
+  }
+
+  .mobile-icon-btn i {
+    font-size: 1.2rem;
+  }
+
+  /* Text label below icon */
+  .mobile-icon-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-align: center;
+    font-weight: 500;
+    line-height: 1;
+    margin-top: -0.25rem;
+  }
+
+  /* ========================================= */
+  /* MOBILE SIDEBAR ADJUSTMENTS */
+  /* ========================================= */
+
+  /* Sidebar starts hidden on mobile */
+  .sidebar {
+    position: fixed !important;
+    left: -280px !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 280px !important;
+    z-index: 1050 !important;
+    transition: left 0.3s ease, transform 0.3s ease !important;
+    transform: translateX(0) !important;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  /* Sidebar visible when active */
+  .sidebar.active {
+    left: 0 !important;
+  }
+
+  /* Prevent body scroll when sidebar is open */
+  body.mobile-menu-open {
+    overflow: hidden;
+  }
+
+  /* Main section takes full width on mobile */
+  .main-section {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Header takes full width on mobile */
+  .top-header {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* ========================================= */
+  /* MOBILE FOOTER ADJUSTMENTS */
+  /* ========================================= */
+
+  .footer {
+    padding: 0.25rem 0.5rem 0.5rem 0.5rem; /* Reduced top padding */
+    height: auto;
+    min-height: 50px;
+  }
+
+  .footer .container-fluid {
+    padding: 0 0.5rem;
+  }
+
+  .footer .row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer .col-md-6 {
+    width: 100%;
+    text-align: center;
+  }
+
+  .footer .footer-right {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ========================================= */
+  /* MOBILE HEADER ADJUSTMENTS */
+  /* ========================================= */
+
+  /* Force header row to flex and center */
+  .top-header .row {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Both columns flex and center */
+  .top-header .col-md-6 {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Left column - rata kiri */
+  .top-header .col-md-6:first-child {
+    justify-content: flex-start !important;
+  }
+
+  /* Right column - RATA KANAN */
+  .top-header .col-md-6:last-child {
+    justify-content: flex-end !important;
+  }
+
+  .top-header .col-md-6:last-child > div {
+    justify-content: flex-end !important;
+  }
+
+  /* Hamburger - baseline */
+  .mobile-hamburger-btn {
+    margin: 0 !important;
+    margin-top: 10px !important;
+    padding: 0.5rem !important;
+  }
+
+  /* Profile dropdown - FORCE SAME HEIGHT AS HAMBURGER */
+  .top-header .user-dropdown {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    margin-top: -60px !important; /* Force naik */
+  }
+
+  .top-header .user-dropdown .dropdown {
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .top-header .user-dropdown .btn {
+    margin: 0 !important;
+    padding: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+}
+
+/* ============================================================================ */
+/* END OF MOBILE RESPONSIVE STYLES */
+/* ============================================================================ */

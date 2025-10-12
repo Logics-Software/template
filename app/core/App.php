@@ -115,6 +115,7 @@ class App
         $this->router->post('/api/extend-session', 'ApiController@extendSession');
         $this->router->get('/api/session-warning', 'ApiController@getSessionWarning');
         $this->router->post('/api/validate-module-access', 'ApiController@validateModuleAccess');
+        $this->router->get('/api/menu-items', 'ApiController@getMenuItems');
         
         // User management routes
         $this->router->get('/users', 'UserController@index');

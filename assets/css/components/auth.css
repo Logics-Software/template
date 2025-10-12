@@ -486,22 +486,44 @@ html.auth-page {
 }
 
 @media (max-width: 576px) {
+  /* LEBIH LEBAR untuk register form di mobile */
+  .register-container {
+    padding: 1rem 0.75rem !important;
+    min-width: auto !important;
+  }
+
+  .register-wrapper-single {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
   .login-wrapper-single .card-header,
   .register-wrapper-single .card-header,
   .lock-screen-modal .card-header {
-    padding: 1rem 1rem 0.5rem;
+    padding: 1rem 0.75rem 0.5rem;
   }
 
   .login-wrapper-single .card-body,
   .register-wrapper-single .card-body,
   .lock-screen-modal .card-body {
-    padding: 0 1rem 1rem;
+    padding: 0 0.75rem 1rem;
   }
 
   .login-wrapper-single .form-floating > .form-control,
   .register-wrapper-single .form-floating > .form-control,
   .lock-screen-modal .form-floating > .form-control {
-    padding: 0.875rem 0.75rem;
+    height: 58px !important;
+    padding: 1.625rem 0.75rem 0.625rem 0.75rem !important;
+    line-height: 1.25;
+    font-size: 0.95rem;
+  }
+
+  .login-wrapper-single .form-floating > label,
+  .register-wrapper-single .form-floating > label,
+  .lock-screen-modal .form-floating > label {
+    padding: 1rem 0.75rem;
+    font-size: 0.9rem;
   }
 
   .login-wrapper-single .btn-primary,

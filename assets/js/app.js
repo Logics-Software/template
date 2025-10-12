@@ -1351,9 +1351,200 @@ function showAccessDeniedModal(moduleName) {
   bsModal.show();
 }
 
+// ============================================
+// MENU SEARCH FUNCTIONALITY
+// ============================================
+let menuSearchData = [];
+let menuSearchIndex = -1;
+let menuSearchTimeout = null;
+
+function initMenuSearch() {
+  const searchInput = document.getElementById("menuSearchInput");
+  const searchResults = document.getElementById("menuSearchResults");
+  const searchClear = document.getElementById("menuSearchClear");
+  const searchContainer = document.querySelector(".menu-search-container");
+
+  if (!searchInput || !searchResults) return;
+
+  // Load menu items from API
+  loadMenuItems();
+
+  // Search input event
+  searchInput.addEventListener("input", function (e) {
+    const query = e.target.value.trim();
+
+    // Show/hide clear button
+    if (query.length > 0) {
+      searchClear.style.display = "flex";
+    } else {
+      searchClear.style.display = "none";
+    }
+
+    // Debounce search
+    clearTimeout(menuSearchTimeout);
+    menuSearchTimeout = setTimeout(() => {
+      performSearch(query);
+    }, 200);
+  });
+
+  // Clear button event
+  searchClear.addEventListener("click", function () {
+    searchInput.value = "";
+    searchClear.style.display = "none";
+    searchResults.style.display = "none";
+    menuSearchIndex = -1;
+    searchInput.focus();
+  });
+
+  // Keyboard navigation
+  searchInput.addEventListener("keydown", function (e) {
+    const items = searchResults.querySelectorAll(".menu-search-item");
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (items.length > 0) {
+        menuSearchIndex = Math.min(menuSearchIndex + 1, items.length - 1);
+        updateActiveItem(items);
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (items.length > 0) {
+        menuSearchIndex = Math.max(menuSearchIndex - 1, 0);
+        updateActiveItem(items);
+      }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (menuSearchIndex >= 0 && items[menuSearchIndex]) {
+        items[menuSearchIndex].click();
+      }
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      searchInput.value = "";
+      searchClear.style.display = "none";
+      searchResults.style.display = "none";
+      menuSearchIndex = -1;
+      searchInput.blur();
+    }
+  });
+
+  // Click outside to close
+  document.addEventListener("click", function (e) {
+    if (searchContainer && !searchContainer.contains(e.target)) {
+      searchResults.style.display = "none";
+      menuSearchIndex = -1;
+    }
+  });
+
+  // Focus event
+  searchInput.addEventListener("focus", function () {
+    if (searchInput.value.trim().length > 0) {
+      searchResults.style.display = "block";
+    }
+  });
+}
+
+function loadMenuItems() {
+  fetch(window.appUrl + "/api/menu-items", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        menuSearchData = data.data || [];
+      }
+    })
+    .catch((error) => {
+      console.error("Error loading menu items:", error);
+    });
+}
+
+function performSearch(query) {
+  const searchResults = document.getElementById("menuSearchResults");
+
+  if (!query || query.length === 0) {
+    searchResults.style.display = "none";
+    return;
+  }
+
+  // Filter menu items
+  const normalizedQuery = query.toLowerCase();
+  const results = menuSearchData.filter((item) => {
+    return (
+      item.name.toLowerCase().includes(normalizedQuery) ||
+      item.path.toLowerCase().includes(normalizedQuery) ||
+      item.group.toLowerCase().includes(normalizedQuery)
+    );
+  });
+
+  // Render results
+  if (results.length === 0) {
+    searchResults.innerHTML = `
+      <div class="menu-search-empty">
+        <i class="fas fa-search"></i>
+        <p>Tidak ditemukan menu tersebut</p>
+      </div>
+    `;
+  } else {
+    let html = "";
+    results.forEach((item, index) => {
+      const highlightedName = highlightText(item.name, query);
+      const highlightedPath = highlightText(item.path, query);
+
+      html += `
+        <a href="${window.appUrl}${item.url}" class="menu-search-item" data-index="${index}">
+          <div class="menu-search-item-icon">
+            <i class="${item.icon}"></i>
+          </div>
+          <div class="menu-search-item-content">
+            <div class="menu-search-item-title">${highlightedName}</div>
+            <div class="menu-search-item-path">${highlightedPath}</div>
+          </div>
+        </a>
+      `;
+    });
+
+    searchResults.innerHTML = html;
+  }
+
+  searchResults.style.display = "block";
+  menuSearchIndex = -1;
+}
+
+function highlightText(text, query) {
+  if (!query || query.length === 0) return text;
+
+  const normalizedQuery = query.toLowerCase();
+  const index = text.toLowerCase().indexOf(normalizedQuery);
+
+  if (index === -1) return text;
+
+  const before = text.substring(0, index);
+  const match = text.substring(index, index + query.length);
+  const after = text.substring(index + query.length);
+
+  return `${before}<span class="menu-search-highlight">${match}</span>${after}`;
+}
+
+function updateActiveItem(items) {
+  items.forEach((item, index) => {
+    if (index === menuSearchIndex) {
+      item.classList.add("active");
+      // Scroll into view if needed
+      item.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    } else {
+      item.classList.remove("active");
+    }
+  });
+}
+
 // Initialize tooltips on page load
 document.addEventListener("DOMContentLoaded", function () {
   initTooltips();
   setupTooltipAutoCleanup();
   initModuleAccessValidation();
+  initMenuSearch();
 });

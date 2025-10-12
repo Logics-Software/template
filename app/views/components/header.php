@@ -1,80 +1,64 @@
-<?php
-// Load call center data (with static caching)
-if (!isset($callCenters)) {
-    static $cachedCallCenters = null;
-    
-    if ($cachedCallCenters === null) {
-        require_once APP_PATH . '/app/models/CallCenter.php';
-        $callCenterModel = new CallCenter();
-        $cachedCallCenters = $callCenterModel->getAll();
-    }
-    
-    $callCenters = $cachedCallCenters;
-}
-
-// Function to get greeting message based on time
-if (!function_exists('getGreetingMessage')) {
-function getGreetingMessage() {
-    $hour = date('H');
-    if ($hour >= 5 && $hour < 12) {
-        return 'Selamat Pagi';
-    } elseif ($hour >= 12 && $hour < 15) {
-        return 'Selamat Siang';
-    } elseif ($hour >= 15 && $hour < 18) {
-        return 'Selamat Sore';
-    } else {
-        return 'Selamat Malam';
-    }
-}
-}
-?>
-
 <!-- Top Header -->
 <div class="top-header">
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
-                    <!-- Sidebar Toggle -->
-                    <button class="btn btn-link sidebar-toggle-btn" 
+                    <!-- Mobile Hamburger Menu (Hidden on Desktop) -->
+                    <button class="btn btn-link mobile-hamburger-btn" 
+                            id="mobileMenuToggle" 
+                            style="display: none;"
+                            aria-label="Toggle Menu">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                    
+                    <!-- Desktop Sidebar Toggle (Hidden on Mobile) -->
+                    <button class="btn btn-link sidebar-toggle-btn desktop-only" 
                             id="sidebarToggle" 
                             aria-label="Toggle Sidebar">
                         <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
                     
-                    <!-- WhatsApp Contact -->
-                    <button class="btn btn-link" 
-                            id="whatsappToggle" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#whatsappModal">
-                        <i class="fab fa-whatsapp"></i>
-                    </button>
-                    
-                    <!-- Greeting Message -->
-                    <div class="greeting-message">
-                        <h6 class="mb-0 text-muted" id="greetingText">
-                            <?php echo getGreetingMessage(); ?>
-                        </h6>
+                    <!-- Quick Search Menu (Desktop Only) -->
+                    <div class="menu-search-container desktop-only">
+                        <div class="menu-search-wrapper">
+                            <i class="fas fa-search menu-search-icon"></i>
+                            <input type="text" 
+                                   class="menu-search-input" 
+                                   id="menuSearchInput" 
+                                   placeholder="Cari menu / modul..." 
+                                   autocomplete="off"
+                                   aria-label="Search menu">
+                            <button class="menu-search-clear" id="menuSearchClear" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="menu-search-results" id="menuSearchResults" style="display: none;">
+                            <div class="menu-search-empty">
+                                <i class="fas fa-search"></i>
+                                <p>Ketik untuk mencari menu...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="d-flex align-items-center justify-content-end">
                     
-                    <!-- Full Screen Toggle -->
-                    <button class="btn btn-link" id="fullscreenToggle">
+                    <!-- Full Screen Toggle (Hidden on Mobile) -->
+                    <button class="btn btn-link desktop-only" id="fullscreenToggle">
                         <i class="fas fa-expand"></i>
                     </button>
                     
-                    <!-- Theme Toggle -->
-                    <button class="btn btn-link" id="themeToggle">
+                    <!-- Theme Toggle (Hidden on Mobile - Moved to Footer) -->
+                    <button class="btn btn-link desktop-only" id="themeToggle">
                         <i class="fas fa-sun" id="themeIcon"></i>
                     </button>
                     
                     <!-- =================================================== -->
-                    <!-- Notifications -->
+                    <!-- Notifications (Hidden on Mobile - Moved to Footer) -->
                     <!-- =================================================== -->
-                    <div class="notification-dropdown">
+                    <div class="notification-dropdown desktop-only">
                         <button class="btn btn-link position-relative" id="notificationToggle" 
                                 aria-label="Notifications" aria-expanded="false" aria-haspopup="true">
                             <i class="far fa-bell"></i>
@@ -172,10 +156,10 @@ function getGreetingMessage() {
                     <!-- =================================================== -->
 
                     <!-- =================================================== -->
-                    <!-- Messages -->
+                    <!-- Messages (Hidden on Mobile - Moved to Footer) -->
                     <!-- =================================================== -->
-                    <div class="message-dropdown">
-                        <button class="btn btn-link position-relative" id="messageToggle" title="Pesan">
+                    <div class="message-dropdown desktop-only">
+                        <button class="btn btn-link position-relative" id="messageToggle">
                             <i class="far fa-envelope"></i>
                             <span class="position-absolute badge rounded-pill bg-danger" id="messageBadge" style="display: none;">
                                 0
@@ -204,7 +188,7 @@ function getGreetingMessage() {
                     <!-- User Profile -->
                     <div class="user-dropdown">
                         <div class="dropdown">
-                            <button class="btn btn-link dropdown-toggle d-flex align-items-center" id="userProfileToggle" data-bs-toggle="dropdown" title="Profil User">
+                            <button class="btn btn-link dropdown-toggle d-flex align-items-center" id="userProfileToggle" data-bs-toggle="dropdown">
                                 <div class="user-avatar me-2">
                                     <?php 
                                     $userPicture = Session::get('user_picture');
@@ -247,72 +231,3 @@ function getGreetingMessage() {
         </div>
     </div>
 </div>
-
-<!-- WhatsApp Contact Modal -->
-<div class="modal fade" id="whatsappModal" tabindex="-1" aria-labelledby="whatsappModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title me-3" id="whatsappModalLabel">
-                    <i class="fab fa-whatsapp text-success me-2"></i>Hubungi Kami via WhatsApp
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <?php if (empty($callCenters)): ?>
-                    <div class="text-center py-5">
-                        <i class="fab fa-whatsapp fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">No call center entries found</h5>
-                        <p class="text-muted">Please add call center entries from the settings menu.</p>
-                    </div>
-                <?php else: ?>
-                    <div class="row g-3">
-                        <?php foreach ($callCenters as $index => $callCenter): ?>
-                            <div class="col-md-6">
-                                <div class="card h-100 whatsapp-contact-card" 
-                                     data-whatsapp="<?php echo preg_replace('/[^0-9]/', '', $callCenter['nomorwa']); ?>" 
-                                     data-name="<?php echo htmlspecialchars($callCenter['judul']); ?>">
-                                    <div class="card-body text-center">
-                                        <div class="mb-3">
-                                            <i class="fab fa-whatsapp fa-3x text-success"></i>
-                                        </div>
-                                        <h6 class="card-title"><?php echo htmlspecialchars($callCenter['judul']); ?></h6>
-                                        <p class="card-text text-muted small"><?php echo htmlspecialchars($callCenter['nomorwa']); ?></p>
-                                        <?php if (!empty($callCenter['deskripsi'])): ?>
-                                            <p class="card-text small"><?php echo htmlspecialchars(substr($callCenter['deskripsi'], 0, 60)); ?><?php echo strlen($callCenter['deskripsi']) > 60 ? '...' : ''; ?></p>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // WhatsApp contact click handler
-    document.querySelectorAll('.whatsapp-contact-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const phoneNumber = this.getAttribute('data-whatsapp');
-            const contactName = this.getAttribute('data-name');
-            
-            // Create WhatsApp URL
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=Halo ${contactName}, saya ingin bertanya tentang...`;
-            
-            // Open WhatsApp in new tab
-            window.open(whatsappUrl, '_blank');
-            
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('whatsappModal'));
-            modal.hide();
-        });
-    });
-});
-</script>
