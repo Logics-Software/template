@@ -28,6 +28,8 @@ if ($scriptDir === '/' || $scriptDir === '.' || $scriptDir === '\\') {
 // Set error reporting (but suppress warnings that cause headers issues)
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // Disable display_errors to prevent output
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/php_error.log'); // Custom error log
 
 // Include configuration
 require_once 'app/config/config.php';

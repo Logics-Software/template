@@ -154,4 +154,13 @@ class User extends Model
         
         return $this->update($userId, $updateData);
     }
+    
+    /**
+     * Get users by role (alias for findByRole)
+     * Used for consistency with other controller methods
+     */
+    public function getUsersByRole($role)
+    {
+        return $this->findByRole($role);
+    }
 }

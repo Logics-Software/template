@@ -83,12 +83,29 @@ $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 $scriptDir = dirname($scriptName);
 
 // Build base URL dynamically for /app/template/ sub-folder
-if ($scriptDir === '/' || $scriptDir === '.') {
+if ($scriptDir === '/' || $scriptDir === '.' || $scriptDir === '\\') {
     // Root directory
-    define('BASE_URL', $protocol . '://' . $host . '/');
+    $baseUrl = $protocol . '://' . $host . '/';
 } else {
     // Subdirectory - for /app/template/
-    define('BASE_URL', $protocol . '://' . $host . $scriptDir . '/');
+    $baseUrl = $protocol . '://' . $host . $scriptDir . '/';
+}
+
+// Normalize BASE_URL to prevent double slashes
+$baseUrl = rtrim($baseUrl, '/') . '/';
+$baseUrl = preg_replace('#(?<!:)/+#', '/', $baseUrl); // Remove duplicate slashes except after protocol
+
+// Additional validation
+if (empty($baseUrl) || $baseUrl === '/') {
+    // Fallback to localhost if something went wrong
+    $baseUrl = 'http://localhost/';
+}
+
+define('BASE_URL', $baseUrl);
+
+// Debug log (will write to PHP error log)
+if (APP_DEBUG) {
+    error_log("BASE_URL configured as: " . BASE_URL);
 }
 
 // Set timezone

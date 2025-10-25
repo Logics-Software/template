@@ -1354,9 +1354,16 @@ function showAccessDeniedModal(moduleName) {
 // ============================================
 // MENU SEARCH FUNCTIONALITY
 // ============================================
-let menuSearchData = [];
-let menuSearchIndex = -1;
-let menuSearchTimeout = null;
+// Use window scope to prevent redeclaration errors
+if (typeof window.menuSearchData === "undefined") {
+  window.menuSearchData = [];
+}
+if (typeof window.menuSearchIndex === "undefined") {
+  window.menuSearchIndex = -1;
+}
+if (typeof window.menuSearchTimeout === "undefined") {
+  window.menuSearchTimeout = null;
+}
 
 function initMenuSearch() {
   const searchInput = document.getElementById("menuSearchInput");
@@ -1381,8 +1388,8 @@ function initMenuSearch() {
     }
 
     // Debounce search
-    clearTimeout(menuSearchTimeout);
-    menuSearchTimeout = setTimeout(() => {
+    clearTimeout(window.menuSearchTimeout);
+    window.menuSearchTimeout = setTimeout(() => {
       performSearch(query);
     }, 200);
   });
@@ -1392,7 +1399,7 @@ function initMenuSearch() {
     searchInput.value = "";
     searchClear.style.display = "none";
     searchResults.style.display = "none";
-    menuSearchIndex = -1;
+    window.menuSearchIndex = -1;
     searchInput.focus();
   });
 
@@ -1403,26 +1410,29 @@ function initMenuSearch() {
     if (e.key === "ArrowDown") {
       e.preventDefault();
       if (items.length > 0) {
-        menuSearchIndex = Math.min(menuSearchIndex + 1, items.length - 1);
+        window.menuSearchIndex = Math.min(
+          window.menuSearchIndex + 1,
+          items.length - 1
+        );
         updateActiveItem(items);
       }
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (items.length > 0) {
-        menuSearchIndex = Math.max(menuSearchIndex - 1, 0);
+        window.menuSearchIndex = Math.max(window.menuSearchIndex - 1, 0);
         updateActiveItem(items);
       }
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (menuSearchIndex >= 0 && items[menuSearchIndex]) {
-        items[menuSearchIndex].click();
+      if (window.menuSearchIndex >= 0 && items[window.menuSearchIndex]) {
+        items[window.menuSearchIndex].click();
       }
     } else if (e.key === "Escape") {
       e.preventDefault();
       searchInput.value = "";
       searchClear.style.display = "none";
       searchResults.style.display = "none";
-      menuSearchIndex = -1;
+      window.menuSearchIndex = -1;
       searchInput.blur();
     }
   });
@@ -1431,7 +1441,7 @@ function initMenuSearch() {
   document.addEventListener("click", function (e) {
     if (searchContainer && !searchContainer.contains(e.target)) {
       searchResults.style.display = "none";
-      menuSearchIndex = -1;
+      window.menuSearchIndex = -1;
     }
   });
 
@@ -1454,7 +1464,7 @@ function loadMenuItems() {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        menuSearchData = data.data || [];
+        window.menuSearchData = data.data || [];
       }
     })
     .catch((error) => {
@@ -1472,7 +1482,7 @@ function performSearch(query) {
 
   // Filter menu items
   const normalizedQuery = query.toLowerCase();
-  const results = menuSearchData.filter((item) => {
+  const results = window.menuSearchData.filter((item) => {
     return (
       item.name.toLowerCase().includes(normalizedQuery) ||
       item.path.toLowerCase().includes(normalizedQuery) ||
@@ -1511,7 +1521,7 @@ function performSearch(query) {
   }
 
   searchResults.style.display = "block";
-  menuSearchIndex = -1;
+  window.menuSearchIndex = -1;
 }
 
 function highlightText(text, query) {
@@ -1531,7 +1541,7 @@ function highlightText(text, query) {
 
 function updateActiveItem(items) {
   items.forEach((item, index) => {
-    if (index === menuSearchIndex) {
+    if (index === window.menuSearchIndex) {
       item.classList.add("active");
       // Scroll into view if needed
       item.scrollIntoView({ block: "nearest", behavior: "smooth" });

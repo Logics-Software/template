@@ -120,7 +120,7 @@
                 <div class="modal-body p-4">
                     <input type="hidden" id="menuItemId" name="id">
                     <input type="hidden" id="menuItemGroupId" name="group_id" value="<?php echo $selected_group['id']; ?>">
-                    <input type="hidden" name="_token" value="<?php echo $csrfToken; ?>">
+                    <input type="hidden" name="_token" value="<?php echo $csrf_token; ?>">
                     
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="menuItemName" name="name" placeholder="" required>
@@ -377,7 +377,8 @@ function initializeMenuBuilder() {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': csrfToken
                 }
             })
             .then(response => {
@@ -663,7 +664,8 @@ function confirmDeleteMenuItem() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': csrfToken
         },
         body: JSON.stringify({
             id: id,
@@ -1049,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sortableBody && sortableBody.children.length > 0) {
         initDragDrop({
             sortOrderUrl: '<?php echo BASE_URL; ?>menu/update-menu-sort',
-            csrfToken: '<?php echo $csrfToken; ?>',
+            csrfToken: '<?php echo $csrf_token; ?>',
             onSuccess: function(data) {
                 window.Notify.success(data.message || 'Urutan menu berhasil diperbarui!');
             },

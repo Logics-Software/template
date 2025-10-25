@@ -223,6 +223,35 @@ class App
         
         // Main routes for module dropdown
         $this->router->get('/menu/get-main-routes', 'MenuController@getMainRoutes');
+        
+        // Customer Visit Tracking routes (for Marketing)
+        $this->router->get('/customer-visits', 'CustomerVisitController@index');
+        $this->router->get('/customer-visits/select-customer', 'CustomerVisitController@selectCustomer');
+        $this->router->post('/customer-visits/check-in', 'CustomerVisitController@checkIn');
+        $this->router->get('/customer-visits/active', 'CustomerVisitController@activeVisit');
+        $this->router->get('/customer-visits/active/{id}', 'CustomerVisitController@activeVisit');
+        $this->router->post('/customer-visits/check-out', 'CustomerVisitController@checkOut');
+        $this->router->get('/customer-visits/history', 'CustomerVisitController@history');
+        $this->router->get('/customer-visits/{id}', 'CustomerVisitController@detail');
+        $this->router->get('/customer-visits-customers', 'CustomerVisitController@customers');
+        
+        // Customer Visit API routes
+        $this->router->get('/api/customer-visits/search-customers', 'CustomerVisitController@searchCustomers');
+        $this->router->post('/api/customer-visits/validate-location', 'CustomerVisitController@validateLocation');
+        
+        // Customer Management routes (for Admin/Manajemen)
+        $this->router->get('/customers', 'CustomerController@index');
+        $this->router->get('/customers/create', 'CustomerController@create');
+        $this->router->post('/customers', 'CustomerController@store');
+        $this->router->get('/customers/{id}', 'CustomerController@show');
+        $this->router->get('/customers/{id}/edit', 'CustomerController@edit');
+        $this->router->put('/customers/{id}', 'CustomerController@update');
+        $this->router->delete('/customers/{id}', 'CustomerController@destroy');
+        
+        // Customer Visit Monitoring routes (for Admin/Manajemen)
+        $this->router->get('/customer-visits-monitoring', 'CustomerVisitMonitoringController@index');
+        $this->router->get('/customer-visits-monitoring/marketing/{id}', 'CustomerVisitMonitoringController@marketingDetail');
+        $this->router->get('/customer-visits-monitoring/report', 'CustomerVisitMonitoringController@report');
     }
 
     private function validateCSRF()
