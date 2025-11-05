@@ -12,30 +12,39 @@ class Request
     {
         $this->data = array_merge($_GET, $_POST, $_FILES);
         
+        // Get Content-Type and method
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? $_SERVER['HTTP_CONTENT_TYPE'] ?? '';
+        $contentType = strtolower(trim($contentType));
+        $actualMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        
+        // Check if this is a JSON request
+        $isJsonRequest = strpos($contentType, 'application/json') !== false;
+        
+        // Read php://input for POST/PUT/DELETE requests with JSON
+        $rawInput = null;
+        if ($actualMethod === 'POST' && $isJsonRequest) {
+            // POST with JSON - read input
+            $rawInput = file_get_contents('php://input');
+        } elseif ($actualMethod === 'PUT' || $actualMethod === 'DELETE') {
+            // PUT/DELETE - always read input
+            $rawInput = file_get_contents('php://input');
+        }
+        
         // Handle JSON requests
-        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-        if (strpos($contentType, 'application/json') !== false) {
-            $jsonData = file_get_contents('php://input');
-            $this->jsonData = $jsonData; // Store raw JSON for later use
-            $decodedData = json_decode($jsonData, true);
-            if ($decodedData !== null) {
-                $this->parsedJsonData = $decodedData; // Store parsed data
+        if ($rawInput !== null && $isJsonRequest) {
+            $this->jsonData = $rawInput; // Store raw JSON
+            $decodedData = json_decode($rawInput, true);
+            if ($decodedData !== null && json_last_error() === JSON_ERROR_NONE) {
+                $this->parsedJsonData = $decodedData;
+                // Merge JSON data into $this->data so input() can access it
                 $this->data = array_merge($this->data, $decodedData);
             }
         }
         
-        // Handle PUT/DELETE requests and POST with _method
-        $actualMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        
-        if ($actualMethod === 'PUT' || $actualMethod === 'DELETE') {
-            // Real PUT/DELETE request - parse from php://input
-            if (strpos($contentType, 'application/json') === false) {
-                parse_str(file_get_contents('php://input'), $putData);
-                $this->data = array_merge($this->data, $putData);
-            }
-        } elseif ($actualMethod === 'POST' && isset($_POST['_method'])) {
-            // POST with method spoofing - data is already in $_POST
-            // No need to parse from php://input
+        // Handle PUT/DELETE requests (non-JSON form-encoded)
+        if ($rawInput !== null && !$isJsonRequest && ($actualMethod === 'PUT' || $actualMethod === 'DELETE')) {
+            parse_str($rawInput, $putData);
+            $this->data = array_merge($this->data, $putData);
         }
     }
 

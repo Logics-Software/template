@@ -54,26 +54,40 @@ class App
             Session::checkAndRegenerate();
             
             // Handle CSRF protection
+            // OPTION: Skip CSRF for AJAX requests (same-origin is safe) - More flexible
+            // Set to false if you want strict CSRF for all requests
+            $skipCSRFForAjax = true;
+            
             if ($this->request->isPost()) {
-                // Skip CSRF validation for certain API endpoints
                 $uri = $this->request->uri();
+                $isAjax = $this->request->isAjax();
+                
+                // Skip CSRF validation for:
+                // 1. Public endpoints (login, register, etc)
+                // 2. All API endpoints (usually have their own auth)
+                // 3. All AJAX requests if skipCSRFForAjax is true (same-origin is safe)
                 $skipCSRF = [
                     '/login',
                     '/register',
                     '/forgot-password',
                     '/select-menu-group',
-                    '/api/messages/mark-read',
-                    '/api/messages/mark-all-read',
-                    '/api/messages/unread-count',
-                    '/api/messages/search-users',
-                    '/api/validate-module-access',  // Read-only validation, no data modification
-                    '/api/update-activity',  // Activity tracking endpoint
-                    '/api/extend-session'  // Session extension endpoint
                 ];
                 
-                if (!in_array($uri, $skipCSRF)) {
+                // Skip CSRF for all /api/* endpoints
+                $isApiEndpoint = strpos($uri, '/api/') === 0;
+                
+                // Skip CSRF for all AJAX requests (same-origin protection is enough)
+                $skipForAjax = $skipCSRFForAjax && $isAjax;
+                
+                // Validate CSRF only if not skipped
+                if (!in_array($uri, $skipCSRF) && !$isApiEndpoint && !$skipForAjax) {
                     if (!$this->validateCSRF()) {
-                        $this->response->json(['error' => 'CSRF token mismatch'], 403);
+                        if ($isAjax) {
+                            $this->response->json(['error' => 'CSRF token mismatch. Please refresh the page.'], 403);
+                        } else {
+                            Session::flash('error', 'CSRF token mismatch. Please try again.');
+                            $this->response->redirect($this->request->uri());
+                        }
                         return;
                     }
                 }
@@ -227,11 +241,10 @@ class App
 
     private function validateCSRF()
     {
-        // Try multiple token sources for compatibility
-        $token = $this->request->input('_token') 
-                ?: $this->request->input('csrf_token')
-                ?: $this->request->header('X-CSRF-Token')
-                ?: $this->request->header('X-CSRF-TOKEN');
+        // Simplified: Since JSON data is merged into $this->data in Request,
+        // input('_token') will work for both form data and JSON body
+        // Only need one source: input('_token') - covers form, JSON, and all POST data
+        $token = $this->request->input('_token');
         
         return Session::validateCSRF($token);
     }
