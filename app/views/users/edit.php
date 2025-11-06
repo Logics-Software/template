@@ -27,7 +27,7 @@
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
-                                <label for="username">Username <span class="text-danger">*</span></label>
+                                <label for="username">Nama User <span class="text-danger">*</span></label>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -42,7 +42,7 @@
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-                                <label for="email">Email Address <span class="text-danger">*</span></label>
+                                <label for="email">Alamaat Email <span class="text-danger">*</span></label>
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="new-password">
-                                <label for="password">Password (leave empty to keep current)</label>
+                                <label for="password">Password (abaikan untuk tetap menggunakan password)</label>
                                 <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="togglePassword" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -60,7 +60,7 @@
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" autocomplete="new-password">
-                                <label for="password_confirmation">Confirm Password</label>
+                                <label for="password_confirmation">Konfirmasi Password</label>
                                 <button class="btn btn-outline-secondary position-absolute top-0 end-0 h-100 d-flex align-items-center justify-content-center password-toggle-btn" type="button" id="togglePasswordConfirmation" class="password-toggle" tabindex="-1">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -72,7 +72,7 @@
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <select class="form-select" id="role" name="role" required>
-                                    <option value="">Select Role</option>
+                                    <option value="">Pilih Role</option>
                                     <option value="admin"<?php echo $user['role'] === 'admin' ? ' selected' : ''; ?>>Administrator</option>
                                     <option value="manajemen"<?php echo $user['role'] === 'manajemen' ? ' selected' : ''; ?>>Manajemen</option>
                                     <option value="user"<?php echo $user['role'] === 'user' ? ' selected' : ''; ?>>User</option>

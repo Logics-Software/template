@@ -29,8 +29,8 @@
                             <table class="table table-md">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
+                                        <th>Nama Group Menu</th>
+                                        <th>Deskripsi</th>
                                         <th>Item</th>
                                         <th>Role</th>
                                         <th></th>

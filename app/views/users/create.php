@@ -26,7 +26,7 @@
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-                                <label for="username">Username <span class="text-danger">*</span></label>
+                                <label for="username">Nama User <span class="text-danger">*</span></label>
                             </div>
                         </div>
                         <div class="col-md-6">

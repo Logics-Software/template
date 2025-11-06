@@ -66,7 +66,7 @@
                     <table class="table table-striped table-hover table-md modules-table" id="modulesTable">
                         <thead>
                             <tr>
-                                <th>Logo</th>
+                                <th>Icon</th>
                                 <th class="sortable" data-sort="caption">
                                     Caption 
                                     <i class="fas fa-sort color-muted ms-1"></i>
