@@ -105,4 +105,42 @@ abstract class BaseController
     {
         Notify::info($message, $redirect);
     }
+
+    /**
+     * Get client IP address
+     * @return string IP address
+     */
+    protected function getClientIp()
+    {
+        $ipKeys = [
+            'HTTP_CF_CONNECTING_IP', // Cloudflare
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR',
+            'HTTP_FORWARDED',
+            'REMOTE_ADDR'
+        ];
+
+        foreach ($ipKeys as $key) {
+            if (isset($_SERVER[$key]) && !empty($_SERVER[$key])) {
+                $ip = $_SERVER[$key];
+                
+                // Handle comma-separated IPs (from proxies)
+                if (strpos($ip, ',') !== false) {
+                    $ips = explode(',', $ip);
+                    $ip = trim($ips[0]);
+                }
+                
+                // Validate IP
+                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                    return $ip;
+                }
+            }
+        }
+
+        // Fallback to REMOTE_ADDR
+        return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    }
 }

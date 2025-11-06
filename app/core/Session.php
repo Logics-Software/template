@@ -257,6 +257,22 @@ class Session
             self::set('_last_activity', time());
             $userModel->updateLastLogin($user['id']);
             
+            // Create login log for auto-login
+            try {
+                $loginLogModel = new LoginLog();
+                $sessionToken = bin2hex(random_bytes(32)); // Generate session token using same pattern as remember token
+                $ipAddress = self::getClientIp();
+                $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
+                
+                $loginLogId = $loginLogModel->createLog($user['id'], $sessionToken, $ipAddress, $userAgent);
+                
+                // Store session token in session for logout tracking
+                self::set('_session_token', $sessionToken);
+            } catch (Exception $e) {
+                // Log error but don't break auto-login flow
+                error_log("Auto-login log creation error: " . $e->getMessage());
+            }
+            
             // Regenerate session for security
             self::regenerate();
             
@@ -293,10 +309,72 @@ class Session
     }
 
     /**
+     * Get client IP address (static version for Session class)
+     * @return string IP address
+     */
+    private static function getClientIp()
+    {
+        $ipKeys = [
+            'HTTP_CF_CONNECTING_IP', // Cloudflare
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR',
+            'HTTP_FORWARDED',
+            'REMOTE_ADDR'
+        ];
+
+        foreach ($ipKeys as $key) {
+            if (isset($_SERVER[$key]) && !empty($_SERVER[$key])) {
+                $ip = $_SERVER[$key];
+                
+                // Handle comma-separated IPs (from proxies)
+                if (strpos($ip, ',') !== false) {
+                    $ips = explode(',', $ip);
+                    $ip = trim($ips[0]);
+                }
+                
+                // Validate IP
+                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                    return $ip;
+                }
+            }
+        }
+
+        // Fallback to REMOTE_ADDR
+        return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    }
+
+    /**
      * Logout and clear remember me
      */
     public static function logout()
     {
+        // Get session token and user ID BEFORE destroying session
+        $sessionToken = self::get('_session_token');
+        $userId = self::get('user_id');
+        
+        // Update logout time in login log
+        if ($sessionToken || $userId) {
+            try {
+                $loginLogModel = new LoginLog();
+                // Pass both token and user_id for better matching
+                $result = $loginLogModel->updateLogout($sessionToken, $userId);
+                
+                if (!$result) {
+                    // Log if update failed (might be already logged out or token not found)
+                    error_log("Logout log update failed. Token: " . substr($sessionToken ?? '', 0, 10) . "..., UserID: " . ($userId ?? 'N/A'));
+                }
+            } catch (Exception $e) {
+                // Log error but don't break logout flow
+                error_log("Logout log update error: " . $e->getMessage());
+            }
+        } else {
+            // Log if both session token and user_id are missing
+            error_log("Logout: Session token and user_id not found in session");
+        }
+        
         self::clearRememberMe();
         self::destroy();
     }

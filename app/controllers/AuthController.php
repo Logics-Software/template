@@ -97,6 +97,22 @@ class AuthController extends BaseController
             // Update last login
             $updateResult = $this->userModel->updateLastLogin($user['id']);
 
+            // Create login log
+            try {
+                $loginLogModel = new LoginLog();
+                $sessionToken = bin2hex(random_bytes(32)); // Generate session token using same pattern as remember token
+                $ipAddress = $this->getClientIp();
+                $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
+                
+                $loginLogId = $loginLogModel->createLog($user['id'], $sessionToken, $ipAddress, $userAgent);
+                
+                // Store session token in session for logout tracking
+                Session::set('_session_token', $sessionToken);
+            } catch (Exception $e) {
+                // Log error but don't break login flow
+                error_log("Login log creation error: " . $e->getMessage());
+            }
+
             // Get user's menu groups
             $usersMenuModel = new UsersMenu();
             $userMenuGroups = $usersMenuModel->getUserMenuGroups($user['id']);
