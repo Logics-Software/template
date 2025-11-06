@@ -18,7 +18,7 @@
             <div class="form-body">
                 <!-- Search and Filter -->
                 <div class="row mb-4">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-2">
                         <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="d-flex" id="searchForm">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Cari user..." value="<?php echo htmlspecialchars($search); ?>" id="searchInput">
@@ -28,7 +28,7 @@
                             </div>
                         </form>
                     </div>
-                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2 mb-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($users['per_page']); ?>">
@@ -39,7 +39,7 @@
                             <option value="register"<?php echo $status === 'register' ? ' selected' : ''; ?>>Register</option>
                         </select>
                     </form>
-                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2 mb-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($users['per_page']); ?>">
@@ -52,7 +52,7 @@
                             <option value="customer"<?php echo $role === 'customer' ? ' selected' : ''; ?>>Customer</option>
                         </select>
                     </form>
-                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/menuakses" class="col-md-2 mb-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($status); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">

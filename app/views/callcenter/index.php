@@ -19,7 +19,7 @@
             <div class="form-body">
                 <!-- Search and Action Buttons -->
                 <div class="row mb-4">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-2">
                         <form method="GET" action="<?php echo APP_URL; ?>/callcenter" class="d-flex" id="searchForm">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Cari call center..." value="<?php echo htmlspecialchars($search); ?>" id="searchInput">
@@ -29,7 +29,7 @@
                             </div>
                         </form>
                     </div>
-                    <form method="GET" action="<?php echo APP_URL; ?>/callcenter" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/callcenter" class="col-md-2 mb-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <select class="form-select p-2" id="per_page" name="per_page" onchange="this.form.submit()">
                             <option value="5"<?php echo ($pagination['per_page'] ?? 10) == 5 ? ' selected' : ''; ?>>5</option>

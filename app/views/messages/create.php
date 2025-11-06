@@ -4,14 +4,14 @@
             <div class="form-header d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                     <h5 class="mb-0">
-                        Tulis Pesan Baru
+                        Pesan Baru
                     </h5>
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/dashboard">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>/messages">Pesan Masuk</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Tulis Pesan Baru</li>
+                        <li class="breadcrumb-item active" aria-current="page">Pesan Baru</li>
                     </ol>
                 </nav>
             </div>
@@ -40,7 +40,7 @@
                                 
                                 <!-- Search and Filter Controls -->
                                 <div class="row mb-3">
-                                    <div class="col-md-7">
+                                    <div class="col-md-7 mb-2">
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-search"></i>
@@ -48,7 +48,7 @@
                                             <input type="text" class="form-control" id="userSearch" placeholder="Cari berdasarkan nama, username, atau email...">
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 mb-2">
                                         <select class="form-select" id="roleFilter">
                                             <option value="">Semua Role</option>
                                             <option value="admin">Admin</option>

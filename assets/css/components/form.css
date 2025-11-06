@@ -150,6 +150,21 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .form-container {
+    margin-bottom: 2rem;
+    overflow: visible; /* Allow footer to be visible */
+  }
+
+  .form-body {
+    padding-bottom: 1rem;
+  }
+
+  .form-footer {
+    padding: var(--padding-lg);
+    /* padding-bottom: 2rem; */
+    /* margin-bottom: 1rem; */
+  }
+
   .file-upload-preview {
     padding: var(--padding-sm);
   }
@@ -168,6 +183,39 @@
 }
 
 @media (max-width: 576px) {
+  .form-container {
+    margin-bottom: 4rem;
+    overflow: visible; /* Allow footer to be visible */
+  }
+
+  .form-body {
+    padding-bottom: 1rem;
+  }
+
+  .form-footer {
+    padding: var(--padding-md);
+    padding-bottom: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Ensure buttons are visible and properly spaced on mobile */
+  .form-footer .btn {
+    white-space: nowrap;
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Ensure buttons wrap properly if needed */
+  .form-footer .d-flex {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Keep buttons side by side but allow wrapping if screen is too small */
+  .form-footer .d-flex > div {
+    flex: 0 0 auto;
+  }
+
   .preview-image {
     width: 80px !important;
     height: 80px !important;

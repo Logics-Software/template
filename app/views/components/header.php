@@ -4,7 +4,7 @@
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
-                    <!-- Mobile Hamburger Menu (Hidden on Desktop) -->
+                    <!-- Tablet & Mobile Hamburger Menu -->
                     <button class="btn btn-link mobile-hamburger-btn" 
                             id="mobileMenuToggle" 
                             style="display: none;"
@@ -12,11 +12,18 @@
                         <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
                     
-                    <!-- Desktop Sidebar Toggle (Hidden on Mobile) -->
+                    <!-- Desktop Sidebar Toggle (Hidden on Mobile/Tablet) -->
                     <button class="btn btn-link sidebar-toggle-btn desktop-only" 
                             id="sidebarToggle" 
                             aria-label="Toggle Sidebar">
                         <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                    
+                    <!-- Mobile Search Toggle Icon -->
+                    <button class="btn btn-link mobile-search-toggle" 
+                            id="mobileSearchToggle" 
+                            aria-label="Toggle Search">
+                        <i class="fas fa-search" aria-hidden="true"></i>
                     </button>
                     
                     <!-- Quick Search Menu (Desktop Only) -->
@@ -46,19 +53,21 @@
                 <div class="d-flex align-items-center justify-content-end">
                     
                     <!-- Full Screen Toggle (Hidden on Mobile) -->
-                    <button class="btn btn-link desktop-only" id="fullscreenToggle">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    
-                    <!-- Theme Toggle (Hidden on Mobile - Moved to Footer) -->
-                    <button class="btn btn-link desktop-only" id="themeToggle">
-                        <i class="fas fa-sun" id="themeIcon"></i>
-                    </button>
+                    <div class="notification-dropdown">
+                        <button class="btn btn-link tema-toggle-btn" id="fullscreenToggle">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        
+                        <!-- Theme Toggle -->
+                        <button class="btn btn-link tema-toggle-btn" id="themeToggle">
+                            <i class="fas fa-sun" id="themeIcon"></i>
+                        </button>
+                    </div>
                     
                     <!-- =================================================== -->
-                    <!-- Notifications (Hidden on Mobile - Moved to Footer) -->
+                    <!-- Notifications -->
                     <!-- =================================================== -->
-                    <div class="notification-dropdown desktop-only">
+                    <div class="notification-dropdown">
                         <button class="btn btn-link position-relative" id="notificationToggle" 
                                 aria-label="Notifications" aria-expanded="false" aria-haspopup="true">
                             <i class="far fa-bell"></i>
@@ -156,9 +165,9 @@
                     <!-- =================================================== -->
 
                     <!-- =================================================== -->
-                    <!-- Messages (Hidden on Mobile - Moved to Footer) -->
+                    <!-- Messages -->
                     <!-- =================================================== -->
-                    <div class="message-dropdown desktop-only">
+                    <div class="message-dropdown">
                         <button class="btn btn-link position-relative" id="messageToggle">
                             <i class="far fa-envelope"></i>
                             <span class="position-absolute badge rounded-pill bg-danger" id="messageBadge" style="display: none;">
@@ -228,6 +237,28 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Search Overlay -->
+<div class="mobile-search-overlay" id="mobileSearchOverlay">
+    <div class="mobile-search-wrapper">
+        <i class="fas fa-search menu-search-icon"></i>
+        <input type="text" 
+               class="menu-search-input" 
+               id="mobileMenuSearchInput" 
+               placeholder="Cari menu / modul..." 
+               autocomplete="off"
+               aria-label="Search menu">
+        <button class="menu-search-clear" id="mobileMenuSearchClear" style="display: none;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="menu-search-results" id="mobileMenuSearchResults" style="display: none;">
+        <div class="menu-search-empty">
+            <i class="fas fa-search"></i>
+            <p>Ketik untuk mencari menu...</p>
         </div>
     </div>
 </div>

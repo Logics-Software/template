@@ -434,20 +434,126 @@
   border-bottom-color: var(--border-color);
 }
 
-/* Mobile sidebar */
-@media (max-width: 768px) {
+/* Tablet sidebar - Hide sidebar, show as overlay */
+@media (min-width: 769px) and (max-width: 1024px) {
   .sidebar {
     width: var(--sidebar-width);
     transform: translateX(-100%);
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s ease;
+    display: none; /* Hide sidebar by default */
   }
 
   .sidebar.show {
     transform: translateX(0);
+    display: flex; /* Show sidebar when toggled */
   }
 
   .sidebar.collapsed {
     width: 0;
     transform: translateX(-100%);
     overflow: hidden;
+    display: none;
+  }
+
+  /* Hide dropdown toggle arrow on tablet */
+  .sidebar-nav .dropdown-toggle::after,
+  .sidebar-nav .nav-link.dropdown-toggle::after,
+  .sidebar-nav .dropdown-toggle[aria-expanded]::after {
+    display: none;
+    content: "";
+    border: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* Show all submenus expanded on tablet - no collapse needed */
+  .sidebar .collapse,
+  .sidebar .collapse.show,
+  .sidebar [class*="collapse"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Make dropdown-toggle look like regular link on tablet */
+  .sidebar .dropdown-toggle {
+    cursor: pointer;
+  }
+
+  /* Sidebar backdrop for overlay */
+  .sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+    transition: opacity 0.3s ease;
+  }
+}
+
+/* Mobile sidebar - Same as tablet (overlay mode) */
+@media (max-width: 768px) {
+  .sidebar {
+    width: var(--sidebar-width);
+    transform: translateX(-100%);
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s ease;
+    display: none; /* Hide sidebar by default */
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+    display: flex; /* Show sidebar when toggled */
+  }
+
+  .sidebar.collapsed {
+    width: 0;
+    transform: translateX(-100%);
+    overflow: hidden;
+    display: none;
+  }
+
+  /* Hide dropdown toggle arrow on mobile */
+  .sidebar-nav .dropdown-toggle::after,
+  .sidebar-nav .nav-link.dropdown-toggle::after,
+  .sidebar-nav .dropdown-toggle[aria-expanded]::after {
+    display: none;
+    content: "";
+    border: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* Show all submenus expanded on mobile - no collapse needed */
+  .sidebar .collapse,
+  .sidebar .collapse.show,
+  .sidebar [class*="collapse"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Make dropdown-toggle look like regular link on mobile */
+  .sidebar .dropdown-toggle {
+    cursor: pointer;
+  }
+
+  /* Sidebar backdrop for overlay */
+  .sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+    transition: opacity 0.3s ease;
   }
 }

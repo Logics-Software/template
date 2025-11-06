@@ -492,6 +492,18 @@ html.auth-page {
     min-width: auto !important;
   }
 
+  /* Margin left dan right untuk form login di mobile */
+  .login-wrapper-single {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+  }
+
+  /* Margin left dan right untuk form lock screen di mobile */
+  .lock-screen-modal {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+  }
+
   .register-wrapper-single {
     width: 100% !important;
     max-width: 100% !important;

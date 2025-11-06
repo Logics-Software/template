@@ -4,13 +4,13 @@
         <div class="form-container">
             <div class="form-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Daftar Group Menu</h5>
+                    <h5 class="mb-0">Daftar Menu</h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="<?php echo APP_URL; ?>/dashboard" class="text-decoration-none">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Daftar Group Menu</li>
+                            <li class="breadcrumb-item active" aria-current="page">Daftar Menu</li>
                         </ol>
                     </nav>
                 </div>
@@ -20,9 +20,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="fw-bold mb-0"><i class="fas fa-server me-2"></i> Group Menu</h6>
+                            <h6 class="fw-bold mb-0"><i class="fas fa-server me-2"></i> Menu</h6>
                             <button class="btn btn-sm btn-primary" onclick="addGroup()">
-                                <i class="fas fa-plus"></i> Tambah Group Menu
+                                <i class="fas fa-plus"></i> Tambah Menu
                             </button>
                         </div>
                         <div class="table-responsive">
@@ -32,7 +32,7 @@
                                         <th>Name</th>
                                         <th>Description</th>
                                         <th>Item</th>
-                                        <th>Default Role</th>
+                                        <th>Role</th>
                                         <th></th>
                                     </tr>
                                 </thead>

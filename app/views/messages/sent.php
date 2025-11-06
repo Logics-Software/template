@@ -17,7 +17,7 @@
             <div class="form-body">
                 <!-- Search Form with Action Buttons -->
                 <div class="row mb-4">
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-2">
                         <form method="GET" action="<?php echo APP_URL; ?>/messages/sent" class="d-flex" id="searchForm">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Cari pesan terkirim..." value="<?php echo htmlspecialchars($search ?? ''); ?>" id="searchInput">
@@ -27,7 +27,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-2">
                         <select class="form-select" id="per_page" name="per_page" onchange="this.form.submit()">
                             <option value="10"<?php echo ($pagination['per_page'] ?? 20) == 10 ? ' selected' : ''; ?>>10</option>
                             <option value="20"<?php echo ($pagination['per_page'] ?? 20) == 20 ? ' selected' : ''; ?>>20</option>

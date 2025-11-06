@@ -27,7 +27,7 @@ if (!$konfigurasi) {
     <div class="form-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">
-                Konfigurasi Sistem
+                Konfigurasi
             </h5>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
@@ -37,7 +37,7 @@ if (!$konfigurasi) {
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        Konfigurasi Sistem
+                        Konfigurasi
                     </li>
                 </ol>
             </nav>
@@ -109,10 +109,10 @@ if (!$konfigurasi) {
     <div class="form-footer">
         <div class="d-flex justify-content-between align-items-center">
             <a href="<?php echo APP_URL; ?>/dashboard" class="btn btn-secondary">
-                <i class="fas fa-arrow-left me-1"></i>Kembali ke Dashboard
+                <i class="fas fa-arrow-left me-1"></i>Batal
             </a>
             <div>
-                <a href="<?php echo APP_URL; ?>/konfigurasi/edit" class="btn btn-warning">
+                <a href="<?php echo APP_URL; ?>/konfigurasi/edit" class="btn btn-warning mb-0">
                     <i class="fas fa-edit me-1"></i>Edit Konfigurasi
                 </a>
             </div>

@@ -43,10 +43,12 @@ function initSidebarState() {
 // Sidebar toggle functionality
 function initSidebarToggle() {
   const sidebarToggle = document.getElementById("sidebarToggle");
+  const mobileMenuToggle = document.getElementById("mobileMenuToggle");
   const sidebar = document.querySelector(".sidebar");
   const mainContent = document.querySelector(".main-content");
   const topHeader = document.querySelector(".top-header");
 
+  // Desktop sidebar toggle
   if (sidebarToggle && sidebar && mainContent && topHeader) {
     sidebarToggle.addEventListener("click", function (e) {
       e.preventDefault();
@@ -64,20 +66,67 @@ function initSidebarToggle() {
         topHeader.classList.add("sidebar-collapsed");
       }
 
-      // For mobile, also toggle show class
-      if (window.innerWidth <= 768) {
-        sidebar.classList.toggle("show");
-      }
-
       // Save sidebar state
       const isCollapsedState = sidebar.classList.contains("collapsed");
       setCookie("sidebar_collapsed", isCollapsedState ? "true" : "false");
     });
+  }
+
+  // Mobile/Tablet hamburger menu toggle
+  if (mobileMenuToggle && sidebar && mainContent && topHeader) {
+    mobileMenuToggle.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Toggle sidebar show class (overlay mode)
+      sidebar.classList.toggle("show");
+      
+      // Add/remove backdrop for overlay
+      if (sidebar.classList.contains("show")) {
+        // Create backdrop if doesn't exist
+        let backdrop = document.querySelector(".sidebar-backdrop");
+        if (!backdrop) {
+          backdrop = document.createElement("div");
+          backdrop.className = "sidebar-backdrop";
+          document.body.appendChild(backdrop);
+        }
+        backdrop.style.display = "block";
+      } else {
+        // Remove backdrop
+        const backdrop = document.querySelector(".sidebar-backdrop");
+        if (backdrop) {
+          backdrop.style.display = "none";
+        }
+      }
+    });
+
+    // Close sidebar when clicking backdrop
+    document.addEventListener("click", function(e) {
+      const backdrop = document.querySelector(".sidebar-backdrop");
+      if (backdrop && e.target === backdrop) {
+        sidebar.classList.remove("show");
+        backdrop.style.display = "none";
+      }
+    });
 
     // Handle window resize
     window.addEventListener("resize", function () {
-      if (window.innerWidth > 768) {
+      // For desktop (> 1024px), remove show class
+      if (window.innerWidth > 1024) {
         sidebar.classList.remove("show");
+        const backdrop = document.querySelector(".sidebar-backdrop");
+        if (backdrop) {
+          backdrop.style.display = "none";
+        }
+      } else {
+        // For tablet/mobile (<= 1024px), ensure sidebar is hidden by default
+        if (!sidebar.classList.contains("show")) {
+          sidebar.classList.remove("show");
+          const backdrop = document.querySelector(".sidebar-backdrop");
+          if (backdrop) {
+            backdrop.style.display = "none";
+          }
+        }
       }
     });
   }
@@ -1541,10 +1590,190 @@ function updateActiveItem(items) {
   });
 }
 
+// Initialize mobile search toggle
+function initMobileSearchToggle() {
+  const mobileSearchToggle = document.getElementById("mobileSearchToggle");
+  const mobileSearchOverlay = document.getElementById("mobileSearchOverlay");
+  const mobileSearchInput = document.getElementById("mobileMenuSearchInput");
+  const mobileSearchClear = document.getElementById("mobileMenuSearchClear");
+  const mobileSearchResults = document.getElementById("mobileMenuSearchResults");
+
+  if (!mobileSearchToggle || !mobileSearchOverlay || !mobileSearchInput) return;
+
+  // Toggle overlay
+  mobileSearchToggle.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    mobileSearchOverlay.classList.toggle("show");
+    
+    if (mobileSearchOverlay.classList.contains("show")) {
+      // Focus input when opened
+      setTimeout(() => {
+        mobileSearchInput.focus();
+      }, 100);
+    } else {
+      // Clear and close when toggled off
+      mobileSearchInput.value = "";
+      mobileSearchClear.style.display = "none";
+      mobileSearchResults.style.display = "none";
+      menuSearchIndex = -1;
+    }
+  });
+
+  // Load menu items (reuse desktop function)
+  loadMenuItems();
+
+  // Search input event
+  mobileSearchInput.addEventListener("input", function (e) {
+    const query = e.target.value.trim();
+
+    // Show/hide clear button
+    if (query.length > 0) {
+      mobileSearchClear.style.display = "flex";
+    } else {
+      mobileSearchClear.style.display = "none";
+    }
+
+    // Debounce search
+    clearTimeout(menuSearchTimeout);
+    menuSearchTimeout = setTimeout(() => {
+      performMobileSearch(query);
+    }, 200);
+  });
+
+  // Clear button event
+  mobileSearchClear.addEventListener("click", function () {
+    mobileSearchInput.value = "";
+    mobileSearchClear.style.display = "none";
+    mobileSearchResults.style.display = "none";
+    menuSearchIndex = -1;
+    mobileSearchInput.focus();
+  });
+
+  // Keyboard navigation
+  mobileSearchInput.addEventListener("keydown", function (e) {
+    const items = mobileSearchResults.querySelectorAll(".menu-search-item");
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (items.length > 0) {
+        menuSearchIndex = Math.min(menuSearchIndex + 1, items.length - 1);
+        updateActiveItem(items);
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (items.length > 0) {
+        menuSearchIndex = Math.max(menuSearchIndex - 1, 0);
+        updateActiveItem(items);
+      }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (menuSearchIndex >= 0 && items[menuSearchIndex]) {
+        items[menuSearchIndex].click();
+        // Close overlay after selection
+        mobileSearchOverlay.classList.remove("show");
+        mobileSearchInput.value = "";
+        mobileSearchClear.style.display = "none";
+        mobileSearchResults.style.display = "none";
+        menuSearchIndex = -1;
+      }
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      mobileSearchOverlay.classList.remove("show");
+      mobileSearchInput.value = "";
+      mobileSearchClear.style.display = "none";
+      mobileSearchResults.style.display = "none";
+      menuSearchIndex = -1;
+    }
+  });
+
+  // Click outside to close (only when overlay is shown)
+  document.addEventListener("click", function (e) {
+    if (
+      mobileSearchOverlay &&
+      mobileSearchToggle &&
+      mobileSearchOverlay.classList.contains("show") &&
+      !mobileSearchOverlay.contains(e.target) &&
+      !mobileSearchToggle.contains(e.target)
+    ) {
+      mobileSearchOverlay.classList.remove("show");
+      mobileSearchInput.value = "";
+      mobileSearchClear.style.display = "none";
+      mobileSearchResults.style.display = "none";
+      menuSearchIndex = -1;
+    }
+  });
+
+  // Focus event
+  mobileSearchInput.addEventListener("focus", function () {
+    if (mobileSearchInput.value.trim().length > 0) {
+      mobileSearchResults.style.display = "block";
+    }
+  });
+}
+
+function performMobileSearch(query) {
+  const mobileSearchResults = document.getElementById("mobileMenuSearchResults");
+
+  if (!query || query.length === 0) {
+    mobileSearchResults.style.display = "none";
+    return;
+  }
+
+  // Filter menu items (reuse same logic)
+  const normalizedQuery = query.toLowerCase();
+  const results = menuSearchData.filter((item) => {
+    return (
+      item.name.toLowerCase().includes(normalizedQuery) ||
+      item.path.toLowerCase().includes(normalizedQuery) ||
+      item.group.toLowerCase().includes(normalizedQuery)
+    );
+  });
+
+  // Display results
+  if (results.length === 0) {
+    mobileSearchResults.innerHTML = `
+      <div class="menu-search-empty">
+        <i class="fas fa-search"></i>
+        <p>Tidak ada hasil ditemukan</p>
+      </div>
+    `;
+    mobileSearchResults.style.display = "block";
+    return;
+  }
+
+  // Build results HTML
+  let resultsHTML = "";
+  results.forEach((item) => {
+    const highlightedName = highlightText(item.name, query);
+    const highlightedPath = highlightText(item.path, query);
+    const icon = item.icon || "fa-circle";
+    const badge = item.badge ? `<span class="menu-search-item-badge">${item.badge}</span>` : "";
+
+    resultsHTML += `
+      <a href="${item.url}" class="menu-search-item">
+        <div class="menu-search-item-icon">
+          <i class="fas ${icon}"></i>
+        </div>
+        <div class="menu-search-item-content">
+          <div class="menu-search-item-title">${highlightedName}</div>
+          <div class="menu-search-item-path">${highlightedPath}</div>
+        </div>
+        ${badge}
+      </a>
+    `;
+  });
+
+  mobileSearchResults.innerHTML = resultsHTML;
+  mobileSearchResults.style.display = "block";
+  menuSearchIndex = -1;
+}
+
 // Initialize tooltips on page load
 document.addEventListener("DOMContentLoaded", function () {
   initTooltips();
   setupTooltipAutoCleanup();
   initModuleAccessValidation();
   initMenuSearch();
+  initMobileSearchToggle();
 });

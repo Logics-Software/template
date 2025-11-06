@@ -31,6 +31,43 @@ body {
   display: inline-block !important;
 }
 
+/* Device-specific visibility utilities */
+.desktop-only {
+  display: block !important;
+}
+.tablet-only {
+  display: none !important;
+}
+.mobile-only {
+  display: none !important;
+}
+
+/* Tablet breakpoint - 769px to 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .desktop-only {
+    display: none !important;
+  }
+  .tablet-only {
+    display: flex !important;
+  }
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Mobile breakpoint - max 768px (Same behavior as tablet) */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+  .tablet-only {
+    display: flex !important; /* Show tablet-only elements on mobile too */
+  }
+  .mobile-only {
+    display: block !important;
+  }
+}
+
 /* Password toggle utilities */
 .password-toggle {
   z-index: 10;

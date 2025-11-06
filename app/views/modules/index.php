@@ -18,7 +18,7 @@
             <div class="form-body">
                 <!-- Search and Filter -->
                 <div class="row mb-4">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-2">
                         <form method="GET" action="<?php echo APP_URL; ?>/modules" class="d-flex" id="searchForm">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Cari modul..." value="<?php echo htmlspecialchars($search); ?>" id="searchInput">
@@ -28,7 +28,7 @@
                             </div>
                         </form>
                     </div>
-                    <form method="GET" action="<?php echo APP_URL; ?>/modules" class="col-md-3">
+                    <form method="GET" action="<?php echo APP_URL; ?>/modules" class="col-md-3 mb-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="per_page" value="<?php echo htmlspecialchars($modules['per_page']); ?>">
                         <select class="form-select p-2" id="role" name="role" onchange="this.form.submit()">
@@ -40,7 +40,7 @@
                             <option value="customer"<?php echo $role === 'customer' ? ' selected' : ''; ?>>Customer</option>
                         </select>
                     </form>
-                    <form method="GET" action="<?php echo APP_URL; ?>/modules" class="col-md-2">
+                    <form method="GET" action="<?php echo APP_URL; ?>/modules" class="col-md-2 mb-2">
                         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
                         <input type="hidden" name="role" value="<?php echo htmlspecialchars($role); ?>">
                         <select class="form-select p-2" id="per_page" name="per_page" onchange="this.form.submit()">
